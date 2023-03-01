@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {Text} from 'react-native';
-import colors from '../../assets/colors';
-import fonts from '../../assets/fonts';
-import {normalize} from '../../helper/responsiveScreen';
+import colors from '../../../assets/colors';
+import {normalize} from '../../../helper/responsiveScreen';
+import fonts from '../../../assets/fonts';
 
 const FontText = ({
   children,

@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {View, StyleSheet, TouchableOpacity, Keyboard} from 'react-native';
-import colors from '../../assets/colors';
-import {hp, wp, normalize, isX} from '../../helper/responsiveScreen';
+import {hp, wp, normalize, isX} from '../../../helper/responsiveScreen';
+import colors from '../../../assets/colors';
 
 // Flag for threshold has reached to prevent firing "onPress"
 let hasMoveBeyondThreshold = false;
@@ -192,6 +192,7 @@ Button.defaultProps = {
   fluid: false,
   dismissKeyboardOnPress: true,
   checkThreshold: false,
+  backgroundColor: 'yellow',
 };
 
 Button.propTypes = {
@@ -250,6 +251,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     overflow: 'hidden',
+    backgroundColor: 'yellow',
+    height: hp(5),
+    width: wp(30),
   },
   buttonFlex: {
     flex: 1,

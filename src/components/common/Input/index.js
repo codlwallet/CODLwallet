@@ -1,137 +1,23 @@
-import React, {Component} from 'react';
-import PropTypes from 'prop-types';
+/* eslint-disable jsx-a11y/anchor-is-valid */
+/* eslint-disable import/no-extraneous-dependencies */
+import React, {
+  createRef,
+  useState,
+  forwardRef,
+  useImperativeHandle,
+} from 'react';
 import {View, TextInput, StyleSheet, findNodeHandle} from 'react-native';
-import colors from '../../assets/colors';
-import fonts from '../../assets/fonts';
-import {hp, wp, normalize, isX} from '../../helper/responsiveScreen';
+import colors from '../../../assets/colors';
+import fonts from '../../../assets/fonts';
+import {hp, normalize, wp} from '../../../helper/responsiveScreen';
+import FontText from '../FontText';
 
-class Input extends Component {
-  static defaultProps = {
-    height: isX ? hp(5) : hp(5.5),
-    fontSize: 16,
-    fontName: 'opensans-regular',
-    color: 'default',
-    placeholder: 'Type something...',
-    placeholderTextColor: 'default',
-    defaultValue: '',
-    clearOnSubmit: false,
-    blurOnSubmit: false,
-    returnKeyType: 'default',
-    multiline: false,
-    multilineHeight: 120,
-    autoCapitalize: null,
-    editable: true,
-    keyboardType: 'default',
-    maxLength: null,
-    secureTextEntry: false,
-    onFocus: null,
-    onBlur: null,
-    autoFocus: false,
-    textAlign: null,
-    onChangeText: null,
-    caretHidden: false,
-    contextMenuHidden: false,
-    selectTextOnFocus: false,
-    willCheckPosition: true,
-  };
-
-  static propTypes = {
-    height: PropTypes.number,
-    fontSize: PropTypes.number,
-    fontName: PropTypes.string,
-    color: PropTypes.string,
-    placeholder: PropTypes.string,
-    placeholderTextColor: PropTypes.string,
-    defaultValue: PropTypes.string,
-    clearOnSubmit: PropTypes.bool,
-    blurOnSubmit: PropTypes.bool,
-    returnKeyType: PropTypes.string,
-    multiline: PropTypes.bool,
-    multilineHeight: PropTypes.number,
-    autoCapitalize: PropTypes.string,
-    editable: PropTypes.bool,
-    keyboardType: PropTypes.string,
-    maxLength: PropTypes.number,
-    secureTextEntry: PropTypes.bool,
-    style: PropTypes.oneOfType([
-      PropTypes.string,
-      PropTypes.number,
-      PropTypes.object,
-      PropTypes.arrayOf(PropTypes.number),
-      PropTypes.arrayOf(PropTypes.object),
-    ]),
-    onFocus: PropTypes.func,
-    onBlur: PropTypes.func,
-    autoFocus: PropTypes.bool,
-    textAlign: PropTypes.string,
-    onChangeText: PropTypes.func,
-    caretHidden: PropTypes.bool,
-    contextMenuHidden: PropTypes.bool,
-    selectTextOnFocus: PropTypes.bool,
-    willCheckPosition: PropTypes.bool,
-  };
-
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      defaultValue: props.defaultValue,
-      value: props.defaultValue,
-      editable: props.editable,
-    };
-  }
-
-  static getDerivedStateFromProps(props, state) {
-    if (props.editable !== state.editable) {
-      return {editable: props.editable};
-    }
-    if (props.defaultValue !== state.defaultValue) {
-      return {value: props.defaultValue, defaultValue: props.defaultValue};
-    }
-    return null;
-  }
-
-  onChangeTextHandler = text => {
-    const {onChangeText} = this.props;
-    this.setState({value: text});
-    if (typeof onChangeText === 'function') {
-      onChangeText(text);
-    }
-  };
-
-  onSubmitEditingHandler = () => {
-    const {onSubmit, clearOnSubmit} = this.props;
-    const {value} = this.state;
-    if (typeof onSubmit === 'function') {
-      onSubmit(value);
-    }
-    if (clearOnSubmit) {
-      this.setState({value: ''});
-    }
-  };
-
-  onFocusHandler = () => {
-    const {willCheckPosition, onFocus, checkPosition} = this.props;
-    if (typeof onFocus === 'function') {
-      onFocus();
-    }
-    if (willCheckPosition && typeof checkPosition === 'function') {
-      checkPosition(findNodeHandle(this.input));
-    }
-  };
-
-  disable = () => this.setState({editable: false});
-
-  enable = () => this.setState({editable: true});
-
-  getValue = () => this.state.value;
-
-  focus = () => this.input && this.input.focus();
-
-  blur = () => this.input && this.input.blur();
-
-  render() {
-    const {
+const Input = forwardRef(
+  (
+    {
+      value,
+      editable,
+      titlecolor,
       height,
       fontSize,
       fontName,
@@ -157,80 +43,204 @@ class Input extends Component {
       contextMenuHidden,
       selectTextOnFocus,
       pointerEvents,
-      ...restInput
-    } = this.props;
-    const {value, editable} = this.state;
+      onSubmit,
+      clearOnSubmit,
+      willCheckPosition,
+      checkPosition,
+      onChangeText,
+      onEndEditing,
+      onKeyPress,
+      autoCorrect,
+      withTitle,
+      title,
+      titleSize,
+      withLeftIcon,
+      leftIcon,
+      fontStyle,
+      isRequired,
+      pTop,
+      withRightIcon,
+      rightIcon,
+      disabled,
+    },
+    ref,
+  ) => {
+    const [inputValue, setValue] = useState(value);
+    const [inputEditable, setEditable] = useState(editable);
+    const [textFocus, SetTextFocus] = useState(false);
+    let inputRef = createRef();
+
+    const onChangeTextHandler = text => {
+      setValue(text);
+      if (typeof onChangeText === 'function') {
+        onChangeText(text);
+      }
+    };
+
+    const onSubmitEditingHandler = () => {
+      if (typeof onSubmit === 'function') {
+        onSubmit(inputValue);
+      }
+      if (clearOnSubmit) {
+        setValue('');
+      }
+    };
+
+    const onFocusHandler = () => {
+      if (typeof onFocus === 'function') {
+        onFocus();
+      }
+      if (willCheckPosition && typeof checkPosition === 'function') {
+        checkPosition(findNodeHandle(inputRef));
+      }
+    };
+
     const _inputStyle = {
       height: multiline ? multilineHeight : height,
-      fontSize: fontSize,
+      fontSize,
       fontFamily: fonts[fontName],
       color: colors[color],
     };
 
+    useImperativeHandle(ref, () => ({
+      focus: () => inputRef.focus(),
+      blur: () => inputRef.blur(),
+      disable: () => setEditable(false),
+      enable: () => setEditable(true),
+    }));
+
     return (
-      <View style={[styles.wrapper, style]}>
-        <TextInput
-          ref={r => (this.input = r)}
-          textContentType="none"
-          pointerEvents={pointerEvents}
-          editable={editable}
-          value={value}
-          autoCorrect={false}
-          autoComplete="off"
-          allowFontScaling={false}
-          placeholder={placeholder}
-          placeholderTextColor={
-            colors[placeholderTextColor]
-              ? colors[placeholderTextColor] + '4d'
-              : ''
-          }
-          onChangeText={this.onChangeTextHandler}
-          onSubmitEditing={this.onSubmitEditingHandler}
-          blurOnSubmit={multiline ? false : blurOnSubmit}
-          returnKeyType={returnKeyType}
-          multiline={multiline}
-          textContentType="none"
-          underlineColorAndroid="transparent"
-          keyboardType={keyboardType}
-          maxLength={maxLength}
-          autoCapitalize={autoCapitalize}
-          secureTextEntry={secureTextEntry}
-          onFocus={this.onFocusHandler}
-          onBlur={onBlur}
-          autoFocus={autoFocus}
-          caretHidden={caretHidden}
-          contextMenuHidden={contextMenuHidden}
-          selectTextOnFocus={selectTextOnFocus}
-          textAlign={textAlign}
-          style={[
-            multiline ? styles.inputMultiline : null,
-            styles.input,
-            _inputStyle,
-            inputStyle,
-          ]}
-          {...restInput}
-        />
-        {children}
+      <View>
+        {withTitle && (
+          <FontText
+            name={'poppins-medium'}
+            size={titleSize}
+            color={titlecolor}
+            opacity={0.5}
+            pTop={pTop}
+            pBottom={hp(0.5)}
+            pLeft={wp(2)}
+            style={fontStyle}>
+            {title}
+            {isRequired && (
+              <FontText
+                name={'default'}
+                size={normalize(15)}
+                color={'red'}
+                pBottom={hp(0.9)}
+                style={fontStyle}>
+                {'*'}
+              </FontText>
+            )}
+          </FontText>
+        )}
+        <View style={[styles.wrapper, style]}>
+          {withLeftIcon ? leftIcon : null}
+          <TextInput
+            ref={el => {
+              inputRef = el;
+            }}
+            textContentType="none"
+            pointerEvents={pointerEvents}
+            editable={inputEditable}
+            value={value}
+            textAlign={textAlign}
+            autoComplete="off"
+            autoCorrect={!!(autoCorrect && autoCorrect === true)}
+            allowFontScaling={false}
+            placeholder={placeholder}
+            placeholderTextColor={placeholderTextColor}
+            onChangeText={onChangeTextHandler}
+            onSubmitEditing={onSubmitEditingHandler}
+            blurOnSubmit={multiline ? false : blurOnSubmit}
+            returnKeyType={returnKeyType}
+            multiline={multiline}
+            underlineColorAndroid="transparent"
+            keyboardType={keyboardType}
+            maxLength={maxLength}
+            disabled={disabled}
+            autoCapitalize={autoCapitalize}
+            secureTextEntry={secureTextEntry}
+            onFocus={onFocus}
+            onBlur={onBlur}
+            onEndEditing={onEndEditing}
+            autoFocus={autoFocus}
+            caretHidden={caretHidden}
+            contextMenuHidden={contextMenuHidden}
+            selectTextOnFocus={selectTextOnFocus}
+            onKeyPress={onKeyPress}
+            style={[
+              multiline ? styles.inputMultiline : null,
+              styles.input,
+              // _inputStyle,
+              inputStyle,
+            ]}
+          />
+          {withRightIcon ? rightIcon : null}
+          {children}
+        </View>
       </View>
     );
-  }
-}
+  },
+);
+
+Input.defaultProps = {
+  height: 46,
+  fontSize: normalize(14),
+  fontName: 'poppins-regular',
+  color: 'black',
+  placeholder: 'Type something...',
+  placeholderTextColor: '#000',
+  defaultValue: '',
+  clearOnSubmit: false,
+  blurOnSubmit: false,
+  returnKeyType: 'default',
+  multiline: false,
+  multilineHeight: hp(10),
+  autoCapitalize: null,
+  editable: true,
+  keyboardType: 'default',
+  maxLength: null,
+  secureTextEntry: false,
+  onFocus: null,
+  onBlur: null,
+  autoFocus: false,
+  textAlign: null,
+  onChangeText: null,
+  caretHidden: false,
+  contextMenuHidden: false,
+  selectTextOnFocus: false,
+  willCheckPosition: true,
+  withTitle: false,
+  titleSize: normalize(16),
+  withLeftIcon: false,
+  withRightIcon: false,
+  isRequired: false,
+  pTop: wp(6),
+};
 
 const styles = StyleSheet.create({
   input: {
-    paddingLeft: 10,
+    flex: 1,
+    paddingLeft: 0,
     paddingRight: 10,
-    backgroundColor: colors.white,
-    paddingTop: 0,
     paddingBottom: 0,
     marginLeft: 0,
     marginRight: 0,
+    height: hp(8),
   },
   inputMultiline: {
     textAlignVertical: 'top',
   },
   wrapper: {
-    justifyContent: 'center',
+    alignItems: 'center',
+    flexDirection: 'row',
+    borderRadius: wp(3),
+    paddingHorizontal: wp(3.5),
+
+    justifyContent: 'space-between',
+    marginHorizontal: wp(4),
+    // backgroundColor: 'white',
   },
 });
 

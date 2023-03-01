@@ -1,9 +1,8 @@
-
-
 /** Define all your fonts here */
 export default {
-  sfprotext: 'Montserrat',
-  ['montserrat-regular']: 'Montserrat-Medium',
-  ['montserrat-semibold']: 'Montserrat-SemiBold',
-  ['montserrat-bold']: 'Montserrat-Bold',
+  default: 'Inter-Regular',
+  ['inter-regular']: 'Inter-Regular',
+  ['inter-semibold']: 'Inter-SemiBold',
+  ['inter-bold']: 'Inter-Bold',
+  ['inter-medium']: 'Inter-Medium',
 };
