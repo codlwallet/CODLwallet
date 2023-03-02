@@ -70,6 +70,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     paddingHorizontal: wp(4),
     paddingTop: Platform.OS === 'android' ? hp(2) : hp(3.5),
+    width: wp(100),
   },
   text: {
     fontWeight: 'bold',

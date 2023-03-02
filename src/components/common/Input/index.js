@@ -185,7 +185,7 @@ const Input = forwardRef(
 );
 
 Input.defaultProps = {
-  height: 46,
+  // height: 46,
   fontSize: normalize(14),
   fontName: 'poppins-regular',
   color: 'black',
@@ -216,18 +216,18 @@ Input.defaultProps = {
   withLeftIcon: false,
   withRightIcon: false,
   isRequired: false,
-  pTop: wp(6),
+  // pTop: wp(6),
 };
 
 const styles = StyleSheet.create({
   input: {
     flex: 1,
     paddingLeft: 0,
-    paddingRight: 10,
+    // paddingRight: 10,
     paddingBottom: 0,
     marginLeft: 0,
     marginRight: 0,
-    height: hp(8),
+    // height: hp(8),
   },
   inputMultiline: {
     textAlignVertical: 'top',
@@ -236,11 +236,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flexDirection: 'row',
     borderRadius: wp(3),
-    paddingHorizontal: wp(3.5),
-
+    paddingHorizontal: wp(5),
+    // paddingVertical: hp(4),
     justifyContent: 'space-between',
     marginHorizontal: wp(4),
-    // backgroundColor: 'white',
+    height: hp(8),
   },
 });
 

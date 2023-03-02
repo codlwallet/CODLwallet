@@ -1,7 +1,7 @@
 import Reactotron from 'reactotron-react-native';
 
 Reactotron.configure({
-  name: 'Frisco',
+  name: 'Codl',
   host: '192.168.29.203',
 })
   .useReactNative({

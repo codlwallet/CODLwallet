@@ -178,7 +178,7 @@ const Button = props => {
 Button.defaultProps = {
   position: 'center',
   flex: true,
-  height: isX ? hp(5.5) : hp(6.5),
+  // height: isX ? hp(5.5) : hp(6.5),
   width: null,
   minWidth: 44,
   sideOffset: 0,
@@ -252,7 +252,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     overflow: 'hidden',
     backgroundColor: 'yellow',
-    height: hp(5),
     width: wp(30),
   },
   buttonFlex: {
