@@ -5,16 +5,23 @@ import {hp, normalize, wp} from '../../../helper/responsiveScreen';
 import FontText from '../FontText';
 import appConstant from '../../../helper/appConstant';
 
-export default function WalletCard({style, headerStyle, children}) {
+export default function WalletCard({
+  style,
+  headerStyle,
+  children,
+  titleColor,
+  title,
+}) {
   return (
     <View style={[styles.container, style]}>
       <View style={[headerStyle, styles.headerContainer]}>
         <FontText
+          color={titleColor}
           textTransform={'uppercase'}
           textAlign={'center'}
           name={'inter-bold'}
           size={normalize(11)}>
-          {appConstant.numberOfWords}
+          {title}
         </FontText>
       </View>
       <View style={styles.numberContainer}>{children}</View>
@@ -29,6 +36,7 @@ const styles = StyleSheet.create({
     width: wp(90),
     alignItems: 'center',
     justifyContent: 'center',
+    paddingVertical: hp(1),
   },
   headerContainer: {
     backgroundColor: colors.white,

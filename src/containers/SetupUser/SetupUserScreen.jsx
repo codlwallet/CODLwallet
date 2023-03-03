@@ -29,7 +29,7 @@ export default function SetupUserScreen(props) {
             <Header title={appConstant.setupUser} showRightIcon RightIcon={'info'} />
             <View style={styles.subContainer}>
                 <Input
-                    withRightIcon
+                    withRightIcon={nameFocus ? true : false}
                     ref={nameRef}
                     autoFocus={nameFocus ? true : false}
                     placeholder={appConstant.name}
@@ -57,7 +57,7 @@ export default function SetupUserScreen(props) {
                     }]}
                     rightIcon={
                         <TouchableOpacity>
-                            <SvgIcons.Check />
+                            <SvgIcons.BlackCheck height={hp(4)} width={hp(2.5)} />
                         </TouchableOpacity>
                     }
                 />

@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, View } from 'react-native'
 import React from 'react'
 import colors from '../../assets/colors'
 import Header from '../../components/common/Header'
@@ -8,7 +8,13 @@ import { hp, normalize, wp } from '../../helper/responsiveScreen'
 import FontText from '../../components/common/FontText'
 import Button from '../../components/common/Button'
 
-export default function AttentionScreen1() {
+export default function AttentionScreen1({ navigation, route }) {
+    const { ButtonValue } = route.params
+
+    const handleUnderStandBtnClick = () => {
+        navigation.navigate(ButtonValue === appConstant.createWallet ? appConstant.createWallet : appConstant.importWallet)
+    }
+
     return (
         <View style={styles.container}>
             <Header showRightIcon RightIcon={'info'} />
@@ -28,7 +34,7 @@ export default function AttentionScreen1() {
                 type="highlight"
                 borderRadius={11}
                 bgColor="white"
-                // onPress={handleProceedClick}
+                onPress={handleUnderStandBtnClick}
                 style={styles.button}>
                 <FontText name={"inter-medium"} size={normalize(16)} color="black">
                     {appConstant.understand}

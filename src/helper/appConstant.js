@@ -18,4 +18,19 @@ module.exports = {
     'Make sure no one is watching you or recording on camera.',
   understand: 'I Understand',
   numberOfWords: 'number of words',
+  areUSure: 'Are You Sure?',
+  attention2Description:
+    'If you go back, you will lose the created seeds and recreate new ones.',
+  checkAgain: 'Check Again',
+  recoverySeeds: 'Recovery Seed',
+  attentionScreen3: 'attentionScreen3',
+  secureSeeds: 'Did you secure recovery seeds?',
+  attention3Description:
+    'Please, write the seed words in the correct order and store them in a secure place.',
+  confirmSeeds: 'Confirm Seeds',
+  complateSeeds: 'Complate Seeds',
+  confirm: 'Confirm',
+  complate: 'Complate',
+  importWallet: 'Import Wallet',
+  edit: 'Edit',
 };

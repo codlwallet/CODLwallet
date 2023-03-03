@@ -7,7 +7,7 @@ import FontText from '../FontText';
 
 const Header = props => {
   const {
-    BackonPress,
+    onBackPress,
     title,
     titleColor,
     showBackIcon,
@@ -23,7 +23,7 @@ const Header = props => {
   return (
     <View style={[styles.container, style]}>
       {showBackIcon && (
-        <TouchableOpacity onPress={BackonPress} style={{padding: 5}}>
+        <TouchableOpacity onPress={onBackPress} style={{padding: 5}}>
           <SvgIcons.BackArrow style={styles.arrow} />
         </TouchableOpacity>
       )}

@@ -18,9 +18,10 @@ export default function SetupWalletScreen(props) {
     const [numberIndex, setNumberIndex] = useState(0)
 
     const handleProceedClick = () => {
-        navigation.navigate(appConstant.attentionScreen1)
+        navigation.navigate(appConstant.attentionScreen1, {
+            ButtonValue: btnValue
+        })
     }
-
     return (
         <View style={styles.container}>
             <Header title={appConstant.setupWallet} showRightIcon RightIcon={'info'} />
@@ -39,6 +40,8 @@ export default function SetupWalletScreen(props) {
             </View>
             <View>
                 <WalletCard style={styles.walletCardContainer}
+                    title={appConstant.numberOfWords}
+                    titleColor={'black'}
                     children={
                         <>
                             {walletNumberData.map((item, index) => {
@@ -89,11 +92,11 @@ const styles = StyleSheet.create({
         backgroundColor: colors.white,
         position: 'absolute',
         bottom: hp(4),
-        alignItems: 'center'
+        alignItems: 'center',
     },
     walletCardContainer: {
         backgroundColor: colors.gray,
-        height: hp(10),
+        bottom: hp(1.5)
     },
     numberContainer: {
         backgroundColor: colors.black,

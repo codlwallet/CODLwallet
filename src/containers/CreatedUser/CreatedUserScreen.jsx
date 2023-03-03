@@ -11,9 +11,8 @@ export default function CreatedUserScreen(props) {
   useEffect(() => {
     setTimeout(() => {
       navigation.navigate(appConstant.setupWallet)
-    }, 3000);
+    }, 2000);
   }, [])
-
 
   return (
     <View style={styles.container}>

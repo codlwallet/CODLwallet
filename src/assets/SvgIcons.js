@@ -10,6 +10,7 @@ import Menu from './svgs/Menu.svg';
 import Plus from './svgs/Plus.svg';
 import BlackHideEye from './svgs/BlackHideEye.svg';
 import BlackCheck from './svgs/BlackCheck.svg';
+import Polygon from './svgs/Polygon.svg';
 
 export default {
   Logo,
@@ -23,4 +24,5 @@ export default {
   Menu,
   Plus,
   BlackCheck,
+  Polygon,
 };
