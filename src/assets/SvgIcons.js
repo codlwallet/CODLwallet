@@ -11,6 +11,10 @@ import Plus from './svgs/Plus.svg';
 import BlackHideEye from './svgs/BlackHideEye.svg';
 import BlackCheck from './svgs/BlackCheck.svg';
 import Polygon from './svgs/Polygon.svg';
+import RightBackArrow from './svgs/RightBackArrow';
+import AppIcon from './svgs/AppIcon';
+import ShowEye from './svgs/ShowEye.svg';
+import BlackShowEye from './svgs/BlackShowEye.svg';
 
 export default {
   Logo,
@@ -25,4 +29,8 @@ export default {
   Plus,
   BlackCheck,
   Polygon,
+  RightBackArrow,
+  AppIcon,
+  ShowEye,
+  BlackShowEye,
 };

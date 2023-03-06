@@ -14,6 +14,8 @@ export default function AttentionScreen2(props) {
 
     const handleProceedClick = () => {
         setBtnValue(appConstant.proceed)
+        navigation.navigate(appConstant.setupWallet)
+
     }
 
     const handleCheckAgainClick = () => {

@@ -45,11 +45,6 @@ module.exports = {
 
   createWalletData: [
     {
-      id: 0,
-      number: 12,
-      name: 'document',
-    },
-    {
       id: 1,
       number: 18,
       name: 'abstract',
@@ -133,6 +128,164 @@ module.exports = {
       id: 17,
       number: 24,
       name: 'cinnamon',
+    },
+    {
+      id: 18,
+      number: 67,
+      name: 'document',
+    },
+    {
+      id: 19,
+      number: 24,
+      name: 'rotate',
+    },
+    {
+      id: 20,
+      number: 24,
+      name: 'attitude',
+    },
+    {
+      id: 21,
+      number: 24,
+      name: 'wear',
+    },
+    {
+      id: 22,
+      number: 24,
+      name: 'rotate',
+    },
+    {
+      id: 23,
+      number: 24,
+      name: 'cinnamon',
+    },
+    {
+      id: 24,
+      number: 67,
+      name: 'document',
+    },
+  ],
+
+  importWalletData: [
+    {
+      id: 1,
+      number: 18,
+      name: '',
+    },
+    {
+      id: 2,
+      number: 24,
+      name: '',
+    },
+    {
+      id: 3,
+      number: 12,
+      name: '',
+    },
+    {
+      id: 4,
+      number: 18,
+      name: '',
+    },
+    {
+      id: 5,
+      number: 24,
+      name: '',
+    },
+    {
+      id: 6,
+      number: 12,
+      name: '',
+    },
+    {
+      id: 7,
+      number: 18,
+      name: '',
+    },
+    {
+      id: 8,
+      number: 24,
+      name: '',
+    },
+    {
+      id: 9,
+      number: 12,
+      name: '',
+    },
+    {
+      id: 10,
+      number: 18,
+      name: '',
+    },
+    {
+      id: 11,
+      number: 24,
+      name: '',
+    },
+    {
+      id: 12,
+      number: 24,
+      name: '',
+    },
+    {
+      id: 13,
+      number: 24,
+      name: '',
+    },
+    {
+      id: 14,
+      number: 24,
+      name: '',
+    },
+    {
+      id: 15,
+      number: 24,
+      name: '',
+    },
+    {
+      id: 16,
+      number: 24,
+      name: '',
+    },
+    {
+      id: 17,
+      number: 24,
+      name: '',
+    },
+    {
+      id: 18,
+      number: 67,
+      name: '',
+    },
+    {
+      id: 19,
+      number: 24,
+      name: '',
+    },
+    {
+      id: 20,
+      number: 24,
+      name: '',
+    },
+    {
+      id: 21,
+      number: 24,
+      name: '',
+    },
+    {
+      id: 22,
+      number: 24,
+      name: '',
+    },
+    {
+      id: 23,
+      number: 24,
+      name: '',
+    },
+    {
+      id: 24,
+      number: 67,
+      name: '',
     },
   ],
 };

@@ -33,4 +33,8 @@ module.exports = {
   complate: 'Complate',
   importWallet: 'Import Wallet',
   edit: 'Edit',
+  welcomePurchase: 'Welcome Purchase',
+  enterPassword: 'Enter Passphrase',
+  passphrase: 'Passphrase',
+  enter: 'Enter ',
 };

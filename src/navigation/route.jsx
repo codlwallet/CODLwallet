@@ -14,6 +14,7 @@ import AttentionScreen3 from '../containers/CreateWallet/AttentionScreen3';
 import ComplateSeedsScreen from '../containers/ConfirmSeeds/ComplateSeedsScreen';
 import ConfirmSeedsScreen from '../containers/ConfirmSeeds/ConfirmSeedsScreen';
 import ImportWalletScreen from '../containers/ImportWallet/ImportWalletScreen';
+import WelcomePurchaseScreen from '../containers/WelcomePurchase/WelcomePurchaseScreen';
 
 const Route = () => {
     const Stack = createNativeStackNavigator();
@@ -32,6 +33,7 @@ const Route = () => {
                 <Stack.Screen name={Constant.confirmSeeds} component={ConfirmSeedsScreen} />
                 <Stack.Screen name={Constant.complateSeeds} component={ComplateSeedsScreen} />
                 <Stack.Screen name={Constant.importWallet} component={ImportWalletScreen} />
+                <Stack.Screen name={Constant.welcomePurchase} component={WelcomePurchaseScreen} />
             </Stack.Navigator>
         </NavigationContainer>
     )

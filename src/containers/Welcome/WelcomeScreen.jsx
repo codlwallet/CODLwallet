@@ -1,10 +1,11 @@
 import React from 'react'
 import { Image, StyleSheet, View } from 'react-native'
 import colors from '../../assets/colors';
+import SvgIcons from '../../assets/SvgIcons';
 import Button from '../../components/common/Button';
 import FontText from '../../components/common/FontText';
 import appConstant from '../../helper/appConstant';
-import { hp, normalize, wp } from '../../helper/responsiveScreen';
+import { hp, normalize } from '../../helper/responsiveScreen';
 
 const WelcomeScreen = (props) => {
     const { navigation } = props
@@ -15,8 +16,12 @@ const WelcomeScreen = (props) => {
 
     return (
         <View style={styles.container}>
-            <Image source={require('../../assets/images/AppLogo.png')} />
-            <Image source={require('../../assets/images/AppName.png')} style={styles.image} />
+            {/* <Image source={require('../../assets/images/AppLogo.png')} /> */}
+            {/* <Image source={require('../../assets/images/AppName.png')} style={styles.image} /> */}
+            <SvgIcons.AppIcon />
+            <View style={styles.image}>
+                <SvgIcons.AppName />
+            </View>
             <Button
                 flex={null}
                 height={hp(6.5)}

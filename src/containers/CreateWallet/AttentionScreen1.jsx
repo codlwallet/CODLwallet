@@ -9,10 +9,15 @@ import FontText from '../../components/common/FontText'
 import Button from '../../components/common/Button'
 
 export default function AttentionScreen1({ navigation, route }) {
-    const { ButtonValue } = route.params
+    const { ButtonValue, numberValue } = route.params
+    console.log("numberValue.....", numberValue, ButtonValue)
 
     const handleUnderStandBtnClick = () => {
-        navigation.navigate(ButtonValue === appConstant.createWallet ? appConstant.createWallet : appConstant.importWallet)
+        navigation.navigate(ButtonValue === appConstant.createWallet ? appConstant.createWallet : appConstant.importWallet, {
+            numberValue: numberValue
+        })
+        // navigation.navigate(appConstant.createWallet)
+
     }
 
     return (

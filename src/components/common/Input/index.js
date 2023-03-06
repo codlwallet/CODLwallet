@@ -62,6 +62,7 @@ const Input = forwardRef(
       withRightIcon,
       rightIcon,
       disabled,
+      onSubmitEditing,
     },
     ref,
   ) => {
@@ -142,7 +143,7 @@ const Input = forwardRef(
             }}
             textContentType="none"
             pointerEvents={pointerEvents}
-            editable={inputEditable}
+            editable={editable}
             value={value}
             textAlign={textAlign}
             autoComplete="off"
@@ -240,7 +241,7 @@ const styles = StyleSheet.create({
     // paddingVertical: hp(4),
     justifyContent: 'space-between',
     marginHorizontal: wp(4),
-    height: hp(8),
+    // height: hp(8),
   },
 });
 

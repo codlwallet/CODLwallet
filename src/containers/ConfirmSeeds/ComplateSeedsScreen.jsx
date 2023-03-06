@@ -8,11 +8,11 @@ import appConstant from '../../helper/appConstant'
 
 export default function ComplateSeedsScreen(props) {
     const { navigation } = props
-    // useEffect(() => {
-    //     setTimeout(() => {
-    //         navigation.navigate(appConstant.setupWallet)
-    //     }, 2000);
-    // }, [])
+    useEffect(() => {
+        setTimeout(() => {
+            navigation.navigate(appConstant.welcomePurchase)
+        }, 2000);
+    }, [])
 
     return (
         <View style={styles.container}>

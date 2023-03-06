@@ -6,16 +6,18 @@ import appConstant from '../../helper/appConstant'
 import { hp, normalize, wp } from '../../helper/responsiveScreen'
 import Button from '../../components/common/Button'
 import FontText from '../../components/common/FontText'
-import { createWalletData } from '../../constants/data'
+import { importWalletData } from '../../constants/data'
 import WalletCard from '../../components/common/WalletCard'
+import Input from '../../components/common/Input'
 
-export default function ImportWalletScreen(props) {
-    const { navigation } = props
+export default function ImportWalletScreen({ navigation, route }) {
+    const { numberValue } = route.params
     const [btnValue, setBtnValue] = useState(appConstant.confirm)
+    const [walletData, setWalletData] = useState(importWalletData)
 
     const handleConfirmClick = () => {
         setBtnValue(appConstant.confirm)
-        // navigation.navigate(appConstant.confirmSeeds)
+        navigation.navigate(appConstant.complateSeeds)
     }
 
     const handleEditClick = () => {
@@ -36,23 +38,38 @@ export default function ImportWalletScreen(props) {
                     title={appConstant.recoverySeeds}
                     children={
                         <FlatList
-                            data={createWalletData}
+                            data={numberValue && walletData.slice(0, numberValue)}
                             numColumns={3}
+                            contentContainerStyle={{ justifyContent: 'center', alignItems: "center" }}
                             keyExtractor={(index) => index.toString()}
                             renderItem={({ item, index }) => {
                                 return (
-                                    <View key={index.toString()} style={styles.seedsContainer}>
-                                        <View style={styles.numberContainer}>
-                                            <FontText name={"inter-bold"} size={normalize(12)} color={'white'}>
-                                                {item?.id}
-                                            </FontText>
-                                        </View>
-                                        <View style={styles.nameContainer}>
-                                            <FontText name={"inter-regular"} size={normalize(16)} color={'red'} pLeft={wp(1)} lines={1}>
-                                                {item?.name}
-                                            </FontText>
-                                        </View>
-                                    </View>
+                                    <>
+                                        <Input
+                                            withLeftIcon
+                                            leftIcon={
+                                                <View style={[styles.numberContainer, { backgroundColor: item.name === '' ? colors.white : colors.red }]}>
+                                                    <FontText name={"inter-bold"} size={normalize(12)} color={item.name === '' ? 'black' : 'white'}>
+                                                        {item?.id}
+                                                    </FontText>
+                                                </View>
+                                            }
+                                            placeholder={''}
+                                            value={item?.name}
+                                            onChangeText={text => {
+                                                walletData[index].name = text;
+                                                setWalletData([...walletData]);
+                                            }}
+                                            keyboardType={'default'}
+                                            returnKeyType={'done'}
+                                            blurOnSubmit
+                                            fontName={'poppins-regular'}
+                                            fontSize={normalize(22)}
+                                            style={[styles.inputContainer, {
+                                                backgroundColor: item.name == '' ? colors.red : colors.white
+                                            }]}
+                                        />
+                                    </>
                                 )
                             }}
                         />
@@ -108,28 +125,28 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
     },
-    seedsContainer: {
+    inputContainer: {
         backgroundColor: colors.white,
         borderRadius: wp(2),
         width: wp(25),
         height: hp(4),
-        alignItems: 'center',
         flexDirection: 'row',
-        justifyContent: 'center',
-        paddingHorizontal: wp(2),
         marginBottom: hp(1),
-        marginRight: wp(2.5),
+        padding: 0,
+        marginHorizontal: wp(1),
+        paddingHorizontal: wp(2)
     },
     numberContainer: {
-        backgroundColor: colors.red,
+        backgroundColor: colors.white,
         borderRadius: wp(1),
         height: hp(3),
-        width: wp(6),
+        width: wp(5),
         justifyContent: 'center',
-        alignItems: 'center'
+        alignItems: 'center',
+        marginRight: wp(1)
     },
     nameContainer: {
-        width: wp(15),
-        flex: 1
+        height: hp(4),
+        padding: 0
     }
 })

@@ -19,7 +19,8 @@ export default function SetupWalletScreen(props) {
 
     const handleProceedClick = () => {
         navigation.navigate(appConstant.attentionScreen1, {
-            ButtonValue: btnValue
+            ButtonValue: btnValue,
+            numberValue: numberValue
         })
     }
     return (

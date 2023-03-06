@@ -1,11 +1,12 @@
 import { View, StyleSheet, TouchableOpacity, Keyboard } from 'react-native'
 import React, { useRef, useState } from 'react'
 import colors from '../../assets/colors'
-import { hp, normalize } from '../../helper/responsiveScreen'
+import { hp, normalize, wp } from '../../helper/responsiveScreen'
 import Header from '../../components/common/Header'
 import appConstant from '../../helper/appConstant'
 import Input from '../../components/common/Input'
 import SvgIcons from '../../assets/SvgIcons'
+import FontText from '../../components/common/FontText'
 
 export default function SetupUserScreen(props) {
     const { navigation } = props
@@ -19,9 +20,19 @@ export default function SetupUserScreen(props) {
     const [nameFocus, setNameFocus] = useState(true)
     const [choosePinFocus, setChoosePinFocus] = useState(false)
     const [confirmPinFocus, setConfirmPinFocus] = useState(false)
+    const [confirmPinError, setConfirmPinError] = useState(false)
+    const [nameError, setnameError] = useState(false)
+    const [choosePassError, setChoosePassError] = useState(false)
+    const [confirmPassError, setConfirmPassError] = useState(false)
+
 
     const onSubmitConfirmPin = () => {
-        navigation.navigate(appConstant.createdUser)
+        if (confirmPin === choosePin) {
+            navigation.navigate(appConstant.createdUser)
+        }
+        else {
+            setConfirmPinError(true)
+        }
     }
 
     return (
@@ -29,7 +40,7 @@ export default function SetupUserScreen(props) {
             <Header title={appConstant.setupUser} showRightIcon RightIcon={'info'} />
             <View style={styles.subContainer}>
                 <Input
-                    withRightIcon={nameFocus ? true : false}
+                    withRightIcon={!nameFocus ? true : false}
                     ref={nameRef}
                     autoFocus={nameFocus ? true : false}
                     placeholder={appConstant.name}
@@ -37,11 +48,13 @@ export default function SetupUserScreen(props) {
                     placeholderTextColor={nameFocus ? colors.black : colors.white}
                     onChangeText={setName}
                     keyboardType={'default'}
+                    blurOnSubmit={false}
                     returnKeyType={'next'}
                     onFocus={() => setNameFocus(true)}
-                    onBlur={() => setNameFocus(false)}
-                    onSubmit={() => choosePinRef?.current.focus()}
+                    onBlur={() => setNameFocus(!nameFocus)}
+                    onSubmit={() => choosePinRef.current.focus()}
                     fontName={'poppins-regular'}
+                    onSubmitEditing={() => choosePinRef.current.focus()}
                     fontSize={normalize(22)}
                     inputStyle={[styles.textInput, {
                         color: nameFocus == true
@@ -54,26 +67,40 @@ export default function SetupUserScreen(props) {
                             nameFocus == true
                                 ? colors.white
                                 : colors.gray,
+
                     }]}
                     rightIcon={
                         <TouchableOpacity>
-                            <SvgIcons.BlackCheck height={hp(4)} width={hp(2.5)} />
+                            <SvgIcons.Check height={hp(4)} width={hp(2.5)} />
                         </TouchableOpacity>
                     }
                 />
+                {/* 
+                {nameError && name === '' &&
+                    <FontText
+                        color={"white"}
+                        pRight={wp(6)}
+                        textAlign={'right'}
+                        name={'inter-regular'}
+                        size={normalize(12)}>
+                        {'Please Enter Name'}
+                    </FontText>
+                } */}
                 <Input
+                    editable={name !== '' ? true : false}
                     withRightIcon
                     ref={choosePinRef}
                     placeholder={appConstant.choosePin}
                     value={choosePin}
                     placeholderTextColor={choosePinFocus ? colors.black : colors.white}
                     onChangeText={setChoosePin}
-                    keyboardType={'number-pad'}
+                    keyboardType={'numeric'}
                     returnKeyType={'next'}
                     secureTextEntry={!showPin ? true : false}
                     onFocus={() => setChoosePinFocus(true)}
                     onBlur={() => setChoosePinFocus(!choosePinFocus)}
-                    onSubmit={() => confirmPinRef?.current.focus()}
+                    onSubmitEditing={() => confirmPinRef.current.focus()}
+                    onSubmit={() => confirmPinRef.current.focus()}
                     inputStyle={[styles.textInput, {
                         color: choosePinFocus == true
                             ? colors.black
@@ -91,7 +118,7 @@ export default function SetupUserScreen(props) {
                         <TouchableOpacity onPress={() => setShowPin(!showPin)}>
                             {showPin ?
                                 <>
-                                    {!choosePinFocus ? <SvgIcons.HideEye /> : <SvgIcons.BlackHideEye />}
+                                    {!choosePinFocus ? <SvgIcons.ShowEye height={hp(3.5)} width={hp(2.5)} /> : <SvgIcons.BlackShowEye height={hp(3.5)} width={hp(2.5)} />}
                                 </>
                                 :
                                 <>
@@ -101,15 +128,26 @@ export default function SetupUserScreen(props) {
                         </TouchableOpacity>
                     }
                 />
+                {/* {choosePassError && choosePin === '' &&
+                    <FontText
+                        color={"white"}
+                        pRight={wp(6)}
+                        name={'inter-regular'}
+                        textAlign={'right'}
+                        size={normalize(12)}>
+                        {'Please Enter PIN'}
+                    </FontText>
+                } */}
                 <Input
-                    withRightIcon={confirmPinFocus ? true : false}
+                    // editable={name !== '' && choosePin !== '' ? true : false}
+                    withRightIcon={choosePin === confirmPin && confirmPinFocus ? true : false}
                     ref={confirmPinRef}
                     placeholder={appConstant.confirmPin}
                     value={confirmPin}
                     secureTextEntry={true}
                     placeholderTextColor={confirmPinFocus ? colors.black : colors.white}
                     onChangeText={setConfirmPin}
-                    keyboardType={'number-pad'}
+                    keyboardType={'numeric'}
                     returnKeyType={'done'}
                     blurOnSubmit
                     onFocus={() => setConfirmPinFocus(true)}
@@ -127,6 +165,8 @@ export default function SetupUserScreen(props) {
                             confirmPinFocus == true
                                 ? colors.white
                                 : colors.gray,
+                        borderColor: confirmPinError ? colors.red : colors.gray,
+                        borderWidth: wp(0.5)
                     }]}
                     rightIcon={
                         <TouchableOpacity>
@@ -162,9 +202,11 @@ const styles = StyleSheet.create({
     },
     textInputContainer: {
         marginTop: hp(2),
+        height: hp(8)
     },
     textInput: {
         fontSize: normalize(22),
         padding: 0,
+        paddingHorizontal: wp(4)
     }
 })
