@@ -15,6 +15,7 @@ import ComplateSeedsScreen from '../containers/ConfirmSeeds/ComplateSeedsScreen'
 import ConfirmSeedsScreen from '../containers/ConfirmSeeds/ConfirmSeedsScreen';
 import ImportWalletScreen from '../containers/ImportWallet/ImportWalletScreen';
 import WelcomePurchaseScreen from '../containers/WelcomePurchase/WelcomePurchaseScreen';
+import MainScreen from '../containers/Main/MainScreen';
 
 const Route = () => {
     const Stack = createNativeStackNavigator();
@@ -34,6 +35,7 @@ const Route = () => {
                 <Stack.Screen name={Constant.complateSeeds} component={ComplateSeedsScreen} />
                 <Stack.Screen name={Constant.importWallet} component={ImportWalletScreen} />
                 <Stack.Screen name={Constant.welcomePurchase} component={WelcomePurchaseScreen} />
+                <Stack.Screen name={Constant.main} component={MainScreen} />
             </Stack.Navigator>
         </NavigationContainer>
     )

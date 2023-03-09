@@ -27,6 +27,7 @@ export default function SetupWalletScreen(props) {
         <View style={styles.container}>
             <Header title={appConstant.setupWallet} showRightIcon RightIcon={'info'} />
             <View style={styles.buttonContainer}>
+                {/* <View style={{ backgroundColor: 'pink' }}> */}
                 {walletData.map((item, index) => {
                     return (
                         <TouchableOpacity key={index} onPress={() => {
@@ -38,8 +39,13 @@ export default function SetupWalletScreen(props) {
                     )
                 })
                 }
+                {/* </View> */}
             </View>
-            <View>
+            <View style={{
+                position: 'absolute',
+                bottom: hp(4),
+
+            }}>
                 <WalletCard style={styles.walletCardContainer}
                     title={appConstant.numberOfWords}
                     headerStyle={{ borderColor: colors.black }}
@@ -61,20 +67,20 @@ export default function SetupWalletScreen(props) {
                         </>
                     }
                 />
+                <Button
+                    flex={null}
+                    height={hp(6.5)}
+                    // width="90%"
+                    type="highlight"
+                    borderRadius={11}
+                    bgColor="white"
+                    onPress={handleProceedClick}
+                    style={styles.button}>
+                    <FontText name={"inter-medium"} size={normalize(16)} color="black">
+                        {appConstant.proceed}
+                    </FontText>
+                </Button>
             </View>
-            <Button
-                flex={null}
-                height={hp(6.5)}
-                width="90%"
-                type="highlight"
-                borderRadius={11}
-                bgColor="white"
-                onPress={handleProceedClick}
-                style={styles.button}>
-                <FontText name={"inter-medium"} size={normalize(16)} color="black">
-                    {appConstant.proceed}
-                </FontText>
-            </Button>
         </View>
     )
 }
@@ -86,19 +92,20 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     buttonContainer: {
-        alignItems: 'center',
-        justifyContent: 'center',
-        height: hp(70)
+        flex: 0.5,
+        alignItems: 'flex-end',
+        justifyContent: 'flex-end'
     },
     button: {
         backgroundColor: colors.white,
-        position: 'absolute',
-        bottom: hp(4),
         alignItems: 'center',
+        alignSelf: 'center',
+        width: '100%'
     },
     walletCardContainer: {
         backgroundColor: colors.gray,
-        bottom: Platform.OS === 'android' ? hp(1) : wp(8),
+        marginBottom: hp(2),
+        paddingTop: hp(4),
         paddingBottom: hp(2.5)
     },
     numberContainer: {

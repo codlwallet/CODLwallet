@@ -25,7 +25,6 @@ export default function AttentionScreen2({ navigation, route }) {
         })
     }
 
-
     useEffect(() => {
         BackHandler.addEventListener('hardwareBackPress', backAction);
         return async () => {

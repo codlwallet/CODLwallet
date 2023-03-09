@@ -16,6 +16,13 @@ import AppIcon from './svgs/AppIcon';
 import ShowEye from './svgs/ShowEye.svg';
 import BlackShowEye from './svgs/BlackShowEye.svg';
 import AppLogo from './svgs/AppLogo.svg';
+import Avalanche from './svgs/Avalanche.svg';
+import Bitcoin from './svgs/Bitcoin.svg';
+import Ethereum from './svgs/Ethereum.svg';
+import Poly from './svgs/Poly.svg';
+import Solana from './svgs/Solana.svg';
+import AV from './svgs/AV.svg';
+import EU from './svgs/EU.svg';
 
 export default {
   Logo,
@@ -35,4 +42,11 @@ export default {
   ShowEye,
   BlackShowEye,
   AppLogo,
+  Avalanche,
+  Bitcoin,
+  Ethereum,
+  Poly,
+  Solana,
+  AV,
+  EU,
 };

@@ -209,7 +209,7 @@ export default function SetupUserScreen(props) {
                 }
                 <Input
                     editable={choosePin !== '' ? true : false}
-                    withRightIcon={choosePin === confirmPin ? true : false}
+                    withRightIcon={confirmPin !== '' && choosePin === confirmPin ? true : false}
                     ref={confirmPinRef}
                     placeholder={appConstant.confirmPin}
                     value={confirmPin}

@@ -33,7 +33,7 @@ export default function ConfirmSeedsScreen(props) {
                     headerStyle={{ borderColor: colors.black }}
                     titleColor={'black'}
                     children={
-                        <>
+                        <View style={{ justifyContent: 'space-between', flexDirection: 'row', alignItems: 'center', flex: 1 }}>
                             <View style={styles.numberWiew}>
                                 <FontText name={"inter-bold"} size={normalize(22)} color={'black'}>
                                     1
@@ -41,8 +41,8 @@ export default function ConfirmSeedsScreen(props) {
                             </View>
                             {confirmSeedsData.map((item, index) => {
                                 return (
-                                    <>
-                                        <TouchableOpacity key={index} style={[styles.numberContainer, { backgroundColor: index === numberIndex ? colors.white : colors.black }]} onPress={() => {
+                                    <View key={index}>
+                                        <TouchableOpacity style={[styles.numberContainer, { backgroundColor: index === numberIndex ? colors.white : colors.black }]} onPress={() => {
                                             setNumberValue(item?.number)
                                             setNumberIndex(index)
                                         }}>
@@ -50,10 +50,10 @@ export default function ConfirmSeedsScreen(props) {
                                                 {item?.name}
                                             </FontText>
                                         </TouchableOpacity>
-                                    </>
+                                    </View>
                                 )
                             })}
-                        </>
+                        </View>
                     }
                 />
 
@@ -100,7 +100,8 @@ const styles = StyleSheet.create({
         backgroundColor: colors.gray,
         bottom: hp(1.5),
         width: wp(95),
-        paddingBottom: hp(2.5)
+        paddingBottom: hp(2.5),
+        paddingTop: hp(3),
     },
     numberWiew: {
         backgroundColor: colors.white,
@@ -109,15 +110,14 @@ const styles = StyleSheet.create({
         borderRadius: wp(2),
         justifyContent: 'center',
         alignItems: 'center',
-        marginRight: wp(1.5)
     },
     numberContainer: {
         backgroundColor: colors.black,
         borderRadius: wp(2),
         paddingHorizontal: wp(2),
         height: hp(6),
+        width: wp(22),
         justifyContent: 'center',
         alignItems: 'center',
-        marginRight: wp(1.5)
     },
 })

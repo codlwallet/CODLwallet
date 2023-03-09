@@ -19,13 +19,14 @@ export default function CreateWalletScreen({ navigation, route }) {
         };
     }, []);
 
-    const handleBackClick = () => {
-        navigation.navigate(appConstant.attentionScreen2, {
-            ButtonValue: ButtonValue,
-            numberValue: numberValue,
-            from: appConstant.createWallet
-        })
-    }
+    // const handleBackClick = () => {
+    //     console.log("sdhsghja")
+    //     navigation.navigate(appConstant.attentionScreen2, {
+    //         ButtonValue: ButtonValue,
+    //         numberValue: numberValue,
+    //         from: appConstant.createWallet
+    //     })
+    // }
 
     const handleProceedClick = () => {
         navigation.navigate(appConstant.attentionScreen3, {
@@ -45,7 +46,7 @@ export default function CreateWalletScreen({ navigation, route }) {
 
     return (
         <View style={styles.container}>
-            <Header title={appConstant.createWallet} showRightIcon RightIcon={'info'} showBackIcon onBackPress={handleBackClick} />
+            <Header title={appConstant.createWallet} showRightIcon RightIcon={'info'} showBackIcon onBackPress={backAction} statusBarcolor={colors.red} />
             <View style={styles.subContainer}>
                 <WalletCard style={styles.walletCardContainer}
                     titleColor={'red'}
@@ -56,10 +57,12 @@ export default function CreateWalletScreen({ navigation, route }) {
                             data={numberValue && createWalletData.slice(0, numberValue)}
                             numColumns={3}
                             contentContainerStyle={{ justifyContent: 'center', alignItems: "center" }}
-                            keyExtractor={(index) => index.toString()}
+                            keyExtractor={(item) => {
+                                return item.id;
+                            }}
                             renderItem={({ item, index }) => {
                                 return (
-                                    <View key={index.toString()} style={styles.seedsContainer}>
+                                    <View style={styles.seedsContainer}>
                                         <View style={styles.numberContainer}>
                                             <FontText name={"inter-bold"} size={normalize(12)} color={'white'}>
                                                 {item?.id}
@@ -102,18 +105,18 @@ const styles = StyleSheet.create({
     subContainer: {
         flex: 1,
         alignItems: 'center',
-        justifyContent: 'center'
+        justifyContent: 'center',
     },
     button: {
-        bottom: hp(2),
+        marginBottom: hp(2),
         alignItems: 'center',
-        marginTop: hp(2),
-        position: 'absolute'
     },
     walletCardContainer: {
         backgroundColor: colors['red-open'],
         justifyContent: 'center',
         alignItems: 'center',
+        paddingTop: hp(3),
+        paddingBottom: hp(1.5),
         paddingHorizontal: 0
     },
     seedsContainer: {

@@ -1,5 +1,11 @@
 import React from 'react';
-import {View, StyleSheet, TouchableOpacity, Platform} from 'react-native';
+import {
+  View,
+  StyleSheet,
+  TouchableOpacity,
+  Platform,
+  StatusBar,
+} from 'react-native';
 import colors from '../../../assets/colors';
 import SvgIcons from '../../../assets/SvgIcons';
 import {hp, normalize, wp} from '../../../helper/responsiveScreen';
@@ -18,48 +24,56 @@ const Header = props => {
     showRightIcon,
     RightIconPress,
     RightIcon,
+    statusBarcolor,
   } = props;
 
   return (
-    <View style={[styles.container, style]}>
-      {showBackIcon && (
-        <TouchableOpacity onPress={onBackPress} style={{padding: 5}}>
-          <SvgIcons.BackArrow style={styles.arrow} />
-        </TouchableOpacity>
-      )}
-      <View
-        style={[
-          styles.titleContainer,
-          {
-            marginLeft: marginLeft,
-          },
-        ]}>
-        {title != null && (
-          <FontText
-            style={styles.title}
-            size={normalize(25)}
-            name="inter-regular"
-            color={'white'}
-            lines={1}
-            pLeft={pLeft}>
-            {title}
-          </FontText>
+    <>
+      <StatusBar
+        barStyle={'light-content'}
+        translucent
+        backgroundColor={statusBarcolor ? statusBarcolor : colors.black}
+      />
+      <View style={[styles.container, style]}>
+        {showBackIcon && (
+          <TouchableOpacity onPress={onBackPress} style={{padding: 5}}>
+            <SvgIcons.BackArrow style={styles.arrow} />
+          </TouchableOpacity>
+        )}
+        <View
+          style={[
+            styles.titleContainer,
+            {
+              marginLeft: marginLeft,
+            },
+          ]}>
+          {title != null && (
+            <FontText
+              style={styles.title}
+              size={normalize(25)}
+              name="inter-regular"
+              color={'white'}
+              lines={1}
+              pLeft={pLeft}>
+              {title}
+            </FontText>
+          )}
+        </View>
+        {showRightIcon && (
+          <TouchableOpacity onPress={RightIconPress} style={{padding: 5}}>
+            {RightIcon === 'info' ? (
+              <SvgIcons.Info style={styles.arrow} />
+            ) : RightIcon === 'false' ? (
+              <SvgIcons.False style={styles.arrow} />
+            ) : RightIcon === 'menu' ? (
+              <SvgIcons.Menu style={styles.arrow} />
+            ) : (
+              <SvgIcons.Plus style={styles.arrow} />
+            )}
+          </TouchableOpacity>
         )}
       </View>
-      {showRightIcon && (
-        <TouchableOpacity onPress={RightIconPress} style={{padding: 5}}>
-          {RightIcon === 'info' ? (
-            <SvgIcons.Info style={styles.arrow} />
-          ) : RightIcon === 'false' ? (
-            <SvgIcons.False style={styles.arrow} />
-          ) : RightIcon === 'menu' ? (
-            <SvgIcons.Menu style={styles.arrow} />
-          ) : (
-            <SvgIcons.Plus style={styles.arrow} />
-          )}
-        </TouchableOpacity>
-      )}
-    </View>
+    </>
   );
 };
 

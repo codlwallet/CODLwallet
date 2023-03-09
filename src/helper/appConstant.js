@@ -22,7 +22,7 @@ module.exports = {
   attention2Description:
     'If you go back, you will lose the created seeds and recreate new ones.',
   checkAgain: 'Check Again',
-  recoverySeeds: 'Did you secure recovery seeds?',
+  recoverySeeds: 'Recovery seed',
   attentionScreen3: 'attentionScreen3',
   secureSeeds: 'Did you secure recovery seeds?',
   attention3Description:
@@ -42,4 +42,14 @@ module.exports = {
   matchedPIN: "Your PIN doesn't match",
   enterSeedsCorrectly: 'Did you enter the seeds correctly?',
   hiddenWallet: 'Hidden Wallet',
+  main: 'Main',
+  connect: 'Connect',
+  AboutCODL: 'About CODL',
+  language: 'Language',
+  networks: 'Networks',
+  recoveryCheck: 'Recovery Check',
+  changePIN: 'Change PIN',
+  changeName: 'Change Name',
+  deleteEverything: 'Delete Everything',
+  lockDevice: 'Lock Device',
 };

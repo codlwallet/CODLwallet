@@ -25,20 +25,20 @@ export default function AttentionScreen2({ navigation, route }) {
         })
     }
 
-    useEffect(() => {
-        BackHandler.addEventListener('hardwareBackPress', backAction);
-        return async () => {
-            BackHandler.removeEventListener('hardwareBackPress', backAction);
-        };
-    }, []);
+    // useEffect(() => {
+    //     BackHandler.addEventListener('hardwareBackPress', backAction);
+    //     return async () => {
+    //         BackHandler.removeEventListener('hardwareBackPress', backAction);
+    //     };
+    // }, []);
 
-    const backAction = () => {
-        navigation.navigate(appConstant.createWallet, {
-            numberValue: numberValue,
-            ButtonValue: ButtonValue
-        })
-        return true;
-    };
+    // const backAction = () => {
+    //     navigation.navigate(appConstant.createWallet, {
+    //         numberValue: numberValue,
+    //         ButtonValue: ButtonValue
+    //     })
+    //     return true;
+    // };
 
     return (
         <View style={styles.container}>
@@ -46,7 +46,7 @@ export default function AttentionScreen2({ navigation, route }) {
             <View style={styles.subContainer}>
                 <SvgIcons.Polygon height={hp(8)} width={hp(8)} />
                 <FontText color={'white'} size={normalize(40)} name={'inter-regular'} textAlign={'center'} pTop={hp(3)}>
-                    {appConstant.recoverySeeds}
+                    {appConstant.secureSeeds}
                 </FontText>
                 <FontText color={'white'} size={normalize(22)} name={'inter-regular'} textAlign={'center'} pTop={hp(2)}>
                     {appConstant.attention3Description}

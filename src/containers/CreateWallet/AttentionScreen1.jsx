@@ -10,15 +10,12 @@ import Button from '../../components/common/Button'
 
 export default function AttentionScreen1({ navigation, route }) {
     const { ButtonValue, numberValue } = route.params
-    console.log("numberValue.....", numberValue, ButtonValue)
 
     const handleUnderStandBtnClick = () => {
         navigation.navigate(ButtonValue === appConstant.createWallet ? appConstant.createWallet : appConstant.importWallet, {
             numberValue: numberValue,
             ButtonValue: ButtonValue
         })
-        // navigation.navigate(appConstant.createWallet)
-
     }
 
     return (
@@ -60,12 +57,11 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: 'center',
         justifyContent: 'center',
-        paddingHorizontal: wp(6)
+        paddingHorizontal: wp(6),
     },
     button: {
         backgroundColor: colors.white,
-        position: 'absolute',
-        bottom: hp(4),
-        alignItems: 'center'
+        marginBottom: hp(4),
+        alignItems: 'center',
     }
 })

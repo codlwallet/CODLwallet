@@ -1,3 +1,7 @@
+const {default: SvgIcons} = require('../assets/SvgIcons');
+const appConstant = require('../helper/appConstant');
+const {hp} = require('../helper/responsiveScreen');
+
 module.exports = {
   walletData: [
     {
@@ -29,17 +33,17 @@ module.exports = {
     {
       id: 0,
       number: 12,
-      name: 'document',
+      name: 'loan',
     },
     {
       id: 1,
       number: 18,
-      name: 'abstract',
+      name: 'attitude',
     },
     {
       id: 2,
       number: 24,
-      name: 'announce',
+      name: 'usage',
     },
   ],
 
@@ -286,6 +290,66 @@ module.exports = {
       id: 24,
       number: 67,
       name: '',
+    },
+  ],
+
+  mainData: [
+    {
+      id: 0,
+      name: 'Bitcoin',
+      icon: <SvgIcons.Bitcoin height={hp(6)} width={hp(4)} />,
+    },
+    {
+      id: 1,
+      name: 'Ethereum',
+      icon: <SvgIcons.EU height={hp(6)} width={hp(4)} />,
+      // image: require('../assets/images/img.png'),
+    },
+    {
+      id: 2,
+      name: 'Solana',
+      icon: <SvgIcons.Solana height={hp(6)} width={hp(4)} />,
+    },
+    {
+      id: 3,
+      name: 'Avalanche',
+      icon: <SvgIcons.AV height={hp(6)} width={hp(4)} />,
+    },
+    {
+      id: 4,
+      name: 'Polygon',
+      icon: <SvgIcons.Poly />,
+    },
+  ],
+
+  settingData: [
+    {
+      id: 0,
+      name: appConstant.changeName,
+    },
+    {
+      id: 1,
+      name: appConstant.changePIN,
+    },
+    {
+      id: 2,
+      name: appConstant.recoveryCheck,
+    },
+    {
+      id: 3,
+      name: appConstant.networks,
+    },
+    {
+      id: 4,
+      name: appConstant.language,
+    },
+    {
+      id: 5,
+      name: appConstant.AboutCODL,
+    },
+    {
+      id: 6,
+      name: appConstant.deleteEverything,
     },
   ],
 };

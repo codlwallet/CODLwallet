@@ -1,4 +1,4 @@
-import { Keyboard, StyleSheet, TouchableOpacity, View } from 'react-native'
+import { Keyboard, Platform, StyleSheet, TouchableOpacity, View } from 'react-native'
 import React, { useState } from 'react'
 import Header from '../../components/common/Header'
 import colors from '../../assets/colors'
@@ -11,7 +11,7 @@ import WalletCard from '../../components/common/WalletCard'
 import ToggleSwitch from 'toggle-switch-react-native'
 import Button from '../../components/common/Button'
 
-export default function WelcomePurchaseScreen() {
+export default function WelcomePurchaseScreen({ navigation }) {
     const [password, setPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false)
     const [passwordFocus, setPasswordFocus] = useState(false)
@@ -22,7 +22,7 @@ export default function WelcomePurchaseScreen() {
     const keyboardShowListener = Keyboard.addListener(
         'keyboardDidShow',
         () => {
-            // alert('Keyboard is open')
+            setIsEnabled(true)
         }
     );
     const keyboardHideListener = Keyboard.addListener(
@@ -32,8 +32,20 @@ export default function WelcomePurchaseScreen() {
         }
     );
 
+    const onSubmitPin = () => {
+        // navigation.navigate(appConstant.main, {
+        //     hidden: isEnabled
+        // })
+    }
+
+    const handleEnterClick = () => {
+        // navigation.navigate(appConstant.main, {
+        //     hidden: isEnabled
+        // })
+    }
+
     return (
-        <View style={styles.container} onStartShouldSetResponder={() => Keyboard.dismiss()}>
+        <View style={styles.container}>
             <Header showRightIcon RightIcon={'info'} title={appConstant.welcome} />
             <View style={styles.subContainer}>
                 <TouchableOpacity style={styles.buttonConatiner}>
@@ -54,12 +66,9 @@ export default function WelcomePurchaseScreen() {
                     secureTextEntry={!showPassword ? true : false}
                     onFocus={() => setPasswordFocus(true)}
                     onBlur={() => setPasswordFocus(!passwordFocus)}
-                    inputStyle={[styles.textInput, {
-                        color: passwordFocus == true
-                            ? colors.black
-                            : colors.white
-                    }]}
+                    inputStyle={[styles.textInput, { color: colors.black }]}
                     fontName={'poppins-regular'}
+                    onSubmit={onSubmitPin}
                     fontSize={normalize(22)}
                     style={[styles.textInputContainer, {
                         backgroundColor:
@@ -70,20 +79,16 @@ export default function WelcomePurchaseScreen() {
                     rightIcon={
                         <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
                             {showPassword ?
-                                <>
-                                    {!passwordFocus ? <SvgIcons.HideEye /> : <SvgIcons.BlackHideEye />}
-                                </>
+                                <SvgIcons.BlackShowEye height={hp(2.5)} width={hp(2.5)} />
                                 :
-                                <>
-                                    {!passwordFocus ? <SvgIcons.HideEye /> : <SvgIcons.BlackHideEye />}
-                                </>
+                                <SvgIcons.BlackHideEye height={hp(2.5)} width={hp(2.5)} />
                             }
                         </TouchableOpacity>
                     }
                 />}
             </View>
 
-            <WalletCard style={[styles.walletCardContainer, { bottom: isEnabled ? hp(22) : 0 }]}
+            <WalletCard style={[styles.walletCardContainer, { bottom: isEnabled ? hp(18) : Platform.OS === 'android' ? hp(-2) : hp(-4) }]}
                 title={appConstant.hiddenWallet}
                 headerStyle={{ borderColor: colors.black }}
                 titleColor={'black'}
@@ -108,14 +113,14 @@ export default function WelcomePurchaseScreen() {
             />
             <Button
                 flex={null}
-                height={hp(6.5)}
+                height={hp(7)}
                 width="90%"
                 type="highlight"
                 borderRadius={11}
                 bgColor="white"
-                // onPress={handleUnderStandBtnClick}
+                onPress={handleEnterClick}
                 style={styles.button}>
-                <FontText name={"inter-medium"} size={normalize(16)} color="black">
+                <FontText name={"inter-medium"} size={normalize(22)} color="black">
                     {appConstant.enter}
                 </FontText>
             </Button>
@@ -157,9 +162,10 @@ const styles = StyleSheet.create({
     walletCardContainer: {
         backgroundColor: colors.gray,
         width: wp(95),
-        paddingBottom: hp(2.5),
+        // paddingBottom: hp(2.5),
         justifyContent: 'center',
         alignItems: 'center',
+
     },
     button: {
         backgroundColor: colors.white,

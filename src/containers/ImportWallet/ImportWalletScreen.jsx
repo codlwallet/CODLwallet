@@ -1,5 +1,5 @@
-import { BackHandler, FlatList, StyleSheet, View } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import { BackHandler, FlatList, Keyboard, StyleSheet, View } from 'react-native'
+import React, { useEffect, useRef, useState } from 'react'
 import colors from '../../assets/colors'
 import Header from '../../components/common/Header'
 import appConstant from '../../helper/appConstant'
@@ -12,10 +12,14 @@ import Input from '../../components/common/Input'
 
 export default function ImportWalletScreen({ navigation, route }) {
     const { numberValue, ButtonValue } = route.params
-    // const cardRef = useRef(null)
+    const cardRef = useRef([])
     const [btnValue, setBtnValue] = useState(appConstant.confirm)
     const [walletData, setWalletData] = useState(importWalletData)
-    const [focus, setFocus] = useState(false)
+    const [isEdit, setIsEdit] = useState(false)
+
+    useEffect(() => {
+        cardRef.current = cardRef.current.slice(0, walletData.length);
+    }, []);
 
     useEffect(() => {
         BackHandler.addEventListener('hardwareBackPress', backAction);
@@ -25,24 +29,20 @@ export default function ImportWalletScreen({ navigation, route }) {
     }, []);
 
     const handleConfirmClick = () => {
+        setIsEdit(false)
+
         setBtnValue(appConstant.confirm)
         navigation.navigate(appConstant.complateSeeds)
     }
 
     const handleEditClick = () => {
+        cardRef.current[0].focus()
+        setIsEdit(true)
         setBtnValue(appConstant.edit)
-        setFocus(true)
-    }
-
-    const handleBackClick = () => {
-        navigation.navigate(appConstant.attentionScreen2, {
-            ButtonValue: ButtonValue,
-            numberValue: numberValue,
-            from: appConstant.importWallet
-        })
     }
 
     const backAction = () => {
+        setIsEdit(false)
         navigation.navigate(appConstant.attentionScreen2, {
             ButtonValue: ButtonValue,
             numberValue: numberValue,
@@ -53,8 +53,8 @@ export default function ImportWalletScreen({ navigation, route }) {
     };
 
     return (
-        <View style={styles.container}>
-            <Header title={appConstant.importWallet} showRightIcon RightIcon={'info'} showBackIcon onBackPress={handleBackClick} />
+        <View style={styles.container} onStartShouldSetResponder={() => Keyboard.dismiss()}>
+            <Header title={appConstant.importWallet} showRightIcon RightIcon={'info'} showBackIcon onBackPress={backAction} statusBarcolor={colors.red} />
             <View style={styles.subContainer}>
                 <WalletCard style={styles.walletCardContainer}
                     titleColor={'red'}
@@ -65,13 +65,15 @@ export default function ImportWalletScreen({ navigation, route }) {
                             data={numberValue && walletData.slice(0, numberValue)}
                             numColumns={3}
                             contentContainerStyle={{ justifyContent: 'center', alignItems: "center" }}
-                            keyExtractor={(index) => index.toString()}
+                            keyExtractor={(item) => {
+                                return item.id;
+                            }}
                             renderItem={({ item, index }) => {
                                 return (
-                                    <View key={index}>
+                                    <View >
                                         <Input
-                                            autoFocus={true}
                                             withLeftIcon
+                                            ref={(el) => (cardRef.current[index] = el)}
                                             leftIcon={
                                                 <View style={[styles.numberContainer, { backgroundColor: item.name === '' ? colors.white : colors.red }]}>
                                                     <FontText name={"inter-bold"} size={normalize(12)} color={item.name === '' ? 'red' : 'white'}>
@@ -82,14 +84,18 @@ export default function ImportWalletScreen({ navigation, route }) {
                                             placeholder={''}
                                             value={item?.name}
                                             // numberOfLines={2}
+                                            editable={isEdit ? true : false}
                                             multiline={false}
                                             inputStyle={[styles.textInput, { color: item.name == '' ? colors.white : colors.red }]}
                                             onChangeText={text => {
                                                 walletData[index].name = text;
                                                 setWalletData([...walletData]);
+                                                if (index === walletData.length - 1) {
+                                                    return;
+                                                }
                                             }}
                                             keyboardType={'default'}
-                                            returnKeyType={'done'}
+                                            returnKeyType={'next'}
                                             blurOnSubmit
 
                                             style={[styles.inputContainer, {
@@ -154,6 +160,7 @@ const styles = StyleSheet.create({
         backgroundColor: colors['red-open'],
         justifyContent: 'center',
         alignItems: 'center',
+        paddingTop: hp(3)
     },
     inputContainer: {
         backgroundColor: colors.white,

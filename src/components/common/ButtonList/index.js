@@ -25,7 +25,6 @@ export default function ButtonView({
         {backgroundColor: index === buttonIndex ? colors.white : colors.gray},
       ]}>
       {/* {showLeftIcon ? leftIcon : null} */}
-
       <FontText
         color={index === buttonIndex ? 'black' : 'white'}
         size={normalize(22)}
