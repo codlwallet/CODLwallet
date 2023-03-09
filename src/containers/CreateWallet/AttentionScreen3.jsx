@@ -1,5 +1,5 @@
-import { BackHandler, StyleSheet, View } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import { StyleSheet, View } from 'react-native'
+import React, { useState } from 'react'
 import colors from '../../assets/colors'
 import appConstant from '../../helper/appConstant'
 import { hp, normalize, wp } from '../../helper/responsiveScreen'
@@ -8,8 +8,8 @@ import SvgIcons from '../../assets/SvgIcons'
 import FontText from '../../components/common/FontText'
 import Button from '../../components/common/Button'
 
-export default function AttentionScreen2({ navigation, route }) {
-    const { ButtonValue, numberValue } = route.params
+export default function AttentionScreen2(props) {
+    const { navigation } = props
     const [btnValue, setBtnValue] = useState(appConstant.confirmSeeds)
 
     const handleConfirmSeedsClick = () => {
@@ -19,26 +19,8 @@ export default function AttentionScreen2({ navigation, route }) {
 
     const handleCheckAgainClick = () => {
         setBtnValue(appConstant.checkAgain)
-        navigation.navigate(appConstant.createWallet, {
-            numberValue: numberValue,
-            ButtonValue: ButtonValue
-        })
+        navigation.navigate(appConstant.createWallet, { numberValue: 12 })
     }
-
-    // useEffect(() => {
-    //     BackHandler.addEventListener('hardwareBackPress', backAction);
-    //     return async () => {
-    //         BackHandler.removeEventListener('hardwareBackPress', backAction);
-    //     };
-    // }, []);
-
-    // const backAction = () => {
-    //     navigation.navigate(appConstant.createWallet, {
-    //         numberValue: numberValue,
-    //         ButtonValue: ButtonValue
-    //     })
-    //     return true;
-    // };
 
     return (
         <View style={styles.container}>
@@ -46,7 +28,7 @@ export default function AttentionScreen2({ navigation, route }) {
             <View style={styles.subContainer}>
                 <SvgIcons.Polygon height={hp(8)} width={hp(8)} />
                 <FontText color={'white'} size={normalize(40)} name={'inter-regular'} textAlign={'center'} pTop={hp(3)}>
-                    {appConstant.secureSeeds}
+                    {appConstant.recoverySeeds}
                 </FontText>
                 <FontText color={'white'} size={normalize(22)} name={'inter-regular'} textAlign={'center'} pTop={hp(2)}>
                     {appConstant.attention3Description}

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Image, StyleSheet, View } from 'react-native'
 import colors from '../../assets/colors';
 import SvgIcons from '../../assets/SvgIcons';
@@ -7,12 +7,41 @@ import FontText from '../../components/common/FontText';
 import appConstant from '../../helper/appConstant';
 import { hp, normalize } from '../../helper/responsiveScreen';
 
+
+import axios from 'axios'
+import Config from '../../constants'
+import DeviceInfo from 'react-native-device-info';
+
 const WelcomeScreen = (props) => {
     const { navigation } = props
 
     const onPressStartBtn = () => {
-        navigation.navigate(appConstant.setupUser)
+
+        const uniqueId = DeviceInfo.getUniqueIdSync();
+        axios.post(`${Config.backendAPI}/users/check`, { machineId: uniqueId }).then((res) => {
+            if (res.data["isExist"]) {
+                navigation.navigate(appConstant.lockUser)
+            } else {
+                navigation.navigate(appConstant.setupUser)
+            }
+        }).catch((e) => {
+            navigation.navigate(appConstant.setupUser)
+        })
+
     }
+
+    useEffect(() => {
+        const uniqueId = DeviceInfo.getUniqueIdSync();
+
+        axios.post(`${Config.backendAPI}/users/check`, { machineId: uniqueId }).then((res) => {
+            if (res.data["isExist"]) {
+                navigation.navigate(appConstant.lockUser)
+            }
+        }).catch((e) => {
+            console.log(e, "e")
+            // navigation.navigate(appConstant.setupUser)
+        })
+    }, [])
 
     return (
         <View style={styles.container}>

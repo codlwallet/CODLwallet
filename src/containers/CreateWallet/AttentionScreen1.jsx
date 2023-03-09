@@ -12,10 +12,7 @@ export default function AttentionScreen1({ navigation, route }) {
     const { ButtonValue, numberValue } = route.params
 
     const handleUnderStandBtnClick = () => {
-        navigation.navigate(ButtonValue === appConstant.createWallet ? appConstant.createWallet : appConstant.importWallet, {
-            numberValue: numberValue,
-            ButtonValue: ButtonValue
-        })
+        navigation.navigate(ButtonValue == appConstant.createWallet ? appConstant.createWallet : appConstant.importWallet, { numberValue })
     }
 
     return (

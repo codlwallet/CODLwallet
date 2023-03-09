@@ -3,6 +3,7 @@ const appConstant = require('../helper/appConstant');
 const {hp} = require('../helper/responsiveScreen');
 
 module.exports = {
+  // backendAPI: 'http://192.168.114.63:2003/api',
   walletData: [
     {
       id: 0,
