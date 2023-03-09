@@ -1,5 +1,5 @@
-import { FlatList, StyleSheet, View } from 'react-native'
-import React, { useState } from 'react'
+import { BackHandler, FlatList, StyleSheet, View } from 'react-native'
+import React, { useEffect, useState } from 'react'
 import colors from '../../assets/colors'
 import Header from '../../components/common/Header'
 import appConstant from '../../helper/appConstant'
@@ -11,9 +11,18 @@ import WalletCard from '../../components/common/WalletCard'
 import Input from '../../components/common/Input'
 
 export default function ImportWalletScreen({ navigation, route }) {
-    const { numberValue } = route.params
+    const { numberValue, ButtonValue } = route.params
+    // const cardRef = useRef(null)
     const [btnValue, setBtnValue] = useState(appConstant.confirm)
     const [walletData, setWalletData] = useState(importWalletData)
+    const [focus, setFocus] = useState(false)
+
+    useEffect(() => {
+        BackHandler.addEventListener('hardwareBackPress', backAction);
+        return async () => {
+            BackHandler.removeEventListener('hardwareBackPress', backAction);
+        };
+    }, []);
 
     const handleConfirmClick = () => {
         setBtnValue(appConstant.confirm)
@@ -22,12 +31,26 @@ export default function ImportWalletScreen({ navigation, route }) {
 
     const handleEditClick = () => {
         setBtnValue(appConstant.edit)
-        // navigation.navigate(appConstant.createWallet)
+        setFocus(true)
     }
 
     const handleBackClick = () => {
-        navigation.navigate(appConstant.attentionScreen2)
+        navigation.navigate(appConstant.attentionScreen2, {
+            ButtonValue: ButtonValue,
+            numberValue: numberValue,
+            from: appConstant.importWallet
+        })
     }
+
+    const backAction = () => {
+        navigation.navigate(appConstant.attentionScreen2, {
+            ButtonValue: ButtonValue,
+            numberValue: numberValue,
+            from: appConstant.importWallet
+
+        });
+        return true;
+    };
 
     return (
         <View style={styles.container}>
@@ -36,6 +59,7 @@ export default function ImportWalletScreen({ navigation, route }) {
                 <WalletCard style={styles.walletCardContainer}
                     titleColor={'red'}
                     title={appConstant.recoverySeeds}
+                    headerStyle={{ borderColor: colors.red }}
                     children={
                         <FlatList
                             data={numberValue && walletData.slice(0, numberValue)}
@@ -44,18 +68,22 @@ export default function ImportWalletScreen({ navigation, route }) {
                             keyExtractor={(index) => index.toString()}
                             renderItem={({ item, index }) => {
                                 return (
-                                    <>
+                                    <View key={index}>
                                         <Input
+                                            autoFocus={true}
                                             withLeftIcon
                                             leftIcon={
                                                 <View style={[styles.numberContainer, { backgroundColor: item.name === '' ? colors.white : colors.red }]}>
-                                                    <FontText name={"inter-bold"} size={normalize(12)} color={item.name === '' ? 'black' : 'white'}>
+                                                    <FontText name={"inter-bold"} size={normalize(12)} color={item.name === '' ? 'red' : 'white'}>
                                                         {item?.id}
                                                     </FontText>
                                                 </View>
                                             }
                                             placeholder={''}
                                             value={item?.name}
+                                            // numberOfLines={2}
+                                            multiline={false}
+                                            inputStyle={[styles.textInput, { color: item.name == '' ? colors.white : colors.red }]}
                                             onChangeText={text => {
                                                 walletData[index].name = text;
                                                 setWalletData([...walletData]);
@@ -63,19 +91,21 @@ export default function ImportWalletScreen({ navigation, route }) {
                                             keyboardType={'default'}
                                             returnKeyType={'done'}
                                             blurOnSubmit
-                                            fontName={'poppins-regular'}
-                                            fontSize={normalize(22)}
+
                                             style={[styles.inputContainer, {
                                                 backgroundColor: item.name == '' ? colors.red : colors.white
                                             }]}
                                         />
-                                    </>
+                                    </View>
                                 )
                             }}
                         />
                     }
                 />
             </View>
+            <FontText name={"inter-regular"} size={22} color={'white'} style={{ width: wp(90) }} pBottom={hp(2)} >
+                {appConstant.enterSeedsCorrectly}
+            </FontText>
             <Button
                 flex={null}
                 height={hp(6.5)}
@@ -133,14 +163,21 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         marginBottom: hp(1),
         padding: 0,
+        paddingHorizontal: wp(2),
         marginHorizontal: wp(1),
-        paddingHorizontal: wp(2)
+        paddingVertical: 0,
+    },
+    textInput: {
+        fontSize: normalize(16),
+        padding: 0,
+        fontFamily: 'inter-regular',
+        flex: 1,
     },
     numberContainer: {
         backgroundColor: colors.white,
         borderRadius: wp(1),
-        height: hp(3),
-        width: wp(5),
+        height: hp(2.5),
+        width: hp(2.5),
         justifyContent: 'center',
         alignItems: 'center',
         marginRight: wp(1)

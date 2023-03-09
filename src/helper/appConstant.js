@@ -22,7 +22,7 @@ module.exports = {
   attention2Description:
     'If you go back, you will lose the created seeds and recreate new ones.',
   checkAgain: 'Check Again',
-  recoverySeeds: 'Recovery Seed',
+  recoverySeeds: 'Did you secure recovery seeds?',
   attentionScreen3: 'attentionScreen3',
   secureSeeds: 'Did you secure recovery seeds?',
   attention3Description:
@@ -30,11 +30,16 @@ module.exports = {
   confirmSeeds: 'Confirm Seeds',
   complateSeeds: 'Complate Seeds',
   confirm: 'Confirm',
-  complate: 'Complate',
+  complate: 'Complete',
   importWallet: 'Import Wallet',
   edit: 'Edit',
   welcomePurchase: 'Welcome Purchase',
   enterPassword: 'Enter Passphrase',
   passphrase: 'Passphrase',
   enter: 'Enter ',
+  enterName: 'Please Enter Name',
+  enterPIN: 'Please Enter PIN ',
+  matchedPIN: "Your PIN doesn't match",
+  enterSeedsCorrectly: 'Did you enter the seeds correctly?',
+  hiddenWallet: 'Hidden Wallet',
 };

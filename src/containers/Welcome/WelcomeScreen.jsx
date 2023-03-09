@@ -18,10 +18,11 @@ const WelcomeScreen = (props) => {
         <View style={styles.container}>
             {/* <Image source={require('../../assets/images/AppLogo.png')} /> */}
             {/* <Image source={require('../../assets/images/AppName.png')} style={styles.image} /> */}
-            <SvgIcons.AppIcon />
-            <View style={styles.image}>
+            {/* <SvgIcons.AppIcon /> */}
+            {/* <View style={styles.image}>
                 <SvgIcons.AppName />
-            </View>
+            </View> */}
+            <SvgIcons.AppLogo />
             <Button
                 flex={null}
                 height={hp(6.5)}
@@ -47,6 +48,8 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         flex: 1,
+        paddingTop: hp(4.5)
+
     },
     image: {
         marginTop: hp(4)

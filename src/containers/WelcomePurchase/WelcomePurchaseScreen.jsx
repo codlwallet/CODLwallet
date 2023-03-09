@@ -29,7 +29,6 @@ export default function WelcomePurchaseScreen() {
         'keyboardDidHide',
         () => {
             setIsEnabled(false)
-
         }
     );
 
@@ -50,7 +49,7 @@ export default function WelcomePurchaseScreen() {
                     value={password}
                     placeholderTextColor={passwordFocus ? colors.black : colors.white}
                     onChangeText={setPassword}
-                    keyboardType={'number-pad'}
+                    keyboardType={'default'}
                     returnKeyType={'next'}
                     secureTextEntry={!showPassword ? true : false}
                     onFocus={() => setPasswordFocus(true)}
@@ -85,7 +84,8 @@ export default function WelcomePurchaseScreen() {
             </View>
 
             <WalletCard style={[styles.walletCardContainer, { bottom: isEnabled ? hp(22) : 0 }]}
-                title={appConstant.numberOfWords}
+                title={appConstant.hiddenWallet}
+                headerStyle={{ borderColor: colors.black }}
                 titleColor={'black'}
                 children={
                     <>
@@ -98,7 +98,7 @@ export default function WelcomePurchaseScreen() {
                             offColor={colors.black}
                             thumbOnStyle={{ borderRadius: 2, height: 17, width: 15, backgroundColor: colors.black, left: 12 }}
                             thumbOffStyle={{ borderRadius: 2, height: 17, width: 15 }}
-                            trackOnStyle={{ borderRadius: 2, width: 50, padding: 12 }}
+                            trackOnStyle={{ borderRadius: 4, width: 50, padding: 12 }}
                             trackOffStyle={{ borderRadius: 2, width: 50, padding: 12 }}
                             size="small"
                             onToggle={toggleSwitch}
@@ -119,9 +119,6 @@ export default function WelcomePurchaseScreen() {
                     {appConstant.enter}
                 </FontText>
             </Button>
-
-
-
         </View>
     )
 }
@@ -135,7 +132,7 @@ const styles = StyleSheet.create({
     subContainer: {
         justifyContent: 'center',
         alignItems: "center",
-        height: hp(70),
+        height: hp(65),
     },
     buttonConatiner: {
         backgroundColor: colors.gray,
@@ -170,5 +167,4 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         position: 'absolute',
     }
-
 })

@@ -1,5 +1,5 @@
-import { FlatList, StyleSheet, View } from 'react-native'
-import React from 'react'
+import { BackHandler, FlatList, StyleSheet, View } from 'react-native'
+import React, { useEffect } from 'react'
 import colors from '../../assets/colors'
 import Header from '../../components/common/Header'
 import appConstant from '../../helper/appConstant'
@@ -9,16 +9,39 @@ import FontText from '../../components/common/FontText'
 import { createWalletData } from '../../constants/data'
 import WalletCard from '../../components/common/WalletCard'
 
-export default function CreateWalletScreen(props) {
-    const { navigation } = props
+export default function CreateWalletScreen({ navigation, route }) {
+    const { numberValue, ButtonValue } = route.params
+
+    useEffect(() => {
+        BackHandler.addEventListener('hardwareBackPress', backAction);
+        return async () => {
+            BackHandler.removeEventListener('hardwareBackPress', backAction);
+        };
+    }, []);
 
     const handleBackClick = () => {
-        navigation.navigate(appConstant.attentionScreen2)
+        navigation.navigate(appConstant.attentionScreen2, {
+            ButtonValue: ButtonValue,
+            numberValue: numberValue,
+            from: appConstant.createWallet
+        })
     }
 
     const handleProceedClick = () => {
-        navigation.navigate(appConstant.attentionScreen3)
+        navigation.navigate(appConstant.attentionScreen3, {
+            ButtonValue: ButtonValue,
+            numberValue: numberValue
+        })
     }
+
+    const backAction = () => {
+        navigation.navigate(appConstant.attentionScreen2, {
+            ButtonValue: ButtonValue,
+            numberValue: numberValue,
+            from: appConstant.createWallet
+        });
+        return true;
+    };
 
     return (
         <View style={styles.container}>
@@ -26,11 +49,13 @@ export default function CreateWalletScreen(props) {
             <View style={styles.subContainer}>
                 <WalletCard style={styles.walletCardContainer}
                     titleColor={'red'}
+                    headerStyle={{ borderColor: colors.red }}
                     title={appConstant.recoverySeeds}
                     children={
                         <FlatList
-                            data={createWalletData}
+                            data={numberValue && createWalletData.slice(0, numberValue)}
                             numColumns={3}
+                            contentContainerStyle={{ justifyContent: 'center', alignItems: "center" }}
                             keyExtractor={(index) => index.toString()}
                             renderItem={({ item, index }) => {
                                 return (
@@ -89,6 +114,7 @@ const styles = StyleSheet.create({
         backgroundColor: colors['red-open'],
         justifyContent: 'center',
         alignItems: 'center',
+        paddingHorizontal: 0
     },
     seedsContainer: {
         backgroundColor: colors.white,
@@ -100,13 +126,13 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         paddingHorizontal: wp(2),
         marginBottom: hp(1),
-        marginRight: wp(2.5),
+        marginHorizontal: wp(1),
     },
     numberContainer: {
         backgroundColor: colors.red,
         borderRadius: wp(1),
-        height: hp(3),
-        width: wp(6),
+        height: hp(2.5),
+        width: hp(2.5),
         justifyContent: 'center',
         alignItems: 'center'
     },

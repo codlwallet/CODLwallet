@@ -32,7 +32,7 @@ export default function WalletCard({
 const styles = StyleSheet.create({
   container: {
     backgroundColor: colors.gray,
-    borderRadius: wp(2),
+    borderRadius: wp(4),
     width: wp(90),
     alignItems: 'center',
     justifyContent: 'center',
@@ -40,9 +40,10 @@ const styles = StyleSheet.create({
   },
   headerContainer: {
     backgroundColor: colors.white,
-    borderRadius: wp(1),
+    borderRadius: wp(2),
     top: hp(-2),
     paddingHorizontal: wp(2),
+    borderWidth: wp(1.5),
   },
   numberContainer: {
     flexDirection: 'row',

@@ -14,7 +14,8 @@ export default function AttentionScreen1({ navigation, route }) {
 
     const handleUnderStandBtnClick = () => {
         navigation.navigate(ButtonValue === appConstant.createWallet ? appConstant.createWallet : appConstant.importWallet, {
-            numberValue: numberValue
+            numberValue: numberValue,
+            ButtonValue: ButtonValue
         })
         // navigation.navigate(appConstant.createWallet)
 

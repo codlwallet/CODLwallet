@@ -69,7 +69,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flexDirection: 'row',
     paddingHorizontal: wp(4),
-    paddingTop: Platform.OS === 'android' ? hp(2) : hp(3.5),
+    paddingTop: Platform.OS === 'android' ? hp(5) : hp(4),
     width: wp(100),
   },
   text: {

@@ -1,4 +1,4 @@
-import { StyleSheet, TouchableOpacity, View } from 'react-native'
+import { Platform, StyleSheet, TouchableOpacity, View } from 'react-native'
 import React, { useState } from 'react'
 import appConstant from '../../helper/appConstant'
 import colors from '../../assets/colors'
@@ -12,9 +12,9 @@ import WalletCard from '../../components/common/WalletCard'
 
 export default function SetupWalletScreen(props) {
     const { navigation } = props
-    const [btnValue, setButtonValue] = useState()
+    const [btnValue, setButtonValue] = useState(appConstant.createWallet)
     const [buttonIndex, setButtonIndex] = useState(0)
-    const [numberValue, setNumberValue] = useState()
+    const [numberValue, setNumberValue] = useState(12)
     const [numberIndex, setNumberIndex] = useState(0)
 
     const handleProceedClick = () => {
@@ -42,6 +42,7 @@ export default function SetupWalletScreen(props) {
             <View>
                 <WalletCard style={styles.walletCardContainer}
                     title={appConstant.numberOfWords}
+                    headerStyle={{ borderColor: colors.black }}
                     titleColor={'black'}
                     children={
                         <>
@@ -97,7 +98,8 @@ const styles = StyleSheet.create({
     },
     walletCardContainer: {
         backgroundColor: colors.gray,
-        bottom: hp(1.5)
+        bottom: Platform.OS === 'android' ? hp(1) : wp(8),
+        paddingBottom: hp(2.5)
     },
     numberContainer: {
         backgroundColor: colors.black,

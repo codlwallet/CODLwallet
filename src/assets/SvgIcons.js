@@ -15,6 +15,7 @@ import RightBackArrow from './svgs/RightBackArrow';
 import AppIcon from './svgs/AppIcon';
 import ShowEye from './svgs/ShowEye.svg';
 import BlackShowEye from './svgs/BlackShowEye.svg';
+import AppLogo from './svgs/AppLogo.svg';
 
 export default {
   Logo,
@@ -33,4 +34,5 @@ export default {
   AppIcon,
   ShowEye,
   BlackShowEye,
+  AppLogo,
 };

@@ -63,6 +63,7 @@ const Input = forwardRef(
       rightIcon,
       disabled,
       onSubmitEditing,
+      numberOfLines,
     },
     ref,
   ) => {
@@ -164,6 +165,7 @@ const Input = forwardRef(
             secureTextEntry={secureTextEntry}
             onFocus={onFocus}
             onBlur={onBlur}
+            numberOfLines={numberOfLines}
             onEndEditing={onEndEditing}
             autoFocus={autoFocus}
             caretHidden={caretHidden}

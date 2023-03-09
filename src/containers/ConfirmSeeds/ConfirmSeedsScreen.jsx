@@ -20,12 +20,17 @@ export default function ConfirmSeedsScreen(props) {
         navigation.navigate(appConstant.complateSeeds)
     }
 
+    const handleBackClick = () => {
+        navigation.goBack()
+    }
+
     return (
         <View style={styles.container}>
-            <Header title={appConstant.confirmSeeds} showRightIcon RightIcon={'info'} showBackIcon />
+            <Header title={appConstant.confirmSeeds} showRightIcon RightIcon={'info'} showBackIcon onBackPress={handleBackClick} />
             <View style={styles.subContainer}>
                 <WalletCard style={styles.walletCardContainer}
                     title={'1st seed'}
+                    headerStyle={{ borderColor: colors.black }}
                     titleColor={'black'}
                     children={
                         <>
@@ -94,7 +99,8 @@ const styles = StyleSheet.create({
     walletCardContainer: {
         backgroundColor: colors.gray,
         bottom: hp(1.5),
-        width: wp(95)
+        width: wp(95),
+        paddingBottom: hp(2.5)
     },
     numberWiew: {
         backgroundColor: colors.white,
