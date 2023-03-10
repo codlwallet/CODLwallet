@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { Image, StyleSheet, View } from 'react-native'
+import { Image, StyleSheet, View, Alert } from 'react-native'
 import colors from '../../assets/colors';
 import SvgIcons from '../../assets/SvgIcons';
 import Button from '../../components/common/Button';
@@ -7,24 +7,22 @@ import FontText from '../../components/common/FontText';
 import appConstant from '../../helper/appConstant';
 import { hp, normalize } from '../../helper/responsiveScreen';
 
-
-import axios from 'axios'
-import Config from '../../constants'
 import DeviceInfo from 'react-native-device-info';
+import { check } from '../../storage';
 
 const WelcomeScreen = (props) => {
     const { navigation } = props
 
     const onPressStartBtn = () => {
-
         const uniqueId = DeviceInfo.getUniqueIdSync();
-        axios.post(`${Config.backendAPI}/users/check`, { machineId: uniqueId }).then((res) => {
-            if (res.data["isExist"]) {
+        check().then((res) => {
+            if (res.isExist) {
                 navigation.navigate(appConstant.lockUser)
             } else {
                 navigation.navigate(appConstant.setupUser)
             }
         }).catch((e) => {
+            console.log(e, "e")
             navigation.navigate(appConstant.setupUser)
         })
 
@@ -32,14 +30,13 @@ const WelcomeScreen = (props) => {
 
     useEffect(() => {
         const uniqueId = DeviceInfo.getUniqueIdSync();
-
-        axios.post(`${Config.backendAPI}/users/check`, { machineId: uniqueId }).then((res) => {
-            if (res.data["isExist"]) {
+        check().then((res) => {
+            if (res.isExist) {
                 navigation.navigate(appConstant.lockUser)
             }
         }).catch((e) => {
             console.log(e, "e")
-            // navigation.navigate(appConstant.setupUser)
+            Alert.alert('Failed', 'You have got an error.')
         })
     }, [])
 

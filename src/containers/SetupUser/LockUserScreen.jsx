@@ -7,11 +7,12 @@ import appConstant from '../../helper/appConstant'
 import Input from '../../components/common/Input'
 import SvgIcons from '../../assets/SvgIcons'
 import DeviceInfo from 'react-native-device-info';
-
-import axios from 'axios'
-import Config from '../../constants'
+import { sign } from '../../storage'
+import { useDispatch } from 'react-redux'
+import { setUser } from '../../redux/slices/authSlice'
 
 export default function LockUserScreen(props) {
+    const dispatch = useDispatch()
     const { navigation } = props
     const choosePinRef = useRef()
     const [choosePin, setChoosePin] = useState('')
@@ -31,14 +32,20 @@ export default function LockUserScreen(props) {
             password: choosePin,
         }
 
-        axios.post(`${Config.backendAPI}/users/signin`, data).then((res) => {
-            console.log(res.data.user["isCreated"], "=====")
-            if (res.data.user["isCreated"] == true) {
-                // Alert.alert('Success!', 'You have logged.');
-                navigation.navigate(appConstant.welcomePurchase)
+        sign(data).then((res) => {
+
+            console.log(res, "=====")
+            if (res.status == true) {
+                if (res.isCreated == true) {
+                    dispatch(setUser(res.user))
+                    navigation.navigate(appConstant.welcomePurchase)
+                } else {
+                    navigation.navigate(appConstant.setupWallet)
+                }
             } else {
-                navigation.navigate(appConstant.setupWallet)
+                Alert.alert('Error!', 'You have got an error.');
             }
+
         }).catch((e) => {
             console.log(e);
             Alert.alert('Error!', 'You have got an error.');

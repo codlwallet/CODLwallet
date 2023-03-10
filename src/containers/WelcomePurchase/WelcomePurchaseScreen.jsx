@@ -10,6 +10,7 @@ import Input from '../../components/common/Input'
 import WalletCard from '../../components/common/WalletCard'
 import ToggleSwitch from 'toggle-switch-react-native'
 import Button from '../../components/common/Button'
+import { useSelector } from 'react-redux'
 
 export default function WelcomePurchaseScreen({ navigation }) {
     const [password, setPassword] = useState('');
@@ -18,6 +19,7 @@ export default function WelcomePurchaseScreen({ navigation }) {
     const [isEnabled, setIsEnabled] = useState(false);
 
     const toggleSwitch = () => setIsEnabled(previousState => !previousState);
+    const { user } = useSelector((state) => state.auth)
 
     const keyboardShowListener = Keyboard.addListener(
         'keyboardDidShow',
@@ -42,6 +44,8 @@ export default function WelcomePurchaseScreen({ navigation }) {
         // navigation.navigate(appConstant.main, {
         //     hidden: isEnabled
         // })
+
+
     }
 
     return (
@@ -50,7 +54,7 @@ export default function WelcomePurchaseScreen({ navigation }) {
             <View style={styles.subContainer}>
                 <TouchableOpacity style={styles.buttonConatiner}>
                     <FontText size={normalize(22)} color={'white'} name={'inter-regular'}>
-                        {'Alice’s Crypto'}
+                        {user?.username}
                     </FontText>
                     <SvgIcons.RightBackArrow height={hp(3)} width={hp(2)} />
                 </TouchableOpacity>

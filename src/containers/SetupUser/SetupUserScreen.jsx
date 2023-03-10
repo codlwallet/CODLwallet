@@ -7,12 +7,14 @@ import appConstant from '../../helper/appConstant'
 import Input from '../../components/common/Input'
 import SvgIcons from '../../assets/SvgIcons'
 import DeviceInfo from 'react-native-device-info';
+import { signup } from '../../storage'
+import { useDispatch } from 'react-redux'
+import { setUser } from '../../redux/slices/authSlice'
 
-import axios from 'axios'
-import Config from '../../constants'
 
 export default function SetupUserScreen(props) {
     const { navigation } = props
+    const dispatch = useDispatch()
     const nameRef = useRef()
     const choosePinRef = useRef()
     const confirmPinRef = useRef()
@@ -47,14 +49,15 @@ export default function SetupUserScreen(props) {
             username: name,
         }
 
-        axios.post(`${Config.backendAPI}/users/signup`, data).then((res) => {
-            if (res) {
-                // Alert.alert('Success!', 'You have created successly.');
+        signup(data).then((res) => {
+            if (res.status) {
+                dispatch(setUser(res.user))
                 navigation.navigate(appConstant.createdUser)
+            } else {
+                navigation.navigate(appConstant.lockUser)
             }
         }).catch((e) => {
             console.log(e);
-            // Alert.alert('Error!', 'You have already created.');
             navigation.navigate(appConstant.lockUser)
         })
 
@@ -201,7 +204,7 @@ const styles = StyleSheet.create({
         marginTop: hp(2),
     },
     textInput: {
-        height : 70,
+        height: 70,
         fontSize: normalize(22),
         // padding: 30,
     }

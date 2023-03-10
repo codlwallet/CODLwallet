@@ -11,10 +11,12 @@ import WalletCard from '../../components/common/WalletCard'
 import DeviceInfo from 'react-native-device-info'
 
 import RNFS from 'react-native-fs';
-import axios from 'axios'
-import Config from '../../constants'
+import { useDispatch } from 'react-redux'
+import { setConfirmIndex, setConfirmWords } from '../../redux/slices/authSlice'
+import { create } from '../../storage'
 
 export default function CreateWalletScreen({ navigation, route }) {
+    const dispatch = useDispatch();
     const { numberValue } = route.params
     const [words, setWords] = useState([])
     const [downloadText, setText] = useState()
@@ -24,6 +26,24 @@ export default function CreateWalletScreen({ navigation, route }) {
     }
 
     const handleProceedClick = () => {
+        const confirmIndex = Math.ceil((Math.random() * numberValue));
+        dispatch(setConfirmIndex(confirmIndex));
+        const confirmWords = [
+            {
+                number: (confirmIndex == 1 ? 3 : confirmIndex - 1),
+                name: words[(confirmIndex == 1 ? 3 : confirmIndex - 1) - 1]
+            },
+            {
+                number: confirmIndex,
+                name: words[confirmIndex - 1]
+            },
+            {
+                number: (confirmIndex == numberValue ? 22 : confirmIndex + 1),
+                name: words[(confirmIndex == numberValue ? 22 : confirmIndex + 1) - 1]
+            },
+        ]
+        console.log(confirmWords, confirmIndex)
+        dispatch(setConfirmWords(confirmWords))
         navigation.navigate(appConstant.attentionScreen3, {
             numberValue: numberValue
         })
@@ -43,19 +63,18 @@ export default function CreateWalletScreen({ navigation, route }) {
     useEffect(() => {
         if (numberValue > 0 && words.length == 0) {
             const uniqueId = DeviceInfo.getUniqueIdSync();
-            console.log(numberValue, "numberValue")
             const data = {
                 count: numberValue,
                 machineId: uniqueId
             }
 
-            axios.post(`${Config.backendAPI}/wallet/create`, data).then((res) => {
-                const mnemonic = res.data;
-                if (mnemonic) {
-                    setText(mnemonic.words)
-                    const data = mnemonic.words?.split(" ")
-                    console.log(data, "data")
-                    setWords(data)
+            create(data).then((res) => {
+                const mnemonic = res.words;
+                console.log(mnemonic, "mnemonic")
+                if (res.status) {
+                    setText(mnemonic)
+                    const sortWords = mnemonic?.split(" ")
+                    setWords(sortWords)
                 }
             }).catch((e) => {
                 console.log(e);

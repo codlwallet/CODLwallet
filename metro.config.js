@@ -13,6 +13,9 @@ module.exports = (async () => {
         },
       }),
       babelTransformerPath: require.resolve('react-native-svg-transformer'),
+      // crypto: require.resolve('crypto-browserify'),
+      // stream: require.resolve('stream-browserify'),
+      // buffer: require.resolve('@craftzdog/react-native-buffer'),
     },
     resolver: {
       assetExts: assetExts.filter(ext => ext !== 'svg'),

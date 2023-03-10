@@ -1,4 +1,4 @@
-import { StyleSheet, TouchableOpacity, View } from 'react-native'
+import { StyleSheet, TouchableOpacity, View, Alert } from 'react-native'
 import React, { useState } from 'react'
 import { confirmSeedsData } from '../../constants/data'
 import { hp, normalize, wp } from '../../helper/responsiveScreen'
@@ -8,16 +8,21 @@ import FontText from '../../components/common/FontText'
 import Button from '../../components/common/Button'
 import WalletCard from '../../components/common/WalletCard'
 import Header from '../../components/common/Header'
+import { useSelector } from 'react-redux'
 
 export default function ConfirmSeedsScreen(props) {
     const { navigation } = props
-    const [btnValue, setButtonValue] = useState()
-    const [buttonIndex, setButtonIndex] = useState(0)
     const [numberValue, setNumberValue] = useState()
     const [numberIndex, setNumberIndex] = useState(0)
+    const { confirmIndex, confirmWords } = useSelector((state) => state.auth)
 
     const handleConfirmClick = () => {
-        navigation.navigate(appConstant.complateSeeds)
+        if (numberValue == confirmIndex) {
+            // Alert.alert('You have confirmed.')
+            navigation.navigate(appConstant.complateSeeds)
+        } else {
+            Alert.alert('The word is not corrected.')
+        }
     }
 
     const handleBackClick = () => {
@@ -29,17 +34,17 @@ export default function ConfirmSeedsScreen(props) {
             <Header title={appConstant.confirmSeeds} showRightIcon RightIcon={'info'} showBackIcon onBackPress={handleBackClick} />
             <View style={styles.subContainer}>
                 <WalletCard style={styles.walletCardContainer}
-                    title={'1st seed'}
+                    title={`${confirmIndex}st seed`}
                     headerStyle={{ borderColor: colors.black }}
                     titleColor={'black'}
                     children={
                         <View style={{ justifyContent: 'space-between', flexDirection: 'row', alignItems: 'center', flex: 1 }}>
                             <View style={styles.numberWiew}>
                                 <FontText name={"inter-bold"} size={normalize(22)} color={'black'}>
-                                    1
+                                    {confirmIndex}
                                 </FontText>
                             </View>
-                            {confirmSeedsData.map((item, index) => {
+                            {confirmWords.map((item, index) => {
                                 return (
                                     <TouchableOpacity key={Number(index)} style={[styles.numberContainer, { backgroundColor: Number(index) === numberIndex ? colors.white : colors.black }]} onPress={() => {
                                         setNumberValue(item?.number)
