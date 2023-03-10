@@ -5,7 +5,6 @@ import HomeScreen from '../containers/Home/HomeScreen';
 import Constant from '../helper/appConstant';
 import WelcomeScreen from '../containers/Welcome/WelcomeScreen';
 import SetupUserScreen from '../containers/SetupUser/SetupUserScreen';
-import LockUserScreen from '../containers/SetupUser/LockUserScreen';
 import CreatedUserScreen from '../containers/CreatedUser/CreatedUserScreen';
 import SetupWalletScreen from '../containers/SetupWallet/SetupWalletScreen';
 import AttentionScreen1 from '../containers/CreateWallet/AttentionScreen1';
@@ -26,7 +25,6 @@ const Route = () => {
                 <Stack.Screen name={Constant.welcome} component={WelcomeScreen} />
                 <Stack.Screen name={Constant.home} component={HomeScreen} />
                 <Stack.Screen name={Constant.setupUser} component={SetupUserScreen} />
-                <Stack.Screen name={Constant.lockUser} component={LockUserScreen} />
                 <Stack.Screen name={Constant.createdUser} component={CreatedUserScreen} />
                 <Stack.Screen name={Constant.setupWallet} component={SetupWalletScreen} />
                 <Stack.Screen name={Constant.attentionScreen1} component={AttentionScreen1} />

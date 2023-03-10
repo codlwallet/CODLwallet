@@ -41,14 +41,16 @@ export default function ConfirmSeedsScreen(props) {
                             </View>
                             {confirmSeedsData.map((item, index) => {
                                 return (
-                                    <TouchableOpacity key={Number(index)} style={[styles.numberContainer, { backgroundColor: Number(index) === numberIndex ? colors.white : colors.black }]} onPress={() => {
-                                        setNumberValue(item?.number)
-                                        setNumberIndex(Number(index))
-                                    }}>
-                                        <FontText name={"inter-regular"} size={normalize(16)} color={Number(index) === numberIndex ? "black" : 'white'}>
-                                            {item?.name}
-                                        </FontText>
-                                    </TouchableOpacity>
+                                    <View key={index}>
+                                        <TouchableOpacity style={[styles.numberContainer, { backgroundColor: index === numberIndex ? colors.white : colors.black }]} onPress={() => {
+                                            setNumberValue(item?.number)
+                                            setNumberIndex(index)
+                                        }}>
+                                            <FontText name={"inter-regular"} size={normalize(16)} color={index === numberIndex ? "black" : 'white'}>
+                                                {item?.name}
+                                            </FontText>
+                                        </TouchableOpacity>
+                                    </View>
                                 )
                             })}
                         </View>

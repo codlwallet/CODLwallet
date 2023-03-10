@@ -1,5 +1,5 @@
-import { Alert, FlatList, StyleSheet, View } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import { BackHandler, FlatList, StyleSheet, View } from 'react-native'
+import React, { useEffect } from 'react'
 import colors from '../../assets/colors'
 import Header from '../../components/common/Header'
 import appConstant from '../../helper/appConstant'
@@ -8,65 +8,45 @@ import Button from '../../components/common/Button'
 import FontText from '../../components/common/FontText'
 import { createWalletData } from '../../constants/data'
 import WalletCard from '../../components/common/WalletCard'
-import DeviceInfo from 'react-native-device-info'
-
-import RNFS from 'react-native-fs';
-import axios from 'axios'
-import Config from '../../constants'
 
 export default function CreateWalletScreen({ navigation, route }) {
-    const { numberValue } = route.params
-    const [words, setWords] = useState([])
-    const [downloadText, setText] = useState()
+    const { numberValue, ButtonValue } = route.params
 
-    const handleBackClick = () => {
-        navigation.navigate(appConstant.attentionScreen2, { numberValue })
-    }
+    useEffect(() => {
+        BackHandler.addEventListener('hardwareBackPress', backAction);
+        return async () => {
+            BackHandler.removeEventListener('hardwareBackPress', backAction);
+        };
+    }, []);
+
+    // const handleBackClick = () => {
+    //     console.log("sdhsghja")
+    //     navigation.navigate(appConstant.attentionScreen2, {
+    //         ButtonValue: ButtonValue,
+    //         numberValue: numberValue,
+    //         from: appConstant.createWallet
+    //     })
+    // }
 
     const handleProceedClick = () => {
         navigation.navigate(appConstant.attentionScreen3, {
+            ButtonValue: ButtonValue,
             numberValue: numberValue
         })
     }
 
-    const download = () => {
-        console.log("download")
-        let path = `${RNFS.DownloadDirectoryPath}/priv.txt`;
-        RNFS.writeFile(path, downloadText, 'utf8').then((res) => {
-            Alert.alert("Saved the wallet.")
-        }
-        ).catch((err) => {
-            Alert.alert("You have got an error.")
+    const backAction = () => {
+        navigation.navigate(appConstant.attentionScreen2, {
+            ButtonValue: ButtonValue,
+            numberValue: numberValue,
+            from: appConstant.createWallet
         });
-    }
-
-    useEffect(() => {
-        if (numberValue > 0 && words.length == 0) {
-            const uniqueId = DeviceInfo.getUniqueIdSync();
-            console.log(numberValue, "numberValue")
-            const data = {
-                count: numberValue,
-                machineId: uniqueId
-            }
-
-            axios.post(`${Config.backendAPI}/wallet/create`, data).then((res) => {
-                const mnemonic = res.data;
-                if (mnemonic) {
-                    setText(mnemonic.words)
-                    const data = mnemonic.words?.split(" ")
-                    console.log(data, "data")
-                    setWords(data)
-                }
-            }).catch((e) => {
-                console.log(e);
-                Alert.alert('Error!', 'You have got an error.');
-            })
-        }
-    }, [numberValue])
+        return true;
+    };
 
     return (
         <View style={styles.container}>
-            <Header title={appConstant.createWallet} showRightIcon RightIcon={'info'} showBackIcon statusBarcolor={colors.red} />
+            <Header title={appConstant.createWallet} showRightIcon RightIcon={'info'} showBackIcon onBackPress={backAction} statusBarcolor={colors.red} />
             <View style={styles.subContainer}>
                 <WalletCard style={styles.walletCardContainer}
                     titleColor={'red'}
@@ -74,20 +54,23 @@ export default function CreateWalletScreen({ navigation, route }) {
                     title={appConstant.recoverySeeds}
                     children={
                         <FlatList
-                            data={words}
+                            data={numberValue && createWalletData.slice(0, numberValue)}
                             numColumns={3}
-                            // keyExtractor={(index) => index.toString()}
-                            renderItem={(res) => {
+                            contentContainerStyle={{ justifyContent: 'center', alignItems: "center" }}
+                            keyExtractor={(item) => {
+                                return item.id;
+                            }}
+                            renderItem={({ item, index }) => {
                                 return (
-                                    <View key={res.index} style={styles.seedsContainer}>
+                                    <View style={styles.seedsContainer}>
                                         <View style={styles.numberContainer}>
                                             <FontText name={"inter-bold"} size={normalize(12)} color={'white'}>
-                                                {(res.index + 1)}
+                                                {item?.id}
                                             </FontText>
                                         </View>
                                         <View style={styles.nameContainer}>
                                             <FontText name={"inter-regular"} size={normalize(16)} color={'red'} pLeft={wp(1)} lines={1}>
-                                                {res.item}
+                                                {item?.name}
                                             </FontText>
                                         </View>
                                     </View>
@@ -109,18 +92,6 @@ export default function CreateWalletScreen({ navigation, route }) {
                     {appConstant.proceed}
                 </FontText>
             </Button>
-            <Button
-                flex={null}
-                height={hp(6.5)}
-                width="90%"
-                type="highlight"
-                borderRadius={11}
-                onPress={download}
-                style={[styles.button, { backgroundColor: colors.white }]}>
-                <FontText name={"inter-medium"} size={normalize(16)} color={"red"}>
-                    {appConstant.download}
-                </FontText>
-            </Button>
         </View>
     )
 }
@@ -139,8 +110,6 @@ const styles = StyleSheet.create({
     button: {
         marginBottom: hp(2),
         alignItems: 'center',
-        marginTop: hp(2),
-        // position: 'absolute'
     },
     walletCardContainer: {
         backgroundColor: colors['red-open'],
