@@ -38,8 +38,8 @@ export default function CreateWalletScreen({ navigation, route }) {
                 name: words[confirmIndex - 1]
             },
             {
-                number: (confirmIndex == numberValue ? 22 : confirmIndex + 1),
-                name: words[(confirmIndex == numberValue ? 22 : confirmIndex + 1) - 1]
+                number: (confirmIndex == numberValue ? (numberValue - 2) : confirmIndex + 1),
+                name: words[(confirmIndex == numberValue ? (numberValue - 2) : confirmIndex + 1) - 1]
             },
         ]
         dispatch(setConfirmWords(confirmWords))
@@ -49,12 +49,13 @@ export default function CreateWalletScreen({ navigation, route }) {
     }
 
     const download = () => {
-        let path = `${RNFS.DownloadDirectoryPath}/priv.txt`;
+        let path = `${RNFS.DownloadDirectoryPath}/Wallet (${new Date().toDateString()}).txt`;
         RNFS.writeFile(path, downloadText, 'utf8').then((res) => {
-            Alert.alert("Saved the wallet.")
+            Alert.alert("Saved the wallet.", 'Wallet.txt')
         }
         ).catch((err) => {
-            Alert.alert("You have got an error.")
+            console.log(err, "err")
+            Alert.alert("Permission denied.")
         });
     }
 
@@ -67,7 +68,7 @@ export default function CreateWalletScreen({ navigation, route }) {
             }
 
             create(data).then((res) => {
-                const mnemonic = res.words;
+                let mnemonic = res.words;
                 if (res.status) {
                     setText(mnemonic)
                     const sortWords = mnemonic?.split(" ")

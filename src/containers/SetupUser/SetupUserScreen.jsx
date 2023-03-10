@@ -206,6 +206,6 @@ const styles = StyleSheet.create({
     textInput: {
         height: 70,
         fontSize: normalize(22),
-        // padding: 30,
+        padding: 2,
     }
 })

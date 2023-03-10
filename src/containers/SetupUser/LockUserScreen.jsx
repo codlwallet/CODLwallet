@@ -128,8 +128,8 @@ const styles = StyleSheet.create({
         marginTop: hp(2),
     },
     textInput: {
-        fontSize: normalize(22),
-        padding: 0,
         height: 70,
+        fontSize: normalize(22),
+        // padding: 0,
     }
 })
