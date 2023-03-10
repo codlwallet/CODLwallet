@@ -28,7 +28,7 @@ const WelcomeScreen = (props) => {
     }
 
     useEffect(() => {
-        initial()
+        // initial()
         const uniqueId = DeviceInfo.getUniqueIdSync();
         check().then((res) => {
             if (res.isExist) {
