@@ -27,18 +27,18 @@ export default function SetupUserScreen(props) {
     const [confirmPinFocus, setConfirmPinFocus] = useState(false)
 
     const onSubmitConfirmPin = () => {
-        if (6 > Number(name.length) || Number(name.length) > 10) {
-            Alert.alert('Name Required', 'Name must be greater than 6 and less than 10 characters. ');
+        if (1 > Number(name.length) || Number(name.length) > 15) {
+            Alert.alert('Name Required', 'Name must be greater than 1 and less than 15 characters. ');
             return;
         }
 
         if (6 > choosePin.length || choosePin.length > 10) {
-            Alert.alert('Pin Required', 'Pin must be greater than 6 and less than 10 characters. ');
+            Alert.alert('Pin must be greater than 4 and less than 8 characters. ');
             return;
         }
 
         if (choosePin !== confirmPin) {
-            Alert.alert('Pin does not matched', 'Confirm pin is not correct.');
+            Alert.alert('Confirm pin is not correct.');
             return;
         }
 

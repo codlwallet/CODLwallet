@@ -21,8 +21,8 @@ export default function LockUserScreen(props) {
 
     const onSubmitConfirmPin = () => {
 
-        if (6 > choosePin.length || choosePin.length > 10) {
-            Alert.alert('Pin Required', 'Pin must be greater than 6 and less than 10 characters. ');
+        if (4 > choosePin.length || choosePin.length > 8) {
+            Alert.alert('Pin Required', 'Pin must be greater than 4 and less than 8 characters. ');
             return;
         }
         const uniqueId = DeviceInfo.getUniqueIdSync();
@@ -41,11 +41,11 @@ export default function LockUserScreen(props) {
                     navigation.navigate(appConstant.setupWallet)
                 }
             } else {
-                Alert.alert('Error!', 'You have got an error.');
+                Alert.alert('Wrong Password');
             }
 
         }).catch((e) => {
-            Alert.alert('Error!', 'You have got an error.');
+            Alert.alert('Wrong Password');
         })
     }
 
@@ -63,10 +63,9 @@ export default function LockUserScreen(props) {
                     onChangeText={setChoosePin}
                     keyboardType={'number-pad'}
                     returnKeyType={'next'}
-                    secureTextEntry={true}
                     onFocus={() => setChoosePinFocus(true)}
                     onBlur={() => setChoosePinFocus(!choosePinFocus)}
-                    // onSubmit={() => confirmPinRef?.current.focus()}
+                    secureTextEntry={!showPin ? true : false}
                     onSubmit={onSubmitConfirmPin}
                     inputStyle={[styles.textInput, {
                         color: choosePinFocus == true
@@ -130,6 +129,6 @@ const styles = StyleSheet.create({
     textInput: {
         height: 70,
         fontSize: normalize(22),
-        // padding: 0,
+        padding: 0,
     }
 })

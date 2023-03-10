@@ -42,10 +42,10 @@ export default function ImportWalletScreen({ navigation, route }) {
                 navigation.navigate(appConstant.complateSeeds)
             }
             else {
-                Alert.alert('Wallet Import Faild', 'Mnemonic words is not correct.')
+                Alert.alert('Recovery Seed is invalid')
             }
         }).catch(e => {
-            Alert.alert('Wallet Import Faild', 'Mnemonic words is not correct.')
+            Alert.alert('Import Failed!','Recovery seed is invalid')
         })
     }
 
