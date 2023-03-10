@@ -12,8 +12,6 @@ export default function MainScreen({ navigation, route }) {
     const { hidden } = route?.params
     const [hideMenu, setHideMenu] = useState(false);
 
-    console.log("hidden.......", hidden)
-
     const handleConnectClick = () => {
 
     }

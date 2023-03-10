@@ -12,7 +12,6 @@ export const check = async () => {
   try {
     let user = await AsyncStorage.getItem(Config.USER);
     user = user != null ? JSON.parse(user) : null;
-    console.log(user, 'user');
     if (user) {
       return {
         status: true,
@@ -31,20 +30,20 @@ export const check = async () => {
   }
 };
 
+export const initial = async () => {
+  await AsyncStorage.removeItem(Config.USER);
+  await AsyncStorage.removeItem(Config.WALLET);
+}
+
 export const signup = async user => {
   try {
-    let res = await AsyncStorage.setItem(Config.USER, JSON.stringify(user));
-    if (res) {
-      return {
-        status: true,
-        user: user
-      };
-    } else {
-      return {
-        status: false,
-      };
-    }
+    await AsyncStorage.setItem(Config.USER, JSON.stringify(user));
+    return {
+      status: true,
+      user: user
+    };
   } catch (e) {
+    console.log(e)
     return {
       status: false,
     };
@@ -78,7 +77,6 @@ export const create = async data => {
     const { count } = data;
     // const words = '';
     const words = await bip39.generateMnemonic(Entropy[count]);
-    console.log(words, '===============');
     if (words) {
       let user = await AsyncStorage.getItem(Config.USER);
       user = user != null ? JSON.parse(user) : null;
@@ -95,9 +93,35 @@ export const create = async data => {
       };
     }
   } catch (e) {
-    console.log(e);
     return {
       status: false,
     };
   }
 };
+
+
+export const importWallet = async data => {
+  try {
+    const isValid = await bip39.validateMnemonic(data)
+    if (isValid) {
+      let user = await AsyncStorage.getItem(Config.USER);
+      user = user != null ? JSON.parse(user) : null;
+      user.isCreated = true;
+      await AsyncStorage.setItem(Config.USER, JSON.stringify(user));
+      await AsyncStorage.setItem(Config.WALLET, JSON.stringify(data));
+      return {
+        status: true,
+        words: data,
+      };
+    } else {
+      return {
+        status: false,
+      };
+    }
+  } catch (e) {
+    return {
+      status: false,
+    };
+  }
+};
+

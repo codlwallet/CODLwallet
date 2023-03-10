@@ -50,6 +50,7 @@ export default function SetupUserScreen(props) {
         }
 
         signup(data).then((res) => {
+            console.log(res, "res")
             if (res.status) {
                 dispatch(setUser(res.user))
                 navigation.navigate(appConstant.createdUser)
@@ -57,7 +58,6 @@ export default function SetupUserScreen(props) {
                 navigation.navigate(appConstant.lockUser)
             }
         }).catch((e) => {
-            console.log(e);
             navigation.navigate(appConstant.lockUser)
         })
 

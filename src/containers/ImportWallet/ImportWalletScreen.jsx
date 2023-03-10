@@ -1,4 +1,4 @@
-import { BackHandler, FlatList, Keyboard, StyleSheet, View } from 'react-native'
+import { BackHandler, FlatList, Keyboard, StyleSheet, View, Alert } from 'react-native'
 import React, { useEffect, useRef, useState } from 'react'
 import colors from '../../assets/colors'
 import Header from '../../components/common/Header'
@@ -9,6 +9,7 @@ import FontText from '../../components/common/FontText'
 import { importWalletData } from '../../constants/data'
 import WalletCard from '../../components/common/WalletCard'
 import Input from '../../components/common/Input'
+import { importWallet } from '../../storage'
 
 export default function ImportWalletScreen({ navigation, route }) {
     const { numberValue, ButtonValue } = route.params
@@ -30,9 +31,22 @@ export default function ImportWalletScreen({ navigation, route }) {
 
     const handleConfirmClick = () => {
         setIsEdit(false)
-
+        const data = walletData.slice(0, numberValue)
         setBtnValue(appConstant.confirm)
-        navigation.navigate(appConstant.complateSeeds)
+        let mnemonic = "";
+        data.forEach(item => {
+            mnemonic += item.name + " "
+        });
+        importWallet(mnemonic.substring(0, mnemonic.length - 1)).then((res) => {
+            if (res.status) {
+                navigation.navigate(appConstant.complateSeeds)
+            }
+            else {
+                Alert.alert('Wallet Import Faild', 'Mnemonic words is not correct.')
+            }
+        }).catch(e => {
+            Alert.alert('Wallet Import Faild', 'Mnemonic words is not correct.')
+        })
     }
 
     const handleEditClick = () => {

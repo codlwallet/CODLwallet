@@ -42,7 +42,6 @@ export default function CreateWalletScreen({ navigation, route }) {
                 name: words[(confirmIndex == numberValue ? 22 : confirmIndex + 1) - 1]
             },
         ]
-        console.log(confirmWords, confirmIndex)
         dispatch(setConfirmWords(confirmWords))
         navigation.navigate(appConstant.attentionScreen3, {
             numberValue: numberValue
@@ -50,7 +49,6 @@ export default function CreateWalletScreen({ navigation, route }) {
     }
 
     const download = () => {
-        console.log("download")
         let path = `${RNFS.DownloadDirectoryPath}/priv.txt`;
         RNFS.writeFile(path, downloadText, 'utf8').then((res) => {
             Alert.alert("Saved the wallet.")
@@ -70,14 +68,12 @@ export default function CreateWalletScreen({ navigation, route }) {
 
             create(data).then((res) => {
                 const mnemonic = res.words;
-                console.log(mnemonic, "mnemonic")
                 if (res.status) {
                     setText(mnemonic)
                     const sortWords = mnemonic?.split(" ")
                     setWords(sortWords)
                 }
             }).catch((e) => {
-                console.log(e);
                 Alert.alert('Error!', 'You have got an error.');
             })
         }

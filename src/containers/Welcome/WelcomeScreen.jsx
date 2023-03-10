@@ -8,7 +8,7 @@ import appConstant from '../../helper/appConstant';
 import { hp, normalize } from '../../helper/responsiveScreen';
 
 import DeviceInfo from 'react-native-device-info';
-import { check } from '../../storage';
+import { check, initial } from '../../storage';
 
 const WelcomeScreen = (props) => {
     const { navigation } = props
@@ -22,20 +22,19 @@ const WelcomeScreen = (props) => {
                 navigation.navigate(appConstant.setupUser)
             }
         }).catch((e) => {
-            console.log(e, "e")
             navigation.navigate(appConstant.setupUser)
         })
 
     }
 
     useEffect(() => {
+        // initial()
         const uniqueId = DeviceInfo.getUniqueIdSync();
         check().then((res) => {
             if (res.isExist) {
                 navigation.navigate(appConstant.lockUser)
             }
         }).catch((e) => {
-            console.log(e, "e")
             Alert.alert('Failed', 'You have got an error.')
         })
     }, [])

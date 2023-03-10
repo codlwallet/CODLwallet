@@ -33,8 +33,6 @@ export default function LockUserScreen(props) {
         }
 
         sign(data).then((res) => {
-
-            console.log(res, "=====")
             if (res.status == true) {
                 if (res.isCreated == true) {
                     dispatch(setUser(res.user))
@@ -47,7 +45,6 @@ export default function LockUserScreen(props) {
             }
 
         }).catch((e) => {
-            console.log(e);
             Alert.alert('Error!', 'You have got an error.');
         })
     }
