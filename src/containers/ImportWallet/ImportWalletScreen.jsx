@@ -20,7 +20,10 @@ export default function ImportWalletScreen({ navigation, route }) {
 
     useEffect(() => {
         cardRef.current = cardRef.current.slice(0, walletData.length);
-    }, []);
+        setIsEdit(true)
+        // console.log(cardRef.current[0])
+        // cardRef.current[0].focus()
+    }, [cardRef]);
 
     useEffect(() => {
         BackHandler.addEventListener('hardwareBackPress', backAction);
@@ -45,7 +48,7 @@ export default function ImportWalletScreen({ navigation, route }) {
                 Alert.alert('Recovery Seed is invalid')
             }
         }).catch(e => {
-            Alert.alert('Import Failed!','Recovery seed is invalid')
+            Alert.alert('Import Failed!', 'Recovery seed is invalid')
         })
     }
 
@@ -53,6 +56,10 @@ export default function ImportWalletScreen({ navigation, route }) {
         cardRef.current[0].focus()
         setIsEdit(true)
         setBtnValue(appConstant.edit)
+    }
+
+    const handleProceed = () => {
+
     }
 
     const backAction = () => {
@@ -95,6 +102,7 @@ export default function ImportWalletScreen({ navigation, route }) {
                                                     </FontText>
                                                 </View>
                                             }
+                                            autoFocus={index == 0 ? true : false}
                                             placeholder={''}
                                             value={item?.name}
                                             // numberOfLines={2}
@@ -123,7 +131,19 @@ export default function ImportWalletScreen({ navigation, route }) {
                     }
                 />
             </View>
-            <FontText name={"inter-regular"} size={22} color={'white'} style={{ width: wp(90) }} pBottom={hp(2)} >
+            <Button
+                flex={null}
+                height={hp(6.5)}
+                width="90%"
+                type="highlight"
+                borderRadius={11}
+                onPress={handleProceed}
+                style={[styles.button, { backgroundColor: btnValue === appConstant.edit ? colors.white : colors['red-open'] }]}>
+                <FontText name={"inter-medium"} size={normalize(16)} color={btnValue === appConstant.edit ? "red" : 'white'}>
+                    {appConstant.proceed}
+                </FontText>
+            </Button>
+            {/* <FontText name={"inter-regular"} size={22} color={'white'} style={{ width: wp(90) }} pBottom={hp(2)} >
                 {appConstant.enterSeedsCorrectly}
             </FontText>
             <Button
@@ -149,7 +169,7 @@ export default function ImportWalletScreen({ navigation, route }) {
                 <FontText name={"inter-medium"} size={normalize(16)} color={btnValue === appConstant.edit ? "red" : 'white'}>
                     {appConstant.edit}
                 </FontText>
-            </Button>
+            </Button> */}
         </View>
     )
 }
