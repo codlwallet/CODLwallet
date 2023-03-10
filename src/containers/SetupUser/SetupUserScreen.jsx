@@ -277,19 +277,6 @@ const styles = StyleSheet.create({
     subContainer: {
         marginTop: hp(10)
     },
-    image: {
-        marginTop: hp(4)
-    },
-    button: {
-        backgroundColor: colors.white,
-        position: 'absolute',
-        bottom: hp(4),
-        alignItems: 'center'
-    },
-    icon: {
-        height: hp(10),
-        width: hp(10)
-    },
     textInputContainer: {
         marginTop: hp(2),
         height: hp(8)

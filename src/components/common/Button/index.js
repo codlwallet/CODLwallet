@@ -107,7 +107,6 @@ const Button = props => {
         <View
           pointerEvents={pointerEvents}
           style={[
-            flex ? styles.buttonFlex : null,
             styles.button,
             {width, minWidth, borderRadius},
             buttonStyle,
@@ -252,7 +251,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     overflow: 'hidden',
     backgroundColor: 'yellow',
-    width: wp(30),
   },
   buttonFlex: {
     flex: 1,

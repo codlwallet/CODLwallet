@@ -7,7 +7,8 @@ import { hp, normalize, wp } from '../../helper/responsiveScreen'
 import Button from '../../components/common/Button'
 import FontText from '../../components/common/FontText'
 import { createWalletData } from '../../constants/data'
-import WalletCard from '../../components/common/WalletCard'
+import WalletCard from '../../components/WalletCard'
+
 
 export default function CreateWalletScreen({ navigation, route }) {
     const { numberValue, ButtonValue } = route.params
@@ -82,13 +83,14 @@ export default function CreateWalletScreen({ navigation, route }) {
             </View>
             <Button
                 flex={null}
-                height={hp(6.5)}
-                width="90%"
+                height={hp(8.5)}
+                bgColor='white'
                 type="highlight"
                 borderRadius={11}
+                style={{ marginBottom: hp(2) }}
                 onPress={handleProceedClick}
-                style={[styles.button, { backgroundColor: colors.white }]}>
-                <FontText name={"inter-medium"} size={normalize(16)} color={"red"}>
+                buttonStyle={styles.button}>
+                <FontText name={"inter-medium"} size={normalize(22)} color={"red"}>
                     {appConstant.proceed}
                 </FontText>
             </Button>
@@ -108,8 +110,8 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
     button: {
-        marginBottom: hp(2),
         alignItems: 'center',
+        width: wp(90)
     },
     walletCardContainer: {
         backgroundColor: colors['red-open'],

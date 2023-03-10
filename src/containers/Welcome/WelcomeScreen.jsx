@@ -5,7 +5,7 @@ import SvgIcons from '../../assets/SvgIcons';
 import Button from '../../components/common/Button';
 import FontText from '../../components/common/FontText';
 import appConstant from '../../helper/appConstant';
-import { hp, normalize } from '../../helper/responsiveScreen';
+import { hp, normalize, wp } from '../../helper/responsiveScreen';
 
 const WelcomeScreen = (props) => {
     const { navigation } = props
@@ -25,14 +25,14 @@ const WelcomeScreen = (props) => {
             <SvgIcons.AppLogo />
             <Button
                 flex={null}
-                height={hp(6.5)}
-                width="90%"
+                height={hp(8.5)}
                 type="highlight"
                 borderRadius={11}
                 bgColor="white"
                 onPress={onPressStartBtn}
-                style={styles.button}>
-                <FontText name={"inter-medium"} size={normalize(16)} color="black">
+                buttonStyle={styles.button}
+                style={styles.buttonView}>
+                <FontText name={"inter-medium"} size={normalize(22)} color="black">
                     {appConstant.getStarted}
                 </FontText>
             </Button>
@@ -49,15 +49,17 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         flex: 1,
         paddingTop: hp(4.5)
-
     },
     image: {
         marginTop: hp(4)
     },
+    buttonView: {
+        position: 'absolute',
+        bottom: hp(4)
+    },
     button: {
         backgroundColor: colors.white,
-        position: 'absolute',
-        bottom: hp(4),
-        alignItems: 'center'
+        alignItems: 'center',
+        width: wp(90)
     }
 })

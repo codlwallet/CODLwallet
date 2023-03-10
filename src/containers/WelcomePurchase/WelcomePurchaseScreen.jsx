@@ -7,9 +7,9 @@ import { hp, normalize, wp } from '../../helper/responsiveScreen'
 import FontText from '../../components/common/FontText'
 import SvgIcons from '../../assets/SvgIcons'
 import Input from '../../components/common/Input'
-import WalletCard from '../../components/common/WalletCard'
 import ToggleSwitch from 'toggle-switch-react-native'
 import Button from '../../components/common/Button'
+import WalletCard from '../../components/WalletCard'
 
 export default function WelcomePurchaseScreen({ navigation }) {
     const [password, setPassword] = useState('');
@@ -88,7 +88,7 @@ export default function WelcomePurchaseScreen({ navigation }) {
                 />}
             </View>
 
-            <WalletCard style={[styles.walletCardContainer, { bottom: isEnabled ? hp(18) : Platform.OS === 'android' ? hp(-2) : hp(-4) }]}
+            <WalletCard style={[styles.walletCardContainer, { bottom: isEnabled ? hp(18) : 0 }]}
                 title={appConstant.hiddenWallet}
                 headerStyle={{ borderColor: colors.black }}
                 titleColor={'black'}
@@ -113,13 +113,15 @@ export default function WelcomePurchaseScreen({ navigation }) {
             />
             <Button
                 flex={null}
-                height={hp(7)}
-                width="90%"
+                height={hp(8.5)}
+                width="95%"
                 type="highlight"
                 borderRadius={11}
                 bgColor="white"
                 onPress={handleEnterClick}
-                style={styles.button}>
+                style={styles.buttonView}
+            // buttonStyle={styles.button}
+            >
                 <FontText name={"inter-medium"} size={normalize(22)} color="black">
                     {appConstant.enter}
                 </FontText>
@@ -135,9 +137,9 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     subContainer: {
+        flex: 0.9,
         justifyContent: 'center',
         alignItems: "center",
-        height: hp(65),
     },
     buttonConatiner: {
         backgroundColor: colors.gray,
@@ -161,16 +163,14 @@ const styles = StyleSheet.create({
     },
     walletCardContainer: {
         backgroundColor: colors.gray,
-        width: wp(95),
-        // paddingBottom: hp(2.5),
+        width: wp(90),
         justifyContent: 'center',
         alignItems: 'center',
-
+        // marginBottom: hp(4),
+        paddingTop: hp(4),
+        paddingBottom: hp(2.5)
     },
-    button: {
-        backgroundColor: colors.white,
-        bottom: hp(4),
-        alignItems: 'center',
-        position: 'absolute',
+    buttonView: {
+        bottom: hp(-4)
     }
 })

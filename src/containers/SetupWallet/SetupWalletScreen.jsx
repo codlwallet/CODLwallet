@@ -1,4 +1,4 @@
-import { Platform, StyleSheet, TouchableOpacity, View } from 'react-native'
+import { StyleSheet, TouchableOpacity, View } from 'react-native'
 import React, { useState } from 'react'
 import appConstant from '../../helper/appConstant'
 import colors from '../../assets/colors'
@@ -8,7 +8,7 @@ import { walletData, walletNumberData } from '../../constants/data'
 import Button from '../../components/common/Button'
 import { hp, normalize, wp } from '../../helper/responsiveScreen'
 import FontText from '../../components/common/FontText'
-import WalletCard from '../../components/common/WalletCard'
+import WalletCard from '../../components/WalletCard'
 
 export default function SetupWalletScreen(props) {
     const { navigation } = props
@@ -27,7 +27,6 @@ export default function SetupWalletScreen(props) {
         <View style={styles.container}>
             <Header title={appConstant.setupWallet} showRightIcon RightIcon={'info'} />
             <View style={styles.buttonContainer}>
-                {/* <View style={{ backgroundColor: 'pink' }}> */}
                 {walletData.map((item, index) => {
                     return (
                         <TouchableOpacity key={index} onPress={() => {
@@ -39,13 +38,8 @@ export default function SetupWalletScreen(props) {
                     )
                 })
                 }
-                {/* </View> */}
             </View>
-            <View style={{
-                position: 'absolute',
-                bottom: hp(4),
-
-            }}>
+            <View style={styles.bottomView}>
                 <WalletCard style={styles.walletCardContainer}
                     title={appConstant.numberOfWords}
                     headerStyle={{ borderColor: colors.black }}
@@ -69,14 +63,14 @@ export default function SetupWalletScreen(props) {
                 />
                 <Button
                     flex={null}
-                    height={hp(6.5)}
-                    // width="90%"
+                    height={hp(8.5)}
                     type="highlight"
                     borderRadius={11}
                     bgColor="white"
                     onPress={handleProceedClick}
-                    style={styles.button}>
-                    <FontText name={"inter-medium"} size={normalize(16)} color="black">
+                    buttonStyle={styles.button}
+                >
+                    <FontText name={"inter-medium"} size={normalize(22)} color="black">
                         {appConstant.proceed}
                     </FontText>
                 </Button>
@@ -97,10 +91,14 @@ const styles = StyleSheet.create({
         justifyContent: 'flex-end'
     },
     button: {
-        backgroundColor: colors.white,
         alignItems: 'center',
         alignSelf: 'center',
-        width: '100%'
+        width: wp(90),
+        height: hp(8.5)
+    },
+    bottomView: {
+        position: 'absolute',
+        bottom: hp(4),
     },
     walletCardContainer: {
         backgroundColor: colors.gray,

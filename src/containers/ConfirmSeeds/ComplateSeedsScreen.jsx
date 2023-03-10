@@ -2,9 +2,9 @@ import { StatusBar, StyleSheet, View } from 'react-native'
 import React, { useEffect } from 'react'
 import colors from '../../assets/colors'
 import SvgIcons from '../../assets/SvgIcons'
-import FontText from '../../components/common/FontText'
-import { hp, normalize } from '../../helper/responsiveScreen'
+import { hp } from '../../helper/responsiveScreen'
 import appConstant from '../../helper/appConstant'
+import AttentionWarningView from '../../components/AttentionWarningView'
 
 export default function ComplateSeedsScreen(props) {
     const { navigation } = props
@@ -21,12 +21,12 @@ export default function ComplateSeedsScreen(props) {
                 translucent
                 backgroundColor={colors.black}
             />
-            <View style={styles.imageContainer}>
-                <SvgIcons.BlackCheck />
-            </View>
-            <FontText size={normalize(40)} name={'inter-regular'} color={'white'} pTop={hp(4)} >
-                {appConstant.complate}
-            </FontText>
+            <AttentionWarningView
+                title={appConstant.complate}
+                mainIcon={<View style={styles.imageContainer}>
+                    <SvgIcons.BlackCheck />
+                </View>}
+            />
         </View>
     )
 }

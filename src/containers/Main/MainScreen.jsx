@@ -60,7 +60,7 @@ export default function MainScreen({ navigation, route }) {
             </View>
             <Button
                 flex={null}
-                height={hp(7)}
+                height={hp(8.5)}
                 width="90%"
                 type="highlight"
                 borderRadius={11}

@@ -6,8 +6,8 @@ import colors from '../../assets/colors'
 import appConstant from '../../helper/appConstant'
 import FontText from '../../components/common/FontText'
 import Button from '../../components/common/Button'
-import WalletCard from '../../components/common/WalletCard'
 import Header from '../../components/common/Header'
+import WalletCard from '../../components/WalletCard'
 
 export default function ConfirmSeedsScreen(props) {
     const { navigation } = props
@@ -33,7 +33,7 @@ export default function ConfirmSeedsScreen(props) {
                     headerStyle={{ borderColor: colors.black }}
                     titleColor={'black'}
                     children={
-                        <View style={{ justifyContent: 'space-between', flexDirection: 'row', alignItems: 'center', flex: 1 }}>
+                        <View style={styles.walletInnerContainer}>
                             <View style={styles.numberWiew}>
                                 <FontText name={"inter-bold"} size={normalize(22)} color={'black'}>
                                     1
@@ -60,14 +60,14 @@ export default function ConfirmSeedsScreen(props) {
             </View>
             <Button
                 flex={null}
-                height={hp(6.5)}
-                width="90%"
+                height={hp(8.5)}
+                width="95%"
                 type="highlight"
                 borderRadius={11}
                 bgColor="white"
                 onPress={handleConfirmClick}
                 style={styles.button}>
-                <FontText name={"inter-medium"} size={normalize(16)} color="black">
+                <FontText name={"inter-medium"} size={normalize(22)} color="black">
                     {appConstant.confirm}
                 </FontText>
             </Button>
@@ -85,16 +85,8 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center'
     },
-    buttonContainer: {
-        alignItems: 'center',
-        justifyContent: 'center',
-        height: hp(70)
-    },
     button: {
-        backgroundColor: colors.white,
-        position: 'absolute',
-        bottom: hp(4),
-        alignItems: 'center',
+        marginBottom: hp(2)
     },
     walletCardContainer: {
         backgroundColor: colors.gray,
@@ -102,6 +94,12 @@ const styles = StyleSheet.create({
         width: wp(95),
         paddingBottom: hp(2.5),
         paddingTop: hp(3),
+    },
+    walletInnerContainer: {
+        justifyContent: 'space-between',
+        flexDirection: 'row',
+        alignItems: 'center',
+        flex: 1
     },
     numberWiew: {
         backgroundColor: colors.white,
