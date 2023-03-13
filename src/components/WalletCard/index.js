@@ -1,4 +1,4 @@
-import {StyleSheet, Text, View} from 'react-native';
+import {FlatList, StyleSheet, Text, View} from 'react-native';
 import React from 'react';
 import {hp, normalize, wp} from '../../helper/responsiveScreen';
 import FontText from '../common/FontText';
@@ -13,7 +13,7 @@ export default function WalletCard({
 }) {
   return (
     <View style={[styles.container, style]}>
-      <View style={[headerStyle, styles.headerContainer]}>
+      <View style={[styles.headerContainer, headerStyle]}>
         <FontText
           color={titleColor}
           textTransform={'uppercase'}
@@ -32,10 +32,6 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: colors.gray,
     borderRadius: wp(4),
-    width: wp(90),
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingVertical: hp(2.5),
   },
   headerContainer: {
     backgroundColor: colors.white,
@@ -44,10 +40,13 @@ const styles = StyleSheet.create({
     position: 'absolute',
     paddingHorizontal: wp(2),
     borderWidth: wp(1.5),
+    alignSelf: 'center',
   },
   numberContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    width: '90%',
+    // flexDirection: 'row',
+    // justifyContent: 'space-between',
+    // alignItems: 'center',
+    // backgroundColor: 'green',
+    // flex: 1,
   },
 });

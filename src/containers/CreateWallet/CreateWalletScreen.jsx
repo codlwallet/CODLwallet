@@ -1,17 +1,16 @@
-import { BackHandler, FlatList, StyleSheet, View } from 'react-native'
-import React, { useEffect } from 'react'
-import colors from '../../assets/colors'
-import Header from '../../components/common/Header'
-import appConstant from '../../helper/appConstant'
-import { hp, normalize, wp } from '../../helper/responsiveScreen'
-import Button from '../../components/common/Button'
-import FontText from '../../components/common/FontText'
-import { createWalletData } from '../../constants/data'
-import WalletCard from '../../components/WalletCard'
-
+import { BackHandler, FlatList, StyleSheet, View } from 'react-native';
+import React, { useEffect } from 'react';
+import colors from '../../assets/colors';
+import Header from '../../components/common/Header';
+import appConstant from '../../helper/appConstant';
+import { hp, isIOS, normalize, wp } from '../../helper/responsiveScreen';
+import Button from '../../components/common/Button';
+import FontText from '../../components/common/FontText';
+import { createWalletData } from '../../constants/data';
+import WalletCard from '../../components/WalletCard';
 
 export default function CreateWalletScreen({ navigation, route }) {
-    const { numberValue, ButtonValue } = route.params
+    const { numberValue, ButtonValue } = route.params;
 
     useEffect(() => {
         BackHandler.addEventListener('hardwareBackPress', backAction);
@@ -32,24 +31,25 @@ export default function CreateWalletScreen({ navigation, route }) {
     const handleProceedClick = () => {
         navigation.navigate(appConstant.attentionScreen3, {
             ButtonValue: ButtonValue,
-            numberValue: numberValue
-        })
-    }
+            numberValue: numberValue,
+        });
+    };
 
     const backAction = () => {
         navigation.navigate(appConstant.attentionScreen2, {
             ButtonValue: ButtonValue,
             numberValue: numberValue,
-            from: appConstant.createWallet
+            from: appConstant.createWallet,
         });
         return true;
     };
 
     return (
         <View style={styles.container}>
-            <Header title={appConstant.createWallet} showRightIcon RightIcon={'info'} showBackIcon onBackPress={backAction} statusBarcolor={colors.red} />
+            <Header title={appConstant.createWallet} showRightIcon RightIcon={'info'} showBackIcon onBackPress={backAction} statusBarcolor={colors.red} style={{ alignSelf: 'center' }} />
             <View style={styles.subContainer}>
-                <WalletCard style={styles.walletCardContainer}
+                <WalletCard
+                    style={styles.walletCardContainer}
                     titleColor={'red'}
                     headerStyle={{ borderColor: colors.red }}
                     title={appConstant.recoverySeeds}
@@ -57,25 +57,34 @@ export default function CreateWalletScreen({ navigation, route }) {
                         <FlatList
                             data={numberValue && createWalletData.slice(0, numberValue)}
                             numColumns={3}
-                            contentContainerStyle={{ justifyContent: 'center', alignItems: "center" }}
-                            keyExtractor={(item) => {
+                            columnWrapperStyle={{ justifyContent: 'space-between' }}
+
+                            keyExtractor={item => {
                                 return item.id;
                             }}
                             renderItem={({ item, index }) => {
                                 return (
                                     <View style={styles.seedsContainer}>
                                         <View style={styles.numberContainer}>
-                                            <FontText name={"inter-bold"} size={normalize(12)} color={'white'}>
+                                            <FontText
+                                                name={'inter-bold'}
+                                                size={normalize(12)}
+                                                color={'white'}>
                                                 {item?.id}
                                             </FontText>
                                         </View>
                                         <View style={styles.nameContainer}>
-                                            <FontText name={"inter-regular"} size={normalize(16)} color={'red'} pLeft={wp(1)} lines={1}>
+                                            <FontText
+                                                name={'inter-regular'}
+                                                size={normalize(14)}
+                                                color={'red'}
+                                                pLeft={wp(1)}
+                                            >
                                                 {item?.name}
                                             </FontText>
                                         </View>
                                     </View>
-                                )
+                                );
                             }}
                         />
                     }
@@ -84,54 +93,49 @@ export default function CreateWalletScreen({ navigation, route }) {
             <Button
                 flex={null}
                 height={hp(8.5)}
-                bgColor='white'
+                bgColor="white"
                 type="highlight"
                 borderRadius={11}
                 style={{ marginBottom: hp(2) }}
                 onPress={handleProceedClick}
                 buttonStyle={styles.button}>
-                <FontText name={"inter-medium"} size={normalize(22)} color={"red"}>
+                <FontText name={'inter-medium'} size={normalize(22)} color={'red'}>
                     {appConstant.proceed}
                 </FontText>
             </Button>
         </View>
-    )
+    );
 }
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: colors.red,
-        alignItems: 'center',
+        paddingHorizontal: wp(3.5),
     },
     subContainer: {
         flex: 1,
-        alignItems: 'center',
         justifyContent: 'center',
     },
     button: {
         alignItems: 'center',
-        width: wp(90)
+        width: wp(90),
     },
     walletCardContainer: {
         backgroundColor: colors['red-open'],
-        justifyContent: 'center',
-        alignItems: 'center',
-        paddingTop: hp(3),
-        paddingBottom: hp(1.5),
-        paddingHorizontal: 0
+        paddingTop: isIOS ? hp(2.5) : hp(3),
+        paddingBottom: isIOS ? hp(1) : hp(1),
+        paddingHorizontal: isIOS ? wp(4.5) : wp(3.5),
     },
     seedsContainer: {
         backgroundColor: colors.white,
         borderRadius: wp(2),
-        width: wp(25),
+        width: isIOS ? wp(26) : wp(27),
         height: hp(4),
         alignItems: 'center',
         flexDirection: 'row',
-        justifyContent: 'center',
-        paddingHorizontal: wp(2),
+        paddingHorizontal: isIOS ? wp(1.2) : wp(1.2),
         marginBottom: hp(1),
-        marginHorizontal: wp(1),
     },
     numberContainer: {
         backgroundColor: colors.red,
@@ -139,10 +143,10 @@ const styles = StyleSheet.create({
         height: hp(2.5),
         width: hp(2.5),
         justifyContent: 'center',
-        alignItems: 'center'
+        alignItems: 'center',
     },
     nameContainer: {
         width: wp(15),
-        flex: 1
-    }
-})
+        flex: 1,
+    },
+});

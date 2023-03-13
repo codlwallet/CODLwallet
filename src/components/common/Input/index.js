@@ -148,7 +148,7 @@ const Input = forwardRef(
             value={value}
             textAlign={textAlign}
             autoComplete="off"
-            autoCorrect={!!(autoCorrect && autoCorrect === true)}
+            autoCorrect={autoCorrect}
             allowFontScaling={false}
             placeholder={placeholder}
             placeholderTextColor={placeholderTextColor}

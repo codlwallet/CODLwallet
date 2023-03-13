@@ -41,7 +41,7 @@ export default function ConfirmSeedsScreen(props) {
                             </View>
                             {confirmSeedsData.map((item, index) => {
                                 return (
-                                    <View key={index}>
+                                    <View key={index} style={styles.seedsView}>
                                         <TouchableOpacity style={[styles.numberContainer, { backgroundColor: index === numberIndex ? colors.white : colors.black }]} onPress={() => {
                                             setNumberValue(item?.number)
                                             setNumberIndex(index)
@@ -92,11 +92,11 @@ const styles = StyleSheet.create({
         backgroundColor: colors.gray,
         bottom: hp(1.5),
         width: wp(95),
-        paddingBottom: hp(2.5),
-        paddingTop: hp(3),
+        paddingBottom: hp(5),
+        paddingTop: hp(6),
+        paddingHorizontal: wp(4)
     },
     walletInnerContainer: {
-        justifyContent: 'space-between',
         flexDirection: 'row',
         alignItems: 'center',
         flex: 1
@@ -117,5 +117,9 @@ const styles = StyleSheet.create({
         width: wp(22),
         justifyContent: 'center',
         alignItems: 'center',
+        marginLeft: wp(2)
     },
+    seedsView: {
+        flex: 1
+    }
 })

@@ -45,7 +45,7 @@ export default function SetupWalletScreen(props) {
                     headerStyle={{ borderColor: colors.black }}
                     titleColor={'black'}
                     children={
-                        <>
+                        <View style={styles.numberView}>
                             {walletNumberData.map((item, index) => {
                                 return (
                                     <TouchableOpacity key={index} style={[styles.numberContainer, { backgroundColor: index === numberIndex ? colors.white : colors.black }]} onPress={() => {
@@ -58,7 +58,7 @@ export default function SetupWalletScreen(props) {
                                     </TouchableOpacity>
                                 )
                             })}
-                        </>
+                        </View>
                     }
                 />
                 <Button
@@ -103,8 +103,14 @@ const styles = StyleSheet.create({
     walletCardContainer: {
         backgroundColor: colors.gray,
         marginBottom: hp(2),
-        paddingTop: hp(4),
-        paddingBottom: hp(2.5)
+        paddingTop: hp(3.5),
+        paddingBottom: hp(2),
+    },
+    numberView: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        marginHorizontal: wp(4)
     },
     numberContainer: {
         backgroundColor: colors.black,

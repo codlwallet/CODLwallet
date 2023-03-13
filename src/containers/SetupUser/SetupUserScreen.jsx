@@ -1,4 +1,4 @@
-import { View, StyleSheet, TouchableOpacity, Keyboard } from 'react-native'
+import { View, StyleSheet, TouchableOpacity, Keyboard, Alert } from 'react-native'
 import React, { useRef, useState } from 'react'
 import colors from '../../assets/colors'
 import { hp, normalize, wp } from '../../helper/responsiveScreen'
@@ -7,6 +7,7 @@ import appConstant from '../../helper/appConstant'
 import Input from '../../components/common/Input'
 import SvgIcons from '../../assets/SvgIcons'
 import FontText from '../../components/common/FontText'
+import Button from '../../components/common/Button'
 
 export default function SetupUserScreen(props) {
     const { navigation } = props
@@ -39,8 +40,18 @@ export default function SetupUserScreen(props) {
     }
 
     const onSubmitName = () => {
-        if (name == '') {
+        if (name === '' || !name.length > 1 || name.length > 15) {
             setnameError(true)
+            Alert.alert(
+                (appConstant.enterName),
+                'Name must be greater than 1 and less than 15 characters.',
+                [
+                    {
+                        text: 'OK',
+                        style: 'ok',
+                    },
+                ],
+            );
         }
         else {
             choosePinRef.current.focus()
@@ -48,8 +59,18 @@ export default function SetupUserScreen(props) {
     }
 
     const onSubmitChoosepin = () => {
-        if (choosePin == '') {
+        if (choosePin === '' || choosePin.length < 4 || choosePin.length > 8) {
             setChoosePassError(true)
+            Alert.alert(
+                (appConstant.enterPIN),
+                'PIN must be greater than 4 and less than 8 characters.',
+                [
+                    {
+                        text: 'OK',
+                        style: 'ok',
+                    },
+                ],
+            );
         }
         else {
             confirmPinRef.current.focus()
@@ -64,8 +85,18 @@ export default function SetupUserScreen(props) {
     }
 
     const onBlurName = () => {
-        if (name == '') {
+        if (name === '' || !name.length > 1 || name.length > 15) {
             setnameError(true)
+            Alert.alert(
+                (appConstant.enterName),
+                'Name must be greater than 1 and less than 15 characters.',
+                [
+                    {
+                        text: 'OK',
+                        style: 'ok',
+                    },
+                ],
+            );
         }
         else {
             setNameFocus(!nameFocus)
@@ -79,8 +110,18 @@ export default function SetupUserScreen(props) {
     }
 
     const onBlurChoosePin = () => {
-        if (choosePin == '') {
+        if (choosePin === '' || choosePin.length < 4 || choosePin.length > 8) {
             setChoosePassError(true)
+            Alert.alert(
+                (appConstant.enterPIN),
+                'PIN must be greater than 4 and less than 8 characters.',
+                [
+                    {
+                        text: 'OK',
+                        style: 'ok',
+                    },
+                ],
+            );
         }
         else {
             setChoosePinFocus(!choosePinFocus)
@@ -88,11 +129,18 @@ export default function SetupUserScreen(props) {
     }
 
     const onBlurConfirmPin = () => {
-        if (confirmPin == '') {
+        if (confirmPin !== choosePin) {
             setConfirmPassError(true)
-        }
-        else if (confirmPin !== choosePin) {
-            setMatchPinError(true)
+            Alert.alert(
+                (appConstant.matchedPIN),
+                'Confirm pin is not correct.',
+                [
+                    {
+                        text: 'OK',
+                        style: 'ok',
+                    },
+                ],
+            );
         }
         else {
             setConfirmPinFocus(!confirmPinFocus)
@@ -105,6 +153,57 @@ export default function SetupUserScreen(props) {
         setConfirmPinFocus(true)
     }
 
+    const checkValidation = () => {
+        let errorStatus = true;
+        if (name === '' || !name.length > 1 || name.length > 15) {
+            setnameError(true);
+            Alert.alert(
+                (appConstant.enterName),
+                'Name must be greater than 1 and less than 15 characters.',
+                [
+                    {
+                        text: 'OK',
+                        style: 'ok',
+                    },
+                ],
+            );
+            errorStatus = false;
+        } else if (choosePin === '' || choosePin.length < 4 || choosePin.length > 8) {
+            setChoosePassError(true);
+            Alert.alert(
+                (appConstant.enterPIN),
+                'PIN must be greater than 4 and less than 8 characters.',
+                [
+                    {
+                        text: 'OK',
+                        style: 'ok',
+                    },
+                ],
+            );
+            errorStatus = false;
+        } else if (confirmPin !== choosePin) {
+            setConfirmPassError(true);
+            Alert.alert(
+                (appConstant.matchedPIN),
+                'Confirm pin is not correct.',
+                [
+                    {
+                        text: 'OK',
+                        style: 'ok',
+                    },
+                ],
+            );
+            errorStatus = false;
+        }
+        return errorStatus;
+    };
+
+    const handleProceedBtn = () => {
+        if (checkValidation()) {
+            navigation.navigate(appConstant.createdUser)
+        }
+    }
+
     return (
         <View style={styles.container} onStartShouldSetResponder={() => Keyboard.dismiss()}>
             <Header title={appConstant.setupUser} showRightIcon RightIcon={'info'} />
@@ -115,6 +214,7 @@ export default function SetupUserScreen(props) {
                     autoFocus={nameFocus ? true : false}
                     placeholder={appConstant.name}
                     value={name}
+                    maxLength={15}
                     placeholderTextColor={nameFocus ? colors.black : colors.white}
                     onChangeText={setName}
                     keyboardType={'default'}
@@ -145,16 +245,16 @@ export default function SetupUserScreen(props) {
                         </TouchableOpacity>
                     }
                 />
-                {nameError && name === '' &&
+                {/* {nameError && name === '' &&
                     <FontText
                         color={"white"}
-                        pRight={wp(6)}
-                        textAlign={'right'}
+                        pTop={hp(1)}
+                        textAlign={'center'}
                         name={'inter-regular'}
-                        size={normalize(12)}>
+                        size={normalize(14)}>
                         {appConstant.enterName}
                     </FontText>
-                }
+                } */}
                 <Input
                     editable={name !== '' ? true : false}
                     withRightIcon
@@ -165,6 +265,7 @@ export default function SetupUserScreen(props) {
                     onChangeText={setChoosePin}
                     keyboardType={'number-pad'}
                     returnKeyType={'next'}
+                    maxLength={8}
                     secureTextEntry={!showPin ? true : false}
                     onFocus={onFocusChoosePin}
                     onBlur={onBlurChoosePin}
@@ -197,16 +298,16 @@ export default function SetupUserScreen(props) {
                         </TouchableOpacity>
                     }
                 />
-                {choosePassError && choosePin === '' &&
+                {/* {choosePassError && choosePin === '' &&
                     <FontText
                         color={"white"}
-                        pRight={wp(6)}
+                        pTop={hp(1)}
                         name={'inter-regular'}
-                        textAlign={'right'}
-                        size={normalize(12)}>
+                        textAlign={'center'}
+                        size={normalize(14)}>
                         {appConstant.enterPIN}
                     </FontText>
-                }
+                } */}
                 <Input
                     editable={choosePin !== '' ? true : false}
                     withRightIcon={confirmPin !== '' && choosePin === confirmPin ? true : false}
@@ -214,6 +315,7 @@ export default function SetupUserScreen(props) {
                     placeholder={appConstant.confirmPin}
                     value={confirmPin}
                     secureTextEntry={true}
+                    maxLength={8}
                     placeholderTextColor={confirmPinFocus ? colors.black : colors.white}
                     onChangeText={setConfirmPin}
                     keyboardType={'numeric'}
@@ -244,27 +346,45 @@ export default function SetupUserScreen(props) {
                         </TouchableOpacity>
                     }
                 />
-                {confirmPassError && confirmPin === '' && !matchPinError &&
+                {/* {confirmPassError && confirmPin === '' && !matchPinError &&
                     <FontText
                         color={"white"}
-                        pRight={wp(6)}
+                        pTop={hp(1)}
+                        textAlign={'center'}
                         name={'inter-regular'}
-                        textAlign={'right'}
-                        size={normalize(12)}>
+                        size={normalize(14)}>
                         {appConstant.enterPIN}
                     </FontText>
                 }
                 {matchPinError && confirmPin !== choosePin &&
                     <FontText
                         color={"white"}
-                        pRight={wp(6)}
+                        pTop={hp(1)}
+                        textAlign={'center'}
                         name={'inter-regular'}
-                        textAlign={'right'}
-                        size={normalize(12)}>
+                        size={normalize(14)}>
                         {appConstant.matchedPIN}
                     </FontText>
-                }
+                } */}
+                <Button
+                    flex={null}
+                    height={hp(8.5)}
+                    type="highlight"
+                    borderRadius={11}
+                    bgColor="white"
+                    onPress={handleProceedBtn}
+                    buttonStyle={styles.button}
+                    style={styles.buttonView}
+                >
+                    <FontText name={"inter-medium"} size={normalize(22)} color="black">
+                        {appConstant.proceed}
+                    </FontText>
+                </Button>
             </View>
+            {/* <View style={styles.button}> */}
+
+            {/* </View> */}
+
         </View>
     )
 }
@@ -272,18 +392,29 @@ export default function SetupUserScreen(props) {
 const styles = StyleSheet.create({
     container: {
         backgroundColor: colors.black,
-        flex: 1
+        flex: 1,
     },
     subContainer: {
+        flex: 1,
+        alignItems: 'center',
         marginTop: hp(10)
     },
     textInputContainer: {
         marginTop: hp(2),
-        height: hp(8)
+        height: hp(8),
+        width: wp(90)
     },
     textInput: {
         fontSize: normalize(22),
         padding: 0,
         paddingHorizontal: wp(4)
+    },
+    buttonView: {
+        position: 'absolute',
+        bottom: hp(4),
+    },
+    button: {
+        backgroundColor: colors.white,
+        width: wp(90),
     }
 })

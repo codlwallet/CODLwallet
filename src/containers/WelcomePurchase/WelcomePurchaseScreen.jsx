@@ -93,22 +93,24 @@ export default function WelcomePurchaseScreen({ navigation }) {
                 headerStyle={{ borderColor: colors.black }}
                 titleColor={'black'}
                 children={
-                    <>
+                    <View style={styles.numberView}>
                         <FontText size={normalize(22)} color={'white'} name={'inter-regular'}>
                             {appConstant.passphrase}
                         </FontText>
-                        <ToggleSwitch
-                            isOn={isEnabled}
-                            onColor={colors.white}
-                            offColor={colors.black}
-                            thumbOnStyle={{ borderRadius: 2, height: 17, width: 15, backgroundColor: colors.black, left: 12 }}
-                            thumbOffStyle={{ borderRadius: 2, height: 17, width: 15 }}
-                            trackOnStyle={{ borderRadius: 4, width: 50, padding: 12 }}
-                            trackOffStyle={{ borderRadius: 2, width: 50, padding: 12 }}
-                            size="small"
-                            onToggle={toggleSwitch}
-                        />
-                    </>
+                        <View style={{ flex: 1, alignItems: 'flex-end' }}>
+                            <ToggleSwitch
+                                isOn={isEnabled}
+                                onColor={colors.white}
+                                offColor={colors.black}
+                                thumbOnStyle={{ borderRadius: 2, height: 17, width: 15, backgroundColor: colors.black, left: 12 }}
+                                thumbOffStyle={{ borderRadius: 2, height: 17, width: 15 }}
+                                trackOnStyle={{ borderRadius: 4, width: 50, padding: 12 }}
+                                trackOffStyle={{ borderRadius: 2, width: 50, padding: 12 }}
+                                size="small"
+                                onToggle={toggleSwitch}
+                            />
+                        </View>
+                    </View>
                 }
             />
             <Button
@@ -172,5 +174,13 @@ const styles = StyleSheet.create({
     },
     buttonView: {
         bottom: hp(-4)
-    }
+    },
+    numberView: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        // backgroundColor: 'red',
+        marginHorizontal: wp(4),
+        width: '90%'
+    },
 })
