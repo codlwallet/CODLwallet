@@ -1,4 +1,3 @@
-const {default: SvgIcons} = require('../assets/SvgIcons');
 const appConstant = require('../helper/appConstant');
 const {hp} = require('../helper/responsiveScreen');
 
@@ -29,21 +28,48 @@ module.exports = {
     },
   ],
 
-  confirmSeedsData: [
+  secondSeedsData: [
     {
       id: 0,
-      number: 12,
+      name: 'wear',
+    },
+    {
+      id: 1,
+      name: 'cupboard',
+    },
+    {
+      id: 2,
+      name: 'rotate',
+    },
+  ],
+
+  sixSeedsData: [
+    {
+      id: 0,
       name: 'loan',
     },
     {
       id: 1,
-      number: 18,
       name: 'attitude',
     },
     {
       id: 2,
-      number: 24,
       name: 'usage',
+    },
+  ],
+
+  twelveSeedsData: [
+    {
+      id: 0,
+      name: 'weekend',
+    },
+    {
+      id: 1,
+      name: 'abstact',
+    },
+    {
+      id: 2,
+      name: 'room',
     },
   ],
 
@@ -297,28 +323,23 @@ module.exports = {
     {
       id: 0,
       name: 'Bitcoin',
-      icon: <SvgIcons.Bitcoin height={hp(6)} width={hp(4)} />,
     },
     {
       id: 1,
       name: 'Ethereum',
-      icon: <SvgIcons.EU height={hp(6)} width={hp(4)} />,
-      // image: require('../assets/images/img.png'),
+      image: require('../assets/images/img.png'),
     },
     {
       id: 2,
       name: 'Solana',
-      icon: <SvgIcons.Solana height={hp(6)} width={hp(4)} />,
     },
     {
       id: 3,
       name: 'Avalanche',
-      icon: <SvgIcons.AV height={hp(6)} width={hp(4)} />,
     },
     {
       id: 4,
       name: 'Polygon',
-      icon: <SvgIcons.Poly />,
     },
   ],
 

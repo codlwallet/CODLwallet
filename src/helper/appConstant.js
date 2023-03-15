@@ -52,4 +52,13 @@ module.exports = {
   changeName: 'Change Name',
   deleteEverything: 'Delete Everything',
   lockDevice: 'Lock Device',
+  unlock: 'Unlock',
+  enterPin: 'Enter PIN',
+  wrongPin: 'Wrong PIN',
+  error: 'Error!',
+  nameErrorMess: 'Name must be greater than 1 and less than 15 characters.',
+  pinErrorMess: 'PIN must be greater than 4 and less than 8 characters.',
+  pinMatchError: 'Confirm pin is not correct.',
+  ok: 'OK',
+  hidden: 'Hidden',
 };

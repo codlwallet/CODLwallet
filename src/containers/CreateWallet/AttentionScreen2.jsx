@@ -19,7 +19,8 @@ export default function AttentionScreen2({ navigation, route }) {
         setBtnValue(appConstant.checkAgain)
         navigation.navigate(ButtonValue === appConstant.createWallet ? appConstant.createWallet : appConstant.importWallet, {
             numberValue: numberValue,
-            ButtonValue: ButtonValue
+            ButtonValue: ButtonValue,
+            form: appConstant.checkAgain
         })
     }
 
@@ -33,7 +34,7 @@ export default function AttentionScreen2({ navigation, route }) {
     const backAction = () => {
         navigation.navigate(from === appConstant.createWallet ? appConstant.createWallet : appConstant.importWallet, {
             numberValue: numberValue,
-            ButtonValue: ButtonValue
+            ButtonValue: ButtonValue,
         })
         return true;
     };
@@ -46,9 +47,9 @@ export default function AttentionScreen2({ navigation, route }) {
                 backgroundColor={colors.black}
             />
             <AttentionWarningView
-                title={appConstant.watchSurroundings}
+                title={appConstant.areUSure}
                 mainIcon={<SvgIcons.Polygon height={hp(8)} width={hp(8)} />}
-                description={appConstant.attention1Description}
+                description={appConstant.attention2Description}
                 showButton1
                 showButton2
                 firstBtnTitle={appConstant.proceed}

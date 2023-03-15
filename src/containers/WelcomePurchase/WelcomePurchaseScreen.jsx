@@ -1,5 +1,5 @@
-import { Keyboard, Platform, StyleSheet, TouchableOpacity, View } from 'react-native'
-import React, { useState } from 'react'
+import { BackHandler, Keyboard, StyleSheet, TouchableOpacity, View } from 'react-native'
+import React, { useEffect, useState } from 'react'
 import Header from '../../components/common/Header'
 import colors from '../../assets/colors'
 import appConstant from '../../helper/appConstant'
@@ -16,8 +16,33 @@ export default function WelcomePurchaseScreen({ navigation }) {
     const [showPassword, setShowPassword] = useState(false)
     const [passwordFocus, setPasswordFocus] = useState(false)
     const [isEnabled, setIsEnabled] = useState(false);
+    const [keyboardHeight, setKeyboardHeight] = useState(0);
 
     const toggleSwitch = () => setIsEnabled(previousState => !previousState);
+
+    useEffect(() => {
+        const showSubscription = Keyboard.addListener('keyboardDidShow', e => setKeyboardHeight(e.endCoordinates.height));
+        const hideSubscription = Keyboard.addListener('keyboardWillHide', () => setKeyboardHeight(0));
+        return () => {
+            showSubscription.remove();
+            hideSubscription.remove();
+        }
+    }, [setKeyboardHeight]);
+
+    useEffect(() => {
+        BackHandler.addEventListener('hardwareBackPress', backAction);
+        return async () => {
+            BackHandler.removeEventListener('hardwareBackPress', backAction);
+        };
+    }, []);
+
+    const backAction = () => {
+        navigation.navigate(appConstant.welcome, {
+            from: appConstant.welcomePurchase,
+        });
+        return true;
+    };
+
 
     const keyboardShowListener = Keyboard.addListener(
         'keyboardDidShow',
@@ -33,6 +58,8 @@ export default function WelcomePurchaseScreen({ navigation }) {
     );
 
     const onSubmitPin = () => {
+        Keyboard.dismiss()
+        setIsEnabled(false)
         // navigation.navigate(appConstant.main, {
         //     hidden: isEnabled
         // })
@@ -47,7 +74,7 @@ export default function WelcomePurchaseScreen({ navigation }) {
     return (
         <View style={styles.container}>
             <Header showRightIcon RightIcon={'info'} title={appConstant.welcome} />
-            <View style={styles.subContainer}>
+            <View style={[styles.subContainer, { bottom: isEnabled ? wp(18) : 0 }]}>
                 <TouchableOpacity style={styles.buttonConatiner}>
                     <FontText size={normalize(22)} color={'white'} name={'inter-regular'}>
                         {'Alice’s Crypto'}
@@ -62,13 +89,14 @@ export default function WelcomePurchaseScreen({ navigation }) {
                     placeholderTextColor={passwordFocus ? colors.black : colors.white}
                     onChangeText={setPassword}
                     keyboardType={'default'}
-                    returnKeyType={'next'}
+                    returnKeyType={'done'}
                     secureTextEntry={!showPassword ? true : false}
                     onFocus={() => setPasswordFocus(true)}
                     onBlur={() => setPasswordFocus(!passwordFocus)}
                     inputStyle={[styles.textInput, { color: colors.black }]}
                     fontName={'poppins-regular'}
                     onSubmit={onSubmitPin}
+                    onSubmitEditing={() => { setPasswordFocus(false), Keyboard.dismiss() }}
                     fontSize={normalize(22)}
                     style={[styles.textInputContainer, {
                         backgroundColor:
@@ -87,8 +115,7 @@ export default function WelcomePurchaseScreen({ navigation }) {
                     }
                 />}
             </View>
-
-            <WalletCard style={[styles.walletCardContainer, { bottom: isEnabled ? hp(18) : 0 }]}
+            <WalletCard style={[styles.walletCardContainer, { bottom: isEnabled ? keyboardHeight - hp(14) : 0 }]}
                 title={appConstant.hiddenWallet}
                 headerStyle={{ borderColor: colors.black }}
                 titleColor={'black'}
@@ -102,8 +129,8 @@ export default function WelcomePurchaseScreen({ navigation }) {
                                 isOn={isEnabled}
                                 onColor={colors.white}
                                 offColor={colors.black}
-                                thumbOnStyle={{ borderRadius: 2, height: 17, width: 15, backgroundColor: colors.black, left: 12 }}
-                                thumbOffStyle={{ borderRadius: 2, height: 17, width: 15 }}
+                                thumbOnStyle={{ borderRadius: 2, height: 18, width: 15, backgroundColor: colors.black, left: 8 }}
+                                thumbOffStyle={{ borderRadius: 2, height: 15, width: 15, left: 3 }}
                                 trackOnStyle={{ borderRadius: 4, width: 50, padding: 12 }}
                                 trackOffStyle={{ borderRadius: 2, width: 50, padding: 12 }}
                                 size="small"
@@ -122,7 +149,6 @@ export default function WelcomePurchaseScreen({ navigation }) {
                 bgColor="white"
                 onPress={handleEnterClick}
                 style={styles.buttonView}
-            // buttonStyle={styles.button}
             >
                 <FontText name={"inter-medium"} size={normalize(22)} color="black">
                     {appConstant.enter}
@@ -168,9 +194,8 @@ const styles = StyleSheet.create({
         width: wp(90),
         justifyContent: 'center',
         alignItems: 'center',
-        // marginBottom: hp(4),
-        paddingTop: hp(4),
-        paddingBottom: hp(2.5)
+        paddingTop: hp(3.5),
+        paddingBottom: hp(3)
     },
     buttonView: {
         bottom: hp(-4)
@@ -179,7 +204,6 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
-        // backgroundColor: 'red',
         marginHorizontal: wp(4),
         width: '90%'
     },

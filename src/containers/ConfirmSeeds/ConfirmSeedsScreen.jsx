@@ -1,6 +1,6 @@
 import { StyleSheet, TouchableOpacity, View } from 'react-native'
 import React, { useState } from 'react'
-import { confirmSeedsData } from '../../constants/data'
+import { secondSeedsData, sixSeedsData, twelveSeedsData } from '../../constants/data'
 import { hp, normalize, wp } from '../../helper/responsiveScreen'
 import colors from '../../assets/colors'
 import appConstant from '../../helper/appConstant'
@@ -11,10 +11,12 @@ import WalletCard from '../../components/WalletCard'
 
 export default function ConfirmSeedsScreen(props) {
     const { navigation } = props
-    const [btnValue, setButtonValue] = useState()
-    const [buttonIndex, setButtonIndex] = useState(0)
-    const [numberValue, setNumberValue] = useState()
-    const [numberIndex, setNumberIndex] = useState(0)
+    const [secondNumberValue, setSecondNumberValue] = useState()
+    const [secondIndex, setSecondIndex] = useState(0)
+    const [sixIndex, setsixIndex] = useState(0)
+    const [twelveIndex, setTwelveIndex] = useState(0)
+    const [sixNumberValue, setSixNumberValue] = useState()
+    const [twelveNumberValue, setTwelveNumberValue] = useState()
 
     const handleConfirmClick = () => {
         navigation.navigate(appConstant.complateSeeds)
@@ -29,24 +31,80 @@ export default function ConfirmSeedsScreen(props) {
             <Header title={appConstant.confirmSeeds} showRightIcon RightIcon={'info'} showBackIcon onBackPress={handleBackClick} />
             <View style={styles.subContainer}>
                 <WalletCard style={styles.walletCardContainer}
-                    title={'1st seed'}
+                    title={'2th seed'}
                     headerStyle={{ borderColor: colors.black }}
                     titleColor={'black'}
                     children={
                         <View style={styles.walletInnerContainer}>
                             <View style={styles.numberWiew}>
                                 <FontText name={"inter-bold"} size={normalize(22)} color={'black'}>
-                                    1
+                                    2
                                 </FontText>
                             </View>
-                            {confirmSeedsData.map((item, index) => {
+                            {secondSeedsData.map((item, index) => {
                                 return (
                                     <View key={index} style={styles.seedsView}>
-                                        <TouchableOpacity style={[styles.numberContainer, { backgroundColor: index === numberIndex ? colors.white : colors.black }]} onPress={() => {
-                                            setNumberValue(item?.number)
-                                            setNumberIndex(index)
+                                        <TouchableOpacity style={[styles.numberContainer, { backgroundColor: index === secondIndex ? colors.white : colors.black }]} onPress={() => {
+                                            setSecondNumberValue(item?.number)
+                                            setSecondIndex(index)
                                         }}>
-                                            <FontText name={"inter-regular"} size={normalize(16)} color={index === numberIndex ? "black" : 'white'}>
+                                            <FontText name={"inter-regular"} size={normalize(16)} color={index === secondIndex ? "black" : 'white'}>
+                                                {item?.name}
+                                            </FontText>
+                                        </TouchableOpacity>
+                                    </View>
+                                )
+                            })}
+                        </View>
+                    }
+                />
+                <WalletCard style={styles.walletCardContainer}
+                    title={'6th seed'}
+                    headerStyle={{ borderColor: colors.black }}
+                    titleColor={'black'}
+                    children={
+                        <View style={styles.walletInnerContainer}>
+                            <View style={styles.numberWiew}>
+                                <FontText name={"inter-bold"} size={normalize(22)} color={'black'}>
+                                    6
+                                </FontText>
+                            </View>
+                            {sixSeedsData.map((item, index) => {
+                                return (
+                                    <View key={index} style={styles.seedsView}>
+                                        <TouchableOpacity style={[styles.numberContainer, { backgroundColor: index === sixIndex ? colors.white : colors.black }]} onPress={() => {
+                                            setSixNumberValue(item?.number)
+                                            setsixIndex(index)
+                                        }}>
+                                            <FontText name={"inter-regular"} size={normalize(16)} color={index === sixIndex ? "black" : 'white'}>
+                                                {item?.name}
+                                            </FontText>
+                                        </TouchableOpacity>
+                                    </View>
+                                )
+                            })}
+                        </View>
+                    }
+                />
+                <WalletCard style={styles.walletCardContainer}
+                    title={'12th seed'}
+                    headerStyle={{ borderColor: colors.black }}
+                    titleColor={'black'}
+                    children={
+                        <View style={styles.walletInnerContainer}>
+                            <View style={styles.numberWiew}>
+                                <FontText name={"inter-bold"} size={normalize(22)} color={'black'}>
+                                    12
+                                </FontText>
+                            </View>
+                            {twelveSeedsData.map((item, index) => {
+                                return (
+                                    <View key={index} style={styles.seedsView}>
+                                        <TouchableOpacity style={[styles.numberContainer, { backgroundColor: index === twelveIndex ? colors.white : colors.black }]} onPress={() => {
+                                            setTwelveNumberValue(item?.number)
+                                            setTwelveIndex(index)
+                                        }}>
+                                            <FontText name={"inter-regular"} size={normalize(16)} color={index === twelveIndex ? "black" : 'white'}>
                                                 {item?.name}
                                             </FontText>
                                         </TouchableOpacity>
@@ -83,7 +141,9 @@ const styles = StyleSheet.create({
     subContainer: {
         flex: 1,
         alignItems: 'center',
-        justifyContent: 'center'
+        justifyContent: 'space-between',
+        alignSelf: 'center',
+        marginVertical: hp(15)
     },
     button: {
         marginBottom: hp(2)
@@ -99,12 +159,12 @@ const styles = StyleSheet.create({
     walletInnerContainer: {
         flexDirection: 'row',
         alignItems: 'center',
-        flex: 1
+        flex: 1,
     },
     numberWiew: {
         backgroundColor: colors.white,
         height: hp(6),
-        width: wp(14),
+        width: hp(6),
         borderRadius: wp(2),
         justifyContent: 'center',
         alignItems: 'center',
@@ -112,14 +172,15 @@ const styles = StyleSheet.create({
     numberContainer: {
         backgroundColor: colors.black,
         borderRadius: wp(2),
-        paddingHorizontal: wp(2),
         height: hp(6),
         width: wp(22),
         justifyContent: 'center',
         alignItems: 'center',
-        marginLeft: wp(2)
     },
     seedsView: {
-        flex: 1
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'flex-end',
+        marginTop: hp(3),
     }
 })

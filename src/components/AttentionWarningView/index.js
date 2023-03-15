@@ -50,7 +50,7 @@ export default function AttentionWarningView({
           buttonStyle={[styles.button]}>
           <FontText
             name={'inter-medium'}
-            size={22}
+            size={normalize(22)}
             color={buttonValue === firstBtnTitle ? 'black' : 'white'}>
             {firstBtnTitle}
           </FontText>
@@ -68,7 +68,7 @@ export default function AttentionWarningView({
           buttonStyle={[styles.button]}>
           <FontText
             name={'inter-medium'}
-            size={22}
+            size={normalize(22)}
             color={buttonValue === secondBtnTitle ? 'black' : 'white'}>
             {secondBtnTitle}
           </FontText>

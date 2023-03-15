@@ -127,7 +127,7 @@ const Button = props => {
             style={[
               {opacity: defaultOpacity},
               StyleSheet.absoluteFill,
-              bgColor ? {backgroundColor: colors[bgColor]} : null,
+              bgColor ? {backgroundColor: colors[bgColor || [bgColor]]} : null,
             ]}
           />
           <View

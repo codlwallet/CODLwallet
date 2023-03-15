@@ -1,5 +1,5 @@
-import { StyleSheet, TouchableOpacity, View } from 'react-native'
-import React, { useState } from 'react'
+import { BackHandler, StyleSheet, TouchableOpacity, View } from 'react-native'
+import React, { useEffect, useState } from 'react'
 import appConstant from '../../helper/appConstant'
 import colors from '../../assets/colors'
 import Header from '../../components/common/Header'
@@ -17,12 +17,28 @@ export default function SetupWalletScreen(props) {
     const [numberValue, setNumberValue] = useState(12)
     const [numberIndex, setNumberIndex] = useState(0)
 
+    useEffect(() => {
+        BackHandler.addEventListener('hardwareBackPress', backAction);
+        return async () => {
+            BackHandler.removeEventListener('hardwareBackPress', backAction);
+        };
+    }, []);
+
     const handleProceedClick = () => {
         navigation.navigate(appConstant.attentionScreen1, {
             ButtonValue: btnValue,
             numberValue: numberValue
         })
     }
+
+    const backAction = () => {
+        navigation.navigate(appConstant.welcome, {
+            from: appConstant.setupWallet,
+        });
+        return true;
+    };
+
+
     return (
         <View style={styles.container}>
             <Header title={appConstant.setupWallet} showRightIcon RightIcon={'info'} />

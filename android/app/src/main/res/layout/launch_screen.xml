@@ -6,9 +6,13 @@
     android:gravity="center"
     android:orientation="vertical"
     android:background="@color/black">
+
     <ImageButton
         android:id="@+id/btnFindMe"
         android:layout_width="157dp"
         android:layout_height="236dp"
-        android:background="@drawable/logo" />
+        android:background="@drawable/logo"
+        android:layout_centerInParent="true"
+        android:layout_centerHorizontal="true"
+        android:scaleType="center" />
 </LinearLayout>

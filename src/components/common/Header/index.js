@@ -8,6 +8,7 @@ import {
 } from 'react-native';
 import colors from '../../../assets/colors';
 import SvgIcons from '../../../assets/SvgIcons';
+import appConstant from '../../../helper/appConstant';
 import {hp, normalize, wp} from '../../../helper/responsiveScreen';
 import FontText from '../FontText';
 
@@ -25,12 +26,15 @@ const Header = props => {
     RightIconPress,
     RightIcon,
     statusBarcolor,
+    statusBarHidden,
+    showHiddenTitle,
   } = props;
 
   return (
     <>
       <StatusBar
         barStyle={'light-content'}
+        hidden={statusBarHidden}
         translucent
         backgroundColor={statusBarcolor ? statusBarcolor : colors.black}
       />
@@ -58,17 +62,33 @@ const Header = props => {
               {title}
             </FontText>
           )}
+          {showHiddenTitle && (
+            <View style={styles.hiddenTitleContainer}>
+              <FontText
+                style={styles.title}
+                size={normalize(15)}
+                name="inter-bold"
+                color={'black'}
+                textTransform={'uppercase'}
+                lines={1}
+                pLeft={pLeft}>
+                {appConstant.hidden}
+              </FontText>
+            </View>
+          )}
         </View>
         {showRightIcon && (
-          <TouchableOpacity onPress={RightIconPress} style={{padding: 5}}>
+          <TouchableOpacity
+            onPress={RightIconPress}
+            style={styles.iconContainer}>
             {RightIcon === 'info' ? (
-              <SvgIcons.Info style={styles.arrow} />
+              <SvgIcons.Info />
             ) : RightIcon === 'false' ? (
-              <SvgIcons.False style={styles.arrow} />
+              <SvgIcons.False />
             ) : RightIcon === 'menu' ? (
-              <SvgIcons.Menu style={styles.arrow} />
+              <SvgIcons.Menu />
             ) : (
-              <SvgIcons.Plus style={styles.arrow} />
+              <SvgIcons.Plus />
             )}
           </TouchableOpacity>
         )}
@@ -93,15 +113,20 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     marginHorizontal: wp(2),
   },
-  arrow: {
-    height: hp(10),
-    width: hp(10),
-    marginHorizontal: 5,
-  },
   titleContainer: {
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  iconContainer: {
+    paddingHorizontal: wp(2),
+    paddingVertical: hp(2),
+  },
+  hiddenTitleContainer: {
+    backgroundColor: colors.white,
+    borderRadius: wp(1),
+    paddingVertical: hp(0.5),
+    paddingHorizontal: wp(0.5),
   },
 });
 
