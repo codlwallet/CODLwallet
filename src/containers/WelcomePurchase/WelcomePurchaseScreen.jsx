@@ -60,27 +60,27 @@ export default function WelcomePurchaseScreen({ navigation }) {
     const onSubmitPin = () => {
         Keyboard.dismiss()
         setIsEnabled(false)
-        // navigation.navigate(appConstant.main, {
-        //     hidden: isEnabled
-        // })
+        navigation.navigate(appConstant.main, {
+            hidden: isEnabled
+        })
     }
 
     const handleEnterClick = () => {
-        // navigation.navigate(appConstant.main, {
-        //     hidden: isEnabled
-        // })
+        navigation.navigate(appConstant.main, {
+            hidden: isEnabled
+        })
     }
 
     return (
         <View style={styles.container}>
             <Header showRightIcon RightIcon={'info'} title={appConstant.welcome} />
             <View style={[styles.subContainer, { bottom: isEnabled ? wp(18) : 0 }]}>
-                <TouchableOpacity style={styles.buttonConatiner}>
+                <View style={styles.buttonConatiner}>
                     <FontText size={normalize(22)} color={'white'} name={'inter-regular'}>
                         {'Alice’s Crypto'}
                     </FontText>
                     <SvgIcons.RightBackArrow height={hp(3)} width={hp(2)} />
-                </TouchableOpacity>
+                </View>
                 {isEnabled && <Input
                     withRightIcon
                     autoFocus={true}
@@ -129,10 +129,10 @@ export default function WelcomePurchaseScreen({ navigation }) {
                                 isOn={isEnabled}
                                 onColor={colors.white}
                                 offColor={colors.black}
-                                thumbOnStyle={{ borderRadius: 2, height: 18, width: 15, backgroundColor: colors.black, left: 8 }}
+                                thumbOnStyle={{ borderRadius: 2, height: 15, width: 15, backgroundColor: colors.black, left: 8 }}
                                 thumbOffStyle={{ borderRadius: 2, height: 15, width: 15, left: 3 }}
                                 trackOnStyle={{ borderRadius: 4, width: 50, padding: 12 }}
-                                trackOffStyle={{ borderRadius: 2, width: 50, padding: 12 }}
+                                trackOffStyle={{ borderRadius: 4, width: 50, padding: 12 }}
                                 size="small"
                                 onToggle={toggleSwitch}
                             />

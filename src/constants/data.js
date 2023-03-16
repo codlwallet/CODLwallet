@@ -1,5 +1,4 @@
 const appConstant = require('../helper/appConstant');
-const {hp} = require('../helper/responsiveScreen');
 
 module.exports = {
   walletData: [
@@ -10,6 +9,28 @@ module.exports = {
     {
       id: 1,
       name: 'Import Wallet',
+    },
+  ],
+
+  languageData: [
+    {
+      id: 0,
+      name: appConstant.english,
+    },
+    {
+      id: 1,
+      name: appConstant.turkce,
+    },
+  ],
+
+  aboutAppData: [
+    {
+      id: 0,
+      name: appConstant.terms,
+    },
+    {
+      id: 1,
+      name: appConstant.etc,
     },
   ],
 
@@ -323,23 +344,28 @@ module.exports = {
     {
       id: 0,
       name: 'Bitcoin',
+      image: require('../assets/images/BI.png'),
     },
     {
       id: 1,
       name: 'Ethereum',
-      image: require('../assets/images/img.png'),
+      image: require('../assets/images/EV.png'),
+      img: require('../assets/images/EVblack.png'),
     },
     {
       id: 2,
       name: 'Solana',
+      image: require('../assets/images/SO.png'),
     },
     {
       id: 3,
       name: 'Avalanche',
+      image: require('../assets/images/img.png'),
     },
     {
       id: 4,
       name: 'Polygon',
+      image: require('../assets/images/PO.png'),
     },
   ],
 

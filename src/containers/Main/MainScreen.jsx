@@ -1,4 +1,4 @@
-import { Image, StyleSheet, View } from 'react-native'
+import { Image, StyleSheet, TouchableOpacity, View } from 'react-native'
 import React, { useState } from 'react'
 import colors from '../../assets/colors'
 import Header from '../../components/common/Header'
@@ -10,8 +10,9 @@ import appConstant from '../../helper/appConstant'
 import SvgIcons from '../../assets/SvgIcons'
 
 export default function MainScreen({ navigation, route }) {
-    const { hidden } = route?.params
+    const hidden = route?.params?.hidden
     const [hideMenu, setHideMenu] = useState(false);
+    const [showNetworks, setShowNetworks] = useState(false)
 
     const handleConnectClick = () => {
 
@@ -19,6 +20,35 @@ export default function MainScreen({ navigation, route }) {
 
     const handleLockDeviceClick = () => {
 
+    }
+
+    const handleMenuListClick = (item) => {
+        if (item.name === appConstant.changeName) {
+            navigation.navigate(appConstant.changeUserDetails, {
+                from: appConstant.changeName
+            })
+        }
+        else if (item.name === appConstant.changePIN) {
+            navigation.navigate(appConstant.changeUserDetails, {
+                from: appConstant.changePIN
+            })
+        }
+        else if (item.name === appConstant.language) {
+            navigation.navigate(appConstant.language)
+        }
+        else if (item.name === appConstant.AboutCODL) {
+            navigation.navigate(appConstant.AboutCODL)
+        }
+        else if (item.name === appConstant.recoveryCheck) {
+            navigation.navigate(appConstant.importWallet, {
+                form: appConstant.recoveryCheck,
+                numberValue: 24,
+            })
+        }
+        else if (item.name === appConstant.networks) {
+            navigation.navigate(appConstant.networks)
+
+        }
     }
 
     return (
@@ -34,17 +64,17 @@ export default function MainScreen({ navigation, route }) {
                                         {item.name === 'Bitcoin' ?
                                             <SvgIcons.Bitcoin height={hp(6)} width={hp(4)} /> :
                                             item.name === 'Ethereum' ?
-                                                <Image source={item.image} style={{ width: hp(3), height: hp(6) }} /> :
+                                                <Image source={item.image} style={{ width: hp(4), height: hp(6.5), }} /> :
                                                 item.name === 'Solana' ?
                                                     <SvgIcons.Solana height={hp(6)} width={hp(4)} /> :
                                                     item.name === 'Avalanche' ?
-                                                        <View style={{ backgroundColor: colors.white, padding: 0, }}>
-                                                            <SvgIcons.AV height={hp(6)} width={hp(4)} />
+                                                        <View style={{ backgroundColor: colors.gray }}>
+                                                            <Image source={item.image} style={{ height: hp(7), width: hp(7), right: wp(2.5) }} />
                                                         </View> :
-                                                        <SvgIcons.Poly height={hp(6)} width={hp(4)} />
+                                                        <SvgIcons.Poly height={hp(6)} width={hp(4.5)} />
                                         }
                                     </View>
-                                    <FontText size={normalize(25)} color={'white'} name={'inter-regular'} pLeft={wp(5)}>
+                                    <FontText size={normalize(25)} color={'white'} name={'inter-regular'} pLeft={wp(5)} style={{ right: item.name === 'Avalanche' ? wp(6) : 0 }}>
                                         {item?.name}
                                     </FontText>
                                 </View>
@@ -56,11 +86,11 @@ export default function MainScreen({ navigation, route }) {
                     <>
                         {settingData.map((item, index) => {
                             return (
-                                <View style={[styles.buttonContainer, { height: hp(7) }]} key={index} >
-                                    <FontText size={normalize(22)} color={item.name === appConstant.deleteEverything ? "red" : 'white'} name={'inter-regular'} >
+                                <TouchableOpacity style={[styles.buttonContainer, { height: hp(7) }]} key={index} onPress={() => handleMenuListClick(item)}>
+                                    <FontText size={normalize(22)} color={item.name === appConstant.deleteEverything ? "red" : 'white'} name={'inter-regular'}  >
                                         {item?.name}
                                     </FontText>
-                                </View>
+                                </TouchableOpacity>
                             )
                         })
                         }

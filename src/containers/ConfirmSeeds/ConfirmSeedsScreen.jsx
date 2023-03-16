@@ -32,7 +32,7 @@ export default function ConfirmSeedsScreen(props) {
             <View style={styles.subContainer}>
                 <WalletCard style={styles.walletCardContainer}
                     title={'2th seed'}
-                    headerStyle={{ borderColor: colors.black }}
+                    headerStyle={{ borderColor: colors.black, top: hp(-3) }}
                     titleColor={'black'}
                     children={
                         <View style={styles.walletInnerContainer}>
@@ -60,7 +60,7 @@ export default function ConfirmSeedsScreen(props) {
                 />
                 <WalletCard style={styles.walletCardContainer}
                     title={'6th seed'}
-                    headerStyle={{ borderColor: colors.black }}
+                    headerStyle={{ borderColor: colors.black, top: hp(-3) }}
                     titleColor={'black'}
                     children={
                         <View style={styles.walletInnerContainer}>
@@ -88,7 +88,7 @@ export default function ConfirmSeedsScreen(props) {
                 />
                 <WalletCard style={styles.walletCardContainer}
                     title={'12th seed'}
-                    headerStyle={{ borderColor: colors.black }}
+                    headerStyle={{ borderColor: colors.black, top: hp(-3) }}
                     titleColor={'black'}
                     children={
                         <View style={styles.walletInnerContainer}>
@@ -153,7 +153,7 @@ const styles = StyleSheet.create({
         bottom: hp(1.5),
         width: wp(95),
         paddingBottom: hp(5),
-        paddingTop: hp(6),
+        paddingTop: hp(5),
         paddingHorizontal: wp(4)
     },
     walletInnerContainer: {

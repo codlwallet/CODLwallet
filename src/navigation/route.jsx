@@ -16,6 +16,11 @@ import ConfirmSeedsScreen from '../containers/ConfirmSeeds/ConfirmSeedsScreen';
 import ImportWalletScreen from '../containers/ImportWallet/ImportWalletScreen';
 import WelcomePurchaseScreen from '../containers/WelcomePurchase/WelcomePurchaseScreen';
 import MainScreen from '../containers/Main/MainScreen';
+import WrongPinWarningScreen from '../containers/SetupUser/WrongPinWarningScreen';
+import ChangeUserDetailsScreen from '../containers/ChangeUserDetails/ChangeUserDetailsScreen';
+import LanguageScreen from '../containers/Language/LanguageScreen';
+import AboutCodlScreen from '../containers/AboutApp/AboutCodlScreen';
+import NetworksScreen from '../containers/Networks/NetworksScreen';
 
 const Route = () => {
     const Stack = createNativeStackNavigator();
@@ -36,6 +41,12 @@ const Route = () => {
                 <Stack.Screen name={Constant.importWallet} component={ImportWalletScreen} />
                 <Stack.Screen name={Constant.welcomePurchase} component={WelcomePurchaseScreen} />
                 <Stack.Screen name={Constant.main} component={MainScreen} />
+                <Stack.Screen name={Constant.wrongPin} component={WrongPinWarningScreen} />
+                <Stack.Screen name={Constant.changeUserDetails} component={ChangeUserDetailsScreen} />
+                <Stack.Screen name={Constant.language} component={LanguageScreen} />
+                <Stack.Screen name={Constant.AboutCODL} component={AboutCodlScreen} />
+                <Stack.Screen name={Constant.networks} component={NetworksScreen} />
+
             </Stack.Navigator>
         </NavigationContainer>
     )

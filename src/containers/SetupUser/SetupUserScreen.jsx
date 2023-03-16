@@ -9,7 +9,8 @@ import SvgIcons from '../../assets/SvgIcons'
 import FontText from '../../components/common/FontText'
 import Button from '../../components/common/Button'
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import AwesomeAlert from 'react-native-awesome-alerts'
+import { useFocusEffect } from '@react-navigation/native'
+import Alert from '../../components/common/Alert'
 
 export default function SetupUserScreen({ navigation, route }) {
     const { from } = route?.params
@@ -25,11 +26,12 @@ export default function SetupUserScreen({ navigation, route }) {
     const [choosePinFocus, setChoosePinFocus] = useState(false)
     const [confirmPinFocus, setConfirmPinFocus] = useState(false)
     const [enterPin, setEnterPin] = useState('')
-    const [enterPinFocus, setEnterPinFocus] = useState(true)
+    const [enterPinFocus, setEnterPinFocus] = useState(false)
     const [loginData, setLoginData] = useState()
     const [showAlert, setShowAlert] = useState(false)
     const [alertTitle, setAlertTitle] = useState('')
     const [alertMessage, setAlertMessage] = useState('')
+    const [warningCount, setWarningCount] = useState(0)
 
     useEffect(() => {
         async function getLoginData() {
@@ -38,6 +40,12 @@ export default function SetupUserScreen({ navigation, route }) {
         }
         getLoginData()
     }, [])
+
+    useFocusEffect(
+        React.useCallback(() => {
+            setEnterPin('')
+        }, []),
+    );
 
     const onSubmitEnterPin = () => {
         setEnterPinFocus(false)
@@ -59,6 +67,11 @@ export default function SetupUserScreen({ navigation, route }) {
         setNameFocus(true)
         setChoosePinFocus(false)
         setConfirmPinFocus(false)
+    }
+
+    const onEnterPinName = () => {
+        setNameFocus(false)
+        setEnterPinFocus(true)
     }
 
     const onBlurName = () => {
@@ -117,9 +130,20 @@ export default function SetupUserScreen({ navigation, route }) {
             errorStatus = false;
         }
         else if (loginData?.pin !== enterPin) {
-            setShowAlert(true)
-            setAlertTitle(appConstant.error)
-            setAlertMessage(appConstant.wrongPin)
+            setWarningCount(warningCount + 1)
+            if (warningCount === 1 || warningCount === 3) {
+                navigation.navigate(appConstant.wrongPin, {
+                    count: warningCount
+                })
+            }
+            else if (warningCount === 4) {
+                navigation.navigate(appConstant.welcome)
+            }
+            else {
+                setShowAlert(true)
+                setAlertTitle(appConstant.error)
+                setAlertMessage(appConstant.wrongPin)
+            }
             errorStatus = false;
         }
         return errorStatus;
@@ -151,7 +175,6 @@ export default function SetupUserScreen({ navigation, route }) {
                     withRightIcon={name !== '' ? true : false}
                     ref={nameRef}
                     editable={from ? false : true}
-                    // autoFocus={nameFocus ? true : false}
                     placeholder={appConstant.name}
                     value={from ? loginData?.name : name}
                     maxLength={15}
@@ -188,11 +211,9 @@ export default function SetupUserScreen({ navigation, route }) {
                         </TouchableOpacity>
                     }
                 />
-
                 {!from ?
                     <>
                         <Input
-                            // editable={name !== '' ? true : false}
                             withRightIcon
                             ref={choosePinRef}
                             placeholder={appConstant.choosePin}
@@ -235,7 +256,6 @@ export default function SetupUserScreen({ navigation, route }) {
                             }
                         />
                         <Input
-                            // editable={choosePin !== '' && choosePin.length >= 4 ? true : false}
                             withRightIcon={confirmPin !== '' && choosePin === confirmPin ? true : false}
                             ref={confirmPinRef}
                             placeholder={appConstant.confirmPin}
@@ -278,7 +298,7 @@ export default function SetupUserScreen({ navigation, route }) {
                     <Input
                         withRightIcon
                         ref={enterPinRef}
-                        autoFocus={!from ? true : false}
+                        // autoFocus={!from ? true : false}
                         placeholder={appConstant.enterPin}
                         value={enterPin}
                         placeholderTextColor={enterPinFocus ? colors.black : colors.white}
@@ -288,6 +308,7 @@ export default function SetupUserScreen({ navigation, route }) {
                         maxLength={8}
                         secureTextEntry={!showPin ? true : false}
                         onBlur={onSubmitEnterPin}
+                        onFocus={onEnterPinName}
                         onSubmitEditing={onSubmitEnterPin}
                         onSubmit={onSubmitEnterPin}
                         inputStyle={[styles.textInput, {
@@ -327,32 +348,20 @@ export default function SetupUserScreen({ navigation, route }) {
                     bgColor="white"
                     onPress={handleProceedBtn}
                     buttonStyle={styles.button}
-                    style={styles.buttonView}
-                >
+                    style={styles.buttonView}>
                     <FontText name={"inter-medium"} size={normalize(22)} color="black">
                         {appConstant.proceed}
                     </FontText>
                 </Button>
             </View>
-            <AwesomeAlert
+            <Alert
                 show={showAlert}
-                contentContainerStyle={styles.alertContainerStyle}
                 title={alertTitle}
                 message={alertMessage}
-                closeOnTouchOutside={false}
-                alertContainerStyle={{ backgroundColor: 'transparent' }}
-                closeOnHardwareBackPress={false}
-                titleStyle={styles.alertTextStyle}
-                messageStyle={{ alignSelf: 'flex-start', color: colors.white, fontSize: 15 }}
-                showConfirmButton={true}
-                confirmText={appConstant.ok}
-                confirmButtonStyle={{ backgroundColor: 'transparent', left: 100 }}
-                confirmButtonTextStyle={{ color: '#58AFA0', fontSize: 16, fontWeight: 500, }}
                 onConfirmPressed={() => {
                     setShowAlert(false)
                 }}
             />
-
         </View>
     )
 }
