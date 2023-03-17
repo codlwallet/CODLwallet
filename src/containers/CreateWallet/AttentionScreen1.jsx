@@ -6,6 +6,7 @@ import appConstant from '../../helper/appConstant'
 import SvgIcons from '../../assets/SvgIcons'
 import { hp, wp } from '../../helper/responsiveScreen'
 import AttentionWarningView from '../../components/AttentionWarningView'
+import { t } from 'i18next'
 
 export default function AttentionScreen1({ navigation, route }) {
     const { ButtonValue, numberValue } = route.params
@@ -20,12 +21,12 @@ export default function AttentionScreen1({ navigation, route }) {
     return (
         <View style={styles.container}>
             <Header showRightIcon RightIcon={'info'} />
-            <AttentionWarningView title={appConstant.watchSurroundings}
+            <AttentionWarningView title={t("watchSurroundings")}
                 mainIcon={<SvgIcons.HideEye height={hp(8)} width={hp(8)} />}
-                description={appConstant.attention1Description}
+                description={t("attention1Description")}
                 showButton1
-                firstBtnTitle={appConstant.understand}
-                buttonValue={appConstant.understand}
+                firstBtnTitle={t("understand")}
+                buttonValue={t("understand")}
                 handleFirstBtnClick={handleUnderStandBtnClick}
             />
         </View>
@@ -38,15 +39,4 @@ const styles = StyleSheet.create({
         backgroundColor: colors.black,
         alignItems: 'center',
     },
-    subContainer: {
-        flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center',
-        paddingHorizontal: wp(6),
-    },
-    button: {
-        backgroundColor: colors.white,
-        marginBottom: hp(4),
-        alignItems: 'center',
-    }
 })

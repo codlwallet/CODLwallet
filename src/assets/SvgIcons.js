@@ -23,6 +23,9 @@ import Poly from './svgs/Poly.svg';
 import Solana from './svgs/Solana.svg';
 import AV from './svgs/AV.svg';
 import EU from './svgs/EU.svg';
+import RedPolygon from './svgs/RedPolygon.svg';
+import RedHideEye from './svgs/RedHideEye.svg';
+import DotIcon from './svgs/DotIcon.svg';
 
 export default {
   Logo,
@@ -49,4 +52,7 @@ export default {
   Solana,
   AV,
   EU,
+  RedPolygon,
+  RedHideEye,
+  DotIcon,
 };

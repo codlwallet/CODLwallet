@@ -5,6 +5,7 @@ import SvgIcons from '../../assets/SvgIcons'
 import FontText from '../../components/common/FontText'
 import { hp, normalize } from '../../helper/responsiveScreen'
 import appConstant from '../../helper/appConstant'
+import { t } from 'i18next'
 
 export default function CreatedUserScreen(props) {
   const { navigation } = props
@@ -20,7 +21,7 @@ export default function CreatedUserScreen(props) {
         <SvgIcons.BlackCheck />
       </View>
       <FontText size={normalize(40)} name={'inter-regular'} color={'white'} pTop={hp(4)} >
-        {appConstant.userCreated}
+        {t("userCreated")}
       </FontText>
     </View>
   )

@@ -1,4 +1,4 @@
-import { Keyboard, StyleSheet, TouchableOpacity, View } from 'react-native'
+import { BackHandler, Keyboard, StyleSheet, TouchableOpacity, View } from 'react-native'
 import React, { useEffect, useRef, useState } from 'react'
 import Input from '../../components/common/Input'
 import colors from '../../assets/colors'
@@ -29,6 +29,8 @@ export default function ChangeUserDetailsScreen({ navigation, route }) {
     const [alertTitle, setAlertTitle] = useState('')
     const [alertMessage, setAlertMessage] = useState('')
     const [loginData, setLoginData] = useState()
+    const [showPin, setShowPin] = useState(false)
+
 
     useEffect(() => {
         async function getLoginData() {
@@ -37,6 +39,22 @@ export default function ChangeUserDetailsScreen({ navigation, route }) {
         }
         getLoginData()
     }, [])
+
+    useEffect(() => {
+        setName(loginData?.name)
+    }, [loginData]);
+
+    useEffect(() => {
+        BackHandler.addEventListener('hardwareBackPress', backAction);
+        return async () => {
+            BackHandler.removeEventListener('hardwareBackPress', backAction);
+        };
+    }, []);
+
+    const backAction = () => {
+        navigation.goBack()
+        return true;
+    };
 
     const onFocusName = () => {
         setNameFocus(true)
@@ -87,8 +105,6 @@ export default function ChangeUserDetailsScreen({ navigation, route }) {
         setConfirmPinFocus(false)
     }
 
-    console.log("cfocus", currentPinFocus)
-
 
     const checkNameValidation = () => {
         let errorStatus = true;
@@ -101,20 +117,63 @@ export default function ChangeUserDetailsScreen({ navigation, route }) {
         return errorStatus;
     };
 
-    const handleProceedBtn = async () => {
-        // if (checkNameValidation()) {
-        // await AsyncStorage.setItem('LoginData', JSON.stringify(data));
-        navigation.goBack()
-        // }
+
+    const checkPinValidation = () => {
+        let errorStatus = true;
+        if (currentPin === '' || currentPin.length < 4 || currentPin.length > 8) {
+            setShowAlert(true)
+            setAlertTitle(appConstant.enterPIN)
+            setAlertMessage(appConstant.pinErrorMess)
+            errorStatus = false;
+        } else if (currentPin !== loginData?.pin) {
+            console.log("fdhsfghj")
+            setShowAlert(true)
+            setAlertTitle(appConstant.matchedPIN)
+            setAlertMessage(appConstant.currentPinMatchError)
+            errorStatus = false;
+        } else if (newPin === '' || newPin.length < 4 || newPin.length > 8) {
+            setShowAlert(true)
+            setAlertTitle(appConstant.enterPIN)
+            setAlertMessage(appConstant.pinErrorMess)
+            errorStatus = false;
+        } else if (newPin !== confirmPin) {
+            setShowAlert(true)
+            setAlertTitle(appConstant.matchedPIN)
+            setAlertMessage(appConstant.pinMatchError)
+            errorStatus = false;
+        }
+        return errorStatus;
+    };
+
+
+
+    const handleDoneBtn = async () => {
+        data = {
+            name: name,
+            pin: from === appConstant?.changeName ? loginData?.pin : confirmPin
+        }
+
+        if (from === appConstant.changeName) {
+            if (checkNameValidation()) {
+                await AsyncStorage.setItem('LoginData', JSON.stringify(data));
+                navigation.goBack()
+            }
+        }
+        else {
+            if (checkPinValidation()) {
+                await AsyncStorage.setItem('LoginData', JSON.stringify(data));
+                navigation.goBack()
+            }
+        }
     }
 
     return (
         <View style={styles.container}>
-            <Header title={from === appConstant.changeName ? appConstant.changeName : changePIN} showRightIcon RightIcon={'info'} statusBarHidden={false} showBackIcon onBackPress={() => navigation.goBack()} />
+            <Header title={from === appConstant.changeName ? appConstant.changeName : changePIN} showRightIcon RightIcon={'info'} statusBarHidden={false} showBackIcon onBackPress={backAction} />
             <View style={styles.subContainer}>
                 {from === appConstant.changeName ?
                     <Input
-                        withRightIcon={name !== '' ? true : false}
+                        withRightIcon
                         ref={nameRef}
                         // editable={from ? false : true}
                         placeholder={appConstant.name}
@@ -166,7 +225,6 @@ export default function ChangeUserDetailsScreen({ navigation, route }) {
                             returnKeyType={'next'}
                             maxLength={8}
                             blurOnSubmit
-                            // secureTextEntry={!showPin ? true : false}
                             onFocus={onFocusCurrentPin}
                             onBlur={onBlurCurrentPin}
                             onSubmitEditing={onSubmitCurrentPin}
@@ -195,12 +253,12 @@ export default function ChangeUserDetailsScreen({ navigation, route }) {
                         />
 
                         <Input
-                            withRightIcon={newPin !== '' && newPin === confirmPin ? true : false}
+                            withRightIcon
                             ref={newPinRef}
                             placeholder={appConstant.newPin}
                             value={newPin}
-                            secureTextEntry={true}
                             maxLength={8}
+                            secureTextEntry={!showPin ? true : false}
                             placeholderTextColor={newPinFocus ? colors.black : colors.white}
                             onChangeText={setNewPin}
                             keyboardType={'numeric'}
@@ -224,10 +282,15 @@ export default function ChangeUserDetailsScreen({ navigation, route }) {
                                         : colors.gray,
                             }]}
                             rightIcon={
-                                <TouchableOpacity>
-                                    {newPinFocus ?
-                                        <SvgIcons.BlackCheck height={hp(4)} width={hp(2.5)} /> :
-                                        <SvgIcons.Check height={hp(4)} width={hp(2.5)} />
+                                <TouchableOpacity onPress={() => setShowPin(!showPin)}>
+                                    {showPin ?
+                                        <>
+                                            {!newPinFocus ? <SvgIcons.ShowEye height={hp(3.5)} width={hp(2.5)} /> : <SvgIcons.BlackShowEye height={hp(3.5)} width={hp(2.5)} />}
+                                        </>
+                                        :
+                                        <>
+                                            {!newPinFocus ? <SvgIcons.HideEye /> : <SvgIcons.BlackHideEye />}
+                                        </>
                                     }
                                 </TouchableOpacity>
                             }
@@ -236,7 +299,7 @@ export default function ChangeUserDetailsScreen({ navigation, route }) {
                         <Input
                             withRightIcon={confirmPin !== '' && newPin === confirmPin ? true : false}
                             ref={confirmPinRef}
-                            placeholder={appConstant.confirmPin}
+                            placeholder={appConstant.confirmNewPin}
                             value={confirmPin}
                             secureTextEntry={true}
                             maxLength={8}
@@ -281,12 +344,12 @@ export default function ChangeUserDetailsScreen({ navigation, route }) {
                     type="highlight"
                     borderRadius={11}
                     bgColor="white"
-                    onPress={handleProceedBtn}
+                    onPress={handleDoneBtn}
                     buttonStyle={styles.button}
                     style={styles.buttonView}
                 >
                     <FontText name={"inter-medium"} size={normalize(22)} color="black">
-                        {appConstant.proceed}
+                        {appConstant.done}
                     </FontText>
                 </Button>
             </View>

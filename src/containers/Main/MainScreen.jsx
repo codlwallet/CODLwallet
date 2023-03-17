@@ -40,14 +40,13 @@ export default function MainScreen({ navigation, route }) {
             navigation.navigate(appConstant.AboutCODL)
         }
         else if (item.name === appConstant.recoveryCheck) {
-            navigation.navigate(appConstant.importWallet, {
-                form: appConstant.recoveryCheck,
-                numberValue: 24,
-            })
+            navigation.navigate(appConstant.recoveryWarning)
         }
         else if (item.name === appConstant.networks) {
             navigation.navigate(appConstant.networks)
-
+        }
+        else if (item.name === appConstant.deleteEverything) {
+            navigation.navigate(appConstant.deleteEverything)
         }
     }
 
@@ -61,13 +60,13 @@ export default function MainScreen({ navigation, route }) {
                             return (
                                 <View style={styles.buttonContainer} key={index} >
                                     <View>
-                                        {item.name === 'Bitcoin' ?
+                                        {item.name === appConstant.bitcoin ?
                                             <SvgIcons.Bitcoin height={hp(6)} width={hp(4)} /> :
-                                            item.name === 'Ethereum' ?
+                                            item.name === appConstant.ethereum ?
                                                 <Image source={item.image} style={{ width: hp(4), height: hp(6.5), }} /> :
-                                                item.name === 'Solana' ?
+                                                item.name === appConstant.solana ?
                                                     <SvgIcons.Solana height={hp(6)} width={hp(4)} /> :
-                                                    item.name === 'Avalanche' ?
+                                                    item.name === appConstant.avalanche ?
                                                         <View style={{ backgroundColor: colors.gray }}>
                                                             <Image source={item.image} style={{ height: hp(7), width: hp(7), right: wp(2.5) }} />
                                                         </View> :

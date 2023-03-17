@@ -1,4 +1,5 @@
 import React from 'react'
+import { useTranslation } from 'react-i18next';
 import { Image, StatusBar, StyleSheet, View } from 'react-native'
 import colors from '../../assets/colors';
 import SvgIcons from '../../assets/SvgIcons';
@@ -8,7 +9,10 @@ import appConstant from '../../helper/appConstant';
 import { hp, normalize, wp } from '../../helper/responsiveScreen';
 
 const WelcomeScreen = ({ navigation, route }) => {
+    const { t } = useTranslation();
+
     const from = route?.params?.from
+
 
     const onPressStartBtn = () => {
         navigation.navigate(appConstant.setupUser, {
@@ -30,7 +34,7 @@ const WelcomeScreen = ({ navigation, route }) => {
                     buttonStyle={styles.button}
                     style={styles.buttonView}>
                     <FontText name={"inter-medium"} size={normalize(22)} color="black">
-                        {from ? appConstant.unlock : appConstant.getStarted}
+                        {from ? t("unlock") : t("getStarted")}
                     </FontText>
                 </Button>
             </View>

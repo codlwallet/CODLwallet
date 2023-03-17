@@ -6,20 +6,17 @@ import appConstant from '../../helper/appConstant'
 import { hp, isIOS, normalize, wp } from '../../helper/responsiveScreen'
 import Button from '../../components/common/Button'
 import FontText from '../../components/common/FontText'
-import { importWalletData } from '../../constants/data'
 import Input from '../../components/common/Input'
 import WalletCard from '../../components/WalletCard'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 
-export default function ImportWalletScreen({ navigation, route }) {
-    const { numberValue, ButtonValue, form } = route.params
+export default function RecoveryCheckScreen({ navigation }) {
     const cardRef = useRef([])
     const [btnValue, setBtnValue] = useState(appConstant.confirm)
-    const [walletData, setWalletData] = useState(importWalletData)
+    const [walletData, setWalletData] = useState()
     const [isEdit, setIsEdit] = useState(false)
     const [textIndex, setTextIndex] = useState(0)
-    const [showConfirm, setShowConfirm] = useState(false)
-    const walletcardData = numberValue && walletData.slice(0, numberValue)
+    const [showConfirm, setShowConfirm] = useState(true)
 
     useEffect(() => {
         cardRef.current = cardRef?.current?.slice(0, walletData?.length);
@@ -32,20 +29,14 @@ export default function ImportWalletScreen({ navigation, route }) {
 
     // }, []);
 
+
     useEffect(() => {
-        if (form === appConstant.checkAgain) {
-            setWalletData([...walletData]);
+        async function getWalletData() {
+            const data = await AsyncStorage.getItem('WalletData');
+            setWalletData(JSON.parse(data))
         }
-        else {
-            const walletdata = walletData.map(item => {
-                return {
-                    id: item?.id,
-                    name: '',
-                    number: item?.number
-                };
-            });
-            setWalletData(walletdata)
-        }
+        getWalletData()
+
     }, []);
 
     useEffect(() => {
@@ -65,7 +56,7 @@ export default function ImportWalletScreen({ navigation, route }) {
     const keyboardHideListener = Keyboard.addListener(
         'keyboardDidHide',
         () => {
-            if (!walletcardData?.some((item) => !item.name)) {
+            if (!walletData?.some((item) => !item.name)) {
                 setBtnValue(appConstant.confirm)
                 setIsEdit(false)
             }
@@ -73,24 +64,12 @@ export default function ImportWalletScreen({ navigation, route }) {
                 setBtnValue(appConstant.edit)
                 setIsEdit(true)
             }
-            setTextIndex(walletcardData.length)
         }
     );
 
     const handleConfirmClick = async () => {
-        setBtnValue(appConstant.confirm)
-        if (form === appConstant.recoveryCheck) {
-            navigation.goBack()
-        }
-        else {
-            await AsyncStorage.setItem('WalletData', JSON.stringify(walletcardData));
-            navigation.navigate(appConstant.complateSeeds)
-        }
-    }
-
-    const handleProceedClick = () => {
-        setBtnValue(appConstant.confirm)
-        setShowConfirm(true)
+        navigation.navigate(appConstant.main)
+        await AsyncStorage.setItem('WalletData', JSON.stringify(walletData));
     }
 
     const handleEditClick = () => {
@@ -100,16 +79,7 @@ export default function ImportWalletScreen({ navigation, route }) {
     }
 
     const backAction = () => {
-        if (form === appConstant.recoveryCheck) {
-            navigation.goBack()
-        }
-        else {
-            navigation.navigate(appConstant.attentionScreen2, {
-                ButtonValue: ButtonValue,
-                numberValue: numberValue,
-                form: appConstant.importWallet
-            });
-        }
+        navigation.goBack()
         return true;
     };
 
@@ -131,8 +101,8 @@ export default function ImportWalletScreen({ navigation, route }) {
                     placeholder={''}
                     value={item?.name}
                     autoCapitalize={'none'}
-                    secureTextEntry={index == textIndex ? false : showConfirm ? false : true}
-                    onSubmit={() => { walletData[index].name !== '' && index !== walletData.slice(0, numberValue).length - 1 ? cardRef.current[index + 1].focus() : Keyboard.dismiss() }}
+                    secureTextEntry={showConfirm ? false : true}
+                    onSubmit={() => { walletData[index].name !== '' && index !== walletData.length - 1 ? cardRef.current[index + 1].focus() : Keyboard.dismiss() }}
                     onFocus={() => { cardRef.current[index].focus(), setTextIndex(index) }}
                     multiline={false}
                     autoCorrect={false}
@@ -151,7 +121,7 @@ export default function ImportWalletScreen({ navigation, route }) {
 
     return (
         <View style={styles.container} >
-            <Header title={form === appConstant.recoveryCheck ? appConstant.recoveryCheck : appConstant.importWallet} showRightIcon RightIcon={'info'} showBackIcon onBackPress={backAction} statusBarcolor={colors.red} style={{ alignSelf: 'center', }} />
+            <Header title={appConstant.recoveryCheck} showRightIcon RightIcon={'info'} showBackIcon onBackPress={backAction} statusBarcolor={colors.red} style={{ alignSelf: 'center', }} />
             <View style={styles.subContainer}>
                 <WalletCard style={styles.walletCardContainer}
                     titleColor={'red'}
@@ -159,7 +129,7 @@ export default function ImportWalletScreen({ navigation, route }) {
                     headerStyle={{ borderColor: colors.red }}
                     children={
                         <FlatList
-                            data={numberValue && walletData.slice(0, numberValue)}
+                            data={walletData}
                             numColumns={3}
                             columnWrapperStyle={{ justifyContent: 'space-between' }}
                             keyExtractor={(item) => {
@@ -171,55 +141,36 @@ export default function ImportWalletScreen({ navigation, route }) {
                 />
             </View>
 
-            {showConfirm && <FontText name={"inter-regular"} size={normalize(20)} color={'white'} style={{ width: wp(90), alignSelf: 'center', }} pBottom={hp(2)} textAlign={'center'}  >
-                {appConstant.enterSeedsCorrectly}
-            </FontText>}
-            {!showConfirm && <Button
-                flex={null}
-                disabled={walletcardData?.some((item) => !item.name)}
-                height={hp(8.5)}
-                bgColor={!walletcardData?.some((item) => !item.name) ? 'white' : ['red-open']}
-                type="highlight"
-                borderRadius={11}
-                style={{ marginBottom: hp(2) }}
-                onPress={handleProceedClick}
-                buttonStyle={styles.button}>
-                <FontText name={"inter-medium"} size={normalize(22)} color={!walletcardData?.some((item) => !item.name) ? "red" : 'white'}>
-                    {appConstant.proceed}
-                </FontText>
-            </Button>
-            }
-            {showConfirm &&
-                <>
-                    <Button
-                        flex={null}
-                        height={hp(8.5)}
-                        bgColor={!walletcardData?.some((item) => !item.name) && btnValue === appConstant.confirm ? 'white' : ['red-open']}
-                        type="highlight"
-                        borderRadius={11}
-                        disabled={walletcardData?.some((item) => !item.name)}
-                        style={{ marginBottom: hp(2) }}
-                        onPress={handleConfirmClick}
-                        buttonStyle={styles.button}>
-                        <FontText name={"inter-medium"} size={normalize(22)} color={!walletcardData?.some((item) => !item.name) && btnValue === appConstant.confirm ? "red" : 'white'}>
-                            {appConstant.confirm}
-                        </FontText>
-                    </Button>
-                    <Button
-                        flex={null}
-                        height={hp(8.5)}
-                        bgColor={btnValue === appConstant.edit ? 'white' : ['red-open']}
-                        type="highlight"
-                        borderRadius={11}
-                        style={{ marginBottom: hp(4) }}
-                        onPress={handleEditClick}
-                        buttonStyle={styles.button}>
-                        <FontText name={"inter-medium"} size={normalize(22)} color={btnValue === appConstant.edit ? "red" : 'white'}>
-                            {appConstant.edit}
-                        </FontText>
-                    </Button>
-                </>
-            }
+            <>
+                <Button
+                    flex={null}
+                    height={hp(8.5)}
+                    bgColor={!walletData?.some((item) => !item.name) && btnValue === appConstant.confirm ? 'white' : ['red-open']}
+                    type="highlight"
+                    borderRadius={11}
+                    disabled={walletData?.some((item) => !item.name)}
+                    style={{ marginBottom: hp(2) }}
+                    onPress={handleConfirmClick}
+                    buttonStyle={styles.button}>
+                    <FontText name={"inter-medium"} size={normalize(22)} color={!walletData?.some((item) => !item.name) && btnValue === appConstant.confirm ? "red" : 'white'}>
+                        {appConstant.done}
+                    </FontText>
+                </Button>
+                <Button
+                    flex={null}
+                    height={hp(8.5)}
+                    bgColor={btnValue === appConstant.edit ? 'white' : ['red-open']}
+                    type="highlight"
+                    borderRadius={11}
+                    style={{ marginBottom: hp(4) }}
+                    onPress={handleEditClick}
+                    buttonStyle={styles.button}>
+                    <FontText name={"inter-medium"} size={normalize(22)} color={btnValue === appConstant.edit ? "red" : 'white'}>
+                        {appConstant.edit}
+                    </FontText>
+                </Button>
+            </>
+
         </View>
     )
 }

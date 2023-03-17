@@ -16,6 +16,7 @@ export default function AttentionWarningView({
   handleFirstBtnClick,
   handleSecondBtnClick,
   buttonValue,
+  isBgRed,
 }) {
   return (
     <View style={styles.container}>
@@ -41,7 +42,13 @@ export default function AttentionWarningView({
       {showButton1 && (
         <Button
           flex={null}
-          bgColor={buttonValue === firstBtnTitle ? 'white' : 'gray'}
+          bgColor={
+            buttonValue === firstBtnTitle
+              ? 'white'
+              : isBgRed
+              ? ['red-open']
+              : 'gray'
+          }
           height={hp(8.5)}
           type="highlight"
           borderRadius={11}
@@ -51,7 +58,13 @@ export default function AttentionWarningView({
           <FontText
             name={'inter-medium'}
             size={normalize(22)}
-            color={buttonValue === firstBtnTitle ? 'black' : 'white'}>
+            color={
+              buttonValue !== firstBtnTitle
+                ? 'white'
+                : isBgRed
+                ? 'red'
+                : 'black'
+            }>
             {firstBtnTitle}
           </FontText>
         </Button>
@@ -59,7 +72,13 @@ export default function AttentionWarningView({
       {showButton2 && (
         <Button
           flex={null}
-          bgColor={buttonValue === secondBtnTitle ? 'white' : 'gray'}
+          bgColor={
+            buttonValue === secondBtnTitle
+              ? 'white'
+              : isBgRed
+              ? ['red-open']
+              : 'gray'
+          }
           height={hp(8.5)}
           type="highlight"
           borderRadius={11}
@@ -69,7 +88,13 @@ export default function AttentionWarningView({
           <FontText
             name={'inter-medium'}
             size={normalize(22)}
-            color={buttonValue === secondBtnTitle ? 'black' : 'white'}>
+            color={
+              buttonValue !== secondBtnTitle
+                ? 'white'
+                : isBgRed
+                ? 'red'
+                : 'black'
+            }>
             {secondBtnTitle}
           </FontText>
         </Button>
@@ -81,7 +106,6 @@ export default function AttentionWarningView({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: colors.black,
     alignItems: 'center',
   },
   subContainer: {

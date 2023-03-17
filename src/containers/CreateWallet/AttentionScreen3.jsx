@@ -5,6 +5,7 @@ import appConstant from '../../helper/appConstant'
 import { hp } from '../../helper/responsiveScreen'
 import SvgIcons from '../../assets/SvgIcons'
 import AttentionWarningView from '../../components/AttentionWarningView'
+import { t } from 'i18next'
 
 export default function AttentionScreen2({ navigation, route }) {
     const { ButtonValue, numberValue } = route.params
@@ -46,13 +47,13 @@ export default function AttentionScreen2({ navigation, route }) {
                 backgroundColor={colors.black}
             />
             <AttentionWarningView
-                title={appConstant.secureSeeds}
+                title={t("secureSeeds")}
                 mainIcon={<SvgIcons.Polygon height={hp(8)} width={hp(8)} />}
-                description={appConstant.attention3Description}
+                description={t.attention3Description}
                 showButton1
                 showButton2
-                firstBtnTitle={appConstant.confirmSeeds}
-                secondBtnTitle={appConstant.checkAgain}
+                firstBtnTitle={t("confirmSeeds")}
+                secondBtnTitle={t("checkAgain")}
                 buttonValue={btnValue}
                 handleFirstBtnClick={handleConfirmSeedsClick}
                 handleSecondBtnClick={handleCheckAgainClick}

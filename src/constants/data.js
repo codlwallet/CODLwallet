@@ -4,11 +4,11 @@ module.exports = {
   walletData: [
     {
       id: 0,
-      name: 'Create Wallet',
+      name: appConstant.createWallet,
     },
     {
       id: 1,
-      name: 'Import Wallet',
+      name: appConstant.importWallet,
     },
   ],
 
@@ -16,10 +16,12 @@ module.exports = {
     {
       id: 0,
       name: appConstant.english,
+      value: 'en',
     },
     {
       id: 1,
       name: appConstant.turkce,
+      value: 'tr',
     },
   ],
 
@@ -343,28 +345,28 @@ module.exports = {
   mainData: [
     {
       id: 0,
-      name: 'Bitcoin',
+      name: appConstant.bitcoin,
       image: require('../assets/images/BI.png'),
     },
     {
       id: 1,
-      name: 'Ethereum',
+      name: appConstant.ethereum,
       image: require('../assets/images/EV.png'),
       img: require('../assets/images/EVblack.png'),
     },
     {
       id: 2,
-      name: 'Solana',
+      name: appConstant.solana,
       image: require('../assets/images/SO.png'),
     },
     {
       id: 3,
-      name: 'Avalanche',
+      name: appConstant.avalanche,
       image: require('../assets/images/img.png'),
     },
     {
       id: 4,
-      name: 'Polygon',
+      name: appConstant.polygon,
       image: require('../assets/images/PO.png'),
     },
   ],

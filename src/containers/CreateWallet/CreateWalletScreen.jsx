@@ -6,8 +6,10 @@ import appConstant from '../../helper/appConstant';
 import { hp, isIOS, normalize, wp } from '../../helper/responsiveScreen';
 import Button from '../../components/common/Button';
 import FontText from '../../components/common/FontText';
-import { createWalletData } from '../../constants/data';
+import { createWalletData, walletData } from '../../constants/data';
 import WalletCard from '../../components/WalletCard';
+import { t } from 'i18next';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function CreateWalletScreen({ navigation, route }) {
     const { numberValue, ButtonValue } = route.params;
@@ -28,11 +30,12 @@ export default function CreateWalletScreen({ navigation, route }) {
     //     })
     // }
 
-    const handleProceedClick = () => {
+    const handleProceedClick = async () => {
         navigation.navigate(appConstant.attentionScreen3, {
             ButtonValue: ButtonValue,
             numberValue: numberValue,
         });
+        await AsyncStorage.setItem('WalletData', JSON.stringify(numberValue && createWalletData.slice(0, numberValue)));
     };
 
     const backAction = () => {
@@ -46,13 +49,13 @@ export default function CreateWalletScreen({ navigation, route }) {
 
     return (
         <View style={styles.container}>
-            <Header title={appConstant.createWallet} showRightIcon RightIcon={'info'} showBackIcon onBackPress={backAction} statusBarcolor={colors.red} style={{ alignSelf: 'center' }} />
+            <Header title={t("createWallet")} showRightIcon RightIcon={'info'} showBackIcon onBackPress={backAction} statusBarcolor={colors.red} style={{ alignSelf: 'center' }} />
             <View style={styles.subContainer}>
                 <WalletCard
                     style={styles.walletCardContainer}
                     titleColor={'red'}
                     headerStyle={{ borderColor: colors.red }}
-                    title={appConstant.recoverySeeds}
+                    title={t("recoverySeeds")}
                     children={
                         <FlatList
                             data={numberValue && createWalletData.slice(0, numberValue)}
@@ -100,7 +103,7 @@ export default function CreateWalletScreen({ navigation, route }) {
                 onPress={handleProceedClick}
                 buttonStyle={styles.button}>
                 <FontText name={'inter-medium'} size={normalize(22)} color={'red'}>
-                    {appConstant.proceed}
+                    {t("proceed")}
                 </FontText>
             </Button>
         </View>

@@ -11,6 +11,7 @@ import Button from '../../components/common/Button'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useFocusEffect } from '@react-navigation/native'
 import Alert from '../../components/common/Alert'
+import { useTranslation } from 'react-i18next'
 
 export default function SetupUserScreen({ navigation, route }) {
     const { from } = route?.params
@@ -32,6 +33,7 @@ export default function SetupUserScreen({ navigation, route }) {
     const [alertTitle, setAlertTitle] = useState('')
     const [alertMessage, setAlertMessage] = useState('')
     const [warningCount, setWarningCount] = useState(0)
+    const { t } = useTranslation();
 
     useEffect(() => {
         async function getLoginData() {
@@ -102,20 +104,20 @@ export default function SetupUserScreen({ navigation, route }) {
         let errorStatus = true;
         if (name === '' || !name.length > 1 || name.length > 15) {
             setShowAlert(true)
-            setAlertTitle(appConstant.enterName)
-            setAlertMessage(appConstant.nameErrorMess)
+            setAlertTitle(t("enterName"))
+            setAlertMessage(t("nameErrorMess"))
             errorStatus = false;
 
         } else if (choosePin === '' || choosePin.length < 4 || choosePin.length > 8) {
             setShowAlert(true)
-            setAlertTitle(appConstant.enterPIN)
-            setAlertMessage(appConstant.pinErrorMess)
+            setAlertTitle(t("enterPIN"))
+            setAlertMessage(t("pinErrorMess"))
             errorStatus = false;
 
         } else if (confirmPin !== choosePin) {
             setShowAlert(true)
-            setAlertTitle(appConstant.matchedPIN)
-            setAlertMessage(appConstant.pinMatchError)
+            setAlertTitle(t("matchedPIN"))
+            setAlertMessage(t("pinMatchError"))
             errorStatus = false;
         }
         return errorStatus;
@@ -125,8 +127,8 @@ export default function SetupUserScreen({ navigation, route }) {
         let errorStatus = true;
         if (enterPin === '' || enterPin.length < 4 || enterPin.length > 8) {
             setShowAlert(true)
-            setAlertTitle(appConstant.enterPIN)
-            setAlertMessage(appConstant.pinErrorMess)
+            setAlertTitle(t("enterPIN"))
+            setAlertMessage(t("pinErrorMess"))
             errorStatus = false;
         }
         else if (loginData?.pin !== enterPin) {
@@ -141,8 +143,8 @@ export default function SetupUserScreen({ navigation, route }) {
             }
             else {
                 setShowAlert(true)
-                setAlertTitle(appConstant.error)
-                setAlertMessage(appConstant.wrongPin)
+                setAlertTitle(t("error"))
+                setAlertMessage(t("wrongPin"))
             }
             errorStatus = false;
         }
@@ -169,13 +171,13 @@ export default function SetupUserScreen({ navigation, route }) {
 
     return (
         <View style={styles.container} onStartShouldSetResponder={() => Keyboard.dismiss()}>
-            <Header title={from ? appConstant.unlock : appConstant.setupUser} showRightIcon RightIcon={'info'} statusBarHidden={false} />
+            <Header title={from ? t("unlock") : t("setupUser")} showRightIcon RightIcon={'info'} statusBarHidden={false} />
             <View style={styles.subContainer}>
                 <Input
                     withRightIcon={name !== '' ? true : false}
                     ref={nameRef}
                     editable={from ? false : true}
-                    placeholder={appConstant.name}
+                    placeholder={t("name")}
                     value={from ? loginData?.name : name}
                     maxLength={15}
                     placeholderTextColor={nameFocus ? colors.black : colors.white}
@@ -216,7 +218,7 @@ export default function SetupUserScreen({ navigation, route }) {
                         <Input
                             withRightIcon
                             ref={choosePinRef}
-                            placeholder={appConstant.choosePin}
+                            placeholder={t("choosePin")}
                             value={choosePin}
                             placeholderTextColor={choosePinFocus ? colors.black : colors.white}
                             onChangeText={setChoosePin}
@@ -258,7 +260,7 @@ export default function SetupUserScreen({ navigation, route }) {
                         <Input
                             withRightIcon={confirmPin !== '' && choosePin === confirmPin ? true : false}
                             ref={confirmPinRef}
-                            placeholder={appConstant.confirmPin}
+                            placeholder={t("confirmPin")}
                             value={confirmPin}
                             secureTextEntry={true}
                             maxLength={8}
@@ -299,7 +301,7 @@ export default function SetupUserScreen({ navigation, route }) {
                         withRightIcon
                         ref={enterPinRef}
                         // autoFocus={!from ? true : false}
-                        placeholder={appConstant.enterPin}
+                        placeholder={t("enterPin")}
                         value={enterPin}
                         placeholderTextColor={enterPinFocus ? colors.black : colors.white}
                         onChangeText={setEnterPin}
@@ -350,7 +352,7 @@ export default function SetupUserScreen({ navigation, route }) {
                     buttonStyle={styles.button}
                     style={styles.buttonView}>
                     <FontText name={"inter-medium"} size={normalize(22)} color="black">
-                        {appConstant.proceed}
+                        {t("proceed")}
                     </FontText>
                 </Button>
             </View>

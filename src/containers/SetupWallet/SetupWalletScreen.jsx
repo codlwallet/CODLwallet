@@ -9,6 +9,7 @@ import Button from '../../components/common/Button'
 import { hp, normalize, wp } from '../../helper/responsiveScreen'
 import FontText from '../../components/common/FontText'
 import WalletCard from '../../components/WalletCard'
+import { t } from 'i18next'
 
 export default function SetupWalletScreen(props) {
     const { navigation } = props
@@ -41,7 +42,7 @@ export default function SetupWalletScreen(props) {
 
     return (
         <View style={styles.container}>
-            <Header title={appConstant.setupWallet} showRightIcon RightIcon={'info'} />
+            <Header title={t("setupWallet")} showRightIcon RightIcon={'info'} />
             <View style={styles.buttonContainer}>
                 {walletData.map((item, index) => {
                     return (
@@ -57,7 +58,7 @@ export default function SetupWalletScreen(props) {
             </View>
             <View style={styles.bottomView}>
                 <WalletCard style={styles.walletCardContainer}
-                    title={appConstant.numberOfWords}
+                    title={t("numberOfWords")}
                     headerStyle={{ borderColor: colors.black }}
                     titleColor={'black'}
                     children={
@@ -87,7 +88,7 @@ export default function SetupWalletScreen(props) {
                     buttonStyle={styles.button}
                 >
                     <FontText name={"inter-medium"} size={normalize(22)} color="black">
-                        {appConstant.proceed}
+                        {t("proceed")}
                     </FontText>
                 </Button>
             </View>

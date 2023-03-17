@@ -1,5 +1,5 @@
-import { StyleSheet, TouchableOpacity, View } from 'react-native'
-import React, { useState } from 'react'
+import { I18nManager, StyleSheet, TouchableOpacity, View } from 'react-native'
+import React, { useEffect, useState } from 'react'
 import { languageData } from '../../constants/data'
 import Header from '../../components/common/Header'
 import appConstant from '../../helper/appConstant'
@@ -8,19 +8,48 @@ import colors from '../../assets/colors'
 import { hp, normalize, wp } from '../../helper/responsiveScreen'
 import Button from '../../components/common/Button'
 import FontText from '../../components/common/FontText'
+import i18n from '../../constants/i18n'
+import { useTranslation } from 'react-i18next'
 
 export default function LanguageScreen({ navigation }) {
-    const [btnValue, setButtonValue] = useState(appConstant.createWallet)
-    const [buttonIndex, setButtonIndex] = useState(0)
+    const { t, i18n } = useTranslation();
+    const [btnValue, setButtonValue] = useState()
+    const [buttonIndex, setButtonIndex] = useState()
+    const [language, setLanguage] = useState()
+
+    useEffect(() => {
+        if (i18n.language === 'tr') {
+            setButtonValue(appConstant.turkce)
+            setButtonIndex(1)
+        }
+        else {
+            setButtonValue(appConstant.english)
+            setButtonIndex(0)
+        }
+
+    }, []);
+
+
+    const handleDoneClick = () => {
+        i18n.changeLanguage(language).then(() => {
+            I18nManager.forceRTL(false);
+        });
+        navigation.goBack()
+    }
+
+
+
     return (
         <View style={styles.container}>
-            <Header title={appConstant.language} showRightIcon RightIcon={'info'} showBackIcon onBackPress={() => navigation.goBack()} />
+            <Header title={t("setupUser")} showRightIcon RightIcon={'info'} showBackIcon onBackPress={() => navigation.goBack()} />
             <View style={styles.buttonContainer}>
                 {languageData.map((item, index) => {
                     return (
                         <TouchableOpacity key={index} onPress={() => {
+                            console.log("sdhg")
                             setButtonValue(item?.name)
                             setButtonIndex(index)
+                            setLanguage(item?.value)
                         }}>
                             <ButtonView listItem={item} showRightIcon index={index} buttonIndex={buttonIndex} />
                         </TouchableOpacity>
@@ -36,7 +65,7 @@ export default function LanguageScreen({ navigation }) {
                 borderRadius={11}
                 bgColor="white"
                 style={styles.buttonView}
-                // onPress={!hideMenu ? handleConnectClick : handleLockDeviceClick}
+                onPress={handleDoneClick}
                 buttonStyle={styles.button}>
                 <FontText name={"inter-medium"} size={normalize(22)} color="black">
                     {appConstant.done}

@@ -5,6 +5,7 @@ import { Provider } from 'react-redux';
 import colors from './src/assets/colors';
 import Route from './src/navigation/route';
 import { store } from './src/redux/store/store';
+import './src/constants/i18n';
 
 export default function App() {
 

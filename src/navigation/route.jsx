@@ -21,6 +21,9 @@ import ChangeUserDetailsScreen from '../containers/ChangeUserDetails/ChangeUserD
 import LanguageScreen from '../containers/Language/LanguageScreen';
 import AboutCodlScreen from '../containers/AboutApp/AboutCodlScreen';
 import NetworksScreen from '../containers/Networks/NetworksScreen';
+import DeleteEverythingScreen from '../containers/DeleteEverything/DeleteEverythingScreen';
+import RecoveryWarningScreen from '../containers/Recovery/RecoveryWarningScreen';
+import RecoveryCheckScreen from '../containers/Recovery/RecoveryCheckScreen';
 
 const Route = () => {
     const Stack = createNativeStackNavigator();
@@ -46,7 +49,9 @@ const Route = () => {
                 <Stack.Screen name={Constant.language} component={LanguageScreen} />
                 <Stack.Screen name={Constant.AboutCODL} component={AboutCodlScreen} />
                 <Stack.Screen name={Constant.networks} component={NetworksScreen} />
-
+                <Stack.Screen name={Constant.deleteEverything} component={DeleteEverythingScreen} />
+                <Stack.Screen name={Constant.recoveryWarning} component={RecoveryWarningScreen} />
+                <Stack.Screen name={Constant.recoveryCheck} component={RecoveryCheckScreen} />
             </Stack.Navigator>
         </NavigationContainer>
     )

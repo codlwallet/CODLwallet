@@ -47,13 +47,13 @@ export default function AttentionScreen2({ navigation, route }) {
                 backgroundColor={colors.black}
             />
             <AttentionWarningView
-                title={appConstant.areUSure}
+                title={t("areUSure")}
                 mainIcon={<SvgIcons.Polygon height={hp(8)} width={hp(8)} />}
-                description={appConstant.attention2Description}
+                description={t.attention2Description}
                 showButton1
                 showButton2
-                firstBtnTitle={appConstant.proceed}
-                secondBtnTitle={appConstant.checkAgain}
+                firstBtnTitle={t("proceed")}
+                secondBtnTitle={t("checkAgain")}
                 buttonValue={btnValue}
                 handleFirstBtnClick={handleProceedClick}
                 handleSecondBtnClick={handleCheckAgainClick}

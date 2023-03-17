@@ -143,7 +143,8 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'space-between',
         alignSelf: 'center',
-        marginVertical: hp(15)
+        marginVertical: hp(15),
+        marginTop: hp(13)
     },
     button: {
         marginBottom: hp(2)
@@ -160,6 +161,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         flex: 1,
+
     },
     numberWiew: {
         backgroundColor: colors.white,
