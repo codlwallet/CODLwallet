@@ -1,30 +1,26 @@
 import { StyleSheet, View } from 'react-native'
 import React from 'react'
 import colors from '../../assets/colors'
-import Header from '../../components/common/Header'
 import appConstant from '../../helper/appConstant'
 import SvgIcons from '../../assets/SvgIcons'
-import { hp, wp } from '../../helper/responsiveScreen'
+import { hp } from '../../helper/responsiveScreen'
 import AttentionWarningView from '../../components/AttentionWarningView'
 import { useTranslation } from 'react-i18next'
 
-export default function AttentionScreen1({ navigation, route }) {
+export default function HiddenWalletWarningScreen({ navigation, route }) {
     const { t } = useTranslation();
-    const { ButtonValue, numberValue } = route.params
 
     const handleUnderStandBtnClick = () => {
-        navigation.navigate(ButtonValue === appConstant.createWallet ? appConstant.createWallet : appConstant.importWallet, {
-            numberValue: numberValue,
-            ButtonValue: ButtonValue
+        navigation.navigate(appConstant.main, {
+            hidden: true
         })
     }
 
     return (
         <View style={styles.container}>
-            <Header showRightIcon RightIcon={'info'} />
-            <AttentionWarningView title={t("watchSurroundings")}
+            <AttentionWarningView title={t("warning")}
                 mainIcon={<SvgIcons.HideEye height={hp(8)} width={hp(8)} />}
-                description={t("attention1Description")}
+                description={t("hiddenWalletWarning")}
                 showButton1
                 firstBtnTitle={t("understand")}
                 buttonValue={t("understand")}

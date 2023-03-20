@@ -1,5 +1,5 @@
-import { Image, StyleSheet, TouchableOpacity, View } from 'react-native'
-import React, { useState } from 'react'
+import { BackHandler, Image, StyleSheet, TouchableOpacity, View } from 'react-native'
+import React, { useEffect, useState } from 'react'
 import colors from '../../assets/colors'
 import Header from '../../components/common/Header'
 import { mainData, settingData } from '../../constants/data'
@@ -8,8 +8,10 @@ import { hp, normalize, wp } from '../../helper/responsiveScreen'
 import Button from '../../components/common/Button'
 import appConstant from '../../helper/appConstant'
 import SvgIcons from '../../assets/SvgIcons'
+import { useTranslation } from 'react-i18next'
 
 export default function MainScreen({ navigation, route }) {
+    const { t } = useTranslation();
     const hidden = route?.params?.hidden
     const [hideMenu, setHideMenu] = useState(false);
     const [showNetworks, setShowNetworks] = useState(false)
@@ -22,31 +24,49 @@ export default function MainScreen({ navigation, route }) {
 
     }
 
+    useEffect(() => {
+        BackHandler.addEventListener('hardwareBackPress', backAction);
+        return async () => {
+            BackHandler.removeEventListener('hardwareBackPress', backAction);
+        };
+    }, []);
+
+    const backAction = () => {
+        navigation.goBack()
+        return true;
+    };
+
     const handleMenuListClick = (item) => {
-        if (item.name === appConstant.changeName) {
+        if (item.name === t("changeName")) {
             navigation.navigate(appConstant.changeUserDetails, {
                 from: appConstant.changeName
             })
         }
-        else if (item.name === appConstant.changePIN) {
+        else if (item.name === t("changePIN")) {
             navigation.navigate(appConstant.changeUserDetails, {
                 from: appConstant.changePIN
             })
         }
-        else if (item.name === appConstant.language) {
+        else if (item.name === t("language")) {
             navigation.navigate(appConstant.language)
         }
-        else if (item.name === appConstant.AboutCODL) {
+        else if (item.name === t("AboutCODL")) {
             navigation.navigate(appConstant.AboutCODL)
         }
-        else if (item.name === appConstant.recoveryCheck) {
+        else if (item.name === t("recoveryCheck")) {
             navigation.navigate(appConstant.recoveryWarning)
         }
-        else if (item.name === appConstant.networks) {
+        else if (item.name === t("networks")) {
             navigation.navigate(appConstant.networks)
         }
-        else if (item.name === appConstant.deleteEverything) {
+        else if (item.name === t("deleteEverything")) {
             navigation.navigate(appConstant.deleteEverything)
+        }
+    }
+
+    const handleMainListClick = (item) => {
+        if (item.name === t("ethereum")) {
+            navigation.navigate(appConstant.createAccount)
         }
     }
 
@@ -58,25 +78,25 @@ export default function MainScreen({ navigation, route }) {
                     <>
                         {mainData.map((item, index) => {
                             return (
-                                <View style={styles.buttonContainer} key={index} >
+                                <TouchableOpacity style={styles.buttonContainer} key={index} onPress={() => handleMainListClick(item)} >
                                     <View>
-                                        {item.name === appConstant.bitcoin ?
+                                        {item.name === t("bitcoin") ?
                                             <SvgIcons.Bitcoin height={hp(6)} width={hp(4)} /> :
-                                            item.name === appConstant.ethereum ?
+                                            item.name === t("ethereum") ?
                                                 <Image source={item.image} style={{ width: hp(4), height: hp(6.5), }} /> :
-                                                item.name === appConstant.solana ?
+                                                item.name === t("solana") ?
                                                     <SvgIcons.Solana height={hp(6)} width={hp(4)} /> :
-                                                    item.name === appConstant.avalanche ?
+                                                    item.name === t("avalanche") ?
                                                         <View style={{ backgroundColor: colors.gray }}>
                                                             <Image source={item.image} style={{ height: hp(7), width: hp(7), right: wp(2.5) }} />
                                                         </View> :
                                                         <SvgIcons.Poly height={hp(6)} width={hp(4.5)} />
                                         }
                                     </View>
-                                    <FontText size={normalize(25)} color={'white'} name={'inter-regular'} pLeft={wp(5)} style={{ right: item.name === 'Avalanche' ? wp(6) : 0 }}>
+                                    <FontText size={normalize(25)} color={'white'} name={'inter-regular'} pLeft={wp(5)} style={{ right: item.name === appConstant.avalanche ? wp(6) : 0 }}>
                                         {item?.name}
                                     </FontText>
-                                </View>
+                                </TouchableOpacity>
                             )
                         })
                         }
@@ -86,7 +106,7 @@ export default function MainScreen({ navigation, route }) {
                         {settingData.map((item, index) => {
                             return (
                                 <TouchableOpacity style={[styles.buttonContainer, { height: hp(7) }]} key={index} onPress={() => handleMenuListClick(item)}>
-                                    <FontText size={normalize(22)} color={item.name === appConstant.deleteEverything ? "red" : 'white'} name={'inter-regular'}  >
+                                    <FontText size={normalize(22)} color={item.name === t("deleteEverything") ? "red" : 'white'} name={'inter-regular'}  >
                                         {item?.name}
                                     </FontText>
                                 </TouchableOpacity>
@@ -106,7 +126,7 @@ export default function MainScreen({ navigation, route }) {
                 onPress={!hideMenu ? handleConnectClick : handleLockDeviceClick}
                 style={styles.button}>
                 <FontText name={"inter-medium"} size={normalize(22)} color="black">
-                    {!hideMenu ? appConstant.connect : appConstant.lockDevice}
+                    {!hideMenu ? t("connect") : t("lockDevice")}
                 </FontText>
             </Button>
         </View>

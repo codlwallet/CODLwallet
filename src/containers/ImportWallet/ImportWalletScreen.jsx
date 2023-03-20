@@ -10,8 +10,10 @@ import { importWalletData } from '../../constants/data'
 import Input from '../../components/common/Input'
 import WalletCard from '../../components/WalletCard'
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import { useTranslation } from 'react-i18next'
 
 export default function ImportWalletScreen({ navigation, route }) {
+    const { t } = useTranslation();
     const { numberValue, ButtonValue, form } = route.params
     const cardRef = useRef([])
     const [btnValue, setBtnValue] = useState(appConstant.confirm)
@@ -155,7 +157,7 @@ export default function ImportWalletScreen({ navigation, route }) {
             <View style={styles.subContainer}>
                 <WalletCard style={styles.walletCardContainer}
                     titleColor={'red'}
-                    title={appConstant.recoverySeeds}
+                    title={t("recoverySeeds")}
                     headerStyle={{ borderColor: colors.red }}
                     children={
                         <FlatList
@@ -172,7 +174,7 @@ export default function ImportWalletScreen({ navigation, route }) {
             </View>
 
             {showConfirm && <FontText name={"inter-regular"} size={normalize(20)} color={'white'} style={{ width: wp(90), alignSelf: 'center', }} pBottom={hp(2)} textAlign={'center'}  >
-                {appConstant.enterSeedsCorrectly}
+                {t("enterSeedsCorrectly")}
             </FontText>}
             {!showConfirm && <Button
                 flex={null}
@@ -185,7 +187,7 @@ export default function ImportWalletScreen({ navigation, route }) {
                 onPress={handleProceedClick}
                 buttonStyle={styles.button}>
                 <FontText name={"inter-medium"} size={normalize(22)} color={!walletcardData?.some((item) => !item.name) ? "red" : 'white'}>
-                    {appConstant.proceed}
+                    {t("proceed")}
                 </FontText>
             </Button>
             }
@@ -202,7 +204,7 @@ export default function ImportWalletScreen({ navigation, route }) {
                         onPress={handleConfirmClick}
                         buttonStyle={styles.button}>
                         <FontText name={"inter-medium"} size={normalize(22)} color={!walletcardData?.some((item) => !item.name) && btnValue === appConstant.confirm ? "red" : 'white'}>
-                            {appConstant.confirm}
+                            {t("confirm")}
                         </FontText>
                     </Button>
                     <Button
@@ -211,11 +213,11 @@ export default function ImportWalletScreen({ navigation, route }) {
                         bgColor={btnValue === appConstant.edit ? 'white' : ['red-open']}
                         type="highlight"
                         borderRadius={11}
-                        style={{ marginBottom: hp(4) }}
+                        style={{ marginBottom: hp(2) }}
                         onPress={handleEditClick}
                         buttonStyle={styles.button}>
                         <FontText name={"inter-medium"} size={normalize(22)} color={btnValue === appConstant.edit ? "red" : 'white'}>
-                            {appConstant.edit}
+                            {t("edit")}
                         </FontText>
                     </Button>
                 </>

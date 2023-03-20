@@ -10,8 +10,10 @@ import Input from '../../components/common/Input'
 import ToggleSwitch from 'toggle-switch-react-native'
 import Button from '../../components/common/Button'
 import WalletCard from '../../components/WalletCard'
+import { useTranslation } from 'react-i18next'
 
 export default function WelcomePurchaseScreen({ navigation }) {
+    const { t } = useTranslation();
     const [password, setPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false)
     const [passwordFocus, setPasswordFocus] = useState(false)
@@ -43,7 +45,6 @@ export default function WelcomePurchaseScreen({ navigation }) {
         return true;
     };
 
-
     const keyboardShowListener = Keyboard.addListener(
         'keyboardDidShow',
         () => {
@@ -60,9 +61,7 @@ export default function WelcomePurchaseScreen({ navigation }) {
     const onSubmitPin = () => {
         Keyboard.dismiss()
         setIsEnabled(false)
-        navigation.navigate(appConstant.main, {
-            hidden: isEnabled
-        })
+        navigation.navigate(appConstant.hiddenWallet)
     }
 
     const handleEnterClick = () => {
@@ -73,7 +72,7 @@ export default function WelcomePurchaseScreen({ navigation }) {
 
     return (
         <View style={styles.container}>
-            <Header showRightIcon RightIcon={'info'} title={appConstant.welcome} />
+            <Header showRightIcon RightIcon={'info'} title={t("welcome")} />
             <View style={[styles.subContainer, { bottom: isEnabled ? wp(18) : 0 }]}>
                 <View style={styles.buttonConatiner}>
                     <FontText size={normalize(22)} color={'white'} name={'inter-regular'}>
@@ -84,7 +83,7 @@ export default function WelcomePurchaseScreen({ navigation }) {
                 {isEnabled && <Input
                     withRightIcon
                     autoFocus={true}
-                    placeholder={appConstant.enterPassword}
+                    placeholder={t("enterPassword")}
                     value={password}
                     placeholderTextColor={passwordFocus ? colors.black : colors.white}
                     onChangeText={setPassword}
@@ -116,13 +115,13 @@ export default function WelcomePurchaseScreen({ navigation }) {
                 />}
             </View>
             <WalletCard style={[styles.walletCardContainer, { bottom: isEnabled ? keyboardHeight - hp(14) : 0 }]}
-                title={appConstant.hiddenWallet}
+                title={t("hiddenWallet")}
                 headerStyle={{ borderColor: colors.black }}
                 titleColor={'black'}
                 children={
                     <View style={styles.numberView}>
                         <FontText size={normalize(22)} color={'white'} name={'inter-regular'}>
-                            {appConstant.passphrase}
+                            {t("passphrase")}
                         </FontText>
                         <View style={{ flex: 1, alignItems: 'flex-end' }}>
                             <ToggleSwitch
@@ -151,7 +150,7 @@ export default function WelcomePurchaseScreen({ navigation }) {
                 style={styles.buttonView}
             >
                 <FontText name={"inter-medium"} size={normalize(22)} color="black">
-                    {appConstant.enter}
+                    {t("enter")}
                 </FontText>
             </Button>
         </View>

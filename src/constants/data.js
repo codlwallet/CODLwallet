@@ -1,14 +1,18 @@
+// const {useTranslation} = require('react-i18next');
+import i18n from '../constants/i18n';
+
 const appConstant = require('../helper/appConstant');
+// const {t} = useTranslation();
 
 module.exports = {
   walletData: [
     {
       id: 0,
-      name: appConstant.createWallet,
+      name: i18n.t('createWallet'),
     },
     {
       id: 1,
-      name: appConstant.importWallet,
+      name: i18n.t('importWallet'),
     },
   ],
 
@@ -28,11 +32,11 @@ module.exports = {
   aboutAppData: [
     {
       id: 0,
-      name: appConstant.terms,
+      name: i18n.t('terms'),
     },
     {
       id: 1,
-      name: appConstant.etc,
+      name: i18n.t('etc'),
     },
   ],
 
@@ -345,28 +349,28 @@ module.exports = {
   mainData: [
     {
       id: 0,
-      name: appConstant.bitcoin,
+      name: i18n.t('bitcoin'),
       image: require('../assets/images/BI.png'),
     },
     {
       id: 1,
-      name: appConstant.ethereum,
+      name: i18n.t('ethereum'),
       image: require('../assets/images/EV.png'),
       img: require('../assets/images/EVblack.png'),
     },
     {
       id: 2,
-      name: appConstant.solana,
+      name: i18n.t('solana'),
       image: require('../assets/images/SO.png'),
     },
     {
       id: 3,
-      name: appConstant.avalanche,
+      name: i18n.t('avalanche'),
       image: require('../assets/images/img.png'),
     },
     {
       id: 4,
-      name: appConstant.polygon,
+      name: i18n.t('polygon'),
       image: require('../assets/images/PO.png'),
     },
   ],
@@ -374,31 +378,102 @@ module.exports = {
   settingData: [
     {
       id: 0,
-      name: appConstant.changeName,
+      name: i18n.t('changeName'),
     },
     {
       id: 1,
-      name: appConstant.changePIN,
+      name: i18n.t('changePIN'),
     },
     {
       id: 2,
-      name: appConstant.recoveryCheck,
+      name: i18n.t('recoveryCheck'),
     },
     {
       id: 3,
-      name: appConstant.networks,
+      name: i18n.t('networks'),
     },
     {
       id: 4,
-      name: appConstant.language,
+      name: i18n.t('language'),
     },
     {
       id: 5,
-      name: appConstant.AboutCODL,
+      name: i18n.t('AboutCODL'),
     },
     {
       id: 6,
-      name: appConstant.deleteEverything,
+      name: i18n.t('deleteEverything'),
+    },
+  ],
+  accountData: [
+    {
+      id: 0,
+      name: '0xa94bs...a710',
+    },
+    {
+      id: 1,
+      name: '0xa94bs...a710',
+    },
+    {
+      id: 2,
+      name: '0xa94bs...a710',
+    },
+    {
+      id: 3,
+      name: '0xa94bs...a710',
+    },
+    {
+      id: 4,
+      name: '0xa94bs...a710',
+    },
+    {
+      id: 5,
+      name: '0xa94bs...a710',
+    },
+    {
+      id: 6,
+      name: '0xa94bs...a710',
+    },
+    {
+      id: 7,
+      name: '0xa94bs...a710',
+    },
+    {
+      id: 8,
+      name: '0xa94bs...a710',
+    },
+    {
+      id: 9,
+      name: '0xa94bs...a710',
     },
   ],
 };
+
+export const mainData = [
+  {
+    id: 0,
+    name: i18n.t('bitcoin'),
+    image: require('../assets/images/BI.png'),
+  },
+  {
+    id: 1,
+    name: i18n.t('ethereum'),
+    image: require('../assets/images/EV.png'),
+    img: require('../assets/images/EVblack.png'),
+  },
+  {
+    id: 2,
+    name: i18n.t('solana'),
+    image: require('../assets/images/SO.png'),
+  },
+  {
+    id: 3,
+    name: i18n.t('avalanche'),
+    image: require('../assets/images/img.png'),
+  },
+  {
+    id: 4,
+    name: i18n.t('polygon'),
+    image: require('../assets/images/PO.png'),
+  },
+];

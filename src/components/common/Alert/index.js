@@ -4,8 +4,10 @@ import AwesomeAlert from 'react-native-awesome-alerts';
 import colors from '../../../assets/colors';
 import {wp} from '../../../helper/responsiveScreen';
 import appConstant from '../../../helper/appConstant';
+import {useTranslation} from 'react-i18next';
 
 export default function Alert({show, title, message, onConfirmPressed}) {
+  const {t} = useTranslation();
   return (
     <View>
       <AwesomeAlert
@@ -19,7 +21,7 @@ export default function Alert({show, title, message, onConfirmPressed}) {
         titleStyle={styles.alertTitleStyle}
         messageStyle={styles.alertMessageText}
         showConfirmButton={true}
-        confirmText={appConstant.ok}
+        confirmText={t('ok')}
         confirmButtonStyle={styles.button}
         confirmButtonTextStyle={styles.buttonText}
         onConfirmPressed={onConfirmPressed}

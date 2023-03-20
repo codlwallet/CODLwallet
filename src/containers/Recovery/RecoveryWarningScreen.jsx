@@ -6,8 +6,10 @@ import SvgIcons from '../../assets/SvgIcons'
 import appConstant from '../../helper/appConstant'
 import { hp } from '../../helper/responsiveScreen'
 import colors from '../../assets/colors'
+import { useTranslation } from 'react-i18next'
 
 export default function RecoveryWarningScreen({ navigation }) {
+    const { t } = useTranslation();
 
     useEffect(() => {
         BackHandler.addEventListener('hardwareBackPress', backAction);
@@ -25,16 +27,15 @@ export default function RecoveryWarningScreen({ navigation }) {
         navigation.navigate(appConstant.recoveryCheck)
     }
 
-
     return (
         <View style={styles.container}>
-            <Header showRightIcon RightIcon={'info'} title={appConstant.recoveryCheck} showBackIcon onBackPress={backAction} />
+            <Header showRightIcon RightIcon={'info'} title={t("recoveryCheck")} showBackIcon onBackPress={backAction} />
             <AttentionWarningView title={appConstant.watchSurroundings}
                 mainIcon={<SvgIcons.HideEye height={hp(8)} width={hp(8)} />}
-                description={appConstant.attention1Description}
+                description={t("attention1Description")}
                 showButton1
-                firstBtnTitle={appConstant.startRecoveryCheck}
-                buttonValue={appConstant.startRecoveryCheck}
+                firstBtnTitle={t("startRecoveryCheck")}
+                buttonValue={t("startRecoveryCheck")}
                 handleFirstBtnClick={handleRecoveryClick}
             />
         </View>

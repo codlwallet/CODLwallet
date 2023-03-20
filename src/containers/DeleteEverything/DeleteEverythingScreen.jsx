@@ -1,4 +1,4 @@
-import { BackHandler, StatusBar, StyleSheet, TouchableOpacity, View } from 'react-native'
+import { BackHandler, Keyboard, StatusBar, StyleSheet, TouchableOpacity, View } from 'react-native'
 import React, { useEffect, useRef, useState } from 'react'
 import colors from '../../assets/colors'
 import appConstant from '../../helper/appConstant'
@@ -11,8 +11,10 @@ import Button from '../../components/common/Button'
 import FontText from '../../components/common/FontText'
 import Alert from '../../components/common/Alert'
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import { useTranslation } from 'react-i18next'
 
 export default function DeleteEverythingScreen({ navigation }) {
+    const { t } = useTranslation();
     const enterPinRef = useRef()
     const [btnValue, setBtnValue] = useState(appConstant.deleteEverything)
     const [isDone, setIsDone] = useState(false)
@@ -32,6 +34,11 @@ export default function DeleteEverythingScreen({ navigation }) {
         };
     }, []);
 
+    const backAction = () => {
+        navigation.goBack()
+        return true;
+    };
+
     useEffect(() => {
         async function getLoginData() {
             const data = await AsyncStorage.getItem('LoginData');
@@ -40,10 +47,6 @@ export default function DeleteEverythingScreen({ navigation }) {
         getLoginData()
     }, [])
 
-    const backAction = () => {
-        navigation.goBack()
-        return true;
-    };
 
     const onSubmitEnterPin = () => {
         setEnterPinFocus(false)
@@ -51,6 +54,10 @@ export default function DeleteEverythingScreen({ navigation }) {
 
     const onFocusEnterPin = () => {
         setEnterPinFocus(true)
+    }
+
+    const onBlurEnterPin = () => {
+        setEnterPinFocus(false)
     }
 
     const handleCheckRecoveryClick = () => {
@@ -98,86 +105,82 @@ export default function DeleteEverythingScreen({ navigation }) {
 
     return (
         <View style={styles.container}>
-            <StatusBar
-                barStyle={'light-content'}
-                translucent
-                backgroundColor={colors.red}
-            />
-            {!isConfirm && <Header showRightIcon title={appConstant.deleteEverything} RightIcon={'info'} onBackPress={backAction} showBackIcon statusBarcolor={colors.red} />}
-            {!isDone ?
-                <AttentionWarningView
-                    isBgRed
-                    title={isConfirm ? appConstant.sureDeleteTitle : appConstant.deleteEverythingTitle}
-                    mainIcon={<SvgIcons.RedPolygon height={hp(11)} width={hp(11)} />}
-                    description={appConstant.deleteEverythingDes}
-                    showButton1
-                    showButton2
-                    firstBtnTitle={isConfirm ? appConstant.confirmDelete : appConstant.checkRecovery}
-                    secondBtnTitle={isConfirm ? appConstant.cancel : appConstant.deleteEverything}
-                    buttonValue={btnValue}
-                    handleFirstBtnClick={isConfirm ? handleConfirmDeleteClick : handleCheckRecoveryClick}
-                    handleSecondBtnClick={isConfirm ? handleCancelClick : handleDeleteEverythingClick}
-                />
-                :
-                <View style={styles.subContainer}>
-                    <Input
-                        withRightIcon
-                        ref={enterPinRef}
-                        // autoFocus={!from ? true : false}
-                        placeholder={appConstant.enterPin}
-                        value={enterPin}
-                        placeholderTextColor={enterPinFocus ? colors.red : colors.white}
-                        onChangeText={setEnterPin}
-                        keyboardType={'number-pad'}
-                        returnKeyType={'done'}
-                        maxLength={8}
-                        secureTextEntry={!showPin ? true : false}
-                        onBlur={onSubmitEnterPin}
-                        onFocus={onFocusEnterPin}
-                        onSubmitEditing={onSubmitEnterPin}
-                        onSubmit={onSubmitEnterPin}
-                        inputStyle={[styles.textInput, {
-                            color: enterPinFocus == true
-                                ? colors.red
-                                : colors.white
-                        }]}
-                        fontName={'poppins-regular'}
-                        fontSize={normalize(22)}
-                        blurOnSubmit
-                        style={[styles.textInputContainer, {
-                            backgroundColor:
-                                enterPinFocus == true
-                                    ? colors.white
-                                    : colors['red-open'],
-                        }]}
-                        rightIcon={
-                            <TouchableOpacity onPress={() => setShowPin(!showPin)}>
-                                {showPin ?
-                                    <>
-                                        {!enterPinFocus ? <SvgIcons.ShowEye height={hp(3.5)} width={hp(2.5)} /> : <SvgIcons.BlackShowEye height={hp(3.5)} width={hp(2.5)} />}
-                                    </>
-                                    :
-                                    <>
-                                        {!enterPinFocus ? <SvgIcons.HideEye height={hp(3.5)} width={hp(2.5)} /> : <SvgIcons.RedHideEye height={hp(3.5)} width={hp(2.5)} />}
-                                    </>
-                                }
-                            </TouchableOpacity>
-                        }
+            {!isConfirm && <Header showRightIcon title={t("deleteEverything")} RightIcon={'info'} onBackPress={backAction} showBackIcon statusBarcolor={colors.red} />}
+            {
+                !isDone ?
+                    <AttentionWarningView
+                        isBgRed
+                        title={isConfirm ? t("sureDeleteTitle") : t("deleteEverythingTitle")}
+                        mainIcon={<SvgIcons.RedPolygon height={hp(11)} width={hp(11)} />}
+                        description={t("deleteEverythingDes")}
+                        showButton1
+                        showButton2
+                        firstBtnTitle={isConfirm ? t("confirmDelete") : t("checkRecovery")}
+                        secondBtnTitle={isConfirm ? t("cancel") : t("deleteEverything")}
+                        buttonValue={btnValue}
+                        handleFirstBtnClick={isConfirm ? handleConfirmDeleteClick : handleCheckRecoveryClick}
+                        handleSecondBtnClick={isConfirm ? handleCancelClick : handleDeleteEverythingClick}
                     />
-                    <Button
-                        flex={null}
-                        height={hp(8.5)}
-                        type="highlight"
-                        borderRadius={11}
-                        bgColor="white"
-                        onPress={hndleDoneClick}
-                        buttonStyle={styles.button}
-                        style={styles.buttonView}>
-                        <FontText name={"inter-medium"} size={normalize(22)} color="red">
-                            {appConstant.done}
-                        </FontText>
-                    </Button>
-                </View>
+                    :
+                    <View style={styles.subContainer}>
+                        <Input
+                            withRightIcon
+                            ref={enterPinRef}
+                            // autoFocus={!from ? true : false}
+                            placeholder={t("enterPin")}
+                            value={enterPin}
+                            placeholderTextColor={enterPinFocus ? colors.red : colors.white}
+                            onChangeText={setEnterPin}
+                            keyboardType={'default'}
+                            returnKeyType={'done'}
+                            blurOnSubmit
+                            maxLength={8}
+                            secureTextEntry={!showPin ? true : false}
+                            onBlur={onBlurEnterPin}
+                            onFocus={onFocusEnterPin}
+                            onSubmitEditing={onSubmitEnterPin}
+                            onSubmit={onSubmitEnterPin}
+                            inputStyle={[styles.textInput, {
+                                color: enterPinFocus == true
+                                    ? colors.red
+                                    : colors.white
+                            }]}
+                            fontName={'poppins-regular'}
+                            fontSize={normalize(22)}
+                            style={[styles.textInputContainer, {
+                                backgroundColor:
+                                    enterPinFocus == true
+                                        ? colors.white
+                                        : colors['red-open'],
+                            }]}
+                            rightIcon={
+                                <TouchableOpacity onPress={() => setShowPin(!showPin)}>
+                                    {showPin ?
+                                        <>
+                                            {!enterPinFocus ? <SvgIcons.ShowEye height={hp(3.2)} width={hp(2.2)} /> : <SvgIcons.RedShowEye height={hp(3)} width={hp(2.5)} />}
+                                        </>
+                                        :
+                                        <>
+                                            {!enterPinFocus ? <SvgIcons.HideEye height={hp(3.5)} width={hp(2.5)} /> : <SvgIcons.RedHideEye height={hp(3.5)} width={hp(2.5)} />}
+                                        </>
+                                    }
+                                </TouchableOpacity>
+                            }
+                        />
+                        <Button
+                            flex={null}
+                            height={hp(8.5)}
+                            type="highlight"
+                            borderRadius={11}
+                            bgColor="white"
+                            onPress={hndleDoneClick}
+                            buttonStyle={styles.button}
+                            style={styles.buttonView}>
+                            <FontText name={"inter-medium"} size={normalize(22)} color="red">
+                                {t("done")}
+                            </FontText>
+                        </Button>
+                    </View>
             }
             <Alert
                 show={showAlert}
@@ -187,7 +190,7 @@ export default function DeleteEverythingScreen({ navigation }) {
                     setShowAlert(false)
                 }}
             />
-        </View>
+        </View >
     )
 }
 
@@ -195,7 +198,6 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: colors.red,
-        alignItems: 'center',
     },
     subContainer: {
         flex: 1,

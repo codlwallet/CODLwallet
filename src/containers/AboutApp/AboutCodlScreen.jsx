@@ -7,12 +7,14 @@ import appConstant from '../../helper/appConstant'
 import { aboutAppData } from '../../constants/data'
 import Header from '../../components/common/Header'
 import SvgIcons from '../../assets/SvgIcons'
+import { useTranslation } from 'react-i18next'
 
 export default function AboutCodlScreen({ navigation }) {
+    const { t } = useTranslation();
 
     return (
         <View style={styles.container}>
-            <Header title={appConstant.AboutCODL} showRightIcon RightIcon={'info'} showBackIcon onBackPress={() => navigation.goBack()} />
+            <Header title={t("AboutCODL")} showRightIcon RightIcon={'info'} showBackIcon onBackPress={() => navigation.goBack()} />
             <View style={styles.buttonContainer}>
                 {aboutAppData.map((item, index) => {
                     return (
@@ -28,7 +30,7 @@ export default function AboutCodlScreen({ navigation }) {
             <View style={styles.bottomView}>
                 <SvgIcons.AppIcon height={hp(10)} width={hp(10)} />
                 <FontText size={normalize(18)} color={'white'} name={'inter-regular'} pTop={hp(4)}>
-                    {`${appConstant.version} ${'0.0.1'}`}
+                    {`${t("version")} ${'0.0.1'}`}
                 </FontText>
             </View>
 

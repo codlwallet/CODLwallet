@@ -68,7 +68,7 @@ export default function LanguageScreen({ navigation }) {
                 onPress={handleDoneClick}
                 buttonStyle={styles.button}>
                 <FontText name={"inter-medium"} size={normalize(22)} color="black">
-                    {appConstant.done}
+                    {t("done")}
                 </FontText>
             </Button>
         </View>

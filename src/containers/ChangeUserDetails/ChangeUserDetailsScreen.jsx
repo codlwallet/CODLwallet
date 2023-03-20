@@ -10,8 +10,10 @@ import Button from '../../components/common/Button'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import FontText from '../../components/common/FontText'
 import Alert from '../../components/common/Alert'
+import { useTranslation } from 'react-i18next'
 
 export default function ChangeUserDetailsScreen({ navigation, route }) {
+    const { t } = useTranslation();
     const nameRef = useRef()
     const currentPinRef = useRef()
     const newPinRef = useRef()
@@ -30,7 +32,6 @@ export default function ChangeUserDetailsScreen({ navigation, route }) {
     const [alertMessage, setAlertMessage] = useState('')
     const [loginData, setLoginData] = useState()
     const [showPin, setShowPin] = useState(false)
-
 
     useEffect(() => {
         async function getLoginData() {
@@ -110,8 +111,8 @@ export default function ChangeUserDetailsScreen({ navigation, route }) {
         let errorStatus = true;
         if (name === '' || !name.length > 1 || name.length > 15) {
             setShowAlert(true)
-            setAlertTitle(appConstant.enterName)
-            setAlertMessage(appConstant.nameErrorMess)
+            setAlertTitle(t("enterName"))
+            setAlertMessage(t("nameErrorMess"))
             errorStatus = false;
         }
         return errorStatus;
@@ -122,24 +123,24 @@ export default function ChangeUserDetailsScreen({ navigation, route }) {
         let errorStatus = true;
         if (currentPin === '' || currentPin.length < 4 || currentPin.length > 8) {
             setShowAlert(true)
-            setAlertTitle(appConstant.enterPIN)
-            setAlertMessage(appConstant.pinErrorMess)
+            setAlertTitle(t("enterPIN"))
+            setAlertMessage(t("pinErrorMess"))
             errorStatus = false;
         } else if (currentPin !== loginData?.pin) {
             console.log("fdhsfghj")
             setShowAlert(true)
-            setAlertTitle(appConstant.matchedPIN)
-            setAlertMessage(appConstant.currentPinMatchError)
+            setAlertTitle(t("matchedPIN"))
+            setAlertMessage(t("currentPinMatchError"))
             errorStatus = false;
         } else if (newPin === '' || newPin.length < 4 || newPin.length > 8) {
             setShowAlert(true)
-            setAlertTitle(appConstant.enterPIN)
-            setAlertMessage(appConstant.pinErrorMess)
+            setAlertTitle(t("enterPIN"))
+            setAlertMessage(t("pinErrorMess"))
             errorStatus = false;
         } else if (newPin !== confirmPin) {
             setShowAlert(true)
-            setAlertTitle(appConstant.matchedPIN)
-            setAlertMessage(appConstant.pinMatchError)
+            setAlertTitle(t("matchedPIN"))
+            setAlertMessage(t("pinMatchError"))
             errorStatus = false;
         }
         return errorStatus;
@@ -162,21 +163,23 @@ export default function ChangeUserDetailsScreen({ navigation, route }) {
         else {
             if (checkPinValidation()) {
                 await AsyncStorage.setItem('LoginData', JSON.stringify(data));
-                navigation.goBack()
+                navigation.navigate(appConstant.complateSeeds, {
+                    from: appConstant.changePIN
+                })
             }
         }
     }
 
     return (
         <View style={styles.container}>
-            <Header title={from === appConstant.changeName ? appConstant.changeName : changePIN} showRightIcon RightIcon={'info'} statusBarHidden={false} showBackIcon onBackPress={backAction} />
+            <Header title={from === appConstant.changeName ? t("changeName") : t("changePIN")} showRightIcon RightIcon={'info'} statusBarHidden={false} showBackIcon onBackPress={backAction} />
             <View style={styles.subContainer}>
                 {from === appConstant.changeName ?
                     <Input
                         withRightIcon
                         ref={nameRef}
                         // editable={from ? false : true}
-                        placeholder={appConstant.name}
+                        placeholder={t("name")}
                         value={name}
                         maxLength={15}
                         placeholderTextColor={nameFocus ? colors.black : colors.white}
@@ -217,7 +220,7 @@ export default function ChangeUserDetailsScreen({ navigation, route }) {
                         <Input
                             withRightIcon={currentPin !== '' ? true : false}
                             ref={currentPinRef}
-                            placeholder={appConstant.currentPin}
+                            placeholder={t("currentPin")}
                             value={currentPin}
                             placeholderTextColor={currentPinFocus ? colors.black : colors.white}
                             onChangeText={setCurrentPin}
@@ -255,7 +258,7 @@ export default function ChangeUserDetailsScreen({ navigation, route }) {
                         <Input
                             withRightIcon
                             ref={newPinRef}
-                            placeholder={appConstant.newPin}
+                            placeholder={t("newPin")}
                             value={newPin}
                             maxLength={8}
                             secureTextEntry={!showPin ? true : false}
@@ -299,7 +302,7 @@ export default function ChangeUserDetailsScreen({ navigation, route }) {
                         <Input
                             withRightIcon={confirmPin !== '' && newPin === confirmPin ? true : false}
                             ref={confirmPinRef}
-                            placeholder={appConstant.confirmNewPin}
+                            placeholder={t("confirmNewPin")}
                             value={confirmPin}
                             secureTextEntry={true}
                             maxLength={8}
@@ -349,7 +352,7 @@ export default function ChangeUserDetailsScreen({ navigation, route }) {
                     style={styles.buttonView}
                 >
                     <FontText name={"inter-medium"} size={normalize(22)} color="black">
-                        {appConstant.done}
+                        {t("done")}
                     </FontText>
                 </Button>
             </View>

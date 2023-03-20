@@ -26,6 +26,8 @@ import EU from './svgs/EU.svg';
 import RedPolygon from './svgs/RedPolygon.svg';
 import RedHideEye from './svgs/RedHideEye.svg';
 import DotIcon from './svgs/DotIcon.svg';
+import RedShowEye from './svgs/RedShowEye.svg';
+import BlackRightArrow from './svgs/BlackRightArrow.svg';
 
 export default {
   Logo,
@@ -55,4 +57,6 @@ export default {
   RedPolygon,
   RedHideEye,
   DotIcon,
+  RedShowEye,
+  BlackRightArrow,
 };

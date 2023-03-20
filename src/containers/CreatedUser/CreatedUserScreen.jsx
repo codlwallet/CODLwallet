@@ -5,9 +5,10 @@ import SvgIcons from '../../assets/SvgIcons'
 import FontText from '../../components/common/FontText'
 import { hp, normalize } from '../../helper/responsiveScreen'
 import appConstant from '../../helper/appConstant'
-import { t } from 'i18next'
+import { useTranslation } from 'react-i18next'
 
 export default function CreatedUserScreen(props) {
+  const { t } = useTranslation();
   const { navigation } = props
   useEffect(() => {
     setTimeout(() => {

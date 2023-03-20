@@ -5,14 +5,22 @@ import SvgIcons from '../../assets/SvgIcons'
 import { hp } from '../../helper/responsiveScreen'
 import appConstant from '../../helper/appConstant'
 import AttentionWarningView from '../../components/AttentionWarningView'
+import { useTranslation } from 'react-i18next'
 
-export default function ComplateSeedsScreen(props) {
-    const { navigation } = props
+export default function ComplateSeedsScreen({ navigation, route }) {
+    const from = route?.params?.from
+    const { t } = useTranslation();
+
     useEffect(() => {
         setTimeout(() => {
-            navigation.navigate(appConstant.welcomePurchase)
+            if (from === appConstant.changePIN) {
+                navigation.navigate(appConstant.main)
+            }
+            else {
+                navigation.navigate(appConstant.main)
+            }
         }, 2000);
-    }, [])
+    },)
 
     return (
         <View style={styles.container}>
@@ -22,7 +30,7 @@ export default function ComplateSeedsScreen(props) {
                 backgroundColor={colors.black}
             />
             <AttentionWarningView
-                title={appConstant.complate}
+                title={t("complate")}
                 mainIcon={<View style={styles.imageContainer}>
                     <SvgIcons.BlackCheck />
                 </View>}

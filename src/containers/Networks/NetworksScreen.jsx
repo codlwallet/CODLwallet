@@ -2,15 +2,16 @@ import { Image, StyleSheet, TouchableOpacity, View } from 'react-native'
 import React, { useState } from 'react'
 import colors from '../../assets/colors'
 import Header from '../../components/common/Header'
-import { mainData, settingData } from '../../constants/data'
+import { mainData } from '../../constants/data'
 import FontText from '../../components/common/FontText'
 import { hp, normalize, wp } from '../../helper/responsiveScreen'
 import Button from '../../components/common/Button'
-import appConstant from '../../helper/appConstant'
 import SvgIcons from '../../assets/SvgIcons'
+import { useTranslation } from 'react-i18next'
 
 export default function NetworksScreen({ navigation, route }) {
-    const [btnIndex, setBtnIndex] = useState(0);
+    const { t } = useTranslation();
+    const [btnIndex, setBtnIndex] = useState();
 
     const handleDoneClick = () => {
         navigation.goBack()
@@ -18,11 +19,11 @@ export default function NetworksScreen({ navigation, route }) {
 
     return (
         <View style={styles.container}>
-            <Header title={appConstant.networks} showRightIcon RightIcon={'info'} showBackIcon onBackPress={() => navigation.goBack()} />
+            <Header title={t("networks")} showRightIcon RightIcon={'info'} showBackIcon onBackPress={() => navigation.goBack()} />
             <View style={styles.subConatiner}>
                 {mainData.map((item, index) => {
                     return (
-                        <View style={styles.buttonView}>
+                        <View style={styles.buttonView} key={index}>
                             {index === btnIndex && <SvgIcons.DotIcon style={{ right: wp(3) }} />}
                             <TouchableOpacity style={[styles.buttonContainer, { backgroundColor: index === btnIndex ? colors.white : colors.gray }]} key={index} onPress={() => setBtnIndex(index)}>
                                 <View style={{ flexDirection: 'row', alignItems: 'center' }}>
@@ -42,7 +43,6 @@ export default function NetworksScreen({ navigation, route }) {
                                         {item?.name}
                                     </FontText>
                                 </View>
-
                                 {index === btnIndex && <SvgIcons.BlackCheck height={hp(3)} width={hp(3)} />}
                             </TouchableOpacity>
                         </View>
@@ -61,7 +61,7 @@ export default function NetworksScreen({ navigation, route }) {
                 onPress={handleDoneClick}
                 style={styles.button}>
                 <FontText name={"inter-medium"} size={normalize(22)} color="black">
-                    {appConstant.done}
+                    {t("done")}
                 </FontText>
             </Button>
         </View>
@@ -84,7 +84,6 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
     },
-
     buttonContainer: {
         backgroundColor: colors.gray,
         alignItems: 'center',

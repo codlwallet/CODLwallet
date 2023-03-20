@@ -86,6 +86,18 @@
     "confirmDelete": "Confirm Delete",
     "cancel": "Cancel",
     "recoveryWarning": "Recovery Warning",
-    "startRecoveryCheck": "Start Recovery Check"
+    "startRecoveryCheck": "Start Recovery Check",
+    "2thSeed": "2th seed",
+    "6thSeed": "6th seed",
+    "12thSeed": "12th seed",
+    "warning": "Warning",
+    "hiddenWalletWarning": "If you forget your passphrase, your hidden wallet is irretrievable!",
+    "createAccount": "Create Account",
+    "walletName": "Wallet Name",
+    "create": "Create",
+    "selectAccount": "Select Account",
+    "next": "Next",
+    "select": "Select",
+    "prev": "Prev"
   }
 }

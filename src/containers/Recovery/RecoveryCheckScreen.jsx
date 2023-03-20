@@ -9,8 +9,10 @@ import FontText from '../../components/common/FontText'
 import Input from '../../components/common/Input'
 import WalletCard from '../../components/WalletCard'
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import { useTranslation } from 'react-i18next'
 
 export default function RecoveryCheckScreen({ navigation }) {
+    const { t } = useTranslation();
     const cardRef = useRef([])
     const [btnValue, setBtnValue] = useState(appConstant.confirm)
     const [walletData, setWalletData] = useState()
@@ -121,11 +123,11 @@ export default function RecoveryCheckScreen({ navigation }) {
 
     return (
         <View style={styles.container} >
-            <Header title={appConstant.recoveryCheck} showRightIcon RightIcon={'info'} showBackIcon onBackPress={backAction} statusBarcolor={colors.red} style={{ alignSelf: 'center', }} />
+            <Header title={t("recoveryCheck")} showRightIcon RightIcon={'info'} showBackIcon onBackPress={backAction} statusBarcolor={colors.red} style={{ alignSelf: 'center', }} />
             <View style={styles.subContainer}>
                 <WalletCard style={styles.walletCardContainer}
                     titleColor={'red'}
-                    title={appConstant.recoverySeeds}
+                    title={t("recoverySeeds")}
                     headerStyle={{ borderColor: colors.red }}
                     children={
                         <FlatList
@@ -153,7 +155,7 @@ export default function RecoveryCheckScreen({ navigation }) {
                     onPress={handleConfirmClick}
                     buttonStyle={styles.button}>
                     <FontText name={"inter-medium"} size={normalize(22)} color={!walletData?.some((item) => !item.name) && btnValue === appConstant.confirm ? "red" : 'white'}>
-                        {appConstant.done}
+                        {t("done")}
                     </FontText>
                 </Button>
                 <Button
@@ -166,7 +168,7 @@ export default function RecoveryCheckScreen({ navigation }) {
                     onPress={handleEditClick}
                     buttonStyle={styles.button}>
                     <FontText name={"inter-medium"} size={normalize(22)} color={btnValue === appConstant.edit ? "red" : 'white'}>
-                        {appConstant.edit}
+                        {t("edit")}
                     </FontText>
                 </Button>
             </>

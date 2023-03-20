@@ -6,12 +6,13 @@ import appConstant from '../../helper/appConstant';
 import { hp, isIOS, normalize, wp } from '../../helper/responsiveScreen';
 import Button from '../../components/common/Button';
 import FontText from '../../components/common/FontText';
-import { createWalletData, walletData } from '../../constants/data';
+import { createWalletData } from '../../constants/data';
 import WalletCard from '../../components/WalletCard';
-import { t } from 'i18next';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useTranslation } from 'react-i18next';
 
 export default function CreateWalletScreen({ navigation, route }) {
+    const { t } = useTranslation();
     const { numberValue, ButtonValue } = route.params;
 
     useEffect(() => {
@@ -61,7 +62,6 @@ export default function CreateWalletScreen({ navigation, route }) {
                             data={numberValue && createWalletData.slice(0, numberValue)}
                             numColumns={3}
                             columnWrapperStyle={{ justifyContent: 'space-between' }}
-
                             keyExtractor={item => {
                                 return item.id;
                             }}
@@ -81,8 +81,7 @@ export default function CreateWalletScreen({ navigation, route }) {
                                                 name={'inter-regular'}
                                                 size={normalize(14)}
                                                 color={'red'}
-                                                pLeft={wp(1)}
-                                            >
+                                                pLeft={wp(1)}>
                                                 {item?.name}
                                             </FontText>
                                         </View>

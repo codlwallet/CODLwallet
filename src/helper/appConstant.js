@@ -91,4 +91,6 @@ module.exports = {
   confirmNewPin: 'Confirm New PIN',
   recoveryWarning: 'Recovery Warning',
   startRecoveryCheck: 'Start Recovery Check',
+  createAccount: 'Create Account',
+  selectAccount: 'Select Account',
 };

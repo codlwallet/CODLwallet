@@ -9,9 +9,10 @@ import Button from '../../components/common/Button'
 import { hp, normalize, wp } from '../../helper/responsiveScreen'
 import FontText from '../../components/common/FontText'
 import WalletCard from '../../components/WalletCard'
-import { t } from 'i18next'
+import { useTranslation } from 'react-i18next'
 
 export default function SetupWalletScreen(props) {
+    const { t } = useTranslation();
     const { navigation } = props
     const [btnValue, setButtonValue] = useState(appConstant.createWallet)
     const [buttonIndex, setButtonIndex] = useState(0)

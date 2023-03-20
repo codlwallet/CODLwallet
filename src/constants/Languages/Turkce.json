@@ -85,6 +85,18 @@
     "confirmDelete": "Silmeyi Onayla",
     "cancel": "İptal etmek",
     "recoveryWarning": "Kurtarma Uyarısı",
-    "startRecoveryCheck": "Kurtarma Kontrolünü Başlat"
+    "startRecoveryCheck": "Kurtarma Kontrolünü Başlat",
+    "2thSeed": "2. tohum",
+    "6thSeed": "6. tohum",
+    "12thSeed": "12. tohum",
+    "warning": "Uyarı",
+    "hiddenWalletWarning": "Parolanızı unutursanız, gizli cüzdanınız geri alınamaz!",
+    "createAccount": "Hesap oluşturmak",
+    "walletName": "Cüzdan Adı",
+    "create": "Yaratmak",
+    "selectAccount": "Hesap Seç",
+    "next": "Sonraki",
+    "select": "Seçme",
+    "prev": "Önceki"
   }
 }

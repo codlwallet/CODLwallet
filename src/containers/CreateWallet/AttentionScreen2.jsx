@@ -5,24 +5,11 @@ import appConstant from '../../helper/appConstant'
 import { hp } from '../../helper/responsiveScreen'
 import SvgIcons from '../../assets/SvgIcons'
 import AttentionWarningView from '../../components/AttentionWarningView'
+import { useTranslation } from 'react-i18next'
 
 export default function AttentionScreen2({ navigation, route }) {
-    const { ButtonValue, numberValue, from } = route.params
+    const { t } = useTranslation();
     const [btnValue, setBtnValue] = useState(appConstant.proceed)
-
-    const handleProceedClick = () => {
-        setBtnValue(appConstant.proceed)
-        navigation.navigate(appConstant.setupWallet)
-    }
-
-    const handleCheckAgainClick = () => {
-        setBtnValue(appConstant.checkAgain)
-        navigation.navigate(ButtonValue === appConstant.createWallet ? appConstant.createWallet : appConstant.importWallet, {
-            numberValue: numberValue,
-            ButtonValue: ButtonValue,
-            form: appConstant.checkAgain
-        })
-    }
 
     useEffect(() => {
         BackHandler.addEventListener('hardwareBackPress', backAction);
@@ -31,11 +18,18 @@ export default function AttentionScreen2({ navigation, route }) {
         };
     }, []);
 
+    const handleProceedClick = () => {
+        setBtnValue(appConstant.proceed)
+        navigation.navigate(appConstant.setupWallet)
+    }
+
+    const handleCheckAgainClick = () => {
+        setBtnValue(appConstant.checkAgain)
+        backAction()
+    }
+
     const backAction = () => {
-        navigation.navigate(from === appConstant.createWallet ? appConstant.createWallet : appConstant.importWallet, {
-            numberValue: numberValue,
-            ButtonValue: ButtonValue,
-        })
+        navigation.goBack()
         return true;
     };
 
@@ -49,7 +43,7 @@ export default function AttentionScreen2({ navigation, route }) {
             <AttentionWarningView
                 title={t("areUSure")}
                 mainIcon={<SvgIcons.Polygon height={hp(8)} width={hp(8)} />}
-                description={t.attention2Description}
+                description={t("attention2Description")}
                 showButton1
                 showButton2
                 firstBtnTitle={t("proceed")}

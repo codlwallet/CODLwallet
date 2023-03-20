@@ -8,8 +8,10 @@ import FontText from '../../components/common/FontText'
 import Button from '../../components/common/Button'
 import Header from '../../components/common/Header'
 import WalletCard from '../../components/WalletCard'
+import { useTranslation } from 'react-i18next'
 
 export default function ConfirmSeedsScreen(props) {
+    const { t } = useTranslation();
     const { navigation } = props
     const [secondNumberValue, setSecondNumberValue] = useState()
     const [secondIndex, setSecondIndex] = useState(0)
@@ -28,10 +30,10 @@ export default function ConfirmSeedsScreen(props) {
 
     return (
         <View style={styles.container}>
-            <Header title={appConstant.confirmSeeds} showRightIcon RightIcon={'info'} showBackIcon onBackPress={handleBackClick} />
+            <Header title={t("confirmSeeds")} showRightIcon RightIcon={'info'} showBackIcon onBackPress={handleBackClick} />
             <View style={styles.subContainer}>
                 <WalletCard style={styles.walletCardContainer}
-                    title={'2th seed'}
+                    title={t('2thSeed')}
                     headerStyle={{ borderColor: colors.black, top: hp(-3) }}
                     titleColor={'black'}
                     children={
@@ -59,7 +61,7 @@ export default function ConfirmSeedsScreen(props) {
                     }
                 />
                 <WalletCard style={styles.walletCardContainer}
-                    title={'6th seed'}
+                    title={t('6thSeed')}
                     headerStyle={{ borderColor: colors.black, top: hp(-3) }}
                     titleColor={'black'}
                     children={
@@ -87,7 +89,7 @@ export default function ConfirmSeedsScreen(props) {
                     }
                 />
                 <WalletCard style={styles.walletCardContainer}
-                    title={'12th seed'}
+                    title={t('12thSeed')}
                     headerStyle={{ borderColor: colors.black, top: hp(-3) }}
                     titleColor={'black'}
                     children={
@@ -126,7 +128,7 @@ export default function ConfirmSeedsScreen(props) {
                 onPress={handleConfirmClick}
                 style={styles.button}>
                 <FontText name={"inter-medium"} size={normalize(22)} color="black">
-                    {appConstant.confirm}
+                    {t("confirm")}
                 </FontText>
             </Button>
         </View >
@@ -161,7 +163,6 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         flex: 1,
-
     },
     numberWiew: {
         backgroundColor: colors.white,
