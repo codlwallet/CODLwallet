@@ -93,4 +93,8 @@ module.exports = {
   startRecoveryCheck: 'Start Recovery Check',
   createAccount: 'Create Account',
   selectAccount: 'Select Account',
+  accountDetails: 'Account Details',
+  accountList: 'Account List',
+  accountReorder: 'Account Reorder',
+  connectWallet: 'Connect Wallet',
 };

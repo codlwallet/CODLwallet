@@ -28,6 +28,7 @@ import RedHideEye from './svgs/RedHideEye.svg';
 import DotIcon from './svgs/DotIcon.svg';
 import RedShowEye from './svgs/RedShowEye.svg';
 import BlackRightArrow from './svgs/BlackRightArrow.svg';
+import Dog from './svgs/Dog.svg';
 
 export default {
   Logo,
@@ -59,4 +60,5 @@ export default {
   DotIcon,
   RedShowEye,
   BlackRightArrow,
+  Dog,
 };

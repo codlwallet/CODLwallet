@@ -9,7 +9,7 @@ import { useTranslation } from 'react-i18next'
 import { accountData } from '../../constants/data'
 import Button from '../../components/common/Button'
 
-export default function SelectAccountScreen({ navigation }) {
+export default function SelectAccountScreen({ navigation, route }) {
     const { t } = useTranslation();
     const [selectIndex, setSelectIndex] = useState()
     const [btnValue, setBtnValue] = useState(t("select"))
@@ -25,6 +25,7 @@ export default function SelectAccountScreen({ navigation }) {
 
     const backAction = () => {
         navigation.goBack()
+        route.params.onGoBack();
         return true;
     };
 
@@ -34,6 +35,7 @@ export default function SelectAccountScreen({ navigation }) {
 
     const handleSelectClick = () => {
         navigation.goBack()
+        route.params.onGoBack();
     }
 
     return (
@@ -44,7 +46,6 @@ export default function SelectAccountScreen({ navigation }) {
                     return (
                         <TouchableOpacity key={index} style={[styles.buttonContainer, { backgroundColor: index == selectIndex ? colors.white : colors.gray }]} onPress={() => {
                             setSelectIndex(index)
-
                             // setWalletNameFocus(false)
                         }}>
                             <View style={[styles.numberContainer, { backgroundColor: index == selectIndex ? colors.black : colors.white }]}>
@@ -52,7 +53,7 @@ export default function SelectAccountScreen({ navigation }) {
                                     {item?.id}
                                 </FontText>
                             </View>
-                            <FontText name={"inter-regular"} size={normalize(22)} color={index == selectIndex ? 'black' : 'white'} pRight={wp(16)} >
+                            <FontText name={"inter-regular"} size={normalize(22)} color={index == selectIndex ? 'black' : 'white'} pRight={index == selectIndex ? wp(16) : wp(26)} >
                                 {item?.name}
                             </FontText>
                             {index == selectIndex && <SvgIcons.BlackCheck height={hp(4)} width={hp(2.5)} />}
@@ -61,30 +62,32 @@ export default function SelectAccountScreen({ navigation }) {
                 })}
             </View>
             <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: hp(2) }}>
-                {isNext &&
+                {isNext ?
                     <Button
-                        width={wp(43)}
+                        width={wp(90)}
                         bgColor={btnValue === t("prev") ? 'white' : 'gray'}
                         type="highlight"
                         borderRadius={11}
-                        onPress={handleNextClick}
-                        buttonStyle={[styles.button,]}>
+                        onPress={() => setIsNext(!isNext)}
+                        buttonStyle={styles.button}>
                         <FontText name={"inter-medium"} size={normalize(22)} color={btnValue === t("next") ? "red" : 'white'}>
                             {t("prev")}
                         </FontText>
-                    </Button>}
-                <Button
-                    height={hp(8.5)}
-                    bgColor={btnValue === t("next") ? 'white' : 'gray'}
-                    type="highlight"
-                    width={isNext ? wp(43) : wp(95)}
-                    borderRadius={11}
-                    onPress={handleNextClick}
-                    buttonStyle={styles.button}>
-                    <FontText name={"inter-medium"} size={normalize(22)} color={btnValue === t("next") ? "red" : 'white'}>
-                        {t("next")}
-                    </FontText>
-                </Button>
+                    </Button>
+                    :
+                    <Button
+                        height={hp(8.5)}
+                        bgColor={btnValue === t("next") ? 'white' : 'gray'}
+                        type="highlight"
+                        width={isNext ? wp(43) : wp(95)}
+                        borderRadius={11}
+                        onPress={handleNextClick}
+                        buttonStyle={styles.button}>
+                        <FontText name={"inter-medium"} size={normalize(22)} color={btnValue === t("next") ? "red" : 'white'}>
+                            {t("next")}
+                        </FontText>
+                    </Button>
+                }
             </View>
             <Button
                 flex={null}
@@ -93,6 +96,7 @@ export default function SelectAccountScreen({ navigation }) {
                 type="highlight"
                 borderRadius={11}
                 width={wp(90)}
+                style={{ marginBottom: hp(2) }}
                 onPress={handleSelectClick}
                 buttonStyle={styles.button}>
                 <FontText name={"inter-medium"} size={normalize(22)} color={btnValue === t("select") ? "black" : 'white'}>

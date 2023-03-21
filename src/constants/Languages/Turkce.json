@@ -97,6 +97,12 @@
     "selectAccount": "Hesap Seç",
     "next": "Sonraki",
     "select": "Seçme",
-    "prev": "Önceki"
+    "prev": "Önceki",
+    "sign": "İmza",
+    "createNewAccount": "Yeni hesap oluştur",
+    "reorder": "Yeniden sırala",
+    "publicAddress": "Açık adres",
+    "connectWallet": "Cüzdanı Bağla",
+    "watchOnly": "Yalnızca İzle"
   }
 }

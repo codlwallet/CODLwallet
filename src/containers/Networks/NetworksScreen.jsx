@@ -32,7 +32,7 @@ export default function NetworksScreen({ navigation, route }) {
                                         item.name === 'Ethereum' ?
                                             <Image source={index === btnIndex ? item?.img : item.image} style={{ width: hp(4), height: hp(6.5) }} /> :
                                             item.name === 'Solana' ?
-                                                <Image source={item.image} style={{ height: hp(3.5), width: hp(3.5), tintColor: index === btnIndex ? '#495057' : colors.white }} /> :
+                                                <Image source={item.image} style={{ height: hp(3.5), width: hp(4.5), tintColor: index === btnIndex ? '#495057' : colors.white }} /> :
                                                 item.name === 'Avalanche' ?
                                                     <View style={{ backgroundColor: index === btnIndex ? colors.white : colors.gray }}>
                                                         <Image source={item.image} style={{ height: hp(7), width: hp(7), right: wp(2.5), }} />

@@ -28,6 +28,9 @@ const Header = props => {
     statusBarcolor,
     statusBarHidden,
     showHiddenTitle,
+    titleStyle,
+    titleWithIcon,
+    titleIcon,
   } = props;
 
   return (
@@ -40,17 +43,19 @@ const Header = props => {
       />
       <View style={[styles.container, style]}>
         {showBackIcon && (
-          <TouchableOpacity onPress={onBackPress} style={{padding: 5}}>
+          <TouchableOpacity onPress={onBackPress} style={styles.iconContainer}>
             <SvgIcons.BackArrow style={styles.arrow} />
           </TouchableOpacity>
         )}
         <View
           style={[
+            titleStyle,
             styles.titleContainer,
             {
               marginLeft: marginLeft,
             },
           ]}>
+          {titleWithIcon && titleIcon}
           {title != null && (
             <FontText
               style={styles.title}
@@ -105,6 +110,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: wp(4),
     paddingTop: Platform.OS === 'android' ? hp(5) : hp(4),
     width: wp(100),
+    alignSelf: 'center',
   },
   text: {
     fontWeight: 'bold',

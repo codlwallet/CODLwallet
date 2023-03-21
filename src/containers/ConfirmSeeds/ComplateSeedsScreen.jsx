@@ -17,7 +17,7 @@ export default function ComplateSeedsScreen({ navigation, route }) {
                 navigation.navigate(appConstant.main)
             }
             else {
-                navigation.navigate(appConstant.main)
+                navigation.navigate(appConstant.welcomePurchase)
             }
         }, 2000);
     },)

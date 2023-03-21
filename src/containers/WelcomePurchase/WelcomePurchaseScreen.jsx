@@ -12,7 +12,7 @@ import Button from '../../components/common/Button'
 import WalletCard from '../../components/WalletCard'
 import { useTranslation } from 'react-i18next'
 
-export default function WelcomePurchaseScreen({ navigation }) {
+export default function WelcomePurchaseScreen({ navigation, route }) {
     const { t } = useTranslation();
     const [password, setPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false)
@@ -74,12 +74,12 @@ export default function WelcomePurchaseScreen({ navigation }) {
         <View style={styles.container}>
             <Header showRightIcon RightIcon={'info'} title={t("welcome")} />
             <View style={[styles.subContainer, { bottom: isEnabled ? wp(18) : 0 }]}>
-                <View style={styles.buttonConatiner}>
+                <TouchableOpacity style={styles.buttonConatiner} onPress={handleEnterClick}>
                     <FontText size={normalize(22)} color={'white'} name={'inter-regular'}>
                         {'Alice’s Crypto'}
                     </FontText>
                     <SvgIcons.RightBackArrow height={hp(3)} width={hp(2)} />
-                </View>
+                </TouchableOpacity>
                 {isEnabled && <Input
                     withRightIcon
                     autoFocus={true}

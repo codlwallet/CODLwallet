@@ -27,14 +27,15 @@ import RecoveryCheckScreen from '../containers/Recovery/RecoveryCheckScreen';
 import HiddenWalletWarningScreen from '../containers/WelcomePurchase/HiddenWalletWarningScreen';
 import CreateAccountScreen from '../containers/CreateAccount/CreateAccountScreen';
 import SelectAccountScreen from '../containers/SelectAccount/SelectAccountScreen';
+import AccountDetailsScreen from '../containers/AccountDetails/AccountDetailsScreen';
+import AccountListScreen from '../containers/AccountList/AccountListScreen';
+import ConnectWalletScreen from '../containers/ConnectWallet/ConnectWalletScreen';
 
 const Route = () => {
     const Stack = createNativeStackNavigator();
     return (
         <NavigationContainer>
             <Stack.Navigator screenOptions={{ headerShown: false }}>
-                {/* <Stack.Screen name={Constant.selectAccount} component={SelectAccountScreen} /> */}
-
                 <Stack.Screen name={Constant.welcome} component={WelcomeScreen} />
                 <Stack.Screen name={Constant.home} component={HomeScreen} />
                 <Stack.Screen name={Constant.setupUser} component={SetupUserScreen} />
@@ -60,7 +61,9 @@ const Route = () => {
                 <Stack.Screen name={Constant.hiddenWallet} component={HiddenWalletWarningScreen} />
                 <Stack.Screen name={Constant.createAccount} component={CreateAccountScreen} />
                 <Stack.Screen name={Constant.selectAccount} component={SelectAccountScreen} />
-
+                <Stack.Screen name={Constant.accountDetails} component={AccountDetailsScreen} />
+                <Stack.Screen name={Constant.accountList} component={AccountListScreen} />
+                <Stack.Screen name={Constant.connectWallet} component={ConnectWalletScreen} />
             </Stack.Navigator>
         </NavigationContainer>
     )

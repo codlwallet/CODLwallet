@@ -16,6 +16,17 @@ module.exports = {
     },
   ],
 
+  walletListData: [
+    {
+      id: 0,
+      name: i18n.t('createNewAccount'),
+    },
+    {
+      id: 1,
+      name: i18n.t('reorderAccounts'),
+    },
+  ],
+
   languageData: [
     {
       id: 0,

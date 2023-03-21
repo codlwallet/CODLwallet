@@ -1,4 +1,4 @@
-import { BackHandler, StyleSheet, TouchableOpacity, View } from 'react-native'
+import { BackHandler, Keyboard, StyleSheet, TouchableOpacity, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import colors from '../../assets/colors'
 import { hp, normalize, wp } from '../../helper/responsiveScreen'
@@ -9,12 +9,14 @@ import SvgIcons from '../../assets/SvgIcons'
 import FontText from '../../components/common/FontText'
 import Button from '../../components/common/Button'
 import appConstant from '../../helper/appConstant'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 export default function CreateAccountScreen({ navigation }) {
   const { t } = useTranslation();
   const [walletName, setWalletName] = useState('')
-  const [walletNameFocus, setWalletNameFocus] = useState(true)
+  const [walletNameFocus, setWalletNameFocus] = useState(false)
   const [isSelect, setIsSelect] = useState(false)
+  const [selectWallet, setSelectWallet] = useState(false)
 
   useEffect(() => {
     BackHandler.addEventListener('hardwareBackPress', backAction);
@@ -24,7 +26,7 @@ export default function CreateAccountScreen({ navigation }) {
   }, []);
 
   const backAction = () => {
-    navigation.goBack()
+    navigation.navigate(appConstant.main)
     return true;
   };
 
@@ -42,19 +44,37 @@ export default function CreateAccountScreen({ navigation }) {
     setIsSelect(true)
   }
 
-  const handleCreateClick = () => {
+  const handleCreateClick = async () => {
+    navigation.navigate(appConstant.accountDetails, {
+      walletName: walletName
+    })
+    const data = {
+      walletName: walletName
+    }
+    await AsyncStorage.setItem("WalletList", JSON.stringify(data))
+  }
 
+  const handleSelectWalletClick = () => {
+    setIsSelect(true)
+    setWalletNameFocus(false)
+    navigation.navigate(appConstant.selectAccount, {
+      onGoBack: () => {
+        setWalletNameFocus(false)
+        setIsSelect(false)
+        setSelectWallet(true)
+      },
+    })
   }
 
   return (
-    <View style={styles.container}>
+    <View style={styles.container} onStartShouldSetResponder={() => Keyboard.dismiss()}>
       <Header title={t("createAccount")} showRightIcon RightIcon={'info'} showBackIcon onBackPress={backAction} statusBarcolor={colors.black} style={{ alignSelf: 'center' }} />
       <View style={styles.subContainer}>
         <Input
           withRightIcon={walletName !== '' ? true : false}
           placeholder={t("walletName")}
           value={walletName}
-          editable={walletNameFocus ? true : false}
+          // editable={walletNameFocus ? true : false}
           maxLength={15}
           placeholderTextColor={walletNameFocus ? colors.black : colors.white}
           onChangeText={setWalletName}
@@ -88,23 +108,17 @@ export default function CreateAccountScreen({ navigation }) {
             </TouchableOpacity>
           }
         />
-        <TouchableOpacity style={[styles.buttonContainer, { backgroundColor: isSelect ? colors.white : colors.gray }]} onPress={() => {
-          console.log("sdhgs")
-          setIsSelect(true)
-          setWalletNameFocus(false)
-          navigation.navigate(appConstant.selectAccount)
-        }}>
+        <TouchableOpacity style={[styles.buttonContainer, { backgroundColor: isSelect ? colors.white : colors.gray }]} onPress={handleSelectWalletClick}>
           <View style={[styles.numberContainer, { backgroundColor: isSelect ? colors.black : colors.white }]}>
             <FontText name={"inter-bold"} size={normalize(15)} color={isSelect ? 'white' : 'black'}>
               {"0"}
             </FontText>
           </View>
-          <FontText name={"inter-regular"} size={normalize(22)} color={isSelect ? 'black' : 'white'} pRight={wp(16)} >
+          <FontText name={"inter-regular"} size={normalize(22)} color={isSelect ? 'black' : 'white'} pRight={!selectWallet ? wp(25) : wp(16)} >
             {"0xa94bb...a710"}
           </FontText>
-          {isSelect && <SvgIcons.BlackRightArrow height={hp(3)} width={hp(2.5)} />
-            // <SvgIcons.Check height={hp(4)} width={hp(2.5)} />
-          }
+          {isSelect && <SvgIcons.BlackRightArrow height={hp(3)} width={hp(2.5)} />}
+          {selectWallet && !isSelect && <SvgIcons.Check height={hp(4)} width={hp(2.5)} />}
         </TouchableOpacity>
       </View>
       <Button

@@ -9,20 +9,26 @@ import Button from '../../components/common/Button'
 import appConstant from '../../helper/appConstant'
 import SvgIcons from '../../assets/SvgIcons'
 import { useTranslation } from 'react-i18next'
+import AsyncStorage from '@react-native-async-storage/async-storage'
+import { useFocusEffect } from '@react-navigation/native'
 
 export default function MainScreen({ navigation, route }) {
     const { t } = useTranslation();
     const hidden = route?.params?.hidden
     const [hideMenu, setHideMenu] = useState(false);
     const [showNetworks, setShowNetworks] = useState(false)
+    const [walletData, setWalletData] = useState()
 
-    const handleConnectClick = () => {
 
-    }
-
-    const handleLockDeviceClick = () => {
-
-    }
+    useFocusEffect(
+        React.useCallback(() => {
+            async function getWalletData() {
+                const data = await AsyncStorage.getItem('WalletList');
+                setWalletData(JSON.parse(data))
+            }
+            getWalletData()
+        }, []),
+    );
 
     useEffect(() => {
         BackHandler.addEventListener('hardwareBackPress', backAction);
@@ -32,9 +38,15 @@ export default function MainScreen({ navigation, route }) {
     }, []);
 
     const backAction = () => {
-        navigation.goBack()
+        navigation.navigate(appConstant.welcome, {
+            from: appConstant.welcomePurchase,
+        });
         return true;
     };
+
+    const handleConnectClick = () => {
+        navigation.navigate(appConstant.connectWallet)
+    }
 
     const handleMenuListClick = (item) => {
         if (item.name === t("changeName")) {
@@ -65,9 +77,16 @@ export default function MainScreen({ navigation, route }) {
     }
 
     const handleMainListClick = (item) => {
-        if (item.name === t("ethereum")) {
+        // if (item.name === t("ethereum")) {
+        if (!walletData?.walletName) {
             navigation.navigate(appConstant.createAccount)
         }
+        else {
+            navigation.navigate(appConstant.accountDetails, {
+                walletName: walletData?.walletName
+            })
+        }
+        // }
     }
 
     return (
@@ -118,13 +137,11 @@ export default function MainScreen({ navigation, route }) {
             </View>
             <Button
                 flex={null}
-                height={hp(8.5)}
-                width="90%"
                 type="highlight"
                 borderRadius={11}
                 bgColor="white"
-                onPress={!hideMenu ? handleConnectClick : handleLockDeviceClick}
-                style={styles.button}>
+                onPress={!hideMenu ? handleConnectClick : backAction}
+                buttonStyle={styles.button}>
                 <FontText name={"inter-medium"} size={normalize(22)} color="black">
                     {!hideMenu ? t("connect") : t("lockDevice")}
                 </FontText>
@@ -157,6 +174,7 @@ const styles = StyleSheet.create({
     button: {
         backgroundColor: colors.white,
         marginBottom: hp(3),
-        alignItems: 'center',
+        width: wp(90),
+        height: hp(8.5)
     }
 })

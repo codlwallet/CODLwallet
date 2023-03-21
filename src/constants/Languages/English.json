@@ -19,12 +19,12 @@
     "understand": "I Understand",
     "numberOfWords": "number of words",
     "areUSure": "Are You Sure?",
-    "attention2Description": "If you go bac', you will lose the created seeds and recreate new ones.",
+    "attention2Description": "If you go back, you will lose the created seeds and recreate new ones.",
     "checkAgain": "Check Again",
     "recoverySeeds": "Recovery seed",
     "attentionScreen3": "attentionScreen3",
     "secureSeeds": "Did you secure recovery seeds?",
-    "attention3Description": "Please', write the seed words in the correct order and store them in a secure place.",
+    "attention3Description": "Please, write the seed words in the correct order and store them in a secure place.",
     "confirmSeeds": "Confirm Seeds",
     "complateSeeds": "Complate Seeds",
     "confirm": "Confirm",
@@ -98,6 +98,13 @@
     "selectAccount": "Select Account",
     "next": "Next",
     "select": "Select",
-    "prev": "Prev"
+    "prev": "Prev",
+    "sign": "Sign",
+    "createNewAccount": "Create New Account",
+    "reorderAccounts": "Reorder Accounts",
+    "reorder": "Reorder",
+    "publicAddress": "Public Address",
+    "connectWallet": "Connect Wallet",
+    "watchOnly": "Watch Only"
   }
 }
