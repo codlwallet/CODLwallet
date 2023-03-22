@@ -30,12 +30,18 @@ import SelectAccountScreen from '../containers/SelectAccount/SelectAccountScreen
 import AccountDetailsScreen from '../containers/AccountDetails/AccountDetailsScreen';
 import AccountListScreen from '../containers/AccountList/AccountListScreen';
 import ConnectWalletScreen from '../containers/ConnectWallet/ConnectWalletScreen';
+import ScanQrScreen from '../containers/ScanQr/ScanQrScreen';
+import SignTransactionScreen from '../containers/SignTransaction/SignTransactionScreen';
+import ConfirmSingingScreen from '../containers/ConfirmSinging/ConfirmSingingScreen';
 
 const Route = () => {
     const Stack = createNativeStackNavigator();
     return (
         <NavigationContainer>
             <Stack.Navigator screenOptions={{ headerShown: false }}>
+                <Stack.Screen name={Constant.confirmSinging} component={ConfirmSingingScreen} />
+
+
                 <Stack.Screen name={Constant.welcome} component={WelcomeScreen} />
                 <Stack.Screen name={Constant.home} component={HomeScreen} />
                 <Stack.Screen name={Constant.setupUser} component={SetupUserScreen} />
@@ -64,6 +70,11 @@ const Route = () => {
                 <Stack.Screen name={Constant.accountDetails} component={AccountDetailsScreen} />
                 <Stack.Screen name={Constant.accountList} component={AccountListScreen} />
                 <Stack.Screen name={Constant.connectWallet} component={ConnectWalletScreen} />
+                <Stack.Screen name={Constant.scanQr} component={ScanQrScreen} />
+                <Stack.Screen name={Constant.signTransaction} component={SignTransactionScreen} />
+                {/* <Stack.Screen name={Constant.confirmSinging} component={ConfirmSingingScreen} /> */}
+
+
             </Stack.Navigator>
         </NavigationContainer>
     )

@@ -11,7 +11,7 @@ import appConstant from '../../helper/appConstant'
 
 export default function AccountDetailsScreen({ navigation, route }) {
     const { t } = useTranslation();
-    const { walletName } = route?.params
+    const walletName = route?.params?.walletName
 
     useEffect(() => {
         BackHandler.addEventListener('hardwareBackPress', backAction);
@@ -24,9 +24,8 @@ export default function AccountDetailsScreen({ navigation, route }) {
         navigation.goBack()
         return true;
     };
-
     const handleSignClick = () => {
-
+        navigation.navigate(appConstant.scanQr)
     }
 
     return (

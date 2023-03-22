@@ -105,6 +105,16 @@
     "reorder": "Reorder",
     "publicAddress": "Public Address",
     "connectWallet": "Connect Wallet",
-    "watchOnly": "Watch Only"
+    "watchOnly": "Watch Only",
+    "scanQr": "Scan QR",
+    "signTransaction": "Sign Transaction",
+    "tokenTransfer": "Token Transfer",
+    "from": "From",
+    "to": "To",
+    "Fees": "Fees",
+    "amount": "Amount",
+    "reject": "Reject",
+    "confirmSigning": "Confirm Signing",
+    "back": "Back"
   }
 }

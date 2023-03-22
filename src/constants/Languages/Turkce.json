@@ -103,6 +103,16 @@
     "reorder": "Yeniden sırala",
     "publicAddress": "Açık adres",
     "connectWallet": "Cüzdanı Bağla",
-    "watchOnly": "Yalnızca İzle"
+    "watchOnly": "Yalnızca İzle",
+    "scanQr": "QR'yi tarayın",
+    "signTransaction": "İmza İşlemi",
+    "tokenTransfer": "Jeton Transferi",
+    "from": "İtibaren",
+    "to": "İle",
+    "Fees": "ücretler",
+    "amount": "Miktar",
+    "reject": "Reddetmek",
+    "confirmSigning": "İmzalamayı Onayla",
+    "back": "Back"
   }
 }

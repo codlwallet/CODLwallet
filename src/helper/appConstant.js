@@ -97,4 +97,7 @@ module.exports = {
   accountList: 'Account List',
   accountReorder: 'Account Reorder',
   connectWallet: 'Connect Wallet',
+  scanQr: 'Scan QR',
+  signTransaction: 'Sign Transaction',
+  confirmSinging: 'Confirm Singing',
 };

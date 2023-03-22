@@ -26,9 +26,7 @@ export default function AccountDetailsScreen({ navigation, route }) {
         return true;
     };
 
-    const handleSignClick = () => {
 
-    }
 
     return (
         <View style={styles.container}>

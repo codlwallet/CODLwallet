@@ -10,13 +10,16 @@ import FontText from '../../components/common/FontText'
 import Button from '../../components/common/Button'
 import appConstant from '../../helper/appConstant'
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import { useFocusEffect } from '@react-navigation/native'
 
-export default function CreateAccountScreen({ navigation }) {
+export default function CreateAccountScreen({ navigation, route }) {
   const { t } = useTranslation();
+  const name = route?.params?.name
   const [walletName, setWalletName] = useState('')
   const [walletNameFocus, setWalletNameFocus] = useState(false)
   const [isSelect, setIsSelect] = useState(false)
   const [selectWallet, setSelectWallet] = useState(false)
+  const [accountData, setAccountData] = useState([])
 
   useEffect(() => {
     BackHandler.addEventListener('hardwareBackPress', backAction);
@@ -25,10 +28,23 @@ export default function CreateAccountScreen({ navigation }) {
     };
   }, []);
 
+  useFocusEffect(
+    React.useCallback(() => {
+      async function getWalletData() {
+        const data = await AsyncStorage.getItem('WalletList');
+        setAccountData(JSON.parse(data))
+      }
+      getWalletData()
+    }, []),
+  );
+
+
   const backAction = () => {
     navigation.navigate(appConstant.main)
     return true;
   };
+
+
 
   const onWalletNameFocus = () => {
     setWalletNameFocus(true)
@@ -45,13 +61,59 @@ export default function CreateAccountScreen({ navigation }) {
   }
 
   const handleCreateClick = async () => {
-    navigation.navigate(appConstant.accountDetails, {
-      walletName: walletName
-    })
-    const data = {
-      walletName: walletName
+    console.log("accountData........??????", typeof accountData,)
+    if (accountData !== null) {
+      accountData.map((item) => {
+        if (item?.name === name) {
+          const data = {
+            walletName: walletName,
+            walletAddress: '0xa94b3c662eE5602A3308604a3fB9A8FDd5caa710'
+          }
+          item?.accountDetails?.push(data)
+        }
+        else {
+          const data =
+          {
+            name: name,
+            accountDetails: [
+              {
+                walletName: walletName,
+                walletAddress: '0xa94b3c662eE5602A3308604a3fB9A8FDd5caa710'
+              }
+            ]
+          }
+
+          item?.push(data)
+        }
+      })
+      setAccountData([...accountData])
+
+      await AsyncStorage.setItem("WalletList", JSON.stringify(accountData))
+      navigation.navigate(appConstant.accountDetails, {
+        walletName: walletName
+      })
     }
-    await AsyncStorage.setItem("WalletList", JSON.stringify(data))
+    else {
+      const data = [
+        {
+          name: name,
+          accountDetails: [
+            {
+              walletName: walletName,
+              walletAddress: '0xa94b3c662eE5602A3308604a3fB9A8FDd5caa710'
+            }
+          ]
+        },
+      ]
+      console.log("data......", data)
+      await AsyncStorage.setItem("WalletList", JSON.stringify(data))
+      navigation.navigate(appConstant.accountDetails, {
+        walletName: walletName
+      })
+
+    }
+
+
   }
 
   const handleSelectWalletClick = () => {

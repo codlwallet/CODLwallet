@@ -361,27 +361,32 @@ module.exports = {
     {
       id: 0,
       name: i18n.t('bitcoin'),
+      value: appConstant.bitcoin,
       image: require('../assets/images/BI.png'),
     },
     {
       id: 1,
       name: i18n.t('ethereum'),
+      value: appConstant.ethereum,
       image: require('../assets/images/EV.png'),
       img: require('../assets/images/EVblack.png'),
     },
     {
       id: 2,
       name: i18n.t('solana'),
+      value: appConstant.solana,
       image: require('../assets/images/SO.png'),
     },
     {
       id: 3,
       name: i18n.t('avalanche'),
+      value: appConstant.avalanche,
       image: require('../assets/images/img.png'),
     },
     {
       id: 4,
       name: i18n.t('polygon'),
+      value: appConstant.polygon,
       image: require('../assets/images/PO.png'),
     },
   ],
@@ -460,31 +465,36 @@ module.exports = {
   ],
 };
 
-export const mainData = [
-  {
-    id: 0,
-    name: i18n.t('bitcoin'),
-    image: require('../assets/images/BI.png'),
-  },
-  {
-    id: 1,
-    name: i18n.t('ethereum'),
-    image: require('../assets/images/EV.png'),
-    img: require('../assets/images/EVblack.png'),
-  },
-  {
-    id: 2,
-    name: i18n.t('solana'),
-    image: require('../assets/images/SO.png'),
-  },
-  {
-    id: 3,
-    name: i18n.t('avalanche'),
-    image: require('../assets/images/img.png'),
-  },
-  {
-    id: 4,
-    name: i18n.t('polygon'),
-    image: require('../assets/images/PO.png'),
-  },
-];
+// export const mainData = [
+//   {
+//     id: 0,
+//     name: i18n.t('bitcoin'),
+//     value: appConstant.bitcoin,
+//     image: require('../assets/images/BI.png'),
+//   },
+//   {
+//     id: 1,
+//     name: i18n.t('ethereum'),
+//     value: appConstant.ethereum,
+//     image: require('../assets/images/EV.png'),
+//     img: require('../assets/images/EVblack.png'),
+//   },
+//   {
+//     id: 2,
+//     name: i18n.t('solana'),
+//     value: appConstant.solana,
+//     image: require('../assets/images/SO.png'),
+//   },
+//   {
+//     id: 3,
+//     name: i18n.t('avalanche'),
+//     value: appConstant.avalanche,
+//     image: require('../assets/images/img.png'),
+//   },
+//   {
+//     id: 4,
+//     name: i18n.t('polygon'),
+//     value: appConstant.polygon,
+//     image: require('../assets/images/PO.png'),
+//   },
+// ];

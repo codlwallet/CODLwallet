@@ -17,14 +17,13 @@ export default function MainScreen({ navigation, route }) {
     const hidden = route?.params?.hidden
     const [hideMenu, setHideMenu] = useState(false);
     const [showNetworks, setShowNetworks] = useState(false)
-    const [walletData, setWalletData] = useState()
-
+    const [accountDetails, setAccountDetails] = useState([])
 
     useFocusEffect(
         React.useCallback(() => {
             async function getWalletData() {
                 const data = await AsyncStorage.getItem('WalletList');
-                setWalletData(JSON.parse(data))
+                setAccountDetails(JSON.parse(data))
             }
             getWalletData()
         }, []),
@@ -77,16 +76,22 @@ export default function MainScreen({ navigation, route }) {
     }
 
     const handleMainListClick = (item) => {
-        // if (item.name === t("ethereum")) {
-        if (!walletData?.walletName) {
-            navigation.navigate(appConstant.createAccount)
-        }
-        else {
-            navigation.navigate(appConstant.accountDetails, {
-                walletName: walletData?.walletName
+        console.log("acc", accountDetails)
+        if (accountDetails?.length === 0 || !accountDetails) {
+            console.log("true")
+            navigation.navigate(appConstant.createAccount, {
+                name: item?.value
             })
         }
-        // }
+        else {
+            // console.log("false")
+            accountDetails.map((i) => {
+                navigation.navigate(appConstant.accountDetails, {
+                    walletName: i?.accountDetails[0].walletName
+                })
+            })
+
+        }
     }
 
     return (
@@ -99,13 +104,13 @@ export default function MainScreen({ navigation, route }) {
                             return (
                                 <TouchableOpacity style={styles.buttonContainer} key={index} onPress={() => handleMainListClick(item)} >
                                     <View>
-                                        {item.name === t("bitcoin") ?
+                                        {item.value === appConstant.bitcoin ?
                                             <SvgIcons.Bitcoin height={hp(6)} width={hp(4)} /> :
-                                            item.name === t("ethereum") ?
+                                            item.value === appConstant.ethereum ?
                                                 <Image source={item.image} style={{ width: hp(4), height: hp(6.5), }} /> :
-                                                item.name === t("solana") ?
+                                                item.value === appConstant.solana ?
                                                     <SvgIcons.Solana height={hp(6)} width={hp(4)} /> :
-                                                    item.name === t("avalanche") ?
+                                                    item.value === appConstant.avalanche ?
                                                         <View style={{ backgroundColor: colors.gray }}>
                                                             <Image source={item.image} style={{ height: hp(7), width: hp(7), right: wp(2.5) }} />
                                                         </View> :

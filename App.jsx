@@ -6,6 +6,12 @@ import colors from './src/assets/colors';
 import Route from './src/navigation/route';
 import { store } from './src/redux/store/store';
 import './src/constants/i18n';
+import { LogBox } from "react-native";
+
+LogBox.ignoreLogs([
+  "ViewPropTypes will be removed",
+  "ColorPropType will be removed",
+])
 
 export default function App() {
 

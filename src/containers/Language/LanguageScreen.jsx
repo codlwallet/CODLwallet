@@ -41,12 +41,11 @@ export default function LanguageScreen({ navigation }) {
 
     return (
         <View style={styles.container}>
-            <Header title={t("setupUser")} showRightIcon RightIcon={'info'} showBackIcon onBackPress={() => navigation.goBack()} />
+            <Header title={t("language")} showRightIcon RightIcon={'info'} showBackIcon onBackPress={() => navigation.goBack()} />
             <View style={styles.buttonContainer}>
                 {languageData.map((item, index) => {
                     return (
                         <TouchableOpacity key={index} onPress={() => {
-                            console.log("sdhg")
                             setButtonValue(item?.name)
                             setButtonIndex(index)
                             setLanguage(item?.value)
