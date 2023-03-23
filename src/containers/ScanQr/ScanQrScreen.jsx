@@ -6,30 +6,26 @@ import Header from '../../components/common/Header'
 import { useTranslation } from 'react-i18next'
 import Button from '../../components/common/Button'
 import FontText from '../../components/common/FontText'
-import { Camera, useCameraDevices } from 'react-native-vision-camera'
+// import { Camera, useCameraDevices } from 'react-native-vision-camera'
 import appConstant from '../../helper/appConstant'
+import SvgIcons from '../../assets/SvgIcons'
+import BarcodeMask from 'react-native-barcode-mask'
 // import { BarcodeFormat, useScanBarcodes } from 'vision-camera-code-scanner'
 
 export default function ScanQrScreen({ navigation }) {
     const { t } = useTranslation();
     const camaraRef = useRef(null)
-    const devices = useCameraDevices();
-    const device = devices.back;
+    // const devices = useCameraDevices('wide-angle-camera')
+    // const device = devices.back
 
     const [barcode, setBarcode] = useState('');
     const [hasPermission, setHasPermission] = useState(false);
     const [isScanned, setIsScanned] = useState(false)
 
-    useEffect(() => {
-        checkCameraPermission();
-    }, []);
-
     // useEffect(() => {
-    //     toggleActiveState();
-    //     return () => {
-    //         barcodes;
-    //     };
-    // }, [barcodes])
+    //     checkCameraPermission();
+    // }, []);
+
 
     useEffect(() => {
         BackHandler.addEventListener('hardwareBackPress', backAction);
@@ -42,21 +38,9 @@ export default function ScanQrScreen({ navigation }) {
         return true;
     };
 
-    const checkCameraPermission = async () => {
-        const status = await Camera.getCameraPermissionStatus();
-        setHasPermission(status === 'authorized');
-    };
-
-    // const toggleActiveState = async () => {
-    //     if (barcodes && barcodes.length > 0 && isScanned === false) {
-    //         setIsScanned(true);
-    //         barcodes.forEach(async (scannedBarcode) => {
-    //             if (scannedBarcode.rawValue !== '') {
-    //                 setBarcode(scannedBarcode.rawValue);
-    //                 Alert.alert(barcode);
-    //             }
-    //         });
-    //     }
+    // const checkCameraPermission = async () => {
+    //     const status = await Camera.getCameraPermissionStatus();
+    //     setHasPermission(status === 'authorized');
     // };
 
     return (
@@ -65,21 +49,28 @@ export default function ScanQrScreen({ navigation }) {
             <View style={styles.subContainer}>
                 <TouchableOpacity onPress={() => navigation.navigate(appConstant.signTransaction)} style={styles.scannerContainer}>
                     {/* <Camera
-                    style={StyleSheet.absoluteFill}
-                    device={device}
-                    isActive={!isScanned}
-                    frameProcessor={frameProcessor}
-                    frameProcessorFps={5}
-                    audio={false}
-                /> */}
+                        style={StyleSheet.absoluteFill}
+                        device={device}
+                        isActive={true}
+                    /> */}
+                    <BarcodeMask
+                        height={hp(45)}
+                        width={hp(45)}
+                        showAnimatedLine={false}
+                        // edgeRadius={15}
+                        edgeHeight={wp(20)}
+                        edgeWidth={wp(20)}
+                        edgeBorderWidth={5}
+                        edgeColor={colors.white}
+                        backgroundColor={"#191919"}
+                    />
                 </TouchableOpacity>
-
             </View>
             <View style={styles.bottomView}>
-                <Image source={require('../../assets/images/EV.png')} style={styles.image} />
-                <FontText name={"inter-regular"} size={normalize(22)} color="white" pLeft={wp(4)} style={{ width: wp(75) }}>
-                    {'0x9b4545d9214097DBE61c984EB2AB83C6e86'}
+                <FontText name={"inter-regular"} size={normalize(22)} color="white"  >
+                    {'Metamask Wallet'}
                 </FontText>
+                <SvgIcons.Dog />
             </View>
             <Button
                 flex={null}
@@ -107,15 +98,12 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-
     },
-
     scannerContainer: {
-        backgroundColor: colors.gray,
         height: hp(45),
         width: hp(45),
-        borderRadius: wp(4),
-
+        borderRadius: 10,
+        backgroundColor: colors.gray
     },
     bottomView: {
         backgroundColor: colors.gray,
@@ -126,7 +114,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: "space-between",
-        paddingHorizontal: wp(4)
+        paddingHorizontal: wp(4),
     },
     image: {
         width: hp(3.5),

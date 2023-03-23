@@ -7,6 +7,7 @@ import Button from '../../components/common/Button'
 import FontText from '../../components/common/FontText'
 import { useTranslation } from 'react-i18next'
 import appConstant from '../../helper/appConstant'
+import TransactionCard from '../../components/TransactionCard'
 
 export default function SignTransactionScreen({ navigation }) {
     const { t } = useTranslation();
@@ -18,6 +19,13 @@ export default function SignTransactionScreen({ navigation }) {
             BackHandler.removeEventListener('hardwareBackPress', backAction);
         };
     }, []);
+
+    const details = {
+        from: '0xa94b3c662eE5602A3308604a3fB9A8FDd5caa710',
+        to: '0xa94b3c662eE5602A3308604a3fB9A8FDd5caa710',
+        fees: '0.0000315 ETH',
+        amount: '0.001 ETH'
+    }
 
     const handleSignClick = () => {
         setBtnValue(t("sign"))
@@ -34,48 +42,10 @@ export default function SignTransactionScreen({ navigation }) {
         <View style={styles.container}>
             <Header title={t("signTransaction")} showRightIcon statusBarcolor={colors.black} style={{ alignSelf: 'center' }} RightIcon={'info'} />
             <View style={styles.subContainer}>
-                <View style={styles.detailsContainer}>
-                    <View style={styles.detailsHeaderView}>
-                        <FontText name={"inter-bold"} size={normalize(11)} color="black" textTransform={'uppercase'}>
-                            {t("tokenTransfer")}
-                        </FontText>
-                    </View>
-                    <View style={styles.infoView}>
-                        <View style={styles.textConatiner}>
-                            <FontText name={"inter-bold"} size={normalize(19)} color="white" style={{ width: wp(20) }}>
-                                {t("from")}
-                            </FontText>
-                            <FontText name={"inter-regular"} size={normalize(19)} color="white" style={styles.text}>
-                                {"0xa94b3c662eE5602A3308604a3fB9A8FDd5caa710"}
-                            </FontText>
-                        </View>
-                        <View style={styles.textConatiner}>
-                            <FontText name={"inter-bold"} size={normalize(19)} color="white" style={{ width: wp(20) }}>
-                                {t("to")}
-                            </FontText>
-                            <FontText name={"inter-regular"} size={normalize(19)} color="white" style={styles.text}>
-                                {"0xa94b3c662eE5602A3308604a3fB9A8FDd5caa710"}
-                            </FontText>
-                        </View>
-                        <View style={styles.textConatiner}>
-                            <FontText name={"inter-bold"} size={normalize(19)} color="white" style={{ width: wp(20) }}>
-                                {t("fees")}
-                            </FontText>
-                            <FontText name={"inter-regular"} size={normalize(19)} color="white" style={{ width: hp(29) }} textAlign={'right'} >
-                                {'0.0000315 ETH'}
-                            </FontText>
-                        </View>
-                        <View style={styles.textConatiner}>
-                            <FontText name={"inter-bold"} size={normalize(19)} color="white" style={{ width: wp(24) }}>
-                                {t("amount")}
-                            </FontText>
-                            <FontText name={"inter-bold"} size={normalize(19)} color="white" style={{ width: hp(27) }} textAlign={'right'}>
-                                {'0.001 ETH'}
-                            </FontText>
-                        </View>
-
-                    </View>
-                </View>
+                <TransactionCard
+                    item={details}
+                    headerTitle={t("tokenTransfer")}
+                />
             </View>
 
             <Button
@@ -131,7 +101,6 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     infoView: {
-        // backgroundColor: 'red',
         width: hp(40)
     },
     textConatiner: {
@@ -139,7 +108,6 @@ const styles = StyleSheet.create({
         marginTop: hp(3)
     },
     text: {
-
         width: hp(30)
     },
 

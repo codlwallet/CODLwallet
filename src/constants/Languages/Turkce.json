@@ -113,6 +113,9 @@
     "amount": "Miktar",
     "reject": "Reddetmek",
     "confirmSigning": "İmzalamayı Onayla",
-    "back": "Back"
+    "back": "Back",
+    "transactionSigned": "İşlem İmzalandı",
+    "broadcastTransaction": "Yayın İşlemi",
+    "signedTX": "imzalı TX"
   }
 }

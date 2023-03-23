@@ -8,11 +8,14 @@ import { hp, normalize, wp } from '../../helper/responsiveScreen'
 import { useTranslation } from 'react-i18next'
 import { accountData } from '../../constants/data'
 import Button from '../../components/common/Button'
+import appConstant from '../../helper/appConstant'
 
 export default function SelectAccountScreen({ navigation, route }) {
+    const name = route?.params?.name
     const { t } = useTranslation();
     const [selectIndex, setSelectIndex] = useState()
     const [btnValue, setBtnValue] = useState(t("select"))
+    const [walletId, setWalletId] = useState()
     const [isNext, setIsNext] = useState(false)
     const data = !isNext ? accountData.slice(0, 5) : accountData.slice(5, 10)
 
@@ -34,8 +37,11 @@ export default function SelectAccountScreen({ navigation, route }) {
     }
 
     const handleSelectClick = () => {
-        navigation.goBack()
-        route.params.onGoBack();
+        navigation.navigate(appConstant.createAccount, {
+            walletId: walletId,
+            name: name
+        })
+        // route.params.onGoBack();
     }
 
     return (
@@ -46,6 +52,7 @@ export default function SelectAccountScreen({ navigation, route }) {
                     return (
                         <TouchableOpacity key={index} style={[styles.buttonContainer, { backgroundColor: index == selectIndex ? colors.white : colors.gray }]} onPress={() => {
                             setSelectIndex(index)
+                            setWalletId(item?.id)
                             // setWalletNameFocus(false)
                         }}>
                             <View style={[styles.numberContainer, { backgroundColor: index == selectIndex ? colors.black : colors.white }]}>

@@ -106,7 +106,7 @@ export default function AttentionWarningView({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
+    // alignItems: 'center',
   },
   subContainer: {
     flex: 1,

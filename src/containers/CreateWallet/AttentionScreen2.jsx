@@ -38,7 +38,7 @@ export default function AttentionScreen2({ navigation, route }) {
             <StatusBar
                 barStyle={'light-content'}
                 translucent
-                backgroundColor={colors.red}
+                backgroundColor={colors.black}
             />
             <AttentionWarningView
                 title={t("areUSure")}

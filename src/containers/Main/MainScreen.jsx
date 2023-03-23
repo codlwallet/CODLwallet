@@ -48,49 +48,59 @@ export default function MainScreen({ navigation, route }) {
     }
 
     const handleMenuListClick = (item) => {
-        if (item.name === t("changeName")) {
+        if (item.value === appConstant.changeName) {
             navigation.navigate(appConstant.changeUserDetails, {
                 from: appConstant.changeName
             })
         }
-        else if (item.name === t("changePIN")) {
+        else if (item.value === appConstant.changePIN) {
             navigation.navigate(appConstant.changeUserDetails, {
                 from: appConstant.changePIN
             })
         }
-        else if (item.name === t("language")) {
+        else if (item.value === appConstant.language) {
             navigation.navigate(appConstant.language)
         }
-        else if (item.name === t("AboutCODL")) {
+        else if (item.value === appConstant.AboutCODL) {
             navigation.navigate(appConstant.AboutCODL)
         }
-        else if (item.name === t("recoveryCheck")) {
+        else if (item.value === appConstant.recoveryWarning) {
             navigation.navigate(appConstant.recoveryWarning)
         }
-        else if (item.name === t("networks")) {
+        else if (item.value === appConstant.networks) {
             navigation.navigate(appConstant.networks)
         }
-        else if (item.name === t("deleteEverything")) {
+        else if (item.value === appConstant.deleteEverything) {
             navigation.navigate(appConstant.deleteEverything)
         }
     }
 
     const handleMainListClick = (item) => {
-        console.log("acc", accountDetails)
+        console.log("accountDetails...", JSON.stringify(accountDetails))
         if (accountDetails?.length === 0 || !accountDetails) {
-            console.log("true")
             navigation.navigate(appConstant.createAccount, {
                 name: item?.value
             })
         }
         else {
-            // console.log("false")
-            accountDetails.map((i) => {
-                navigation.navigate(appConstant.accountDetails, {
-                    walletName: i?.accountDetails[0].walletName
+            if (accountDetails.some((i) => i.name === item.name)) {
+                accountDetails.map((i) => {
+                    if (i.name === item.name) {
+                        i.accountDetails.map((itm) => {
+                            navigation.navigate(appConstant.accountDetails, {
+                                walletName: itm?.walletName,
+                                name: item.name
+                            })
+                        })
+                    }
                 })
-            })
 
+            }
+            else {
+                navigation.navigate(appConstant.createAccount, {
+                    name: item?.value
+                })
+            }
         }
     }
 

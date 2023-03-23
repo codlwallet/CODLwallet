@@ -1,4 +1,4 @@
-import { View, StyleSheet, TouchableOpacity } from 'react-native'
+import { View, StyleSheet, TouchableOpacity, Keyboard } from 'react-native'
 import React, { useEffect, useRef, useState } from 'react'
 import colors from '../../assets/colors'
 import { hp, normalize, wp } from '../../helper/responsiveScreen'
@@ -9,8 +9,10 @@ import FontText from '../../components/common/FontText'
 import Button from '../../components/common/Button'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useTranslation } from 'react-i18next'
+import appConstant from '../../helper/appConstant'
+import Alert from '../../components/common/Alert'
 
-export default function ConfirmSingingScreen() {
+export default function ConfirmSingingScreen({ navigation }) {
     const nameRef = useRef()
     const enterPinRef = useRef()
     const [name, setName] = useState('')
@@ -19,75 +21,70 @@ export default function ConfirmSingingScreen() {
     const [enterPin, setEnterPin] = useState('')
     const [enterPinFocus, setEnterPinFocus] = useState(false)
     const [loginData, setLoginData] = useState()
+    const [showAlert, setShowAlert] = useState(false)
+    const [alertTitle, setAlertTitle] = useState('')
+    const [alertMessage, setAlertMessage] = useState('')
     const { t } = useTranslation();
-
 
     useEffect(() => {
         async function getLoginData() {
             const data = await AsyncStorage.getItem('LoginData');
             setLoginData(JSON.parse(data))
-            setName(loginData?.name)
         }
         getLoginData()
     }, [])
 
-
     const onSubmitEnterPin = () => {
         setEnterPinFocus(false)
-    }
-
-    const onSubmitName = () => {
-        enterPinRef.current.focus()
-    }
-
-    const onFocusName = () => {
-        setNameFocus(true)
-
     }
 
     const onFocusEnterPin = () => {
         setEnterPinFocus(true)
     }
 
-    const onBlurName = () => {
-        setNameFocus(!nameFocus)
+    const enterBtnValidation = () => {
+        let errorStatus = true;
+        if (enterPin === '' || enterPin.length < 4 || enterPin.length > 8) {
+            setShowAlert(true)
+            setAlertTitle(t("enterPIN"))
+            setAlertMessage(t("pinErrorMess"))
+            errorStatus = false;
+        }
+        else if (loginData?.pin !== enterPin) {
+            setShowAlert(true)
+            setAlertTitle(t("error"))
+            setAlertMessage(t("wrongPin"))
+            errorStatus = false;
+        }
+        return errorStatus;
     }
 
+    const handleProceedBtn = () => {
+        if (enterBtnValidation()) {
+            navigation.navigate(appConstant.complateSinging)
+        }
+    }
 
     return (
-        <View style={styles.container}>
+        <View style={styles.container} onStartShouldSetResponder={() => Keyboard.dismiss()}>
             <Header title={t("confirmSigning")} showRightIcon statusBarcolor={colors.black} style={{ alignSelf: 'center' }} RightIcon={'info'} />
             <View style={styles.subContainer}>
                 <Input
-                    withRightIcon={name !== '' ? true : false}
+                    // withRightIcon={name !== '' ? true : false}
                     ref={nameRef}
                     placeholder={t("name")}
-                    value={name}
+                    editable={false}
+                    value={loginData?.name ? loginData?.name : name}
                     maxLength={15}
                     placeholderTextColor={nameFocus ? colors.black : colors.white}
                     onChangeText={setName}
                     keyboardType={'default'}
                     blurOnSubmit={false}
                     returnKeyType={'next'}
-                    onFocus={onFocusName}
-                    onBlur={onBlurName}
-                    onSubmit={onSubmitName}
                     fontName={'poppins-regular'}
-                    onSubmitEditing={onSubmitName}
                     fontSize={normalize(22)}
-                    inputStyle={[styles.textInput, {
-                        color: nameFocus == true
-                            ? colors.black
-                            : colors.white
-                    }]}
-                    style={[styles.textInputContainer,
-                    {
-                        backgroundColor:
-                            nameFocus == true
-                                ? colors.white
-                                : colors.gray,
-
-                    }]}
+                    inputStyle={styles.textInput}
+                    style={styles.textInputContainer}
                     rightIcon={
                         <TouchableOpacity>
                             {nameFocus ?
@@ -148,14 +145,21 @@ export default function ConfirmSingingScreen() {
                 type="highlight"
                 borderRadius={11}
                 bgColor="white"
-                // onPress={handleProceedBtn}
+                onPress={handleProceedBtn}
                 buttonStyle={styles.button}
-                style={styles.buttonView}
-            >
+                style={styles.buttonView}>
                 <FontText name={"inter-medium"} size={normalize(22)} color="black">
                     {t("proceed")}
                 </FontText>
             </Button>
+            <Alert
+                show={showAlert}
+                title={alertTitle}
+                message={alertMessage}
+                onConfirmPressed={() => {
+                    setShowAlert(false)
+                }}
+            />
         </View>
     )
 }
@@ -179,12 +183,14 @@ const styles = StyleSheet.create({
     textInputContainer: {
         marginTop: hp(2),
         height: hp(8),
-        width: wp(90)
+        width: wp(90),
+        backgroundColor: colors.gray,
     },
     textInput: {
         fontSize: normalize(22),
         padding: 0,
-        paddingHorizontal: wp(4)
+        paddingHorizontal: wp(4),
+        color: colors.white
     },
     button: {
         backgroundColor: colors.white,

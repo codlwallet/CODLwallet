@@ -100,4 +100,6 @@ module.exports = {
   scanQr: 'Scan QR',
   signTransaction: 'Sign Transaction',
   confirmSinging: 'Confirm Singing',
+  complateSinging: 'Complate Singing',
+  broadcastTransaction: 'Broadcast Transaction',
 };

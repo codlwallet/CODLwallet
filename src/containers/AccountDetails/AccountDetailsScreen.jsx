@@ -12,6 +12,7 @@ import appConstant from '../../helper/appConstant'
 export default function AccountDetailsScreen({ navigation, route }) {
     const { t } = useTranslation();
     const walletName = route?.params?.walletName
+    const name = route?.params?.name
 
     useEffect(() => {
         BackHandler.addEventListener('hardwareBackPress', backAction);
@@ -30,7 +31,9 @@ export default function AccountDetailsScreen({ navigation, route }) {
 
     return (
         <View style={styles.container}>
-            <Header title={walletName} showRightIcon showBackIcon onBackPress={() => navigation.navigate(appConstant.main)} statusBarcolor={colors.black} style={{ alignSelf: 'center' }} RightIconPress={() => navigation.navigate(appConstant.createAccount)} />
+            <Header title={walletName} showRightIcon showBackIcon onBackPress={() => navigation.navigate(appConstant.main)} statusBarcolor={colors.black} style={{ alignSelf: 'center' }} RightIconPress={() => navigation.navigate(appConstant.createAccount, {
+                name: name
+            })} />
             <View style={styles.subContainer}>
                 <View style={styles.scannerContainer}>
                     <View style={styles.walletHeaderView}>

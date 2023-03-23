@@ -15,6 +15,8 @@ import { useFocusEffect } from '@react-navigation/native'
 export default function CreateAccountScreen({ navigation, route }) {
   const { t } = useTranslation();
   const name = route?.params?.name
+  const walletId = route?.params?.walletId
+
   const [walletName, setWalletName] = useState('')
   const [walletNameFocus, setWalletNameFocus] = useState(false)
   const [isSelect, setIsSelect] = useState(false)
@@ -38,13 +40,10 @@ export default function CreateAccountScreen({ navigation, route }) {
     }, []),
   );
 
-
   const backAction = () => {
     navigation.navigate(appConstant.main)
     return true;
   };
-
-
 
   const onWalletNameFocus = () => {
     setWalletNameFocus(true)
@@ -61,7 +60,6 @@ export default function CreateAccountScreen({ navigation, route }) {
   }
 
   const handleCreateClick = async () => {
-    console.log("accountData........??????", typeof accountData,)
     if (accountData !== null) {
       accountData.map((item) => {
         if (item?.name === name) {
@@ -82,12 +80,10 @@ export default function CreateAccountScreen({ navigation, route }) {
               }
             ]
           }
-
-          item?.push(data)
+          accountData?.push(data)
+          setAccountData([...accountData])
         }
       })
-      setAccountData([...accountData])
-
       await AsyncStorage.setItem("WalletList", JSON.stringify(accountData))
       navigation.navigate(appConstant.accountDetails, {
         walletName: walletName
@@ -105,21 +101,18 @@ export default function CreateAccountScreen({ navigation, route }) {
           ]
         },
       ]
-      console.log("data......", data)
       await AsyncStorage.setItem("WalletList", JSON.stringify(data))
       navigation.navigate(appConstant.accountDetails, {
         walletName: walletName
       })
-
     }
-
-
   }
 
   const handleSelectWalletClick = () => {
     setIsSelect(true)
     setWalletNameFocus(false)
     navigation.navigate(appConstant.selectAccount, {
+      name: name,
       onGoBack: () => {
         setWalletNameFocus(false)
         setIsSelect(false)
@@ -173,10 +166,10 @@ export default function CreateAccountScreen({ navigation, route }) {
         <TouchableOpacity style={[styles.buttonContainer, { backgroundColor: isSelect ? colors.white : colors.gray }]} onPress={handleSelectWalletClick}>
           <View style={[styles.numberContainer, { backgroundColor: isSelect ? colors.black : colors.white }]}>
             <FontText name={"inter-bold"} size={normalize(15)} color={isSelect ? 'white' : 'black'}>
-              {"0"}
+              {walletId ? walletId : "0"}
             </FontText>
           </View>
-          <FontText name={"inter-regular"} size={normalize(22)} color={isSelect ? 'black' : 'white'} pRight={!selectWallet ? wp(25) : wp(16)} >
+          <FontText name={"inter-regular"} size={normalize(22)} color={isSelect ? 'black' : 'white'} pRight={isSelect ? hp(9) : hp(13)} >
             {"0xa94bb...a710"}
           </FontText>
           {isSelect && <SvgIcons.BlackRightArrow height={hp(3)} width={hp(2.5)} />}

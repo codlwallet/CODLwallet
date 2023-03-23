@@ -115,6 +115,9 @@
     "amount": "Amount",
     "reject": "Reject",
     "confirmSigning": "Confirm Signing",
-    "back": "Back"
+    "back": "Back",
+    "transactionSigned": "Transaction Signed",
+    "broadcastTransaction": "Broadcast Transaction",
+    "signedTX": "Signed TX"
   }
 }

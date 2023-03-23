@@ -1,5 +1,5 @@
-import { StyleSheet, View } from 'react-native'
-import React from 'react'
+import { BackHandler, StyleSheet, View } from 'react-native'
+import React, { useEffect } from 'react'
 import colors from '../../assets/colors'
 import Header from '../../components/common/Header'
 import appConstant from '../../helper/appConstant'
@@ -11,6 +11,18 @@ import { useTranslation } from 'react-i18next'
 export default function AttentionScreen1({ navigation, route }) {
     const { t } = useTranslation();
     const { ButtonValue, numberValue } = route.params
+
+    useEffect(() => {
+        BackHandler.addEventListener('hardwareBackPress', backAction);
+        return async () => {
+            BackHandler.removeEventListener('hardwareBackPress', backAction);
+        };
+    }, []);
+
+    const backAction = () => {
+        navigation.goBack()
+        return true;
+    };
 
     const handleUnderStandBtnClick = () => {
         navigation.navigate(ButtonValue === appConstant.createWallet ? appConstant.createWallet : appConstant.importWallet, {

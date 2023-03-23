@@ -10,7 +10,7 @@ import QRCode from 'react-native-qrcode-svg'
 import appConstant from '../../helper/appConstant'
 import SvgIcons from '../../assets/SvgIcons'
 
-export default function AccountDetailsScreen({ navigation, route }) {
+export default function ConnectWalletScreen({ navigation, route }) {
     const { t } = useTranslation();
     // const { walletName } = route?.params
 

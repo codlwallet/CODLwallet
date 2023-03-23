@@ -395,30 +395,37 @@ module.exports = {
     {
       id: 0,
       name: i18n.t('changeName'),
+      value: appConstant.changeName,
     },
     {
       id: 1,
       name: i18n.t('changePIN'),
+      value: appConstant.changePIN,
     },
     {
       id: 2,
       name: i18n.t('recoveryCheck'),
+      value: appConstant.recoveryCheck,
     },
     {
       id: 3,
       name: i18n.t('networks'),
+      value: appConstant.networks,
     },
     {
       id: 4,
       name: i18n.t('language'),
+      value: appConstant.language,
     },
     {
       id: 5,
       name: i18n.t('AboutCODL'),
+      value: appConstant.AboutCODL,
     },
     {
       id: 6,
       name: i18n.t('deleteEverything'),
+      value: appConstant.deleteEverything,
     },
   ],
   accountData: [
@@ -463,38 +470,15 @@ module.exports = {
       name: '0xa94bs...a710',
     },
   ],
-};
 
-// export const mainData = [
-//   {
-//     id: 0,
-//     name: i18n.t('bitcoin'),
-//     value: appConstant.bitcoin,
-//     image: require('../assets/images/BI.png'),
-//   },
-//   {
-//     id: 1,
-//     name: i18n.t('ethereum'),
-//     value: appConstant.ethereum,
-//     image: require('../assets/images/EV.png'),
-//     img: require('../assets/images/EVblack.png'),
-//   },
-//   {
-//     id: 2,
-//     name: i18n.t('solana'),
-//     value: appConstant.solana,
-//     image: require('../assets/images/SO.png'),
-//   },
-//   {
-//     id: 3,
-//     name: i18n.t('avalanche'),
-//     value: appConstant.avalanche,
-//     image: require('../assets/images/img.png'),
-//   },
-//   {
-//     id: 4,
-//     name: i18n.t('polygon'),
-//     value: appConstant.polygon,
-//     image: require('../assets/images/PO.png'),
-//   },
-// ];
+  paginationData: [
+    {
+      id: 1,
+      title: i18n.t('signedTX'),
+    },
+    {
+      id: 2,
+      title: i18n.t('tokenTransfer'),
+    },
+  ],
+};

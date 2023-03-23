@@ -1,7 +1,6 @@
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import HomeScreen from '../containers/Home/HomeScreen';
 import Constant from '../helper/appConstant';
 import WelcomeScreen from '../containers/Welcome/WelcomeScreen';
 import SetupUserScreen from '../containers/SetupUser/SetupUserScreen';
@@ -33,17 +32,15 @@ import ConnectWalletScreen from '../containers/ConnectWallet/ConnectWalletScreen
 import ScanQrScreen from '../containers/ScanQr/ScanQrScreen';
 import SignTransactionScreen from '../containers/SignTransaction/SignTransactionScreen';
 import ConfirmSingingScreen from '../containers/ConfirmSinging/ConfirmSingingScreen';
+import ComplateSingingScreen from '../containers/ConfirmSinging/ComplateSingingScreen';
+import BroadcastTransactionScreen from '../containers/BroadcastTransaction/BroadcastTransactionScreen';
 
 const Route = () => {
     const Stack = createNativeStackNavigator();
     return (
         <NavigationContainer>
             <Stack.Navigator screenOptions={{ headerShown: false }}>
-                <Stack.Screen name={Constant.confirmSinging} component={ConfirmSingingScreen} />
-
-
                 <Stack.Screen name={Constant.welcome} component={WelcomeScreen} />
-                <Stack.Screen name={Constant.home} component={HomeScreen} />
                 <Stack.Screen name={Constant.setupUser} component={SetupUserScreen} />
                 <Stack.Screen name={Constant.createdUser} component={CreatedUserScreen} />
                 <Stack.Screen name={Constant.setupWallet} component={SetupWalletScreen} />
@@ -72,7 +69,9 @@ const Route = () => {
                 <Stack.Screen name={Constant.connectWallet} component={ConnectWalletScreen} />
                 <Stack.Screen name={Constant.scanQr} component={ScanQrScreen} />
                 <Stack.Screen name={Constant.signTransaction} component={SignTransactionScreen} />
-                {/* <Stack.Screen name={Constant.confirmSinging} component={ConfirmSingingScreen} /> */}
+                <Stack.Screen name={Constant.confirmSinging} component={ConfirmSingingScreen} />
+                <Stack.Screen name={Constant.complateSinging} component={ComplateSingingScreen} />
+                <Stack.Screen name={Constant.broadcastTransaction} component={BroadcastTransactionScreen} />
 
 
             </Stack.Navigator>
