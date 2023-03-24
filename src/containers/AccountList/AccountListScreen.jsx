@@ -1,4 +1,4 @@
-import { BackHandler, Image, StyleSheet, TouchableOpacity, View } from 'react-native'
+import { BackHandler, Image, ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import colors from '../../assets/colors';
 import { hp, normalize, wp } from '../../helper/responsiveScreen';
@@ -12,14 +12,16 @@ import appConstant from '../../helper/appConstant';
 import Button from '../../components/common/Button';
 import SvgIcons from '../../assets/SvgIcons';
 
-
-export default function AccountListScreen({ navigation }) {
+export default function AccountListScreen({ navigation, route }) {
     const { t } = useTranslation();
+    const name = route?.params?.name
+    const accountList = route?.params?.accountList
     const [walletData, setWalletData] = useState()
     const [showList, setShowList] = useState(true)
     const [btnValue, setButtonValue] = useState()
     const [buttonIndex, setButtonIndex] = useState()
     const [showReorder, setShowReorder] = useState(false)
+    const [accountValue, setAccountValue] = useState()
 
     useEffect(() => {
         async function getWalletData() {
@@ -45,7 +47,9 @@ export default function AccountListScreen({ navigation }) {
         setButtonValue(item?.name)
         setButtonIndex(index)
         if (item.name === t("createNewAccount")) {
-            navigation.navigate(appConstant.createAccount)
+            navigation.navigate(appConstant.createAccount, {
+                name: name
+            })
         }
         else {
             setShowReorder(true)
@@ -55,9 +59,20 @@ export default function AccountListScreen({ navigation }) {
     }
 
     const handleDoneClick = () => {
-        navigation.navigate(appConstant.accountDetails, {
-            walletName: walletData?.walletName
-        })
+        setShowReorder(false)
+    }
+
+    const onClickAccount = (itm) => {
+        setAccountValue(itm?.walletName)
+        if (!showReorder) {
+            navigation.navigate(appConstant.accountDetails, {
+                walletName: itm?.walletName,
+                from: appConstant.accountList,
+                onGoBack: () => {
+                    setAccountValue('')
+                },
+            })
+        }
     }
 
     return (
@@ -71,30 +86,49 @@ export default function AccountListScreen({ navigation }) {
                     statusBarcolor={colors.black}
                     RightIconPress={() => { setShowReorder(false), setShowList(false) }} />
                 :
-                <Header title={t('ethereum')}
+                <Header title={name}
                     showRightIcon
-                    RightIcon={'menu'}
+                    RightIcon={!showReorder && !showList ? 'false' : 'menu'}
                     showBackIcon={showList ? true : false}
                     onBackPress={backAction}
                     statusBarcolor={colors.black}
-                    titleStyle={{ left: showList ? 0 : wp(23.7) }}
-                    titleIcon={<Image source={require('../../assets/images/EV.png')} style={styles.image} />}
+                    titleStyle={{ left: showList ? 0 : wp(30) }}
+                    titleIcon={
+                        name === appConstant.bitcoin ?
+                            <SvgIcons.Bitcoin height={hp(5)} width={hp(3)} /> :
+                            name === appConstant.ethereum ?
+                                <Image source={require('../../assets/images/EV.png')} style={{ width: hp(3.5), height: hp(5.5), }} /> :
+                                name === appConstant.solana ?
+                                    <SvgIcons.Solana height={hp(5.5)} width={hp(3.5)} /> :
+                                    name === appConstant.avalanche ?
+                                        <View style={{ backgroundColor: colors.black }}>
+                                            <Image source={require('../../assets/images/img.png')} style={{ height: hp(6), width: hp(6) }} />
+                                        </View> :
+                                        <SvgIcons.Poly height={hp(5.5)} width={hp(4)} />
+                    }
                     RightIconPress={() => { setShowList(!showList) }}
                     titleWithIcon />
             }
             <View style={styles.subContainer}>
                 {showList || showReorder ?
-                    <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', }}>
-                        {showReorder && <SvgIcons.DotIcon style={{ right: wp(3) }} />}
-                        <TouchableOpacity style={[styles.buttonContainer,]} >
-                            <FontText name={"inter-regular"} size={normalize(22)} color={'white'}  >
-                                {walletData?.walletName}
-                            </FontText>
-                            <FontText name={"inter-regular"} size={normalize(15)} color={'white'}  >
-                                {"0xa94bb...a710"}
-                            </FontText>
-                        </TouchableOpacity>
-                    </View>
+                    <ScrollView contentContainerStyle={{ justifyContent: 'center', alignItems: 'center', flexGrow: 1, paddingVertical: hp(0.5) }}  >
+                        {accountList.map((item, index) => {
+                            return (
+                                <View key={index} style={styles.listView}>
+                                    {item?.walletName === accountValue && <SvgIcons.DotIcon style={{ left: wp(-2) }} />}
+                                    <TouchableOpacity style={[styles.buttonContainer, { backgroundColor: item?.walletName === accountValue ? colors.white : colors.gray }]} onPress={() => onClickAccount(item)}>
+                                        <FontText name={"inter-regular"} size={normalize(22)} color={item?.walletName === accountValue ? "black" : 'white'}  >
+                                            {item?.walletName}
+                                        </FontText>
+                                        <FontText name={"inter-regular"} size={normalize(15)} color={item?.walletName === accountValue ? "black" : 'white'}  >
+                                            {"0xa94bb...a710"}
+                                        </FontText>
+                                    </TouchableOpacity>
+                                </View>
+                            )
+                        })
+                        }
+                    </ScrollView>
                     :
                     <>
                         {walletListData?.map((item, index) => {
@@ -117,7 +151,7 @@ export default function AccountListScreen({ navigation }) {
                 onPress={handleDoneClick}
                 buttonStyle={styles.button}>
                 <FontText name={"inter-medium"} size={normalize(22)} color="black">
-                    {t("create")}
+                    {t("done")}
                 </FontText>
             </Button>}
         </View>
@@ -128,22 +162,21 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: colors.black,
-        paddingHorizontal: wp(3.5),
     },
     subContainer: {
         flex: 1,
         justifyContent: 'center',
-        alignItems: 'center'
+        alignItems: 'center',
+
     },
     buttonContainer: {
         height: hp(8.5),
-        width: wp(90),
+        width: '95%',
         borderRadius: wp(2),
         alignItems: 'center',
         justifyContent: 'space-between',
         flexDirection: 'row',
         paddingHorizontal: wp(5),
-        // marginTop: hp(2),
         backgroundColor: colors.gray,
     },
     image: {
@@ -155,6 +188,13 @@ const styles = StyleSheet.create({
         marginBottom: hp(3),
         height: hp(8.5),
         width: wp(90)
+    },
+    listView: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+        width: wp(93),
+        marginBottom: hp(2)
     }
 
 })

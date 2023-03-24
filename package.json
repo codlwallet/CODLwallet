@@ -32,8 +32,11 @@
     "react-native-splash-screen": "^3.3.0",
     "react-native-svg": "^13.8.0",
     "react-native-vision-camera": "^2.13.0",
+    "react-qr-reader": "^3.0.0-beta-1",
     "react-redux": "^8.0.5",
-    "toggle-switch-react-native": "^3.3.0"
+    "toggle-switch-react-native": "^3.3.0",
+    "vision-camera-code-scanner": "^0.2.0",
+    "vision-camera-dynamsoft-barcode-reader": "^0.6.0"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

@@ -13,6 +13,7 @@ export default function AccountDetailsScreen({ navigation, route }) {
     const { t } = useTranslation();
     const walletName = route?.params?.walletName
     const name = route?.params?.name
+    const from = route?.params?.from
 
     useEffect(() => {
         BackHandler.addEventListener('hardwareBackPress', backAction);
@@ -22,18 +23,26 @@ export default function AccountDetailsScreen({ navigation, route }) {
     }, []);
 
     const backAction = () => {
-        navigation.goBack()
+        if (from === appConstant.createAccount) {
+            navigation.navigate(appConstant.main)
+        }
+        else {
+            navigation.goBack()
+        }
         return true;
     };
+
     const handleSignClick = () => {
-        navigation.navigate(appConstant.scanQr)
+        navigation.navigate(appConstant.scanQr, {
+            walletName: walletName
+        })
     }
 
     return (
         <View style={styles.container}>
-            <Header title={walletName} showRightIcon showBackIcon onBackPress={() => navigation.navigate(appConstant.main)} statusBarcolor={colors.black} style={{ alignSelf: 'center' }} RightIconPress={() => navigation.navigate(appConstant.createAccount, {
+            <Header title={walletName} showRightIcon={from !== appConstant.accountList ? true : false} showBackIcon onBackPress={backAction} statusBarcolor={colors.black} style={{ alignSelf: 'center' }} RightIconPress={() => navigation.navigate(appConstant.createAccount, {
                 name: name
-            })} />
+            })} titleStyle={{ right: from === appConstant.accountList ? wp(35) : 0 }} />
             <View style={styles.subContainer}>
                 <View style={styles.scannerContainer}>
                     <View style={styles.walletHeaderView}>

@@ -11,6 +11,7 @@ import FontText from '../../components/common/FontText'
 import Header from '../../components/common/Header'
 
 export default function ComplateSingingScreen({ navigation, route }) {
+    const walletName = route?.params?.walletName
     const from = route?.params?.from
     const { t } = useTranslation();
 
@@ -22,12 +23,16 @@ export default function ComplateSingingScreen({ navigation, route }) {
     }, []);
 
     const backAction = () => {
-        navigation.navigate(appConstant.accountDetails);
+        navigation.navigate(appConstant.accountDetails, {
+            walletName: walletName
+        });
         return true;
     };
 
     const handlebroadcastTransactionBtn = () => {
-        navigation.navigate(appConstant.broadcastTransaction)
+        navigation.navigate(appConstant.broadcastTransaction, {
+            walletName: walletName
+        })
     }
 
     return (
@@ -60,7 +65,6 @@ const styles = StyleSheet.create({
     container: {
         backgroundColor: colors.black,
         flex: 1,
-        // justifyContent: 'center',
     },
     imageContainer: {
         backgroundColor: colors.white,

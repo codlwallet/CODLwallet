@@ -12,7 +12,8 @@ import { useTranslation } from 'react-i18next'
 import appConstant from '../../helper/appConstant'
 import Alert from '../../components/common/Alert'
 
-export default function ConfirmSingingScreen({ navigation }) {
+export default function ConfirmSingingScreen({ navigation, route }) {
+    const walletName = route?.params?.walletName
     const nameRef = useRef()
     const enterPinRef = useRef()
     const [name, setName] = useState('')
@@ -61,7 +62,9 @@ export default function ConfirmSingingScreen({ navigation }) {
 
     const handleProceedBtn = () => {
         if (enterBtnValidation()) {
-            navigation.navigate(appConstant.complateSinging)
+            navigation.navigate(appConstant.complateSinging, {
+                walletName: walletName
+            })
         }
     }
 

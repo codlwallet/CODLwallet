@@ -9,8 +9,9 @@ import { useTranslation } from 'react-i18next'
 import appConstant from '../../helper/appConstant'
 import TransactionCard from '../../components/TransactionCard'
 
-export default function SignTransactionScreen({ navigation }) {
+export default function SignTransactionScreen({ navigation, route }) {
     const { t } = useTranslation();
+    const walletName = route?.params?.walletName
     const [btnValue, setBtnValue] = useState(t("sign"))
 
     useEffect(() => {
@@ -29,12 +30,15 @@ export default function SignTransactionScreen({ navigation }) {
 
     const handleSignClick = () => {
         setBtnValue(t("sign"))
-        navigation.navigate(appConstant.confirmSinging)
+        navigation.navigate(appConstant.confirmSinging, {
+            walletName: walletName
+        })
     }
 
-
     const backAction = () => {
-        navigation.navigate(appConstant.accountDetails)
+        navigation.navigate(appConstant.accountDetails, {
+            walletName: walletName
+        })
         return true;
     };
 

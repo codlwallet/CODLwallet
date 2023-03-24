@@ -39,9 +39,10 @@ export default function SelectAccountScreen({ navigation, route }) {
     const handleSelectClick = () => {
         navigation.navigate(appConstant.createAccount, {
             walletId: walletId,
-            name: name
+            name: name,
+
         })
-        // route.params.onGoBack();
+        route.params.onGoBack();
     }
 
     return (
@@ -53,7 +54,6 @@ export default function SelectAccountScreen({ navigation, route }) {
                         <TouchableOpacity key={index} style={[styles.buttonContainer, { backgroundColor: index == selectIndex ? colors.white : colors.gray }]} onPress={() => {
                             setSelectIndex(index)
                             setWalletId(item?.id)
-                            // setWalletNameFocus(false)
                         }}>
                             <View style={[styles.numberContainer, { backgroundColor: index == selectIndex ? colors.black : colors.white }]}>
                                 <FontText name={"inter-bold"} size={normalize(15)} color={index == selectIndex ? 'white' : 'black'}>

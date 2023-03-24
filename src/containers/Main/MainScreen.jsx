@@ -16,7 +16,6 @@ export default function MainScreen({ navigation, route }) {
     const { t } = useTranslation();
     const hidden = route?.params?.hidden
     const [hideMenu, setHideMenu] = useState(false);
-    const [showNetworks, setShowNetworks] = useState(false)
     const [accountDetails, setAccountDetails] = useState([])
 
     useFocusEffect(
@@ -37,9 +36,7 @@ export default function MainScreen({ navigation, route }) {
     }, []);
 
     const backAction = () => {
-        navigation.navigate(appConstant.welcome, {
-            from: appConstant.welcomePurchase,
-        });
+        navigation.goBack()
         return true;
     };
 
@@ -76,7 +73,6 @@ export default function MainScreen({ navigation, route }) {
     }
 
     const handleMainListClick = (item) => {
-        console.log("accountDetails...", JSON.stringify(accountDetails))
         if (accountDetails?.length === 0 || !accountDetails) {
             navigation.navigate(appConstant.createAccount, {
                 name: item?.value
@@ -85,13 +81,21 @@ export default function MainScreen({ navigation, route }) {
         else {
             if (accountDetails.some((i) => i.name === item.name)) {
                 accountDetails.map((i) => {
-                    if (i.name === item.name) {
-                        i.accountDetails.map((itm) => {
-                            navigation.navigate(appConstant.accountDetails, {
-                                walletName: itm?.walletName,
-                                name: item.name
+                    if (i?.name === item.name) {
+                        if (i?.accountDetails.length !== 1) {
+                            navigation.navigate(appConstant.accountList, {
+                                name: item.name,
+                                accountList: i?.accountDetails
                             })
-                        })
+                        }
+                        else {
+                            i?.accountDetails.map((itm) => {
+                                navigation.navigate(appConstant?.accountDetails, {
+                                    walletName: itm?.walletName,
+                                    name: item?.name
+                                })
+                            })
+                        }
                     }
                 })
 

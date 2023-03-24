@@ -14,6 +14,7 @@ import TransactionCard from '../../components/TransactionCard'
 
 export default function BroadcastTransactionScreen({ navigation, route }) {
     const { t } = useTranslation();
+    const walletName = route?.params?.walletName
     const CarouselRef = useRef();
     const [selectedIndex, setselectedIndex] = useState(0);
 
@@ -33,7 +34,7 @@ export default function BroadcastTransactionScreen({ navigation, route }) {
 
     const backAction = () => {
         navigation.navigate(appConstant.accountDetails, {
-            // walletName: walletData?.walletName
+            walletName: walletName
         })
         return true;
     };
@@ -45,7 +46,7 @@ export default function BroadcastTransactionScreen({ navigation, route }) {
                     <View style={styles.scannerContainer}>
                         <View style={styles.walletHeaderView}>
                             <FontText name={"inter-bold"} size={normalize(11)} color="black" textTransform={'uppercase'}>
-                                {item?.id === 1 ? t("watchOnly") : t("tokenTransfer")}
+                                {t("signedTX")}
                             </FontText>
                         </View>
                         <QRCode
@@ -70,7 +71,7 @@ export default function BroadcastTransactionScreen({ navigation, route }) {
 
     return (
         <View style={styles.container}>
-            <Header title={t("broadcastTransaction")} showRightIcon RightIcon={'info'} statusBarcolor={colors.black} style={{ alignSelf: 'center' }} RightIconPress={() => navigation.navigate(appConstant.createAccount)} />
+            <Header title={t("broadcastTransaction")} showRightIcon RightIcon={'info'} statusBarcolor={colors.black} style={{ alignSelf: 'center' }} />
             <View style={styles.subContainer}>
                 <Carousel
                     data={paginationData}

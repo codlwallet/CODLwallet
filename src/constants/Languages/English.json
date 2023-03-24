@@ -111,7 +111,7 @@
     "tokenTransfer": "Token Transfer",
     "from": "From",
     "to": "To",
-    "Fees": "Fees",
+    "fees": "Fees",
     "amount": "Amount",
     "reject": "Reject",
     "confirmSigning": "Confirm Signing",

@@ -30,7 +30,7 @@ export default function ConnectWalletScreen({ navigation, route }) {
 
     return (
         <View style={styles.container}>
-            <Header title={t("connectWallet")} showRightIcon RightIcon={'info'} statusBarcolor={colors.black} style={{ alignSelf: 'center' }} RightIconPress={() => navigation.navigate(appConstant.createAccount)} />
+            <Header title={t("connectWallet")} showRightIcon RightIcon={'info'} statusBarcolor={colors.black} style={{ alignSelf: 'center' }} />
             <View style={styles.subContainer}>
                 <View style={styles.scannerContainer}>
                     <View style={styles.walletHeaderView}>
