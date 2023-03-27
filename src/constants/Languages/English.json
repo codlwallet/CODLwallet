@@ -118,6 +118,8 @@
     "back": "Back",
     "transactionSigned": "Transaction Signed",
     "broadcastTransaction": "Broadcast Transaction",
-    "signedTX": "Signed TX"
+    "signedTX": "Signed TX",
+    "walletnameRequired": "Walletname Required",
+    "walletnameError": "Walletname must be greater than 1 characters"
   }
 }

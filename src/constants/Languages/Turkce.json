@@ -116,6 +116,8 @@
     "back": "Back",
     "transactionSigned": "İşlem İmzalandı",
     "broadcastTransaction": "Yayın İşlemi",
-    "signedTX": "imzalı TX"
+    "signedTX": "imzalı TX",
+    "walletnameRequired": "Cüzdanadı Gerekli",
+    "walletnameError": "Cüzdanadı 1 karakterden büyük olmalıdır"
   }
 }

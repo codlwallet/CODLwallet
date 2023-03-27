@@ -13,9 +13,9 @@ import appConstant from '../../helper/appConstant'
 export default function SelectAccountScreen({ navigation, route }) {
     const name = route?.params?.name
     const { t } = useTranslation();
-    const [selectIndex, setSelectIndex] = useState()
+    const [selectIndex, setSelectIndex] = useState(0)
     const [btnValue, setBtnValue] = useState(t("select"))
-    const [walletId, setWalletId] = useState()
+    const [walletId, setWalletId] = useState(0)
     const [isNext, setIsNext] = useState(false)
     const data = !isNext ? accountData.slice(0, 5) : accountData.slice(5, 10)
 
@@ -40,9 +40,7 @@ export default function SelectAccountScreen({ navigation, route }) {
         navigation.navigate(appConstant.createAccount, {
             walletId: walletId,
             name: name,
-
         })
-        route.params.onGoBack();
     }
 
     return (

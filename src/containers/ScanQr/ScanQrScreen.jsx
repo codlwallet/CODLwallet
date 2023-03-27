@@ -1,31 +1,32 @@
-import { BackHandler, StyleSheet, TouchableOpacity, View } from 'react-native'
-import React, { useEffect, useRef, useState } from 'react'
+import { BackHandler, Dimensions, Image, PermissionsAndroid, Platform, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import React, { useEffect, useState } from 'react'
 import colors from '../../assets/colors'
 import { hp, normalize, wp } from '../../helper/responsiveScreen'
 import Header from '../../components/common/Header'
 import { useTranslation } from 'react-i18next'
 import Button from '../../components/common/Button'
 import FontText from '../../components/common/FontText'
-import { Camera, useCameraDevices } from 'react-native-vision-camera'
 import appConstant from '../../helper/appConstant'
 import SvgIcons from '../../assets/SvgIcons'
-import BarcodeMask from 'react-native-barcode-mask'
-import { QrReader } from 'react-qr-reader';
+import { Camera } from 'react-native-camera-kit'
 
 export default function ScanQrScreen({ navigation, route }) {
     const { t } = useTranslation();
     const walletName = route?.params?.walletName
-    const camaraRef = useRef(null)
-    const devices = useCameraDevices('wide-angle-camera')
-    const device = devices.back
-    const [barcode, setBarcode] = useState('');
-    const [hasPermission, setHasPermission] = useState(false);
-    const [data, setData] = useState('');
+    const [qrvalue, setQrvalue] = useState('');
+    const [opneScanner, setOpneScanner] = useState(false);
+
+    const WalletData = {
+        from: '0xa94b3c662eE5602A3308604a3fB9A8FDd5caa710',
+        to: '0x17d33da0FbC3167CC5aA1e68c1b412183B5U5d1',
+        fees: '0.0000315 ETH',
+        amount: '0.001 ETH'
+    }
+
 
     useEffect(() => {
-        checkCameraPermission();
+        onOpneScanner();
     }, []);
-
 
     useEffect(() => {
         BackHandler.addEventListener('hardwareBackPress', backAction);
@@ -39,54 +40,73 @@ export default function ScanQrScreen({ navigation, route }) {
         return true;
     };
 
-    const checkCameraPermission = async () => {
-        const status = await Camera.getCameraPermissionStatus();
-        setHasPermission(status === 'authorized');
-    };
-    let handleScan = data => {
-        if (data) {
-            setResult(data);
+    const onOpneScanner = () => {
+        if (Platform.OS === 'android') {
+            async function requestCameraPermission() {
+                try {
+                    const granted = await PermissionsAndroid.request(
+                        PermissionsAndroid.PERMISSIONS.CAMERA,
+                        {
+                            title: 'Camera Permission',
+                            message: 'App needs permission for camera access',
+                        },
+                    );
+                    if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+                        setQrvalue('');
+                        setOpneScanner(true);
+                    } else {
+                        alert('CAMERA permission denied');
+                    }
+                } catch (err) {
+                    alert('Camera permission err', err);
+                    console.warn(err);
+                }
+            }
+            requestCameraPermission();
+        } else {
+            setQrvalue('');
+            setOpneScanner(true);
         }
     };
 
-    let handleError = err => {
-        // alert(err);
+
+    const onBarcodeScan = (qrvalue) => {
+        console.log(qrvalue)
+        setQrvalue(qrvalue);
+        setOpneScanner(false);
+        if (qrvalue) {
+            navigation.navigate(appConstant.signTransaction, {
+                walletName: walletName,
+                WalletData: WalletData
+            })
+        }
+
     };
 
     return (
         <View style={styles.container}>
             <Header title={t("scanQr")} showRightIcon statusBarcolor={colors.black} style={{ alignSelf: 'center' }} RightIcon={'info'} />
             <View style={styles.subContainer}>
-                <TouchableOpacity onPress={() => navigation.navigate(appConstant.signTransaction, {
-                    walletName: walletName
-                })} style={styles.scannerContainer}>
-                    {device != null &&
-                        hasPermission &&
-                        <Camera
-                            style={StyleSheet.absoluteFill}
-                            device={device}
-                            isActive={true}
-                            ref={camaraRef}
-                        >
-                            {/* <QrReader
-                                onError={handleError}
-                                onScan={handleScan}
-                                facingMode="environment"
-                                style={{ width: '100%', backgroundColor: 'red' }}
-                            /> */}
-                            <BarcodeMask
-                                height={hp(45)}
-                                width={hp(45)}
-                                showAnimatedLine={false}
-                                edgeRadius={15}
-                                edgeHeight={wp(20)}
-                                edgeWidth={wp(20)}
-                                edgeBorderWidth={5}
-                                onLayoutMeasured={(event) => { console.log("event....", event) }}
-                                edgeColor={colors.white}
-                                backgroundColor={"#191919"}
-                            />
-                        </Camera>
+                <TouchableOpacity onPress={() => navigation.navigate(appConstant.signTransaction)}>
+                    {opneScanner &&
+                        <>
+                            <View style={{ borderRadius: 10, backgroundColor: colors.black, padding: 6, borderRadius: 20, justifyContent: 'center', alignItems: 'center' }}>
+                                <Camera
+                                    style={{ backgroundColor: 'green', height: hp(41.5), width: hp(41.5), justifyContent: 'center', alignItems: 'center', borderRadius: 10 }}
+                                    scanBarcode={true}
+                                    colorForScannerFrame={'blue'}
+                                    onReadCode={(event) =>
+                                        onBarcodeScan(event.nativeEvent.codeStringValue)
+                                    }
+                                />
+                                <View style={{ position: 'absolute' }}>
+                                    <Image source={require('../../assets/images/frame.png')} style={{ height: hp(44.1), width: hp(44.1), padding: 4, marginTop: hp(0.8) }} />
+                                </View>
+
+
+                            </View>
+
+                        </>
                     }
                 </TouchableOpacity>
             </View>
@@ -124,10 +144,10 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     scannerContainer: {
+        // borderRadius: 10,
+        backgroundColor: colors.gray,
         height: hp(45),
         width: hp(45),
-        borderRadius: 10,
-        backgroundColor: colors.gray
     },
     bottomView: {
         backgroundColor: colors.gray,
@@ -150,4 +170,26 @@ const styles = StyleSheet.create({
         height: hp(8.5),
         width: wp(90),
     },
+    maskOutter: {
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        width: '100%',
+        height: '100%',
+        alignItems: 'center',
+        justifyContent: 'space-around',
+    },
+    maskInner: {
+        width: 300,
+        backgroundColor: 'transparent',
+        borderColor: 'white',
+        borderWidth: 1,
+    },
+    maskFrame: {
+        backgroundColor: 'rgba(1,1,1,0.6)',
+    },
+    maskRow: {
+        width: '100%',
+    },
+    maskCenter: { flexDirection: 'row' },
 })

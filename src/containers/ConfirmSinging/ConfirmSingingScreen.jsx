@@ -1,4 +1,4 @@
-import { View, StyleSheet, TouchableOpacity, Keyboard } from 'react-native'
+import { View, StyleSheet, TouchableOpacity, Keyboard, BackHandler } from 'react-native'
 import React, { useEffect, useRef, useState } from 'react'
 import colors from '../../assets/colors'
 import { hp, normalize, wp } from '../../helper/responsiveScreen'
@@ -34,6 +34,21 @@ export default function ConfirmSingingScreen({ navigation, route }) {
         }
         getLoginData()
     }, [])
+
+    useEffect(() => {
+        BackHandler.addEventListener('hardwareBackPress', backAction);
+        return async () => {
+            BackHandler.removeEventListener('hardwareBackPress', backAction);
+        };
+    }, []);
+
+    const backAction = () => {
+        console.log("sdsjh")
+        navigation.navigate(appConstant.accountDetails, {
+            walletName: walletName
+        })
+        return true;
+    };
 
     const onSubmitEnterPin = () => {
         setEnterPinFocus(false)

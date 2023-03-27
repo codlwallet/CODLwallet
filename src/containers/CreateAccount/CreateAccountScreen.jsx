@@ -11,6 +11,7 @@ import Button from '../../components/common/Button'
 import appConstant from '../../helper/appConstant'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { useFocusEffect } from '@react-navigation/native'
+import Alert from '../../components/common/Alert'
 
 export default function CreateAccountScreen({ navigation, route }) {
   const { t } = useTranslation();
@@ -23,6 +24,9 @@ export default function CreateAccountScreen({ navigation, route }) {
   const [selectWallet, setSelectWallet] = useState(false)
   const [accountData, setAccountData] = useState([])
   const [showCheckIcon, setShowIcon] = useState(false)
+  const [showAlert, setShowAlert] = useState(false)
+  const [alertTitle, setAlertTitle] = useState('')
+  const [alertMessage, setAlertMessage] = useState('')
 
   useEffect(() => {
     BackHandler.addEventListener('hardwareBackPress', backAction);
@@ -63,17 +67,45 @@ export default function CreateAccountScreen({ navigation, route }) {
   }
 
   const handleCreateClick = async () => {
-    if (accountData !== null) {
-      accountData.map((item) => {
-        if (accountData.some((i) => i.name === name)) {
-          const data = {
-            walletName: walletName,
-            walletAddress: '0xa94b3c662eE5602A3308604a3fB9A8FDd5caa710'
+    if (!walletName) {
+      setShowAlert(true)
+      setAlertTitle(t('walletnameRequired'))
+      setAlertMessage(t("walletnameError"))
+    }
+    else {
+
+      if (accountData !== null) {
+        accountData.map((item) => {
+          if (accountData.some((i) => i.name === name)) {
+            const data = {
+              walletName: walletName,
+              walletAddress: '0xa94b3c662eE5602A3308604a3fB9A8FDd5caa710'
+            }
+            item?.accountDetails?.push(data)
           }
-          item?.accountDetails?.push(data)
-        }
-        else {
-          const data =
+          else {
+            const data =
+            {
+              name: name,
+              accountDetails: [
+                {
+                  walletName: walletName,
+                  walletAddress: '0xa94b3c662eE5602A3308604a3fB9A8FDd5caa710'
+                }
+              ]
+            }
+            accountData?.push(data)
+            setAccountData([...accountData])
+          }
+        })
+        await AsyncStorage.setItem("WalletList", JSON.stringify(accountData))
+        navigation.navigate(appConstant.accountDetails, {
+          walletName: walletName,
+          from: appConstant.createAccount
+        })
+      }
+      else {
+        const data = [
           {
             name: name,
             accountDetails: [
@@ -82,34 +114,14 @@ export default function CreateAccountScreen({ navigation, route }) {
                 walletAddress: '0xa94b3c662eE5602A3308604a3fB9A8FDd5caa710'
               }
             ]
-          }
-          accountData?.push(data)
-          setAccountData([...accountData])
-        }
-      })
-      await AsyncStorage.setItem("WalletList", JSON.stringify(accountData))
-      navigation.navigate(appConstant.accountDetails, {
-        walletName: walletName,
-        from: appConstant.createAccount
-      })
-    }
-    else {
-      const data = [
-        {
-          name: name,
-          accountDetails: [
-            {
-              walletName: walletName,
-              walletAddress: '0xa94b3c662eE5602A3308604a3fB9A8FDd5caa710'
-            }
-          ]
-        },
-      ]
-      await AsyncStorage.setItem("WalletList", JSON.stringify(data))
-      navigation.navigate(appConstant.accountDetails, {
-        walletName: walletName,
-        from: appConstant.createAccount
-      })
+          },
+        ]
+        await AsyncStorage.setItem("WalletList", JSON.stringify(data))
+        navigation.navigate(appConstant.accountDetails, {
+          walletName: walletName,
+          from: appConstant.createAccount
+        })
+      }
     }
   }
 
@@ -177,8 +189,8 @@ export default function CreateAccountScreen({ navigation, route }) {
           <FontText name={"inter-regular"} size={normalize(22)} color={isSelect ? 'black' : 'white'} pRight={!isSelect ? hp(13) : hp(9)} >
             {"0xa94bb...a710"}
           </FontText>
-          {isSelect && !walletId && <SvgIcons.BlackRightArrow height={hp(3)} width={hp(2.5)} />}
-          {walletId && <SvgIcons.BlackCheck height={hp(4)} width={hp(2.5)} />}
+          {isSelect && walletId === '' && <SvgIcons.BlackRightArrow height={hp(3)} width={hp(2.5)} />}
+          {walletId !== '' && isSelect && <SvgIcons.BlackCheck height={hp(4)} width={hp(2.5)} />}
         </TouchableOpacity>
       </View>
       <Button
@@ -192,6 +204,14 @@ export default function CreateAccountScreen({ navigation, route }) {
           {t("create")}
         </FontText>
       </Button>
+      <Alert
+        show={showAlert}
+        title={alertTitle}
+        message={alertMessage}
+        onConfirmPressed={() => {
+          setShowAlert(false)
+        }}
+      />
     </View >
   )
 }

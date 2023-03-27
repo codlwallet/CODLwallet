@@ -28,6 +28,7 @@ export default function AccountDetailsScreen({ navigation, route }) {
         }
         else {
             navigation.goBack()
+            route.params.onGoBack()
         }
         return true;
     };
@@ -40,7 +41,7 @@ export default function AccountDetailsScreen({ navigation, route }) {
 
     return (
         <View style={styles.container}>
-            <Header title={walletName} showRightIcon={from !== appConstant.accountList ? true : false} showBackIcon onBackPress={backAction} statusBarcolor={colors.black} style={{ alignSelf: 'center' }} RightIconPress={() => navigation.navigate(appConstant.createAccount, {
+            <Header title={walletName} showRightIcon={from == appConstant.createAccount ? true : false} showBackIcon onBackPress={backAction} statusBarcolor={colors.black} style={{ alignSelf: 'center' }} RightIconPress={() => navigation.navigate(appConstant.createAccount, {
                 name: name
             })} titleStyle={{ right: from === appConstant.accountList ? wp(35) : 0 }} />
             <View style={styles.subContainer}>
