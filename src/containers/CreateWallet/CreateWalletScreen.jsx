@@ -98,7 +98,7 @@ export default function CreateWalletScreen({ navigation, route }) {
                 bgColor="white"
                 type="highlight"
                 borderRadius={11}
-                style={{ marginBottom: hp(2) }}
+                style={{ marginBottom: hp(3) }}
                 onPress={handleProceedClick}
                 buttonStyle={styles.button}>
                 <FontText name={'inter-medium'} size={normalize(22)} color={'red'}>

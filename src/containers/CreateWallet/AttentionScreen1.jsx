@@ -39,6 +39,7 @@ export default function AttentionScreen1({ navigation, route }) {
                 description={t("attention1Description")}
                 showButton1
                 firstBtnTitle={t("understand")}
+                firstBtnValue={t("understand")}
                 buttonValue={t("understand")}
                 handleFirstBtnClick={handleUnderStandBtnClick}
             />

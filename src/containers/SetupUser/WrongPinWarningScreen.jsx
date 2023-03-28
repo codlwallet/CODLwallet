@@ -6,6 +6,7 @@ import appConstant from '../../helper/appConstant'
 import AttentionWarningView from '../../components/AttentionWarningView'
 import { hp } from '../../helper/responsiveScreen'
 import { useTranslation } from 'react-i18next'
+import Header from '../../components/common/Header'
 
 export default function WrongPinWarningScreen({ navigation, route }) {
     const { t } = useTranslation();
@@ -22,13 +23,15 @@ export default function WrongPinWarningScreen({ navigation, route }) {
                 translucent
                 backgroundColor={colors.black}
             />
+            <Header showRightIcon RightIconPress={handleTryAgainClick} statusBarcolor={colors.black} RightIcon={'false'} />
             <AttentionWarningView
                 title={count === 1 ? t("wrongPin") : t("lastTry")}
-                mainIcon={<SvgIcons.Polygon height={hp(8)} width={hp(8)} />}
+                mainIcon={<SvgIcons.Polygon height={hp(10)} width={hp(10)} />}
                 description={count === 1 ? `${3} ${t("attemptsLeft")}` : `${t("lastTryDescription")}`}
                 showButton1
                 firstBtnTitle={t("tryAgain")}
-                buttonValue={appConstant.tryAgain}
+                firstBtnValue={t("tryAgain")}
+                buttonValue={t("tryAgain")}
                 handleFirstBtnClick={handleTryAgainClick}
             />
         </View>

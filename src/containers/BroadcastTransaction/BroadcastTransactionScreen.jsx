@@ -132,7 +132,7 @@ const styles = StyleSheet.create({
     },
     button: {
         backgroundColor: colors.white,
-        marginBottom: hp(2),
+        marginBottom: hp(3),
         height: hp(8.5),
         width: wp(90),
     },

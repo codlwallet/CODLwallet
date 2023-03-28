@@ -11,6 +11,7 @@ import ToggleSwitch from 'toggle-switch-react-native'
 import Button from '../../components/common/Button'
 import WalletCard from '../../components/WalletCard'
 import { useTranslation } from 'react-i18next'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 export default function WelcomePurchaseScreen({ navigation, route }) {
     const { t } = useTranslation();
@@ -19,8 +20,15 @@ export default function WelcomePurchaseScreen({ navigation, route }) {
     const [passwordFocus, setPasswordFocus] = useState(false)
     const [isEnabled, setIsEnabled] = useState(false);
     const [keyboardHeight, setKeyboardHeight] = useState(0);
+    const [loginData, setLoginData] = useState()
 
-    const toggleSwitch = () => setIsEnabled(previousState => !previousState);
+    useEffect(() => {
+        async function getLoginData() {
+            const data = await AsyncStorage.getItem('LoginData');
+            setLoginData(JSON.parse(data))
+        }
+        getLoginData()
+    }, [])
 
     useEffect(() => {
         const showSubscription = Keyboard.addListener('keyboardDidShow', e => setKeyboardHeight(e.endCoordinates.height));
@@ -58,6 +66,8 @@ export default function WelcomePurchaseScreen({ navigation, route }) {
         }
     );
 
+    const toggleSwitch = () => setIsEnabled(previousState => !previousState);
+
     const onSubmitPin = () => {
         Keyboard.dismiss()
         setIsEnabled(false)
@@ -76,7 +86,7 @@ export default function WelcomePurchaseScreen({ navigation, route }) {
             <View style={[styles.subContainer, { bottom: isEnabled ? wp(18) : 0 }]}>
                 <TouchableOpacity style={styles.buttonConatiner} onPress={handleEnterClick}>
                     <FontText size={normalize(22)} color={'white'} name={'inter-regular'}>
-                        {'Alice’s Crypto'}
+                        {loginData?.name}
                     </FontText>
                     <SvgIcons.RightBackArrow height={hp(3)} width={hp(2)} />
                 </TouchableOpacity>
@@ -114,7 +124,7 @@ export default function WelcomePurchaseScreen({ navigation, route }) {
                     }
                 />}
             </View>
-            <WalletCard style={[styles.walletCardContainer, { bottom: isEnabled ? keyboardHeight - hp(14) : 0 }]}
+            <WalletCard style={[styles.walletCardContainer, { bottom: isEnabled ? keyboardHeight - hp(6) : hp(6) }]}
                 title={t("hiddenWallet")}
                 headerStyle={{ borderColor: colors.black }}
                 titleColor={'black'}
@@ -197,7 +207,8 @@ const styles = StyleSheet.create({
         paddingBottom: hp(3)
     },
     buttonView: {
-        bottom: hp(-4)
+        bottom: hp(3),
+        position: 'absolute'
     },
     numberView: {
         flexDirection: 'row',

@@ -29,15 +29,12 @@ export default function LanguageScreen({ navigation }) {
 
     }, []);
 
-
     const handleDoneClick = () => {
         i18n.changeLanguage(language).then(() => {
             I18nManager.forceRTL(false);
         });
         navigation.goBack()
     }
-
-
 
     return (
         <View style={styles.container}>
@@ -50,7 +47,7 @@ export default function LanguageScreen({ navigation }) {
                             setButtonIndex(index)
                             setLanguage(item?.value)
                         }}>
-                            <ButtonView listItem={item} showRightIcon index={index} buttonIndex={buttonIndex} />
+                            <ButtonView listItem={item} showRightIcon index={index} buttonIndex={buttonIndex} from={true} />
                         </TouchableOpacity>
                     )
                 })
@@ -87,7 +84,7 @@ const styles = StyleSheet.create({
     },
     buttonView: {
         position: 'absolute',
-        bottom: hp(2)
+        bottom: hp(3)
     },
     button: {
         alignItems: 'center',

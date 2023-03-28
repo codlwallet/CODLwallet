@@ -4,17 +4,15 @@ import colors from '../../../assets/colors';
 import {hp, normalize, wp} from '../../../helper/responsiveScreen';
 import FontText from '../FontText';
 import SvgIcons from '../../../assets/SvgIcons';
+import i18n from '../../../constants/i18n';
 
 export default function ButtonView({
   style,
   listItem,
   showRightIcon,
-  textColor,
-  rightIcon,
-  showLeftIcon,
-  leftIcon,
   index,
   buttonIndex,
+  from,
 }) {
   return (
     <View
@@ -30,7 +28,9 @@ export default function ButtonView({
         size={normalize(22)}
         pRight={wp(20)}
         name={'inter-regular'}>
-        {listItem.name}
+        {from == true || i18n.language === 'tr'
+          ? listItem.name
+          : listItem?.value}
       </FontText>
       {showRightIcon && index === buttonIndex && (
         <SvgIcons.BlackCheck height={hp(4)} width={wp(4)} />

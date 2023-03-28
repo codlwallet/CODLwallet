@@ -75,7 +75,7 @@ const styles = StyleSheet.create({
         borderRadius: hp(4)
     },
     buttonView: {
-        marginBottom: hp(2)
+        marginBottom: hp(3)
     },
     button: {
         backgroundColor: colors.white,

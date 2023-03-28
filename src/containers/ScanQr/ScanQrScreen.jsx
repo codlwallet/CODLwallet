@@ -23,7 +23,6 @@ export default function ScanQrScreen({ navigation, route }) {
         amount: '0.001 ETH'
     }
 
-
     useEffect(() => {
         onOpneScanner();
     }, []);
@@ -87,7 +86,9 @@ export default function ScanQrScreen({ navigation, route }) {
         <View style={styles.container}>
             <Header title={t("scanQr")} showRightIcon statusBarcolor={colors.black} style={{ alignSelf: 'center' }} RightIcon={'info'} />
             <View style={styles.subContainer}>
-                <TouchableOpacity onPress={() => navigation.navigate(appConstant.signTransaction)}>
+                <TouchableOpacity onPress={() => navigation.navigate(appConstant.signTransaction, {
+                    walletName: walletName,
+                })}>
                     {opneScanner &&
                         <>
                             <View style={{ borderRadius: 10, backgroundColor: colors.black, padding: 6, borderRadius: 20, justifyContent: 'center', alignItems: 'center' }}>

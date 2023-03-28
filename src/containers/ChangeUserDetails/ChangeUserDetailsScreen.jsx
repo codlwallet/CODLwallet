@@ -3,7 +3,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import Input from '../../components/common/Input'
 import colors from '../../assets/colors'
 import { hp, normalize, wp } from '../../helper/responsiveScreen'
-import appConstant, { changePIN } from '../../helper/appConstant'
+import appConstant from '../../helper/appConstant'
 import SvgIcons from '../../assets/SvgIcons'
 import Header from '../../components/common/Header'
 import Button from '../../components/common/Button'
@@ -218,7 +218,7 @@ export default function ChangeUserDetailsScreen({ navigation, route }) {
                     :
                     <>
                         <Input
-                            withRightIcon={currentPin !== '' ? true : false}
+                            withRightIcon={currentPin == loginData?.pin ? true : false}
                             ref={currentPinRef}
                             placeholder={t("currentPin")}
                             value={currentPin}
@@ -340,7 +340,6 @@ export default function ChangeUserDetailsScreen({ navigation, route }) {
                     </>
 
                 }
-
                 <Button
                     flex={null}
                     height={hp(8.5)}
@@ -356,7 +355,6 @@ export default function ChangeUserDetailsScreen({ navigation, route }) {
                     </FontText>
                 </Button>
             </View>
-
             <Alert
                 show={showAlert}
                 title={alertTitle}
@@ -392,7 +390,7 @@ const styles = StyleSheet.create({
     },
     buttonView: {
         position: 'absolute',
-        bottom: hp(4),
+        bottom: hp(3),
     },
     button: {
         backgroundColor: colors.white,

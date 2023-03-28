@@ -149,7 +149,7 @@ const styles = StyleSheet.create({
         marginTop: hp(13)
     },
     button: {
-        marginBottom: hp(2)
+        marginBottom: hp(3)
     },
     walletCardContainer: {
         backgroundColor: colors.gray,

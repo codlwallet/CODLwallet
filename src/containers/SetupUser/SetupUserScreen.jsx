@@ -390,7 +390,7 @@ const styles = StyleSheet.create({
     },
     buttonView: {
         position: 'absolute',
-        bottom: hp(4),
+        bottom: hp(3),
     },
     button: {
         backgroundColor: colors.white,

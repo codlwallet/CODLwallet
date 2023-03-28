@@ -1,6 +1,6 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next';
-import { Image, StatusBar, StyleSheet, View } from 'react-native'
+import { StatusBar, StyleSheet, View } from 'react-native'
 import colors from '../../assets/colors';
 import SvgIcons from '../../assets/SvgIcons';
 import Button from '../../components/common/Button';
@@ -10,9 +10,7 @@ import { hp, normalize, wp } from '../../helper/responsiveScreen';
 
 const WelcomeScreen = ({ navigation, route }) => {
     const { t } = useTranslation();
-
     const from = route?.params?.from
-
 
     const onPressStartBtn = () => {
         navigation.navigate(appConstant.setupUser, {
@@ -39,7 +37,6 @@ const WelcomeScreen = ({ navigation, route }) => {
                 </Button>
             </View>
         </>
-
     )
 }
 
@@ -52,12 +49,9 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         flex: 1
     },
-    image: {
-        marginTop: hp(4)
-    },
     buttonView: {
         position: 'absolute',
-        bottom: hp(4)
+        bottom: hp(3)
     },
     button: {
         backgroundColor: colors.white,

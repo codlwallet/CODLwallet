@@ -43,7 +43,6 @@ export default function ConfirmSingingScreen({ navigation, route }) {
     }, []);
 
     const backAction = () => {
-        console.log("sdsjh")
         navigation.navigate(appConstant.accountDetails, {
             walletName: walletName
         })
@@ -196,7 +195,7 @@ const styles = StyleSheet.create({
     },
     buttonView: {
         position: 'absolute',
-        bottom: hp(4),
+        bottom: hp(3),
     },
     textInputContainer: {
         marginTop: hp(2),

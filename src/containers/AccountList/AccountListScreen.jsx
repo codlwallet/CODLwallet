@@ -46,7 +46,7 @@ export default function AccountListScreen({ navigation, route }) {
     const handleWalletOptionClick = (item, index) => {
         setButtonValue(item?.name)
         setButtonIndex(index)
-        if (item.name === t("createNewAccount")) {
+        if (item.value === appConstant.createNewAccount) {
             navigation.navigate(appConstant.createAccount, {
                 name: name
             })

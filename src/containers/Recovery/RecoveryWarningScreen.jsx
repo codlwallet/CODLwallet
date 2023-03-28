@@ -30,11 +30,12 @@ export default function RecoveryWarningScreen({ navigation }) {
     return (
         <View style={styles.container}>
             <Header showRightIcon RightIcon={'info'} title={t("recoveryCheck")} showBackIcon onBackPress={backAction} />
-            <AttentionWarningView title={appConstant.watchSurroundings}
+            <AttentionWarningView title={t("watchSurroundings")}
                 mainIcon={<SvgIcons.HideEye height={hp(8)} width={hp(8)} />}
                 description={t("attention1Description")}
                 showButton1
                 firstBtnTitle={t("startRecoveryCheck")}
+                firstBtnValue={t("startRecoveryCheck")}
                 buttonValue={t("startRecoveryCheck")}
                 handleFirstBtnClick={handleRecoveryClick}
             />

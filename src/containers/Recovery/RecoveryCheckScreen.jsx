@@ -164,7 +164,7 @@ export default function RecoveryCheckScreen({ navigation }) {
                     bgColor={btnValue === appConstant.edit ? 'white' : ['red-open']}
                     type="highlight"
                     borderRadius={11}
-                    style={{ marginBottom: hp(4) }}
+                    style={{ marginBottom: hp(3) }}
                     onPress={handleEditClick}
                     buttonStyle={styles.button}>
                     <FontText name={"inter-medium"} size={normalize(22)} color={btnValue === appConstant.edit ? "red" : 'white'}>

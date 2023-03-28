@@ -48,7 +48,7 @@ export default function SetupWalletScreen(props) {
                 {walletData.map((item, index) => {
                     return (
                         <TouchableOpacity key={index} onPress={() => {
-                            setButtonValue(item?.name)
+                            setButtonValue(item?.value)
                             setButtonIndex(index)
                         }}>
                             <ButtonView listItem={item} showRightIcon index={index} buttonIndex={buttonIndex} />
@@ -116,7 +116,7 @@ const styles = StyleSheet.create({
     },
     bottomView: {
         position: 'absolute',
-        bottom: hp(4),
+        bottom: hp(3),
     },
     walletCardContainer: {
         backgroundColor: colors.gray,

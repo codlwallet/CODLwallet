@@ -42,10 +42,12 @@ export default function AttentionScreen2({ navigation, route }) {
             />
             <AttentionWarningView
                 title={t("secureSeeds")}
-                mainIcon={<SvgIcons.Polygon height={hp(8)} width={hp(8)} />}
+                mainIcon={<SvgIcons.Polygon height={hp(10)} width={hp(10)} />}
                 description={t("attention3Description")}
                 showButton1
                 showButton2
+                firstBtnValue={appConstant.confirmSeeds}
+                secondBtnValue={appConstant.checkAgain}
                 firstBtnTitle={t("confirmSeeds")}
                 secondBtnTitle={t("checkAgain")}
                 buttonValue={btnValue}

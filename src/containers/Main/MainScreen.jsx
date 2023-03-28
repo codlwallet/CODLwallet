@@ -11,12 +11,22 @@ import SvgIcons from '../../assets/SvgIcons'
 import { useTranslation } from 'react-i18next'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { useFocusEffect } from '@react-navigation/native'
+import i18n from '../../constants/i18n'
 
 export default function MainScreen({ navigation, route }) {
     const { t } = useTranslation();
     const hidden = route?.params?.hidden
     const [hideMenu, setHideMenu] = useState(false);
     const [accountDetails, setAccountDetails] = useState([])
+    const [loginData, setLoginData] = useState()
+
+    useEffect(() => {
+        async function getLoginData() {
+            const data = await AsyncStorage.getItem('LoginData');
+            setLoginData(JSON.parse(data))
+        }
+        getLoginData()
+    }, [])
 
     useFocusEffect(
         React.useCallback(() => {
@@ -36,7 +46,8 @@ export default function MainScreen({ navigation, route }) {
     }, []);
 
     const backAction = () => {
-        navigation.goBack()
+        // navigation.goBack()
+        navigation.navigate(appConstant.welcomePurchase)
         return true;
     };
 
@@ -61,7 +72,7 @@ export default function MainScreen({ navigation, route }) {
         else if (item.value === appConstant.AboutCODL) {
             navigation.navigate(appConstant.AboutCODL)
         }
-        else if (item.value === appConstant.recoveryWarning) {
+        else if (item.value === appConstant.recoveryCheck) {
             navigation.navigate(appConstant.recoveryWarning)
         }
         else if (item.value === appConstant.networks) {
@@ -92,7 +103,8 @@ export default function MainScreen({ navigation, route }) {
                             i?.accountDetails.map((itm) => {
                                 navigation.navigate(appConstant?.accountDetails, {
                                     walletName: itm?.walletName,
-                                    name: item?.name
+                                    name: item?.name,
+                                    from: appConstant.main
                                 })
                             })
                         }
@@ -108,9 +120,19 @@ export default function MainScreen({ navigation, route }) {
         }
     }
 
+    const handleLockDeviceClick = () => {
+        navigation.navigate(appConstant.welcome, {
+            from: appConstant.welcomePurchase,
+        });
+    }
+
+    const onpressRightIcon = () => {
+        setHideMenu(!hideMenu)
+    }
+
     return (
         <View style={styles.container}>
-            <Header title={'Alice’s Crypto'} showRightIcon RightIcon={!hideMenu ? 'menu' : 'false'} RightIconPress={() => setHideMenu(!hideMenu)} style={{ height: hp(10) }} showHiddenTitle={hidden} />
+            <Header title={loginData?.name} showRightIcon RightIcon={!hideMenu ? 'menu' : 'false'} RightIconPress={() => onpressRightIcon()} style={{ height: hp(10) }} showHiddenTitle={hidden} />
             <View style={styles.subConatiner}>
                 {!hideMenu ?
                     <>
@@ -131,8 +153,8 @@ export default function MainScreen({ navigation, route }) {
                                                         <SvgIcons.Poly height={hp(6)} width={hp(4.5)} />
                                         }
                                     </View>
-                                    <FontText size={normalize(25)} color={'white'} name={'inter-regular'} pLeft={wp(5)} style={{ right: item.name === appConstant.avalanche ? wp(6) : 0 }}>
-                                        {item?.name}
+                                    <FontText size={normalize(25)} color={'white'} name={'inter-regular'} pLeft={wp(5)} style={{ right: item?.value === appConstant.avalanche ? wp(6) : 0 }}>
+                                        {i18n.language === 'tr' ? item?.name : item?.value}
                                     </FontText>
                                 </TouchableOpacity>
                             )
@@ -144,8 +166,8 @@ export default function MainScreen({ navigation, route }) {
                         {settingData.map((item, index) => {
                             return (
                                 <TouchableOpacity style={[styles.buttonContainer, { height: hp(7) }]} key={index} onPress={() => handleMenuListClick(item)}>
-                                    <FontText size={normalize(22)} color={item.name === t("deleteEverything") ? "red" : 'white'} name={'inter-regular'}  >
-                                        {item?.name}
+                                    <FontText size={normalize(22)} color={item.value === appConstant.deleteEverything ? "red" : 'white'} name={'inter-regular'}  >
+                                        {i18n.language === 'tr' ? item?.name : item?.value}
                                     </FontText>
                                 </TouchableOpacity>
                             )
@@ -159,7 +181,7 @@ export default function MainScreen({ navigation, route }) {
                 type="highlight"
                 borderRadius={11}
                 bgColor="white"
-                onPress={!hideMenu ? handleConnectClick : backAction}
+                onPress={!hideMenu ? handleConnectClick : handleLockDeviceClick}
                 buttonStyle={styles.button}>
                 <FontText name={"inter-medium"} size={normalize(22)} color="black">
                     {!hideMenu ? t("connect") : t("lockDevice")}

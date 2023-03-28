@@ -8,22 +8,26 @@ module.exports = {
   walletData: [
     {
       id: 0,
-      name: i18n.t('createWallet'),
+      name: 'Cüzdan Oluştur',
+      value: appConstant.createWallet,
     },
     {
       id: 1,
-      name: i18n.t('importWallet'),
+      name: 'Cüzdanı İçe Aktar',
+      value: appConstant.importWallet,
     },
   ],
 
   walletListData: [
     {
       id: 0,
-      name: i18n.t('createNewAccount'),
+      name: 'Yeni hesap oluştur',
+      value: appConstant.createNewAccount,
     },
     {
       id: 1,
-      name: i18n.t('reorderAccounts'),
+      name: 'Hesapları Yeniden Sırala',
+      value: appConstant.reorderAccounts,
     },
   ],
 
@@ -44,10 +48,12 @@ module.exports = {
     {
       id: 0,
       name: i18n.t('terms'),
+      value: appConstant.terms,
     },
     {
       id: 1,
       name: i18n.t('etc'),
+      value: appConstant.etc,
     },
   ],
 
@@ -360,32 +366,32 @@ module.exports = {
   mainData: [
     {
       id: 0,
-      name: i18n.t('bitcoin'),
+      name: 'Bitcoin',
       value: appConstant.bitcoin,
       image: require('../assets/images/BI.png'),
     },
     {
       id: 1,
-      name: i18n.t('ethereum'),
+      name: 'Ethereum',
       value: appConstant.ethereum,
       image: require('../assets/images/EV.png'),
       img: require('../assets/images/EVblack.png'),
     },
     {
       id: 2,
-      name: i18n.t('solana'),
+      name: 'Solana',
       value: appConstant.solana,
       image: require('../assets/images/SO.png'),
     },
     {
       id: 3,
-      name: i18n.t('avalanche'),
+      name: 'Çığ',
       value: appConstant.avalanche,
       image: require('../assets/images/img.png'),
     },
     {
       id: 4,
-      name: i18n.t('polygon'),
+      name: 'Çokgen',
       value: appConstant.polygon,
       image: require('../assets/images/PO.png'),
     },
@@ -394,37 +400,37 @@ module.exports = {
   settingData: [
     {
       id: 0,
-      name: i18n.t('changeName'),
+      name: 'İsmini değiştir',
       value: appConstant.changeName,
     },
     {
       id: 1,
-      name: i18n.t('changePIN'),
+      name: "Pin'i değiştir",
       value: appConstant.changePIN,
     },
     {
       id: 2,
-      name: i18n.t('recoveryCheck'),
+      name: 'Kurtarma Kontrolü',
       value: appConstant.recoveryCheck,
     },
     {
       id: 3,
-      name: i18n.t('networks'),
+      name: 'Ağlar',
       value: appConstant.networks,
     },
     {
       id: 4,
-      name: i18n.t('language'),
+      name: 'Dil',
       value: appConstant.language,
     },
     {
       id: 5,
-      name: i18n.t('AboutCODL'),
+      name: 'CODL hakkında',
       value: appConstant.AboutCODL,
     },
     {
       id: 6,
-      name: i18n.t('deleteEverything'),
+      name: 'Hepsini sil',
       value: appConstant.deleteEverything,
     },
   ],

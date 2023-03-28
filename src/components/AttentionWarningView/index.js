@@ -2,7 +2,6 @@ import {StyleSheet, View} from 'react-native';
 import React from 'react';
 import {hp, normalize, wp} from '../../helper/responsiveScreen';
 import FontText from '../common/FontText';
-import colors from '../../assets/colors';
 import Button from '../common/Button';
 
 export default function AttentionWarningView({
@@ -17,6 +16,8 @@ export default function AttentionWarningView({
   handleSecondBtnClick,
   buttonValue,
   isBgRed,
+  firstBtnValue,
+  secondBtnValue,
 }) {
   return (
     <View style={styles.container}>
@@ -43,7 +44,7 @@ export default function AttentionWarningView({
         <Button
           flex={null}
           bgColor={
-            buttonValue === firstBtnTitle
+            buttonValue === firstBtnValue
               ? 'white'
               : isBgRed
               ? ['red-open']
@@ -53,13 +54,13 @@ export default function AttentionWarningView({
           type="highlight"
           borderRadius={11}
           onPress={handleFirstBtnClick}
-          style={{marginBottom: hp(2)}}
+          style={{marginBottom: showButton2 ? hp(2) : hp(3)}}
           buttonStyle={[styles.button]}>
           <FontText
             name={'inter-medium'}
             size={normalize(22)}
             color={
-              buttonValue !== firstBtnTitle
+              buttonValue !== firstBtnValue
                 ? 'white'
                 : isBgRed
                 ? 'red'
@@ -73,7 +74,7 @@ export default function AttentionWarningView({
         <Button
           flex={null}
           bgColor={
-            buttonValue === secondBtnTitle
+            buttonValue === secondBtnValue
               ? 'white'
               : isBgRed
               ? ['red-open']
@@ -83,13 +84,13 @@ export default function AttentionWarningView({
           type="highlight"
           borderRadius={11}
           onPress={handleSecondBtnClick}
-          style={{marginBottom: hp(2)}}
+          style={{marginBottom: hp(3)}}
           buttonStyle={[styles.button]}>
           <FontText
             name={'inter-medium'}
             size={normalize(22)}
             color={
-              buttonValue !== secondBtnTitle
+              buttonValue !== secondBtnValue
                 ? 'white'
                 : isBgRed
                 ? 'red'
@@ -106,7 +107,6 @@ export default function AttentionWarningView({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    // alignItems: 'center',
   },
   subContainer: {
     flex: 1,

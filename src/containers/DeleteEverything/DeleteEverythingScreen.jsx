@@ -61,7 +61,7 @@ export default function DeleteEverythingScreen({ navigation }) {
     }
 
     const handleCheckRecoveryClick = () => {
-        setBtnValue(appConstant.recoveryCheck)
+        setBtnValue(appConstant.checkRecovery)
         navigation.navigate(appConstant.recoveryWarning)
     }
 
@@ -74,14 +74,14 @@ export default function DeleteEverythingScreen({ navigation }) {
         let errorStatus = true;
         if (enterPin === '' || enterPin.length < 4 || enterPin.length > 8) {
             setShowAlert(true)
-            setAlertTitle(appConstant.enterPIN)
-            setAlertMessage(appConstant.pinErrorMess)
+            setAlertTitle(t("enterPIN"))
+            setAlertMessage(t("pinErrorMess"))
             errorStatus = false;
         }
         else if (loginData?.pin !== enterPin) {
             setShowAlert(true)
-            setAlertTitle(appConstant.error)
-            setAlertMessage(appConstant.wrongPin)
+            setAlertTitle(t("error"))
+            setAlertMessage(t("wrongPin"))
             errorStatus = false;
         }
         return errorStatus;
@@ -117,6 +117,8 @@ export default function DeleteEverythingScreen({ navigation }) {
                         showButton2
                         firstBtnTitle={isConfirm ? t("confirmDelete") : t("checkRecovery")}
                         secondBtnTitle={isConfirm ? t("cancel") : t("deleteEverything")}
+                        firstBtnValue={isConfirm ? appConstant.confirmDelete : appConstant.checkRecovery}
+                        secondBtnValue={isConfirm ? appConstant.cancel : appConstant.deleteEverything}
                         buttonValue={btnValue}
                         handleFirstBtnClick={isConfirm ? handleConfirmDeleteClick : handleCheckRecoveryClick}
                         handleSecondBtnClick={isConfirm ? handleCancelClick : handleDeleteEverythingClick}
@@ -131,7 +133,7 @@ export default function DeleteEverythingScreen({ navigation }) {
                             value={enterPin}
                             placeholderTextColor={enterPinFocus ? colors.red : colors.white}
                             onChangeText={setEnterPin}
-                            keyboardType={'default'}
+                            keyboardType={'numeric'}
                             returnKeyType={'done'}
                             blurOnSubmit
                             maxLength={8}
@@ -206,7 +208,7 @@ const styles = StyleSheet.create({
     },
     buttonView: {
         position: 'absolute',
-        bottom: hp(2),
+        bottom: hp(3),
         alignSelf: 'center'
     },
     button: {

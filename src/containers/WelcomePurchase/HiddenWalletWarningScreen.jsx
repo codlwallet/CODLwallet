@@ -23,6 +23,7 @@ export default function HiddenWalletWarningScreen({ navigation, route }) {
                 description={t("hiddenWalletWarning")}
                 showButton1
                 firstBtnTitle={t("understand")}
+                firstBtnValue={t("understand")}
                 buttonValue={t("understand")}
                 handleFirstBtnClick={handleUnderStandBtnClick}
             />

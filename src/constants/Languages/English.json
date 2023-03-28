@@ -120,6 +120,8 @@
     "broadcastTransaction": "Broadcast Transaction",
     "signedTX": "Signed TX",
     "walletnameRequired": "Walletname Required",
-    "walletnameError": "Walletname must be greater than 1 characters"
+    "walletnameError": "Walletname must be greater than 1 characters",
+    "importWalletFailed": "Import Wallet Failed",
+    "importWalletError": "Special Characters or Numbers are not allowed"
   }
 }

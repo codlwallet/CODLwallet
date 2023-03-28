@@ -130,6 +130,7 @@ export default function CreateAccountScreen({ navigation, route }) {
     setWalletNameFocus(false)
     navigation.navigate(appConstant.selectAccount, {
       name: name,
+      walletId: walletId,
       onGoBack: () => {
         setWalletNameFocus(false)
         // setIsSelect(false)
@@ -189,8 +190,8 @@ export default function CreateAccountScreen({ navigation, route }) {
           <FontText name={"inter-regular"} size={normalize(22)} color={isSelect ? 'black' : 'white'} pRight={!isSelect ? hp(13) : hp(9)} >
             {"0xa94bb...a710"}
           </FontText>
-          {isSelect && walletId === '' && <SvgIcons.BlackRightArrow height={hp(3)} width={hp(2.5)} />}
-          {walletId !== '' && isSelect && <SvgIcons.BlackCheck height={hp(4)} width={hp(2.5)} />}
+          {walletId === undefined && isSelect && <SvgIcons.BlackRightArrow height={hp(3)} width={hp(2.5)} />}
+          {walletId !== undefined && isSelect && < SvgIcons.BlackCheck height={hp(4)} width={hp(2.5)} />}
         </TouchableOpacity>
       </View>
       <Button
@@ -226,10 +227,6 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     marginTop: hp(20),
-  },
-  button: {
-    alignItems: 'center',
-    width: wp(90),
   },
   textInputContainer: {
     marginTop: hp(2),
