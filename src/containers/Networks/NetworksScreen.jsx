@@ -35,19 +35,17 @@ export default function NetworksScreen({ navigation, route }) {
                                             item.value === 'Solana' ?
                                                 <Image source={item.image} style={{ height: hp(3.5), width: hp(4.5), tintColor: index === btnIndex ? '#495057' : colors.white }} /> :
                                                 item.value === 'Avalanche' ?
-                                                    <View style={{ backgroundColor: index === btnIndex ? colors.white : colors.gray }}>
-                                                        <Image source={item.image} style={{ height: hp(7), width: hp(7), right: wp(2.5), }} />
-                                                    </View> :
+                                                    <Image source={item.image} style={{ height: hp(4), width: hp(5), tintColor: index === btnIndex ? '#495057' : colors.white }} />
+                                                    :
                                                     <Image source={item.image} style={{ height: hp(4), width: hp(4.5), tintColor: index === btnIndex ? '#495057' : colors.white }} />
                                     }
-                                    <FontText size={normalize(25)} color={index === btnIndex ? 'black' : 'white'} name={'inter-regular'} pLeft={wp(5)} style={{ right: item?.value === 'Avalanche' ? wp(6) : 0 }}>
+                                    <FontText size={normalize(25)} color={index === btnIndex ? 'black' : 'white'} name={'inter-regular'} pLeft={wp(5)} style={{}}>
                                         {i18n.language === 'tr' ? item?.name : item?.value}
                                     </FontText>
                                 </View>
                                 {index === btnIndex && <SvgIcons.BlackCheck height={hp(3)} width={hp(3)} />}
                             </TouchableOpacity>
                         </View>
-
                     )
                 })
                 }
@@ -55,7 +53,7 @@ export default function NetworksScreen({ navigation, route }) {
             <Button
                 flex={null}
                 height={hp(8.5)}
-                width="90%"
+                width={wp(90)}
                 type="highlight"
                 borderRadius={11}
                 bgColor="white"
@@ -89,7 +87,7 @@ const styles = StyleSheet.create({
         backgroundColor: colors.gray,
         alignItems: 'center',
         flexDirection: 'row',
-        width: wp(85),
+        width: wp(88),
         borderRadius: wp(2),
         marginVertical: hp(1),
         paddingHorizontal: wp(4),
@@ -97,8 +95,6 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between'
     },
     button: {
-        backgroundColor: colors.white,
         marginBottom: hp(3),
-        alignItems: 'center',
     }
 })

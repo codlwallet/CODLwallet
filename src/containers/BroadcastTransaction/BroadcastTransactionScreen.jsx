@@ -86,21 +86,9 @@ export default function BroadcastTransactionScreen({ navigation, route }) {
                     activeDotIndex={selectedIndex}
                     carouselRef={CarouselRef}
                     tappableDots={true}
-                    dotStyle={{
-                        width: wp(2.5),
-                        height: wp(2.5),
-                        borderRadius: wp(7),
-                        backgroundColor: colors.white,
-                        bottom: hp(10),
-                        marginHorizontal: (-10),
-                    }}
+                    dotStyle={styles.activeDot}
                     activeOpacity={0.5}
-                    inactiveDotStyle={{
-                        backgroundColor: colors['gray-open'],
-                        width: wp(4),
-                        height: wp(4),
-                        marginHorizontal: (-10),
-                    }}
+                    inactiveDotStyle={styles.inactiveDot}
                 />
             </View>
             <Button
@@ -108,8 +96,10 @@ export default function BroadcastTransactionScreen({ navigation, route }) {
                 type="highlight"
                 borderRadius={11}
                 bgColor="white"
+                height={hp(8.5)}
+                width={wp(90)}
                 onPress={backAction}
-                buttonStyle={styles.button}>
+                style={styles.button}>
                 <FontText name={"inter-medium"} size={normalize(22)} color="black">
                     {t("done")}
                 </FontText>
@@ -127,14 +117,9 @@ const styles = StyleSheet.create({
     },
     subContainer: {
         flex: 1,
-        // justifyContent: 'center',
-        // alignItems: 'center',
     },
     button: {
-        backgroundColor: colors.white,
         marginBottom: hp(3),
-        height: hp(8.5),
-        width: wp(90),
     },
     scannerContainer: {
         backgroundColor: colors.white,
@@ -153,15 +138,18 @@ const styles = StyleSheet.create({
         borderWidth: wp(1),
         borderColor: colors.black,
     },
-    bottomView: {
-        backgroundColor: colors.gray,
-        height: hp(11),
-        width: wp(90),
-        marginBottom: hp(2),
-        borderRadius: wp(2),
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: "space-between",
-        paddingHorizontal: wp(5)
+    activeDot: {
+        width: wp(2.5),
+        height: wp(2.5),
+        borderRadius: wp(7),
+        backgroundColor: colors.white,
+        bottom: hp(10),
+        marginHorizontal: (-10),
     },
+    inactiveDot: {
+        backgroundColor: colors['gray-open'],
+        width: wp(4),
+        height: wp(4),
+        marginHorizontal: (-10),
+    }
 })

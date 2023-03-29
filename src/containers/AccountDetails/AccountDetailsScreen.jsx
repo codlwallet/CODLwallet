@@ -76,9 +76,11 @@ export default function AccountDetailsScreen({ navigation, route }) {
                 flex={null}
                 type="highlight"
                 borderRadius={11}
+                height={hp(8.5)}
+                width={wp(90)}
                 bgColor="white"
                 onPress={handleSignClick}
-                buttonStyle={styles.button}>
+                style={styles.button}>
                 <FontText name={"inter-medium"} size={normalize(22)} color="black">
                     {t("sign")}
                 </FontText>
@@ -100,10 +102,7 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
     button: {
-        backgroundColor: colors.white,
         marginBottom: hp(3),
-        height: hp(8.5),
-        width: wp(90),
     },
     scannerContainer: {
         backgroundColor: colors.white,

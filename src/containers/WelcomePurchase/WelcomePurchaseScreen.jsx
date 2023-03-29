@@ -90,7 +90,7 @@ export default function WelcomePurchaseScreen({ navigation, route }) {
                     </FontText>
                     <SvgIcons.RightBackArrow height={hp(3)} width={hp(2)} />
                 </TouchableOpacity>
-                {isEnabled && <Input
+                {isEnabled ? <Input
                     withRightIcon
                     autoFocus={true}
                     placeholder={t("enterPassword")}
@@ -122,9 +122,9 @@ export default function WelcomePurchaseScreen({ navigation, route }) {
                             }
                         </TouchableOpacity>
                     }
-                />}
+                /> : null}
             </View>
-            <WalletCard style={[styles.walletCardContainer, { bottom: isEnabled ? keyboardHeight - hp(6) : hp(6) }]}
+            <WalletCard style={[styles.walletCardContainer, { bottom: isEnabled ? keyboardHeight - hp(13) : 0 }]}
                 title={t("hiddenWallet")}
                 headerStyle={{ borderColor: colors.black }}
                 titleColor={'black'}
@@ -152,7 +152,7 @@ export default function WelcomePurchaseScreen({ navigation, route }) {
             <Button
                 flex={null}
                 height={hp(8.5)}
-                width="95%"
+                width={wp(90)}
                 type="highlight"
                 borderRadius={11}
                 bgColor="white"
@@ -207,8 +207,7 @@ const styles = StyleSheet.create({
         paddingBottom: hp(3)
     },
     buttonView: {
-        bottom: hp(3),
-        position: 'absolute'
+        bottom: hp(-4)
     },
     numberView: {
         flexDirection: 'row',

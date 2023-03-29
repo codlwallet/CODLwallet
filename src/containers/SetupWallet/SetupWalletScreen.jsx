@@ -85,8 +85,8 @@ export default function SetupWalletScreen(props) {
                     type="highlight"
                     borderRadius={11}
                     bgColor="white"
+                    width={wp(90)}
                     onPress={handleProceedClick}
-                    buttonStyle={styles.button}
                 >
                     <FontText name={"inter-medium"} size={normalize(22)} color="black">
                         {t("proceed")}
@@ -107,12 +107,6 @@ const styles = StyleSheet.create({
         flex: 0.5,
         alignItems: 'flex-end',
         justifyContent: 'flex-end'
-    },
-    button: {
-        alignItems: 'center',
-        alignSelf: 'center',
-        width: wp(90),
-        height: hp(8.5)
     },
     bottomView: {
         position: 'absolute',

@@ -35,12 +35,12 @@ const Header = props => {
 
   return (
     <>
-      <StatusBar
+      {/* <StatusBar
         barStyle={'light-content'}
         hidden={statusBarHidden}
         translucent
         backgroundColor={statusBarcolor ? statusBarcolor : colors.black}
-      />
+      /> */}
       <View style={[styles.container, style]}>
         {showBackIcon && (
           <TouchableOpacity onPress={onBackPress} style={styles.iconContainer}>

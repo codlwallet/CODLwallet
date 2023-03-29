@@ -121,6 +121,8 @@
     "walletnameError": "Cüzdanadı 1 karakterden büyük olmalıdır",
     "importWalletFailed": "Cüzdanı İçe Aktarma Başarısız",
     "importWalletError": "Özel Karakterlere veya Rakamlara izin verilmez",
-    "reorderAccounts": "Hesapları Yeniden Sırala"
+    "reorderAccounts": "Hesapları Yeniden Sırala",
+    "selectWalletRequired": "Cüzdan Seçin Gerekli",
+    "selectWalletError": "Seçtiğiniz hesaba sahip olmalısınız"
   }
 }

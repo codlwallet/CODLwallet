@@ -23,12 +23,13 @@ export default function CreateAccountScreen({ navigation, route }) {
   const [isSelect, setIsSelect] = useState(false)
   const [selectWallet, setSelectWallet] = useState(false)
   const [accountData, setAccountData] = useState([])
-  const [showCheckIcon, setShowIcon] = useState(false)
   const [showAlert, setShowAlert] = useState(false)
   const [alertTitle, setAlertTitle] = useState('')
   const [alertMessage, setAlertMessage] = useState('')
+  const [showBackArrow, setShowBackArrow] = useState(false)
 
   useEffect(() => {
+    setWalletName('')
     BackHandler.addEventListener('hardwareBackPress', backAction);
     return async () => {
       BackHandler.removeEventListener('hardwareBackPress', backAction);
@@ -37,6 +38,8 @@ export default function CreateAccountScreen({ navigation, route }) {
 
   useFocusEffect(
     React.useCallback(() => {
+      setWalletNameFocus(false)
+      setIsSelect(false)
       async function getWalletData() {
         const data = await AsyncStorage.getItem('WalletList');
         setAccountData(JSON.parse(data))
@@ -54,26 +57,34 @@ export default function CreateAccountScreen({ navigation, route }) {
     setWalletNameFocus(true)
     nameRef.current.focus()
     setIsSelect(false)
+    setShowBackArrow(false)
   }
 
   const onWalletNameBlur = () => {
     setWalletNameFocus(false)
     setIsSelect(true)
+    setShowBackArrow(true)
   }
 
   const onWalletNameSubmit = () => {
     setWalletNameFocus(false)
     setIsSelect(true)
+    setShowBackArrow(true)
+
   }
 
   const handleCreateClick = async () => {
-    if (!walletName) {
+    if (walletName === '') {
       setShowAlert(true)
       setAlertTitle(t('walletnameRequired'))
       setAlertMessage(t("walletnameError"))
     }
+    else if (walletId === '' || walletId === undefined) {
+      setShowAlert(true)
+      setAlertTitle(t('selectWalletRequired'))
+      setAlertMessage(t("selectWalletError"))
+    }
     else {
-
       if (accountData !== null) {
         accountData.map((item) => {
           if (accountData.some((i) => i.name === name)) {
@@ -81,7 +92,7 @@ export default function CreateAccountScreen({ navigation, route }) {
               walletName: walletName,
               walletAddress: '0xa94b3c662eE5602A3308604a3fB9A8FDd5caa710'
             }
-            item?.accountDetails?.push(data)
+            item.name === name && item?.accountDetails?.push(data)
           }
           else {
             const data =
@@ -101,7 +112,8 @@ export default function CreateAccountScreen({ navigation, route }) {
         await AsyncStorage.setItem("WalletList", JSON.stringify(accountData))
         navigation.navigate(appConstant.accountDetails, {
           walletName: walletName,
-          from: appConstant.createAccount
+          from: appConstant.createAccount,
+          name: name
         })
       }
       else {
@@ -119,7 +131,8 @@ export default function CreateAccountScreen({ navigation, route }) {
         await AsyncStorage.setItem("WalletList", JSON.stringify(data))
         navigation.navigate(appConstant.accountDetails, {
           walletName: walletName,
-          from: appConstant.createAccount
+          from: appConstant.createAccount,
+          name: name
         })
       }
     }
@@ -127,14 +140,15 @@ export default function CreateAccountScreen({ navigation, route }) {
 
   const handleSelectWalletClick = () => {
     setIsSelect(true)
+    setShowBackArrow(true)
     setWalletNameFocus(false)
     navigation.navigate(appConstant.selectAccount, {
       name: name,
       walletId: walletId,
       onGoBack: () => {
         setWalletNameFocus(false)
+        setShowBackArrow(false)
         // setIsSelect(false)
-        setSelectWallet(true)
       },
     })
   }
@@ -187,11 +201,16 @@ export default function CreateAccountScreen({ navigation, route }) {
               {walletId ? walletId : "0"}
             </FontText>
           </View>
-          <FontText name={"inter-regular"} size={normalize(22)} color={isSelect ? 'black' : 'white'} pRight={!isSelect ? hp(13) : hp(9)} >
+          <FontText name={"inter-regular"} size={normalize(22)} color={isSelect ? 'black' : 'white'} pRight={!isSelect ? hp(9) : hp(9)} >
             {"0xa94bb...a710"}
           </FontText>
-          {walletId === undefined && isSelect && <SvgIcons.BlackRightArrow height={hp(3)} width={hp(2.5)} />}
-          {walletId !== undefined && isSelect && < SvgIcons.BlackCheck height={hp(4)} width={hp(2.5)} />}
+          {showBackArrow && <SvgIcons.BlackRightArrow height={hp(3)} width={hp(2.5)} />}
+          {!showBackArrow &&
+            <>
+              {isSelect ? < SvgIcons.BlackCheck height={hp(4)} width={hp(2.5)} /> :
+                < SvgIcons.Check height={hp(4)} width={hp(2.5)} />}
+            </>
+          }
         </TouchableOpacity>
       </View>
       <Button
@@ -199,8 +218,10 @@ export default function CreateAccountScreen({ navigation, route }) {
         type="highlight"
         borderRadius={11}
         bgColor="white"
+        height={hp(8.5)}
+        width={wp(90)}
         onPress={handleCreateClick}
-        buttonStyle={styles.button}>
+        style={styles.button}>
         <FontText name={"inter-medium"} size={normalize(22)} color="black">
           {t("create")}
         </FontText>
@@ -256,9 +277,7 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   button: {
-    backgroundColor: colors.white,
     marginBottom: hp(3),
-    height: hp(8.5),
-    width: wp(90)
+    alignSelf: 'center'
   }
 })

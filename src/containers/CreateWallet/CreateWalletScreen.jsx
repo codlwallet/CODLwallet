@@ -50,7 +50,7 @@ export default function CreateWalletScreen({ navigation, route }) {
 
     return (
         <View style={styles.container}>
-            <Header title={t("createWallet")} showRightIcon RightIcon={'info'} showBackIcon onBackPress={backAction} statusBarcolor={colors.red} style={{ alignSelf: 'center' }} />
+            <Header title={t("createWallet")} showRightIcon RightIcon={'info'} showBackIcon onBackPress={backAction} statusBarcolor={colors.red} />
             <View style={styles.subContainer}>
                 <WalletCard
                     style={styles.walletCardContainer}
@@ -98,9 +98,10 @@ export default function CreateWalletScreen({ navigation, route }) {
                 bgColor="white"
                 type="highlight"
                 borderRadius={11}
-                style={{ marginBottom: hp(3) }}
+                width={wp(90)}
                 onPress={handleProceedClick}
-                buttonStyle={styles.button}>
+                style={styles.button}
+            >
                 <FontText name={'inter-medium'} size={normalize(22)} color={'red'}>
                     {t("proceed")}
                 </FontText>
@@ -120,8 +121,8 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
     button: {
-        alignItems: 'center',
-        width: wp(90),
+        marginBottom: hp(3),
+        alignSelf: 'center'
     },
     walletCardContainer: {
         backgroundColor: colors['red-open'],

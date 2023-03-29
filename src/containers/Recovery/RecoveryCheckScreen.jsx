@@ -142,7 +142,6 @@ export default function RecoveryCheckScreen({ navigation }) {
                     }
                 />
             </View>
-
             <>
                 <Button
                     flex={null}
@@ -150,10 +149,11 @@ export default function RecoveryCheckScreen({ navigation }) {
                     bgColor={!walletData?.some((item) => !item.name) && btnValue === appConstant.confirm ? 'white' : ['red-open']}
                     type="highlight"
                     borderRadius={11}
+                    width={wp(90)}
                     disabled={walletData?.some((item) => !item.name)}
-                    style={{ marginBottom: hp(2) }}
+                    style={[styles.button, { marginBottom: hp(2) }]}
                     onPress={handleConfirmClick}
-                    buttonStyle={styles.button}>
+                >
                     <FontText name={"inter-medium"} size={normalize(22)} color={!walletData?.some((item) => !item.name) && btnValue === appConstant.confirm ? "red" : 'white'}>
                         {t("done")}
                     </FontText>
@@ -163,16 +163,16 @@ export default function RecoveryCheckScreen({ navigation }) {
                     height={hp(8.5)}
                     bgColor={btnValue === appConstant.edit ? 'white' : ['red-open']}
                     type="highlight"
+                    width={wp(90)}
                     borderRadius={11}
-                    style={{ marginBottom: hp(3) }}
+                    style={styles.button}
                     onPress={handleEditClick}
-                    buttonStyle={styles.button}>
+                >
                     <FontText name={"inter-medium"} size={normalize(22)} color={btnValue === appConstant.edit ? "red" : 'white'}>
                         {t("edit")}
                     </FontText>
                 </Button>
             </>
-
         </View>
     )
 }
@@ -188,8 +188,8 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
     button: {
-        width: wp(90),
-        alignItems: 'center',
+        alignSelf: 'center',
+        marginBottom: hp(3)
     },
     walletCardContainer: {
         backgroundColor: colors['red-open'],

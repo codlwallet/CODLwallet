@@ -24,11 +24,11 @@ export default function ComplateSeedsScreen({ navigation, route }) {
 
     return (
         <View style={styles.container}>
-            <StatusBar
+            {/* <StatusBar
                 barStyle={'light-content'}
                 translucent
                 backgroundColor={colors.black}
-            />
+            /> */}
             <AttentionWarningView
                 title={t("complate")}
                 mainIcon={<View style={styles.imageContainer}>

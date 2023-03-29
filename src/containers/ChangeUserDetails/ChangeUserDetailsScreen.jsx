@@ -344,10 +344,10 @@ export default function ChangeUserDetailsScreen({ navigation, route }) {
                     flex={null}
                     height={hp(8.5)}
                     type="highlight"
+                    width={wp(90)}
                     borderRadius={11}
                     bgColor="white"
                     onPress={handleDoneBtn}
-                    buttonStyle={styles.button}
                     style={styles.buttonView}
                 >
                     <FontText name={"inter-medium"} size={normalize(22)} color="black">
@@ -375,7 +375,6 @@ const styles = StyleSheet.create({
     subContainer: {
         flex: 1,
         alignItems: 'center',
-        // justifyContent: 'center'
         marginTop: hp(20)
     },
     textInputContainer: {
@@ -392,19 +391,4 @@ const styles = StyleSheet.create({
         position: 'absolute',
         bottom: hp(3),
     },
-    button: {
-        backgroundColor: colors.white,
-        width: wp(90),
-    },
-    alertContainerStyle: {
-        backgroundColor: '#3A3A3A',
-        width: wp(85)
-    },
-    alertTextStyle: {
-        alignSelf: 'flex-start',
-        color: colors.white,
-        right: 14,
-        fontSize: 19,
-        fontWeight: 500
-    }
 })

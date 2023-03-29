@@ -19,7 +19,7 @@ const WelcomeScreen = ({ navigation, route }) => {
     }
     return (
         <>
-            <StatusBar backgroundColor={colors.black} />
+            {/* <StatusBar backgroundColor={colors.black} /> */}
             <View style={styles.container}>
                 <SvgIcons.AppLogo />
                 <Button
@@ -28,8 +28,8 @@ const WelcomeScreen = ({ navigation, route }) => {
                     type="highlight"
                     borderRadius={11}
                     bgColor="white"
+                    width={wp(90)}
                     onPress={onPressStartBtn}
-                    buttonStyle={styles.button}
                     style={styles.buttonView}>
                     <FontText name={"inter-medium"} size={normalize(22)} color="black">
                         {from ? t("unlock") : t("getStarted")}
@@ -53,9 +53,4 @@ const styles = StyleSheet.create({
         position: 'absolute',
         bottom: hp(3)
     },
-    button: {
-        backgroundColor: colors.white,
-        alignItems: 'center',
-        width: wp(90)
-    }
 })

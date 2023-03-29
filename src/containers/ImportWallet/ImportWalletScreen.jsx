@@ -1,4 +1,4 @@
-import { BackHandler, FlatList, Keyboard, StyleSheet, View } from 'react-native'
+import { BackHandler, FlatList, Keyboard, KeyboardAvoidingView, StyleSheet, View } from 'react-native'
 import React, { useEffect, useRef, useState } from 'react'
 import colors from '../../assets/colors'
 import Header from '../../components/common/Header'
@@ -109,7 +109,6 @@ export default function ImportWalletScreen({ navigation, route }) {
         return errorStatus;
     };
 
-
     const handleProceedClick = () => {
         if (isValidate()) {
             setBtnValue(appConstant.confirm)
@@ -139,7 +138,7 @@ export default function ImportWalletScreen({ navigation, route }) {
 
     const renderWalletData = (item, index) => {
         return (
-            <View >
+            <>
                 <Input
                     autoFocus={isEdit}
                     withLeftIcon
@@ -169,14 +168,14 @@ export default function ImportWalletScreen({ navigation, route }) {
                     returnKeyType={'next'}
                     style={[styles.inputContainer, { backgroundColor: item.name == '' ? colors.red : colors.white }]}
                 />
-            </View>
+            </>
         )
     }
 
     return (
         <View style={styles.container} >
             <Header title={t("importWallet")} showRightIcon RightIcon={'info'} showBackIcon onBackPress={backAction} statusBarcolor={colors.red} style={{ alignSelf: 'center', }} />
-            <View style={styles.subContainer}>
+            <KeyboardAvoidingView style={styles.subContainer} behavior='padding'>
                 <WalletCard style={styles.walletCardContainer}
                     titleColor={'red'}
                     title={t("recoverySeeds")}
@@ -193,7 +192,7 @@ export default function ImportWalletScreen({ navigation, route }) {
                         />
                     }
                 />
-            </View>
+            </KeyboardAvoidingView>
 
             {showConfirm && <FontText name={"inter-regular"} size={normalize(20)} color={'white'} style={{ width: wp(90), alignSelf: 'center', }} pBottom={hp(2)} textAlign={'center'}  >
                 {t("enterSeedsCorrectly")}
@@ -205,9 +204,10 @@ export default function ImportWalletScreen({ navigation, route }) {
                 bgColor={!walletcardData?.some((item) => !item.name) ? 'white' : ['red-open']}
                 type="highlight"
                 borderRadius={11}
-                style={{ marginBottom: hp(2) }}
+                width={wp(90)}
+                style={styles.button}
                 onPress={handleProceedClick}
-                buttonStyle={styles.button}>
+            >
                 <FontText name={"inter-medium"} size={normalize(22)} color={!walletcardData?.some((item) => !item.name) ? "red" : 'white'}>
                     {t("proceed")}
                 </FontText>
@@ -222,9 +222,10 @@ export default function ImportWalletScreen({ navigation, route }) {
                         type="highlight"
                         borderRadius={11}
                         disabled={walletcardData?.some((item) => !item.name)}
-                        style={{ marginBottom: hp(2) }}
+                        width={wp(90)}
+                        style={[styles.button, { marginBottom: hp(2) }]}
                         onPress={handleConfirmClick}
-                        buttonStyle={styles.button}>
+                    >
                         <FontText name={"inter-medium"} size={normalize(22)} color={!walletcardData?.some((item) => !item.name) && btnValue === appConstant.confirm ? "red" : 'white'}>
                             {t("confirm")}
                         </FontText>
@@ -235,9 +236,10 @@ export default function ImportWalletScreen({ navigation, route }) {
                         bgColor={btnValue === appConstant.edit ? 'white' : ['red-open']}
                         type="highlight"
                         borderRadius={11}
-                        style={{ marginBottom: hp(3) }}
+                        width={wp(90)}
+                        style={styles.button}
                         onPress={handleEditClick}
-                        buttonStyle={styles.button}>
+                    >
                         <FontText name={"inter-medium"} size={normalize(22)} color={btnValue === appConstant.edit ? "red" : 'white'}>
                             {t("edit")}
                         </FontText>
@@ -267,8 +269,8 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
     button: {
-        width: wp(90),
-        alignItems: 'center',
+        marginBottom: hp(3),
+        alignSelf: 'center',
     },
     walletCardContainer: {
         backgroundColor: colors['red-open'],

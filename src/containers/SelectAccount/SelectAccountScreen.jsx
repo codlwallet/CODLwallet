@@ -53,7 +53,7 @@ export default function SelectAccountScreen({ navigation, route }) {
 
     return (
         <View style={styles.container}>
-            <Header title={t("selectAccount")} showRightIcon RightIcon={'info'} showBackIcon onBackPress={backAction} statusBarcolor={colors.black} style={{ alignSelf: 'center' }} />
+            <Header title={t("selectAccount")} showRightIcon RightIcon={'info'} showBackIcon onBackPress={backAction} statusBarcolor={colors.black} />
             <View style={styles.subContainer}>
                 {data?.map((item, index) => {
                     return (
@@ -80,9 +80,10 @@ export default function SelectAccountScreen({ navigation, route }) {
                         width={wp(90)}
                         bgColor={btnValue === t("prev") ? 'white' : 'gray'}
                         type="highlight"
+                        height={hp(8.5)}
                         borderRadius={11}
                         onPress={handlePrevClick}
-                        buttonStyle={styles.button}>
+                    >
                         <FontText name={"inter-medium"} size={normalize(22)} color={btnValue === t("next") ? "red" : 'white'}>
                             {t("prev")}
                         </FontText>
@@ -92,10 +93,10 @@ export default function SelectAccountScreen({ navigation, route }) {
                         height={hp(8.5)}
                         bgColor={btnValue === t("next") ? 'white' : 'gray'}
                         type="highlight"
-                        width={isNext ? wp(43) : wp(95)}
+                        width={isNext ? wp(43) : wp(90)}
                         borderRadius={11}
                         onPress={handleNextClick}
-                        buttonStyle={styles.button}>
+                    >
                         <FontText name={"inter-medium"} size={normalize(22)} color={btnValue === t("next") ? "red" : 'white'}>
                             {t("next")}
                         </FontText>
@@ -109,9 +110,8 @@ export default function SelectAccountScreen({ navigation, route }) {
                 type="highlight"
                 borderRadius={11}
                 width={wp(90)}
-                style={{ marginBottom: hp(3) }}
                 onPress={handleSelectClick}
-                buttonStyle={styles.button}>
+                style={styles.button}>
                 <FontText name={"inter-medium"} size={normalize(22)} color={btnValue === t("select") ? "black" : 'white'}>
                     {t("select")}
                 </FontText>
@@ -150,8 +150,6 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
     button: {
-        backgroundColor: colors.white,
-        height: hp(8.5),
-        alignSelf: 'center'
+        marginBottom: hp(3)
     },
 })

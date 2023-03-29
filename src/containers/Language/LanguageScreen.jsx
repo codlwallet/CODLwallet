@@ -26,7 +26,6 @@ export default function LanguageScreen({ navigation }) {
             setButtonValue(appConstant.english)
             setButtonIndex(0)
         }
-
     }, []);
 
     const handleDoneClick = () => {
@@ -56,13 +55,13 @@ export default function LanguageScreen({ navigation }) {
             <Button
                 flex={null}
                 height={hp(8.5)}
-                width="90%"
+                width={wp(90)}
                 type="highlight"
                 borderRadius={11}
                 bgColor="white"
                 style={styles.buttonView}
                 onPress={handleDoneClick}
-                buttonStyle={styles.button}>
+            >
                 <FontText name={"inter-medium"} size={normalize(22)} color="black">
                     {t("done")}
                 </FontText>
@@ -86,11 +85,4 @@ const styles = StyleSheet.create({
         position: 'absolute',
         bottom: hp(3)
     },
-    button: {
-        alignItems: 'center',
-        alignSelf: 'center',
-        width: wp(90),
-        height: hp(8.5)
-    },
-
 })

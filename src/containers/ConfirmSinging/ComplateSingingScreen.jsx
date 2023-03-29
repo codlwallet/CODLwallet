@@ -49,9 +49,9 @@ export default function ComplateSingingScreen({ navigation, route }) {
                 height={hp(8.5)}
                 type="highlight"
                 borderRadius={11}
+                width={wp(90)}
                 bgColor="white"
                 onPress={handlebroadcastTransactionBtn}
-                buttonStyle={styles.button}
                 style={styles.buttonView}>
                 <FontText name={"inter-medium"} size={normalize(22)} color="black">
                     {t("broadcastTransaction")}
@@ -75,10 +75,7 @@ const styles = StyleSheet.create({
         borderRadius: hp(4)
     },
     buttonView: {
-        marginBottom: hp(3)
-    },
-    button: {
-        backgroundColor: colors.white,
-        width: wp(90),
+        marginBottom: hp(3),
+        alignSelf: 'center'
     },
 })

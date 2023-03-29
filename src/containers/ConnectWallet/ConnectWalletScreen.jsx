@@ -30,7 +30,7 @@ export default function ConnectWalletScreen({ navigation, route }) {
 
     return (
         <View style={styles.container}>
-            <Header title={t("connectWallet")} showRightIcon RightIcon={'info'} statusBarcolor={colors.black} style={{ alignSelf: 'center' }} />
+            <Header title={t("connectWallet")} showRightIcon RightIcon={'info'} statusBarcolor={colors.black} />
             <View style={styles.subContainer}>
                 <View style={styles.scannerContainer}>
                     <View style={styles.walletHeaderView}>
@@ -61,8 +61,10 @@ export default function ConnectWalletScreen({ navigation, route }) {
                 type="highlight"
                 borderRadius={11}
                 bgColor="white"
+                width={wp(90)}
+                height={hp(8.5)}
                 onPress={backAction}
-                buttonStyle={styles.button}>
+                style={styles.button}>
                 <FontText name={"inter-medium"} size={normalize(22)} color="black">
                     {t("done")}
                 </FontText>
@@ -84,10 +86,7 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
     button: {
-        backgroundColor: colors.white,
         marginBottom: hp(3),
-        height: hp(8.5),
-        width: wp(90),
     },
     scannerContainer: {
         backgroundColor: colors.white,

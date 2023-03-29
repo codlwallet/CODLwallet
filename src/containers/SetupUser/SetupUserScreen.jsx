@@ -348,8 +348,8 @@ export default function SetupUserScreen({ navigation, route }) {
                     type="highlight"
                     borderRadius={11}
                     bgColor="white"
+                    width={wp(90)}
                     onPress={handleProceedBtn}
-                    buttonStyle={styles.button}
                     style={styles.buttonView}>
                     <FontText name={"inter-medium"} size={normalize(22)} color="black">
                         {t("proceed")}
@@ -392,19 +392,4 @@ const styles = StyleSheet.create({
         position: 'absolute',
         bottom: hp(3),
     },
-    button: {
-        backgroundColor: colors.white,
-        width: wp(90),
-    },
-    alertContainerStyle: {
-        backgroundColor: '#3A3A3A',
-        width: wp(85)
-    },
-    alertTextStyle: {
-        alignSelf: 'flex-start',
-        color: colors.white,
-        right: 14,
-        fontSize: 19,
-        fontWeight: 500
-    }
 })

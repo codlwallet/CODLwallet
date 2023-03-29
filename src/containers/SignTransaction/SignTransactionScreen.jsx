@@ -44,33 +44,35 @@ export default function SignTransactionScreen({ navigation, route }) {
 
     return (
         <View style={styles.container}>
-            <Header title={t("signTransaction")} showRightIcon statusBarcolor={colors.black} style={{ alignSelf: 'center' }} RightIcon={'info'} />
+            <Header title={t("signTransaction")} showRightIcon statusBarcolor={colors.black} RightIcon={'info'} />
             <View style={styles.subContainer}>
                 <TransactionCard
                     item={details}
                     headerTitle={t("tokenTransfer")}
                 />
             </View>
-
             <Button
                 flex={null}
                 type="highlight"
+                height={hp(8.5)}
+                width={wp(90)}
                 borderRadius={11}
                 bgColor={btnValue === t("sign") ? "white" : 'gray'}
                 onPress={handleSignClick}
-                buttonStyle={styles.button}>
+                style={[styles.button, { marginBottom: hp(2) }]}>
                 <FontText name={"inter-medium"} size={normalize(22)} color={btnValue === t("sign") ? "black" : 'white'}>
                     {t("sign")}
                 </FontText>
             </Button>
-
             <Button
                 flex={null}
                 type="highlight"
+                height={hp(8.5)}
+                width={wp(90)}
                 borderRadius={11}
                 bgColor={btnValue === t("reject") ? "white" : 'gray'}
                 onPress={backAction}
-                buttonStyle={styles.button}>
+                style={styles.button}>
                 <FontText name={"inter-medium"} size={normalize(22)} color={btnValue === t("reject") ? "black" : 'white'}>
                     {t("reject")}
                 </FontText>
@@ -92,37 +94,7 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
     button: {
-        backgroundColor: colors.white,
         marginBottom: hp(3),
-        height: hp(8.5),
-        width: wp(90),
-    },
-    detailsContainer: {
-        backgroundColor: colors.gray,
-        height: hp(45),
-        width: hp(45),
-        borderRadius: wp(2),
-        alignItems: 'center',
-    },
-    infoView: {
-        width: hp(40)
-    },
-    textConatiner: {
-        flexDirection: 'row',
-        marginTop: hp(3)
-    },
-    text: {
-        width: hp(30)
-    },
-
-    detailsHeaderView: {
-        backgroundColor: colors.white,
-        borderRadius: wp(1.5),
-        paddingHorizontal: wp(2),
-        paddingVertical: hp(0.5),
-        top: hp(-2),
-        borderWidth: wp(1),
-        borderColor: colors.black,
     },
 
 })

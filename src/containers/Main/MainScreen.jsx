@@ -43,11 +43,15 @@ export default function MainScreen({ navigation, route }) {
         return async () => {
             BackHandler.removeEventListener('hardwareBackPress', backAction);
         };
-    }, []);
+    }, [hideMenu]);
 
     const backAction = () => {
-        // navigation.goBack()
-        navigation.navigate(appConstant.welcomePurchase)
+        if (hideMenu) {
+            setHideMenu(false)
+        }
+        else {
+            navigation.navigate(appConstant.welcomePurchase)
+        }
         return true;
     };
 
@@ -90,12 +94,13 @@ export default function MainScreen({ navigation, route }) {
             })
         }
         else {
-            if (accountDetails.some((i) => i.name === item.name)) {
+            if (accountDetails.some((i) => i.name === item.value)) {
                 accountDetails.map((i) => {
-                    if (i?.name === item.name) {
+                    if (i?.name === item.value) {
                         if (i?.accountDetails.length !== 1) {
                             navigation.navigate(appConstant.accountList, {
-                                name: item.name,
+                                name: item?.value,
+                                headerName: item?.name,
                                 accountList: i?.accountDetails
                             })
                         }
@@ -103,14 +108,14 @@ export default function MainScreen({ navigation, route }) {
                             i?.accountDetails.map((itm) => {
                                 navigation.navigate(appConstant?.accountDetails, {
                                     walletName: itm?.walletName,
-                                    name: item?.name,
+                                    name: item?.value,
+                                    headerName: item?.name,
                                     from: appConstant.main
                                 })
                             })
                         }
                     }
                 })
-
             }
             else {
                 navigation.navigate(appConstant.createAccount, {
@@ -147,13 +152,12 @@ export default function MainScreen({ navigation, route }) {
                                                 item.value === appConstant.solana ?
                                                     <SvgIcons.Solana height={hp(6)} width={hp(4)} /> :
                                                     item.value === appConstant.avalanche ?
-                                                        <View style={{ backgroundColor: colors.gray }}>
-                                                            <Image source={item.image} style={{ height: hp(7), width: hp(7), right: wp(2.5) }} />
-                                                        </View> :
+                                                        <Image source={item.image} style={{ height: hp(4), width: hp(5) }} />
+                                                        :
                                                         <SvgIcons.Poly height={hp(6)} width={hp(4.5)} />
                                         }
                                     </View>
-                                    <FontText size={normalize(25)} color={'white'} name={'inter-regular'} pLeft={wp(5)} style={{ right: item?.value === appConstant.avalanche ? wp(6) : 0 }}>
+                                    <FontText size={normalize(25)} color={'white'} name={'inter-regular'} pLeft={wp(5)}>
                                         {i18n.language === 'tr' ? item?.name : item?.value}
                                     </FontText>
                                 </TouchableOpacity>
@@ -177,12 +181,14 @@ export default function MainScreen({ navigation, route }) {
                 }
             </View>
             <Button
+                height={hp(8.5)}
+                width={wp(90)}
                 flex={null}
                 type="highlight"
                 borderRadius={11}
                 bgColor="white"
                 onPress={!hideMenu ? handleConnectClick : handleLockDeviceClick}
-                buttonStyle={styles.button}>
+                style={styles.button}>
                 <FontText name={"inter-medium"} size={normalize(22)} color="black">
                     {!hideMenu ? t("connect") : t("lockDevice")}
                 </FontText>
@@ -213,9 +219,6 @@ const styles = StyleSheet.create({
         height: hp(9)
     },
     button: {
-        backgroundColor: colors.white,
         marginBottom: hp(3),
-        width: wp(90),
-        height: hp(8.5)
     }
 })

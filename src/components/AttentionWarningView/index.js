@@ -43,6 +43,7 @@ export default function AttentionWarningView({
       {showButton1 && (
         <Button
           flex={null}
+          width={wp(90)}
           bgColor={
             buttonValue === firstBtnValue
               ? 'white'
@@ -54,8 +55,7 @@ export default function AttentionWarningView({
           type="highlight"
           borderRadius={11}
           onPress={handleFirstBtnClick}
-          style={{marginBottom: showButton2 ? hp(2) : hp(3)}}
-          buttonStyle={[styles.button]}>
+          style={[styles.button, {marginBottom: showButton2 ? hp(2) : hp(3)}]}>
           <FontText
             name={'inter-medium'}
             size={normalize(22)}
@@ -83,9 +83,9 @@ export default function AttentionWarningView({
           height={hp(8.5)}
           type="highlight"
           borderRadius={11}
+          width={wp(90)}
           onPress={handleSecondBtnClick}
-          style={{marginBottom: hp(3)}}
-          buttonStyle={[styles.button]}>
+          style={styles.button}>
           <FontText
             name={'inter-medium'}
             size={normalize(22)}
@@ -115,9 +115,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: wp(6),
   },
   button: {
-    alignItems: 'center',
-    width: wp(90),
-    marginBottom: hp(8),
-    height: hp(8.5),
+    alignSelf: 'center',
+    marginBottom: hp(3),
   },
 });

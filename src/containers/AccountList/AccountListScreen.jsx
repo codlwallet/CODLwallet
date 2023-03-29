@@ -16,6 +16,7 @@ export default function AccountListScreen({ navigation, route }) {
     const { t } = useTranslation();
     const name = route?.params?.name
     const accountList = route?.params?.accountList
+    const headerName = route?.params?.headerName
     const [walletData, setWalletData] = useState()
     const [showList, setShowList] = useState(true)
     const [btnValue, setButtonValue] = useState()
@@ -86,7 +87,7 @@ export default function AccountListScreen({ navigation, route }) {
                     statusBarcolor={colors.black}
                     RightIconPress={() => { setShowReorder(false), setShowList(false) }} />
                 :
-                <Header title={name}
+                <Header title={headerName}
                     showRightIcon
                     RightIcon={!showReorder && !showList ? 'false' : 'menu'}
                     showBackIcon={showList ? true : false}
@@ -142,14 +143,15 @@ export default function AccountListScreen({ navigation, route }) {
                     </>
                 }
             </View>
-
             {showReorder && <Button
                 flex={null}
                 type="highlight"
                 borderRadius={11}
                 bgColor="white"
+                height={hp(8.5)}
+                width={wp(90)}
                 onPress={handleDoneClick}
-                buttonStyle={styles.button}>
+                style={styles.button}>
                 <FontText name={"inter-medium"} size={normalize(22)} color="black">
                     {t("done")}
                 </FontText>
@@ -167,7 +169,6 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-
     },
     buttonContainer: {
         height: hp(8.5),
@@ -179,15 +180,8 @@ const styles = StyleSheet.create({
         paddingHorizontal: wp(5),
         backgroundColor: colors.gray,
     },
-    image: {
-        width: hp(3),
-        height: hp(5),
-    },
     button: {
-        backgroundColor: colors.white,
         marginBottom: hp(3),
-        height: hp(8.5),
-        width: wp(90)
     },
     listView: {
         flexDirection: 'row',
@@ -196,5 +190,4 @@ const styles = StyleSheet.create({
         width: wp(93),
         marginBottom: hp(2)
     }
-
 })

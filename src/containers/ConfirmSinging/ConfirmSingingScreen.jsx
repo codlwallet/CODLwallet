@@ -162,8 +162,8 @@ export default function ConfirmSingingScreen({ navigation, route }) {
                 type="highlight"
                 borderRadius={11}
                 bgColor="white"
+                width={wp(90)}
                 onPress={handleProceedBtn}
-                buttonStyle={styles.button}
                 style={styles.buttonView}>
                 <FontText name={"inter-medium"} size={normalize(22)} color="black">
                     {t("proceed")}
@@ -208,9 +208,5 @@ const styles = StyleSheet.create({
         padding: 0,
         paddingHorizontal: wp(4),
         color: colors.white
-    },
-    button: {
-        backgroundColor: colors.white,
-        width: wp(90),
     },
 })

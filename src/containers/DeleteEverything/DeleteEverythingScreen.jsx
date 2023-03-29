@@ -173,10 +173,10 @@ export default function DeleteEverythingScreen({ navigation }) {
                             flex={null}
                             height={hp(8.5)}
                             type="highlight"
+                            width={wp(90)}
                             borderRadius={11}
                             bgColor="white"
                             onPress={hndleDoneClick}
-                            buttonStyle={styles.button}
                             style={styles.buttonView}>
                             <FontText name={"inter-medium"} size={normalize(22)} color="red">
                                 {t("done")}
@@ -210,10 +210,6 @@ const styles = StyleSheet.create({
         position: 'absolute',
         bottom: hp(3),
         alignSelf: 'center'
-    },
-    button: {
-        backgroundColor: colors.white,
-        width: wp(90),
     },
     textInputContainer: {
         marginTop: hp(-20),

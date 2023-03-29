@@ -84,16 +84,16 @@ export default function ScanQrScreen({ navigation, route }) {
 
     return (
         <View style={styles.container}>
-            <Header title={t("scanQr")} showRightIcon statusBarcolor={colors.black} style={{ alignSelf: 'center' }} RightIcon={'info'} />
+            <Header title={t("scanQr")} showRightIcon statusBarcolor={colors.black} RightIcon={'info'} />
             <View style={styles.subContainer}>
                 <TouchableOpacity onPress={() => navigation.navigate(appConstant.signTransaction, {
                     walletName: walletName,
                 })}>
                     {opneScanner &&
                         <>
-                            <View style={{ borderRadius: 10, backgroundColor: colors.black, padding: 6, borderRadius: 20, justifyContent: 'center', alignItems: 'center' }}>
+                            <View style={styles.scannerContainer}>
                                 <Camera
-                                    style={{ backgroundColor: 'green', height: hp(41.5), width: hp(41.5), justifyContent: 'center', alignItems: 'center', borderRadius: 10 }}
+                                    style={styles.camera}
                                     scanBarcode={true}
                                     colorForScannerFrame={'blue'}
                                     onReadCode={(event) =>
@@ -101,7 +101,7 @@ export default function ScanQrScreen({ navigation, route }) {
                                     }
                                 />
                                 <View style={{ position: 'absolute' }}>
-                                    <Image source={require('../../assets/images/frame.png')} style={{ height: hp(44.1), width: hp(44.1), padding: 4, marginTop: hp(0.8) }} />
+                                    <Image source={require('../../assets/images/frame.png')} style={styles.image} />
                                 </View>
 
 
@@ -122,8 +122,10 @@ export default function ScanQrScreen({ navigation, route }) {
                 type="highlight"
                 borderRadius={11}
                 bgColor="white"
+                height={hp(8.5)}
+                width={wp(90)}
                 onPress={backAction}
-                buttonStyle={styles.button}>
+                style={styles.button}>
                 <FontText name={"inter-medium"} size={normalize(22)} color="black">
                     {t("back")}
                 </FontText>
@@ -145,10 +147,18 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     scannerContainer: {
-        // borderRadius: 10,
-        backgroundColor: colors.gray,
-        height: hp(45),
-        width: hp(45),
+        borderRadius: 10,
+        padding: 6,
+        borderRadius: 20,
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+    camera: {
+        height: hp(41.5),
+        width: hp(41.5),
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: 10
     },
     bottomView: {
         backgroundColor: colors.gray,
@@ -162,35 +172,12 @@ const styles = StyleSheet.create({
         paddingHorizontal: wp(4),
     },
     image: {
-        width: hp(3.5),
-        height: hp(5.5),
+        height: hp(44.1),
+        width: hp(44.1),
+        padding: 4,
+        marginTop: hp(0.8)
     },
     button: {
-        backgroundColor: colors.white,
         marginBottom: hp(3),
-        height: hp(8.5),
-        width: wp(90),
     },
-    maskOutter: {
-        position: 'absolute',
-        top: 0,
-        left: 0,
-        width: '100%',
-        height: '100%',
-        alignItems: 'center',
-        justifyContent: 'space-around',
-    },
-    maskInner: {
-        width: 300,
-        backgroundColor: 'transparent',
-        borderColor: 'white',
-        borderWidth: 1,
-    },
-    maskFrame: {
-        backgroundColor: 'rgba(1,1,1,0.6)',
-    },
-    maskRow: {
-        width: '100%',
-    },
-    maskCenter: { flexDirection: 'row' },
 })
