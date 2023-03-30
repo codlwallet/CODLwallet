@@ -118,11 +118,12 @@
     "broadcastTransaction": "Yayın İşlemi",
     "signedTX": "imzalı TX",
     "walletnameRequired": "Cüzdanadı Gerekli",
-    "walletnameError": "Cüzdanadı 1 karakterden büyük olmalıdır",
+    "walletnameError": "Cüzdanadı 1 karakterden büyük olmalıdır.",
     "importWalletFailed": "Cüzdanı İçe Aktarma Başarısız",
-    "importWalletError": "Özel Karakterlere veya Rakamlara izin verilmez",
+    "importWalletError": "Özel Karakterlere veya Rakamlara izin verilmez.",
     "reorderAccounts": "Hesapları Yeniden Sırala",
     "selectWalletRequired": "Cüzdan Seçin Gerekli",
-    "selectWalletError": "Seçtiğiniz hesaba sahip olmalısınız"
+    "selectWalletError": "Seçtiğiniz hesaba sahip olmalısınız.",
+    "newPinError": "Yeni pin eski pinden farklı olmalıdır."
   }
 }

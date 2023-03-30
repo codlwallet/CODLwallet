@@ -12,6 +12,7 @@ import Button from '../../components/common/Button'
 import WalletCard from '../../components/WalletCard'
 import { useTranslation } from 'react-i18next'
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import { useFocusEffect } from '@react-navigation/native'
 
 export default function WelcomePurchaseScreen({ navigation, route }) {
     const { t } = useTranslation();
@@ -30,14 +31,30 @@ export default function WelcomePurchaseScreen({ navigation, route }) {
         getLoginData()
     }, [])
 
-    useEffect(() => {
-        const showSubscription = Keyboard.addListener('keyboardDidShow', e => setKeyboardHeight(e.endCoordinates.height));
-        const hideSubscription = Keyboard.addListener('keyboardWillHide', () => setKeyboardHeight(0));
-        return () => {
-            showSubscription.remove();
-            hideSubscription.remove();
-        }
-    }, [setKeyboardHeight]);
+    // useFocusEffect(
+    //     React.useCallback(() => {
+    //         const showSubscription = Keyboard.addListener('keyboardDidShow', e => setKeyboardHeight(e.endCoordinates.height));
+    //         const hideSubscription = Keyboard.addListener('keyboardWillHide', () => setKeyboardHeight(0));
+    //         const keyboardShowListener = Keyboard.addListener(
+    //             'keyboardDidShow',
+    //             () => {
+    //                 setIsEnabled(true)
+    //             }
+    //         );
+    //         const keyboardHideListener = Keyboard.addListener(
+    //             'keyboardDidHide',
+    //             () => {
+    //                 setIsEnabled(false)
+    //             }
+    //         );
+    //         return () => {
+    //             showSubscription.remove();
+    //             hideSubscription.remove();
+    //         }
+    //     }, [isEnabled, keyboardHeight]),
+    // );
+
+    // console.log("keyboardHeight......", keyboardHeight)
 
     useEffect(() => {
         BackHandler.addEventListener('hardwareBackPress', backAction);
@@ -52,19 +69,6 @@ export default function WelcomePurchaseScreen({ navigation, route }) {
         });
         return true;
     };
-
-    const keyboardShowListener = Keyboard.addListener(
-        'keyboardDidShow',
-        () => {
-            setIsEnabled(true)
-        }
-    );
-    const keyboardHideListener = Keyboard.addListener(
-        'keyboardDidHide',
-        () => {
-            setIsEnabled(false)
-        }
-    );
 
     const toggleSwitch = () => setIsEnabled(previousState => !previousState);
 
@@ -124,7 +128,7 @@ export default function WelcomePurchaseScreen({ navigation, route }) {
                     }
                 /> : null}
             </View>
-            <WalletCard style={[styles.walletCardContainer, { bottom: isEnabled ? keyboardHeight - hp(13) : 0 }]}
+            <WalletCard style={[styles.walletCardContainer, { bottom: isEnabled ? 255 - hp(13) : 0 }]}
                 title={t("hiddenWallet")}
                 headerStyle={{ borderColor: colors.black }}
                 titleColor={'black'}

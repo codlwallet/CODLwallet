@@ -48,6 +48,7 @@ export default function SelectAccountScreen({ navigation, route }) {
         navigation.navigate(appConstant.createAccount, {
             walletId: walletId,
             name: name,
+            from: appConstant.selectAccount
         })
     }
 

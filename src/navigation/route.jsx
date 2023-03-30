@@ -34,6 +34,7 @@ import SignTransactionScreen from '../containers/SignTransaction/SignTransaction
 import ConfirmSingingScreen from '../containers/ConfirmSinging/ConfirmSingingScreen';
 import ComplateSingingScreen from '../containers/ConfirmSinging/ComplateSingingScreen';
 import BroadcastTransactionScreen from '../containers/BroadcastTransaction/BroadcastTransactionScreen';
+import ReorderScreen from '../containers/Reorder/ReorderScreen';
 
 const Route = () => {
     const Stack = createNativeStackNavigator();
@@ -72,8 +73,7 @@ const Route = () => {
                 <Stack.Screen name={Constant.confirmSinging} component={ConfirmSingingScreen} />
                 <Stack.Screen name={Constant.complateSinging} component={ComplateSingingScreen} />
                 <Stack.Screen name={Constant.broadcastTransaction} component={BroadcastTransactionScreen} />
-
-
+                <Stack.Screen name={Constant.reorder} component={ReorderScreen} />
             </Stack.Navigator>
         </NavigationContainer>
     )

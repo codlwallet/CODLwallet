@@ -18,11 +18,11 @@ export default function WrongPinWarningScreen({ navigation, route }) {
 
     return (
         <View style={styles.container}>
-            {/* <StatusBar
+            <StatusBar
                 barStyle={'light-content'}
                 translucent
                 backgroundColor={colors.black}
-            /> */}
+            />
             <Header showRightIcon RightIconPress={handleTryAgainClick} statusBarcolor={colors.black} RightIcon={'false'} />
             <AttentionWarningView
                 title={count === 1 ? t("wrongPin") : t("lastTry")}

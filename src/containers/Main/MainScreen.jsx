@@ -100,7 +100,7 @@ export default function MainScreen({ navigation, route }) {
                         if (i?.accountDetails.length !== 1) {
                             navigation.navigate(appConstant.accountList, {
                                 name: item?.value,
-                                headerName: item?.name,
+                                headerName: i18n.language == 'tr' ? item?.name : item?.value,
                                 accountList: i?.accountDetails
                             })
                         }
@@ -109,7 +109,7 @@ export default function MainScreen({ navigation, route }) {
                                 navigation.navigate(appConstant?.accountDetails, {
                                     walletName: itm?.walletName,
                                     name: item?.value,
-                                    headerName: item?.name,
+                                    headerName: i18n.language == 'tr' ? item?.name : item?.value,
                                     from: appConstant.main
                                 })
                             })
@@ -152,7 +152,7 @@ export default function MainScreen({ navigation, route }) {
                                                 item.value === appConstant.solana ?
                                                     <SvgIcons.Solana height={hp(6)} width={hp(4)} /> :
                                                     item.value === appConstant.avalanche ?
-                                                        <Image source={item.image} style={{ height: hp(4), width: hp(5) }} />
+                                                        <Image source={item.image} style={{ height: hp(4), width: hp(4.5) }} />
                                                         :
                                                         <SvgIcons.Poly height={hp(6)} width={hp(4.5)} />
                                         }

@@ -35,12 +35,12 @@ const Header = props => {
 
   return (
     <>
-      {/* <StatusBar
+      <StatusBar
         barStyle={'light-content'}
         hidden={statusBarHidden}
         translucent
         backgroundColor={statusBarcolor ? statusBarcolor : colors.black}
-      /> */}
+      />
       <View style={[styles.container, style]}>
         {showBackIcon && (
           <TouchableOpacity onPress={onBackPress} style={styles.iconContainer}>
@@ -108,7 +108,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flexDirection: 'row',
     paddingHorizontal: wp(4),
-    paddingTop: Platform.OS === 'android' ? hp(5) : hp(4),
+    paddingTop: Platform.OS === 'android' ? hp(3) : hp(3),
     width: wp(100),
     alignSelf: 'center',
   },

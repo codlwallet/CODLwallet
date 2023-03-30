@@ -1,5 +1,5 @@
-import { Image, StyleSheet, TouchableOpacity, View } from 'react-native'
-import React, { useState } from 'react'
+import { BackHandler, Image, StyleSheet, TouchableOpacity, View } from 'react-native'
+import React, { useEffect, useState } from 'react'
 import colors from '../../assets/colors'
 import Header from '../../components/common/Header'
 import { mainData } from '../../constants/data'
@@ -14,13 +14,25 @@ export default function NetworksScreen({ navigation, route }) {
     const { t } = useTranslation();
     const [btnIndex, setBtnIndex] = useState();
 
-    const handleDoneClick = () => {
+    useEffect(() => {
+        BackHandler.addEventListener('hardwareBackPress', backAction);
+        return async () => {
+            BackHandler.removeEventListener('hardwareBackPress', backAction);
+        };
+    }, []);
+
+    const backAction = () => {
         navigation.goBack()
-    }
+        return true;
+    };
+
+    // const handleDoneClick = () => {
+    //     navigation.goBack()
+    // }
 
     return (
         <View style={styles.container}>
-            <Header title={t("networks")} showRightIcon RightIcon={'info'} showBackIcon onBackPress={() => navigation.goBack()} />
+            <Header title={t("networks")} showRightIcon RightIcon={'info'} showBackIcon onBackPress={backAction} />
             <View style={styles.subConatiner}>
                 {mainData.map((item, index) => {
                     return (
@@ -35,7 +47,7 @@ export default function NetworksScreen({ navigation, route }) {
                                             item.value === 'Solana' ?
                                                 <Image source={item.image} style={{ height: hp(3.5), width: hp(4.5), tintColor: index === btnIndex ? '#495057' : colors.white }} /> :
                                                 item.value === 'Avalanche' ?
-                                                    <Image source={item.image} style={{ height: hp(4), width: hp(5), tintColor: index === btnIndex ? '#495057' : colors.white }} />
+                                                    <Image source={item.image} style={{ height: hp(4.3), width: hp(5), tintColor: index === btnIndex ? '#495057' : colors.white }} />
                                                     :
                                                     <Image source={item.image} style={{ height: hp(4), width: hp(4.5), tintColor: index === btnIndex ? '#495057' : colors.white }} />
                                     }
@@ -57,7 +69,7 @@ export default function NetworksScreen({ navigation, route }) {
                 type="highlight"
                 borderRadius={11}
                 bgColor="white"
-                onPress={handleDoneClick}
+                onPress={backAction}
                 style={styles.button}>
                 <FontText name={"inter-medium"} size={normalize(22)} color="black">
                     {t("done")}

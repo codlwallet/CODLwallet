@@ -1,5 +1,5 @@
-import { StyleSheet, TouchableOpacity, View } from 'react-native'
-import React from 'react'
+import { BackHandler, StyleSheet, TouchableOpacity, View } from 'react-native'
+import React, { useEffect } from 'react'
 import colors from '../../assets/colors'
 import { hp, normalize, wp } from '../../helper/responsiveScreen'
 import FontText from '../../components/common/FontText'
@@ -12,9 +12,21 @@ import { useTranslation } from 'react-i18next'
 export default function AboutCodlScreen({ navigation }) {
     const { t } = useTranslation();
 
+    useEffect(() => {
+        BackHandler.addEventListener('hardwareBackPress', backAction);
+        return async () => {
+            BackHandler.removeEventListener('hardwareBackPress', backAction);
+        };
+    }, []);
+
+    const backAction = () => {
+        navigation.goBack()
+        return true;
+    };
+
     return (
         <View style={styles.container}>
-            <Header title={t("AboutCODL")} showRightIcon RightIcon={'info'} showBackIcon onBackPress={() => navigation.goBack()} />
+            <Header title={t("AboutCODL")} showRightIcon RightIcon={'info'} showBackIcon onBackPress={backAction} />
             <View style={styles.buttonContainer}>
                 {aboutAppData.map((item, index) => {
                     return (

@@ -17,6 +17,7 @@ export default function CreateAccountScreen({ navigation, route }) {
   const { t } = useTranslation();
   const name = route?.params?.name
   const walletId = route?.params?.walletId
+  const from = route?.params?.from
   const nameRef = useRef(null)
   const [walletName, setWalletName] = useState('')
   const [walletNameFocus, setWalletNameFocus] = useState(false)
@@ -36,10 +37,20 @@ export default function CreateAccountScreen({ navigation, route }) {
     };
   }, []);
 
+  useEffect(() => {
+    if (from === appConstant.selectAccount) {
+      setSelectWallet(true)
+    }
+    else {
+      setWalletName('')
+    }
+  }, [from]);
+
   useFocusEffect(
     React.useCallback(() => {
       setWalletNameFocus(false)
       setIsSelect(false)
+      setShowBackArrow(false)
       async function getWalletData() {
         const data = await AsyncStorage.getItem('WalletList');
         setAccountData(JSON.parse(data))
@@ -49,7 +60,12 @@ export default function CreateAccountScreen({ navigation, route }) {
   );
 
   const backAction = () => {
-    navigation.navigate(appConstant.main)
+    if (from === appConstant.accountList) {
+      navigation.goBack()
+    }
+    else {
+      navigation.navigate(appConstant.main)
+    }
     return true;
   };
 
@@ -70,7 +86,6 @@ export default function CreateAccountScreen({ navigation, route }) {
     setWalletNameFocus(false)
     setIsSelect(true)
     setShowBackArrow(true)
-
   }
 
   const handleCreateClick = async () => {
@@ -132,7 +147,7 @@ export default function CreateAccountScreen({ navigation, route }) {
         navigation.navigate(appConstant.accountDetails, {
           walletName: walletName,
           from: appConstant.createAccount,
-          name: name
+          name: name,
         })
       }
     }
@@ -201,11 +216,11 @@ export default function CreateAccountScreen({ navigation, route }) {
               {walletId ? walletId : "0"}
             </FontText>
           </View>
-          <FontText name={"inter-regular"} size={normalize(22)} color={isSelect ? 'black' : 'white'} pRight={!isSelect ? hp(9) : hp(9)} >
+          <FontText name={"inter-regular"} size={normalize(22)} color={isSelect ? 'black' : 'white'} pRight={selectWallet || showBackArrow ? hp(9) : hp(13)} >
             {"0xa94bb...a710"}
           </FontText>
           {showBackArrow && <SvgIcons.BlackRightArrow height={hp(3)} width={hp(2.5)} />}
-          {!showBackArrow &&
+          {!showBackArrow && selectWallet &&
             <>
               {isSelect ? < SvgIcons.BlackCheck height={hp(4)} width={hp(2.5)} /> :
                 < SvgIcons.Check height={hp(4)} width={hp(2.5)} />}

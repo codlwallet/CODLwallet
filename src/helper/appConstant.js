@@ -102,6 +102,7 @@ module.exports = {
   confirmSinging: 'Confirm Singing',
   complateSinging: 'Complate Singing',
   broadcastTransaction: 'Broadcast Transaction',
-  createNewAccount: 'create New Account',
-  reorderAccounts: 'reorder Accounts',
+  createNewAccount: 'Create New Account',
+  reorderAccounts: 'Reorder Accounts',
+  reorder: 'Reorder',
 };

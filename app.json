@@ -1,4 +1,10 @@
 {
   "name": "codl",
-  "displayName": "codl"
+  "displayName": "codl",
+  "androidStatusBar": {
+    "barStyle": "light-content",
+    "backgroundColor": "#3a81fd",
+    "hidden": false,
+    "translucent": false
+  }
 }

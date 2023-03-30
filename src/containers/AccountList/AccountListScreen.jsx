@@ -4,12 +4,10 @@ import colors from '../../assets/colors';
 import { hp, normalize, wp } from '../../helper/responsiveScreen';
 import Header from '../../components/common/Header';
 import FontText from '../../components/common/FontText';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useTranslation } from 'react-i18next';
 import { walletListData } from '../../constants/data'
 import ButtonView from '../../components/common/ButtonList';
 import appConstant from '../../helper/appConstant';
-import Button from '../../components/common/Button';
 import SvgIcons from '../../assets/SvgIcons';
 
 export default function AccountListScreen({ navigation, route }) {
@@ -17,20 +15,9 @@ export default function AccountListScreen({ navigation, route }) {
     const name = route?.params?.name
     const accountList = route?.params?.accountList
     const headerName = route?.params?.headerName
-    const [walletData, setWalletData] = useState()
     const [showList, setShowList] = useState(true)
     const [btnValue, setButtonValue] = useState()
     const [buttonIndex, setButtonIndex] = useState()
-    const [showReorder, setShowReorder] = useState(false)
-    const [accountValue, setAccountValue] = useState()
-
-    useEffect(() => {
-        async function getWalletData() {
-            const data = await AsyncStorage.getItem('WalletList');
-            setWalletData(JSON.parse(data))
-        }
-        getWalletData()
-    }, [])
 
     useEffect(() => {
         BackHandler.addEventListener('hardwareBackPress', backAction);
@@ -49,79 +36,66 @@ export default function AccountListScreen({ navigation, route }) {
         setButtonIndex(index)
         if (item.value === appConstant.createNewAccount) {
             navigation.navigate(appConstant.createAccount, {
-                name: name
+                name: name,
+                from: appConstant.accountList
             })
+            setButtonValue('')
+            setButtonIndex()
         }
         else {
-            setShowReorder(true)
+            navigation.navigate(appConstant.reorder, {
+                name: name,
+                accountList: accountList
+            })
             setButtonValue('')
             setButtonIndex()
         }
     }
 
-    const handleDoneClick = () => {
-        setShowReorder(false)
-    }
-
     const onClickAccount = (itm) => {
-        setAccountValue(itm?.walletName)
-        if (!showReorder) {
-            navigation.navigate(appConstant.accountDetails, {
-                walletName: itm?.walletName,
-                from: appConstant.accountList,
-                onGoBack: () => {
-                    setAccountValue('')
-                },
-            })
-        }
+        navigation.navigate(appConstant.accountDetails, {
+            walletName: itm?.walletName,
+            from: appConstant.accountList,
+        })
     }
 
     return (
         <View style={styles.container}>
-            {showReorder && !showList ?
-                <Header title={t('reorder')}
-                    showRightIcon
-                    RightIcon={'false'}
-                    showBackIcon
-                    onBackPress={backAction}
-                    statusBarcolor={colors.black}
-                    RightIconPress={() => { setShowReorder(false), setShowList(false) }} />
-                :
-                <Header title={headerName}
-                    showRightIcon
-                    RightIcon={!showReorder && !showList ? 'false' : 'menu'}
-                    showBackIcon={showList ? true : false}
-                    onBackPress={backAction}
-                    statusBarcolor={colors.black}
-                    titleStyle={{ left: showList ? 0 : wp(30) }}
-                    titleIcon={
-                        name === appConstant.bitcoin ?
-                            <SvgIcons.Bitcoin height={hp(5)} width={hp(3)} /> :
-                            name === appConstant.ethereum ?
-                                <Image source={require('../../assets/images/EV.png')} style={{ width: hp(3.5), height: hp(5.5), }} /> :
-                                name === appConstant.solana ?
-                                    <SvgIcons.Solana height={hp(5.5)} width={hp(3.5)} /> :
-                                    name === appConstant.avalanche ?
-                                        <View style={{ backgroundColor: colors.black }}>
-                                            <Image source={require('../../assets/images/img.png')} style={{ height: hp(6), width: hp(6) }} />
-                                        </View> :
-                                        <SvgIcons.Poly height={hp(5.5)} width={hp(4)} />
-                    }
-                    RightIconPress={() => { setShowList(!showList) }}
-                    titleWithIcon />
-            }
+            <Header title={headerName}
+                showRightIcon
+                style={{ height: hp(10) }}
+                RightIcon={'menu'}
+                showBackIcon={showList ? true : false}
+                onBackPress={backAction}
+                statusBarcolor={colors.black}
+                titleStyle={{ left: showList ? wp(2.2) : wp(24), width: wp(45) }}
+                titleIcon={
+                    name === appConstant.bitcoin ?
+                        <SvgIcons.Bitcoin height={hp(5)} width={hp(3)} /> :
+                        name === appConstant.ethereum ?
+                            <Image source={require('../../assets/images/EV.png')} style={{ width: hp(3.5), height: hp(5.5), }} /> :
+                            name === appConstant.solana ?
+                                <SvgIcons.Solana height={hp(5.5)} width={hp(3.5)} /> :
+                                name === appConstant.avalanche ?
+                                    <View style={{ backgroundColor: colors.black }}>
+                                        <Image source={require('../../assets/images/img.png')} style={{ height: hp(3.8), width: hp(4.5) }} />
+                                    </View> :
+                                    <SvgIcons.Poly height={hp(5.5)} width={hp(4)} />
+                }
+                RightIconPress={() => { setShowList(!showList) }}
+                titleWithIcon />
+
             <View style={styles.subContainer}>
-                {showList || showReorder ?
+                {showList ?
                     <ScrollView contentContainerStyle={{ justifyContent: 'center', alignItems: 'center', flexGrow: 1, paddingVertical: hp(0.5) }}  >
-                        {accountList.map((item, index) => {
+                        {accountList?.map((item, index) => {
                             return (
                                 <View key={index} style={styles.listView}>
-                                    {item?.walletName === accountValue && <SvgIcons.DotIcon style={{ left: wp(-2) }} />}
-                                    <TouchableOpacity style={[styles.buttonContainer, { backgroundColor: item?.walletName === accountValue ? colors.white : colors.gray }]} onPress={() => onClickAccount(item)}>
-                                        <FontText name={"inter-regular"} size={normalize(22)} color={item?.walletName === accountValue ? "black" : 'white'}  >
+                                    <TouchableOpacity style={[styles.buttonContainer]} onPress={() => onClickAccount(item)}>
+                                        <FontText name={"inter-regular"} size={normalize(22)} color={'white'}  >
                                             {item?.walletName}
                                         </FontText>
-                                        <FontText name={"inter-regular"} size={normalize(15)} color={item?.walletName === accountValue ? "black" : 'white'}  >
+                                        <FontText name={"inter-regular"} size={normalize(15)} color={'white'}  >
                                             {"0xa94bb...a710"}
                                         </FontText>
                                     </TouchableOpacity>
@@ -143,19 +117,6 @@ export default function AccountListScreen({ navigation, route }) {
                     </>
                 }
             </View>
-            {showReorder && <Button
-                flex={null}
-                type="highlight"
-                borderRadius={11}
-                bgColor="white"
-                height={hp(8.5)}
-                width={wp(90)}
-                onPress={handleDoneClick}
-                style={styles.button}>
-                <FontText name={"inter-medium"} size={normalize(22)} color="black">
-                    {t("done")}
-                </FontText>
-            </Button>}
         </View>
     )
 }

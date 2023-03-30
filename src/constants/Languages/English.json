@@ -120,10 +120,12 @@
     "broadcastTransaction": "Broadcast Transaction",
     "signedTX": "Signed TX",
     "walletnameRequired": "Walletname Required",
-    "walletnameError": "Walletname must be greater than 1 characters",
+    "walletnameError": "Walletname must be greater than 1 characters.",
     "importWalletFailed": "Import Wallet Failed",
-    "importWalletError": "Special Characters or Numbers are not allowed",
+    "importWalletError": "Special Characters or Numbers are not allowed.",
     "selectWalletRequired": "Selectwallet Required",
-    "selectWalletError": "You must have select account"
+    "selectWalletError": "You must have select account.",
+    "newPinRequired": "Invalid New Pin",
+    "newPinError": "New pin must be different than old pin."
   }
 }

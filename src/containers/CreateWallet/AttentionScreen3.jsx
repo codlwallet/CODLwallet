@@ -35,11 +35,11 @@ export default function AttentionScreen2({ navigation, route }) {
 
     return (
         <View style={styles.container}>
-            {/* <StatusBar
+            <StatusBar
                 barStyle={'light-content'}
                 translucent
                 backgroundColor={colors.black}
-            /> */}
+            />
             <AttentionWarningView
                 title={t("secureSeeds")}
                 mainIcon={<SvgIcons.Polygon height={hp(10)} width={hp(10)} />}

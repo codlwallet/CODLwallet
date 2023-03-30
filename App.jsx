@@ -23,7 +23,7 @@ export default function App() {
 
   return (
     <Provider store={store}>
-      <StatusBar barStyle={'light-content'} hidden={true} />
+      <StatusBar barStyle={'light-content'} />
       <Route />
     </Provider>
   )

@@ -28,7 +28,7 @@ export default function AccountDetailsScreen({ navigation, route }) {
         }
         else if (from === appConstant.accountList) {
             navigation.goBack()
-            route?.params?.onGoBack()
+            // route?.params?.onGoBack()
         }
         else {
             navigation.goBack()

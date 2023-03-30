@@ -127,7 +127,6 @@ export default function ChangeUserDetailsScreen({ navigation, route }) {
             setAlertMessage(t("pinErrorMess"))
             errorStatus = false;
         } else if (currentPin !== loginData?.pin) {
-            console.log("fdhsfghj")
             setShowAlert(true)
             setAlertTitle(t("matchedPIN"))
             setAlertMessage(t("currentPinMatchError"))
@@ -141,6 +140,11 @@ export default function ChangeUserDetailsScreen({ navigation, route }) {
             setShowAlert(true)
             setAlertTitle(t("matchedPIN"))
             setAlertMessage(t("pinMatchError"))
+            errorStatus = false;
+        } else if (newPin === loginData?.pin) {
+            setShowAlert(true)
+            setAlertTitle(t("newPinRequired"))
+            setAlertMessage(t("newPinError"))
             errorStatus = false;
         }
         return errorStatus;
@@ -254,7 +258,6 @@ export default function ChangeUserDetailsScreen({ navigation, route }) {
                                 </TouchableOpacity>
                             }
                         />
-
                         <Input
                             withRightIcon
                             ref={newPinRef}

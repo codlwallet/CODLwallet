@@ -1,4 +1,4 @@
-import { BackHandler, FlatList, Keyboard, KeyboardAvoidingView, StyleSheet, View } from 'react-native'
+import { BackHandler, FlatList, Keyboard, KeyboardAvoidingView, Platform, SafeAreaView, StatusBar, StyleSheet, View } from 'react-native'
 import React, { useEffect, useRef, useState } from 'react'
 import colors from '../../assets/colors'
 import Header from '../../components/common/Header'
@@ -25,8 +25,9 @@ export default function ImportWalletScreen({ navigation, route }) {
     const [showAlert, setShowAlert] = useState(false)
     const [alertTitle, setAlertTitle] = useState('')
     const [alertMessage, setAlertMessage] = useState('')
+    const [showKeyboard, setShowKeyboard] = useState(false)
     const walletcardData = numberValue && walletData.slice(0, numberValue)
-    const regex = /^[A-Za-z]+$/;
+    const reg = /^([^0-9$%]*)$@()]+-#*&^!-/;
 
     useEffect(() => {
         cardRef.current = cardRef?.current?.slice(0, walletData?.length);
@@ -66,6 +67,7 @@ export default function ImportWalletScreen({ navigation, route }) {
         'keyboardDidShow',
         () => {
             setIsEdit(true)
+            setShowKeyboard(true)
         }
     );
 
@@ -81,8 +83,10 @@ export default function ImportWalletScreen({ navigation, route }) {
                 setIsEdit(true)
             }
             setTextIndex(walletcardData.length)
+            setShowKeyboard(false)
         }
     );
+
 
     const handleConfirmClick = async () => {
         setBtnValue(appConstant.confirm)
@@ -95,25 +99,25 @@ export default function ImportWalletScreen({ navigation, route }) {
         }
     }
 
-    const isValidate = () => {
-        let errorStatus = true;
-        walletcardData.forEach(item => {
-            if (!regex.test(item.name)
-            ) {
-                setShowAlert(true)
-                setAlertTitle(t("importWalletFailed"))
-                setAlertMessage(t("importWalletError"))
-                errorStatus = false;
-            }
-        });
-        return errorStatus;
-    };
+    // const isValidate = () => {
+    //     let errorStatus = true;
+    //     walletcardData.forEach(item => {
+    //         if (regex.test(item.name)
+    //         ) {
+    //             setShowAlert(true)
+    //             setAlertTitle(t("importWalletFailed"))
+    //             setAlertMessage(t("importWalletError"))
+    //             errorStatus = false;
+    //         }
+    //     });
+    //     return errorStatus;
+    // };
 
     const handleProceedClick = () => {
-        if (isValidate()) {
-            setBtnValue(appConstant.confirm)
-            setShowConfirm(true)
-        }
+        // if (isValidate()) {
+        setBtnValue(appConstant.confirm)
+        setShowConfirm(true)
+        // }
     }
 
     const handleEditClick = () => {
@@ -161,8 +165,10 @@ export default function ImportWalletScreen({ navigation, route }) {
                     autoCorrect={false}
                     inputStyle={[styles.textInput, { color: item.name == '' ? colors.white : colors.red }]}
                     onChangeText={text => {
-                        walletData[index].name = text.toLowerCase();
-                        setWalletData([...walletData]);
+                        if (reg.test(text)) {
+                            walletData[index].name = text.toLowerCase();
+                            setWalletData([...walletData]);
+                        }
                     }}
                     keyboardType={'default'}
                     returnKeyType={'next'}
@@ -174,8 +180,8 @@ export default function ImportWalletScreen({ navigation, route }) {
 
     return (
         <View style={styles.container} >
-            <Header title={t("importWallet")} showRightIcon RightIcon={'info'} showBackIcon onBackPress={backAction} statusBarcolor={colors.red} style={{ alignSelf: 'center', }} />
-            <KeyboardAvoidingView style={styles.subContainer} behavior='padding'>
+            <Header title={t("importWallet")} showRightIcon RightIcon={'info'} showBackIcon onBackPress={backAction} statusBarcolor={colors.red} />
+            <View style={[styles.subContainer, { bottom: showKeyboard ? hp(4) : 0 }]} >
                 <WalletCard style={styles.walletCardContainer}
                     titleColor={'red'}
                     title={t("recoverySeeds")}
@@ -192,7 +198,7 @@ export default function ImportWalletScreen({ navigation, route }) {
                         />
                     }
                 />
-            </KeyboardAvoidingView>
+            </View>
 
             {showConfirm && <FontText name={"inter-regular"} size={normalize(20)} color={'white'} style={{ width: wp(90), alignSelf: 'center', }} pBottom={hp(2)} textAlign={'center'}  >
                 {t("enterSeedsCorrectly")}
@@ -266,7 +272,7 @@ const styles = StyleSheet.create({
     },
     subContainer: {
         flex: 1,
-        justifyContent: 'center',
+        marginTop: hp(12)
     },
     button: {
         marginBottom: hp(3),
