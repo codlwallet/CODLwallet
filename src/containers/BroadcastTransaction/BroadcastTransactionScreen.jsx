@@ -15,6 +15,7 @@ import TransactionCard from '../../components/TransactionCard'
 export default function BroadcastTransactionScreen({ navigation, route }) {
     const { t } = useTranslation();
     const walletName = route?.params?.walletName
+    const showIcon = route?.params?.name
     const CarouselRef = useRef();
     const [selectedIndex, setselectedIndex] = useState(0);
 
@@ -34,7 +35,8 @@ export default function BroadcastTransactionScreen({ navigation, route }) {
 
     const backAction = () => {
         navigation.navigate(appConstant.accountDetails, {
-            walletName: walletName
+            walletName: walletName,
+            showIcon: showIcon
         })
         return true;
     };

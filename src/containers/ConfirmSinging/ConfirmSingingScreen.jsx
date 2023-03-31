@@ -10,10 +10,11 @@ import Button from '../../components/common/Button'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useTranslation } from 'react-i18next'
 import appConstant from '../../helper/appConstant'
-import Alert from '../../components/common/Alert'
+import PopUp from '../../components/common/AlertBox'
 
 export default function ConfirmSingingScreen({ navigation, route }) {
     const walletName = route?.params?.walletName
+    const showIcon = route?.params?.name
     const nameRef = useRef()
     const enterPinRef = useRef()
     const [name, setName] = useState('')
@@ -44,7 +45,8 @@ export default function ConfirmSingingScreen({ navigation, route }) {
 
     const backAction = () => {
         navigation.navigate(appConstant.accountDetails, {
-            walletName: walletName
+            walletName: walletName,
+            showIcon: showIcon
         })
         return true;
     };
@@ -169,14 +171,13 @@ export default function ConfirmSingingScreen({ navigation, route }) {
                     {t("proceed")}
                 </FontText>
             </Button>
-            <Alert
-                show={showAlert}
+            {showAlert && <PopUp
                 title={alertTitle}
                 message={alertMessage}
                 onConfirmPressed={() => {
                     setShowAlert(false)
                 }}
-            />
+            />}
         </View>
     )
 }

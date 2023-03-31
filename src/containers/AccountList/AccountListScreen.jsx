@@ -35,20 +35,30 @@ export default function AccountListScreen({ navigation, route }) {
         setButtonValue(item?.name)
         setButtonIndex(index)
         if (item.value === appConstant.createNewAccount) {
-            navigation.navigate(appConstant.createAccount, {
-                name: name,
-                from: appConstant.accountList
-            })
-            setButtonValue('')
-            setButtonIndex()
+            setTimeout(() => {
+                navigation.navigate(appConstant.createAccount, {
+                    name: name,
+                    from: appConstant.accountList,
+                    onGoBack: () => {
+                        setShowList(true)
+                    }
+                })
+                setButtonValue('')
+                setButtonIndex()
+            }, 200);
         }
         else {
-            navigation.navigate(appConstant.reorder, {
-                name: name,
-                accountList: accountList
-            })
-            setButtonValue('')
-            setButtonIndex()
+            setTimeout(() => {
+                navigation.navigate(appConstant.reorder, {
+                    name: name,
+                    accountList: accountList,
+                    onGoBack: () => {
+                        setShowList(true)
+                    }
+                })
+                setButtonValue('')
+                setButtonIndex()
+            }, 200);
         }
     }
 
@@ -64,7 +74,7 @@ export default function AccountListScreen({ navigation, route }) {
             <Header title={headerName}
                 showRightIcon
                 style={{ height: hp(10) }}
-                RightIcon={'menu'}
+                RightIcon={showList ? 'menu' : "false"}
                 showBackIcon={showList ? true : false}
                 onBackPress={backAction}
                 statusBarcolor={colors.black}
@@ -73,7 +83,7 @@ export default function AccountListScreen({ navigation, route }) {
                     name === appConstant.bitcoin ?
                         <SvgIcons.Bitcoin height={hp(5)} width={hp(3)} /> :
                         name === appConstant.ethereum ?
-                            <Image source={require('../../assets/images/EV.png')} style={{ width: hp(3.5), height: hp(5.5), }} /> :
+                            <Image source={require('../../assets/images/EV.png')} style={{ width: hp(3), height: hp(5), }} /> :
                             name === appConstant.solana ?
                                 <SvgIcons.Solana height={hp(5.5)} width={hp(3.5)} /> :
                                 name === appConstant.avalanche ?

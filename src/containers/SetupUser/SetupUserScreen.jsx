@@ -10,8 +10,8 @@ import FontText from '../../components/common/FontText'
 import Button from '../../components/common/Button'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useFocusEffect } from '@react-navigation/native'
-import Alert from '../../components/common/Alert'
 import { useTranslation } from 'react-i18next'
+import PopUp from '../../components/common/AlertBox'
 
 export default function SetupUserScreen({ navigation, route }) {
     const { from } = route?.params
@@ -356,14 +356,13 @@ export default function SetupUserScreen({ navigation, route }) {
                     </FontText>
                 </Button>
             </View>
-            <Alert
-                show={showAlert}
+            {showAlert && <PopUp
                 title={alertTitle}
                 message={alertMessage}
                 onConfirmPressed={() => {
                     setShowAlert(false)
                 }}
-            />
+            />}
         </View>
     )
 }

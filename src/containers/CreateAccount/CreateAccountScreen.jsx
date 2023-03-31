@@ -11,7 +11,8 @@ import Button from '../../components/common/Button'
 import appConstant from '../../helper/appConstant'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { useFocusEffect } from '@react-navigation/native'
-import Alert from '../../components/common/Alert'
+
+import PopUp from '../../components/common/AlertBox'
 
 export default function CreateAccountScreen({ navigation, route }) {
   const { t } = useTranslation();
@@ -43,6 +44,7 @@ export default function CreateAccountScreen({ navigation, route }) {
     }
     else {
       setWalletName('')
+      setSelectWallet(false)
     }
   }, [from]);
 
@@ -168,9 +170,14 @@ export default function CreateAccountScreen({ navigation, route }) {
     })
   }
 
+  const onPressCloseIcon = () => {
+    navigation.goBack()
+    route.params.onGoBack();
+  }
+
   return (
     <View style={styles.container} onStartShouldSetResponder={() => Keyboard.dismiss()}>
-      <Header title={t("createAccount")} showRightIcon RightIcon={'info'} showBackIcon onBackPress={backAction} statusBarcolor={colors.black} style={{ alignSelf: 'center' }} />
+      <Header title={t("createAccount")} showRightIcon RightIcon={from === appConstant.accountList ? 'false' : 'info'} showBackIcon rightIconDisable={from === appConstant.accountList ? false : true} onBackPress={backAction} statusBarcolor={colors.black} RightIconPress={onPressCloseIcon} />
       <View style={styles.subContainer}>
         <Input
           withRightIcon={walletName !== '' ? true : false}
@@ -241,14 +248,13 @@ export default function CreateAccountScreen({ navigation, route }) {
           {t("create")}
         </FontText>
       </Button>
-      <Alert
-        show={showAlert}
+      {showAlert && <PopUp
         title={alertTitle}
         message={alertMessage}
         onConfirmPressed={() => {
           setShowAlert(false)
         }}
-      />
+      />}
     </View >
   )
 }

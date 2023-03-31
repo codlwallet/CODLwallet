@@ -33,6 +33,11 @@ export default function ReorderScreen({ navigation, route }) {
         setAccountValue(itm?.walletName)
     }
 
+    const onPressCloseIcon = () => {
+        navigation.goBack()
+        route.params.onGoBack();
+    }
+
     return (
         <View style={styles.container}>
             <Header title={t('reorder')}
@@ -41,14 +46,14 @@ export default function ReorderScreen({ navigation, route }) {
                 showBackIcon
                 onBackPress={backAction}
                 statusBarcolor={colors.black}
-                RightIconPress={backAction}
+                RightIconPress={onPressCloseIcon}
             />
             <View style={styles.subContainer}>
                 <ScrollView contentContainerStyle={{ justifyContent: 'center', alignItems: 'center', flexGrow: 1, paddingVertical: hp(0.5) }}  >
                     {accountList?.map((item, index) => {
                         return (
                             <View key={index} style={styles.listView}>
-                                {item?.walletName === accountValue && <SvgIcons.DotIcon style={{ left: wp(-2) }} />}
+                                {item?.walletName === accountValue && <SvgIcons.DotIcon style={{ left: wp(-1.5) }} />}
                                 <TouchableOpacity style={[styles.buttonContainer, { backgroundColor: item?.walletName === accountValue ? colors.white : colors.gray }]} onPress={() => onClickAccount(item)}>
                                     <FontText name={"inter-regular"} size={normalize(22)} color={item?.walletName === accountValue ? "black" : 'white'}  >
                                         {item?.walletName}

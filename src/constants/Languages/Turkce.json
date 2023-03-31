@@ -117,7 +117,7 @@
     "transactionSigned": "İşlem İmzalandı",
     "broadcastTransaction": "Yayın İşlemi",
     "signedTX": "imzalı TX",
-    "walletnameRequired": "Cüzdanadı Gerekli",
+    "walletnameRequired": "Cüzdan Adı Gerekli",
     "walletnameError": "Cüzdanadı 1 karakterden büyük olmalıdır.",
     "importWalletFailed": "Cüzdanı İçe Aktarma Başarısız",
     "importWalletError": "Özel Karakterlere veya Rakamlara izin verilmez.",

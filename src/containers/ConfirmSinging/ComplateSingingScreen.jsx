@@ -12,6 +12,7 @@ import Header from '../../components/common/Header'
 
 export default function ComplateSingingScreen({ navigation, route }) {
     const walletName = route?.params?.walletName
+    const showIcon = route?.params?.name
     const from = route?.params?.from
     const { t } = useTranslation();
 
@@ -24,7 +25,8 @@ export default function ComplateSingingScreen({ navigation, route }) {
 
     const backAction = () => {
         navigation.navigate(appConstant.accountDetails, {
-            walletName: walletName
+            walletName: walletName,
+            showIcon: showIcon
         });
         return true;
     };

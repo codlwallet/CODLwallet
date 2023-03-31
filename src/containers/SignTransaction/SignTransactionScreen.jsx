@@ -12,6 +12,7 @@ import TransactionCard from '../../components/TransactionCard'
 export default function SignTransactionScreen({ navigation, route }) {
     const { t } = useTranslation();
     const walletName = route?.params?.walletName
+    const showIcon = route?.params?.name
     const [btnValue, setBtnValue] = useState(t("sign"))
 
     useEffect(() => {
@@ -37,7 +38,8 @@ export default function SignTransactionScreen({ navigation, route }) {
 
     const backAction = () => {
         navigation.navigate(appConstant.accountDetails, {
-            walletName: walletName
+            walletName: walletName,
+            showIcon: showIcon
         })
         return true;
     };

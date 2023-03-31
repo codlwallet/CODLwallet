@@ -9,8 +9,8 @@ import Header from '../../components/common/Header'
 import Button from '../../components/common/Button'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import FontText from '../../components/common/FontText'
-import Alert from '../../components/common/Alert'
 import { useTranslation } from 'react-i18next'
+import PopUp from '../../components/common/AlertBox'
 
 export default function ChangeUserDetailsScreen({ navigation, route }) {
     const { t } = useTranslation();
@@ -117,7 +117,6 @@ export default function ChangeUserDetailsScreen({ navigation, route }) {
         }
         return errorStatus;
     };
-
 
     const checkPinValidation = () => {
         let errorStatus = true;
@@ -358,14 +357,13 @@ export default function ChangeUserDetailsScreen({ navigation, route }) {
                     </FontText>
                 </Button>
             </View>
-            <Alert
-                show={showAlert}
+            {showAlert && <PopUp
                 title={alertTitle}
                 message={alertMessage}
                 onConfirmPressed={() => {
                     setShowAlert(false)
                 }}
-            />
+            />}
         </View>
     )
 }

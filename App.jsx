@@ -23,7 +23,7 @@ export default function App() {
 
   return (
     <Provider store={store}>
-      <StatusBar barStyle={'light-content'} />
+      <StatusBar barStyle={'light-content'} translucent backgroundColor={colors.black} />
       <Route />
     </Provider>
   )

@@ -9,9 +9,9 @@ import Header from '../../components/common/Header'
 import Input from '../../components/common/Input'
 import Button from '../../components/common/Button'
 import FontText from '../../components/common/FontText'
-import Alert from '../../components/common/Alert'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { useTranslation } from 'react-i18next'
+import PopUp from '../../components/common/AlertBox'
 
 export default function DeleteEverythingScreen({ navigation }) {
     const { t } = useTranslation();
@@ -184,14 +184,13 @@ export default function DeleteEverythingScreen({ navigation }) {
                         </Button>
                     </View>
             }
-            <Alert
-                show={showAlert}
+            {showAlert && <PopUp
                 title={alertTitle}
                 message={alertMessage}
                 onConfirmPressed={() => {
                     setShowAlert(false)
                 }}
-            />
+            />}
         </View >
     )
 }

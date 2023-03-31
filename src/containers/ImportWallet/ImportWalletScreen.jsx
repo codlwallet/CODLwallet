@@ -1,4 +1,4 @@
-import { BackHandler, FlatList, Keyboard, KeyboardAvoidingView, Platform, SafeAreaView, StatusBar, StyleSheet, View } from 'react-native'
+import { BackHandler, FlatList, Keyboard, StyleSheet, View } from 'react-native'
 import React, { useEffect, useRef, useState } from 'react'
 import colors from '../../assets/colors'
 import Header from '../../components/common/Header'
@@ -11,7 +11,6 @@ import Input from '../../components/common/Input'
 import WalletCard from '../../components/WalletCard'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { useTranslation } from 'react-i18next'
-import Alert from '../../components/common/Alert'
 
 export default function ImportWalletScreen({ navigation, route }) {
     const { t } = useTranslation();
@@ -22,12 +21,9 @@ export default function ImportWalletScreen({ navigation, route }) {
     const [isEdit, setIsEdit] = useState(false)
     const [textIndex, setTextIndex] = useState(0)
     const [showConfirm, setShowConfirm] = useState(false)
-    const [showAlert, setShowAlert] = useState(false)
-    const [alertTitle, setAlertTitle] = useState('')
-    const [alertMessage, setAlertMessage] = useState('')
     const [showKeyboard, setShowKeyboard] = useState(false)
     const walletcardData = numberValue && walletData.slice(0, numberValue)
-    const reg = /^([^0-9$%]*)$@()]+-#*&^!-/;
+    const reg = (/^[A-Za-z]+$/);
 
     useEffect(() => {
         cardRef.current = cardRef?.current?.slice(0, walletData?.length);
@@ -99,25 +95,9 @@ export default function ImportWalletScreen({ navigation, route }) {
         }
     }
 
-    // const isValidate = () => {
-    //     let errorStatus = true;
-    //     walletcardData.forEach(item => {
-    //         if (regex.test(item.name)
-    //         ) {
-    //             setShowAlert(true)
-    //             setAlertTitle(t("importWalletFailed"))
-    //             setAlertMessage(t("importWalletError"))
-    //             errorStatus = false;
-    //         }
-    //     });
-    //     return errorStatus;
-    // };
-
     const handleProceedClick = () => {
-        // if (isValidate()) {
         setBtnValue(appConstant.confirm)
         setShowConfirm(true)
-        // }
     }
 
     const handleEditClick = () => {
@@ -165,7 +145,7 @@ export default function ImportWalletScreen({ navigation, route }) {
                     autoCorrect={false}
                     inputStyle={[styles.textInput, { color: item.name == '' ? colors.white : colors.red }]}
                     onChangeText={text => {
-                        if (reg.test(text)) {
+                        if (text === '' || reg.test(text)) {
                             walletData[index].name = text.toLowerCase();
                             setWalletData([...walletData]);
                         }
@@ -252,14 +232,6 @@ export default function ImportWalletScreen({ navigation, route }) {
                     </Button>
                 </>
             }
-            <Alert
-                show={showAlert}
-                title={alertTitle}
-                message={alertMessage}
-                onConfirmPressed={() => {
-                    setShowAlert(false)
-                }}
-            />
         </View>
     )
 }

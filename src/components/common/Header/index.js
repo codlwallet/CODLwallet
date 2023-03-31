@@ -31,6 +31,7 @@ const Header = props => {
     titleStyle,
     titleWithIcon,
     titleIcon,
+    rightIconDisable,
   } = props;
 
   return (
@@ -84,6 +85,7 @@ const Header = props => {
         </View>
         {showRightIcon && (
           <TouchableOpacity
+            disabled={rightIconDisable}
             onPress={RightIconPress}
             style={styles.iconContainer}>
             {RightIcon === 'info' ? (
@@ -108,7 +110,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flexDirection: 'row',
     paddingHorizontal: wp(4),
-    paddingTop: Platform.OS === 'android' ? hp(3) : hp(3),
+    paddingTop: Platform.OS === 'android' ? hp(4.8) : hp(3),
     width: wp(100),
     alignSelf: 'center',
   },

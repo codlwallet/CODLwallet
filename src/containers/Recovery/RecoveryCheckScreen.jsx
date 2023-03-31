@@ -19,6 +19,8 @@ export default function RecoveryCheckScreen({ navigation }) {
     const [isEdit, setIsEdit] = useState(false)
     const [textIndex, setTextIndex] = useState(0)
     const [showConfirm, setShowConfirm] = useState(true)
+    const [showKeyboard, setShowKeyboard] = useState(false)
+    const reg = (/^[A-Za-z]+$/);
 
     useEffect(() => {
         cardRef.current = cardRef?.current?.slice(0, walletData?.length);
@@ -30,7 +32,6 @@ export default function RecoveryCheckScreen({ navigation }) {
     //     }, 1000);
 
     // }, []);
-
 
     useEffect(() => {
         async function getWalletData() {
@@ -52,6 +53,7 @@ export default function RecoveryCheckScreen({ navigation }) {
         'keyboardDidShow',
         () => {
             setIsEdit(true)
+            setShowKeyboard(true)
         }
     );
 
@@ -65,6 +67,7 @@ export default function RecoveryCheckScreen({ navigation }) {
             else {
                 setBtnValue(appConstant.edit)
                 setIsEdit(true)
+                setShowKeyboard(false)
             }
         }
     );
@@ -110,8 +113,10 @@ export default function RecoveryCheckScreen({ navigation }) {
                     autoCorrect={false}
                     inputStyle={[styles.textInput, { color: item.name == '' ? colors.white : colors.red }]}
                     onChangeText={text => {
-                        walletData[index].name = text.toLowerCase();
-                        setWalletData([...walletData]);
+                        if (text === '' || reg.test(text)) {
+                            walletData[index].name = text.toLowerCase();
+                            setWalletData([...walletData]);
+                        }
                     }}
                     keyboardType={'default'}
                     returnKeyType={'next'}
@@ -124,7 +129,7 @@ export default function RecoveryCheckScreen({ navigation }) {
     return (
         <View style={styles.container} >
             <Header title={t("recoveryCheck")} showRightIcon RightIcon={'info'} showBackIcon onBackPress={backAction} statusBarcolor={colors.red} style={{ alignSelf: 'center', }} />
-            <View style={styles.subContainer}>
+            <View style={[styles.subContainer, { bottom: showKeyboard ? hp(4) : 0 }]}>
                 <WalletCard style={styles.walletCardContainer}
                     titleColor={'red'}
                     title={t("recoverySeeds")}
@@ -151,7 +156,7 @@ export default function RecoveryCheckScreen({ navigation }) {
                     borderRadius={11}
                     width={wp(90)}
                     disabled={walletData?.some((item) => !item.name)}
-                    style={[styles.button, { marginBottom: hp(2) }]}
+                    style={[styles.button, { bottom: hp(14) }]}
                     onPress={handleConfirmClick}
                 >
                     <FontText name={"inter-medium"} size={normalize(22)} color={!walletData?.some((item) => !item.name) && btnValue === appConstant.confirm ? "red" : 'white'}>
@@ -184,12 +189,13 @@ const styles = StyleSheet.create({
         paddingHorizontal: wp(3.5),
     },
     subContainer: {
-        flex: 1,
         justifyContent: 'center',
+        marginTop: hp(12)
     },
     button: {
         alignSelf: 'center',
-        marginBottom: hp(3)
+        position: 'absolute',
+        bottom: hp(3)
     },
     walletCardContainer: {
         backgroundColor: colors['red-open'],

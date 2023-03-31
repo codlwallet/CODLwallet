@@ -1,4 +1,4 @@
-import { BackHandler, Keyboard, StyleSheet, TouchableOpacity, View } from 'react-native'
+import { BackHandler, Keyboard, KeyboardAvoidingView, StyleSheet, TouchableOpacity, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import Header from '../../components/common/Header'
 import colors from '../../assets/colors'
@@ -31,30 +31,28 @@ export default function WelcomePurchaseScreen({ navigation, route }) {
         getLoginData()
     }, [])
 
-    // useFocusEffect(
-    //     React.useCallback(() => {
-    //         const showSubscription = Keyboard.addListener('keyboardDidShow', e => setKeyboardHeight(e.endCoordinates.height));
-    //         const hideSubscription = Keyboard.addListener('keyboardWillHide', () => setKeyboardHeight(0));
-    //         const keyboardShowListener = Keyboard.addListener(
-    //             'keyboardDidShow',
-    //             () => {
-    //                 setIsEnabled(true)
-    //             }
-    //         );
-    //         const keyboardHideListener = Keyboard.addListener(
-    //             'keyboardDidHide',
-    //             () => {
-    //                 setIsEnabled(false)
-    //             }
-    //         );
-    //         return () => {
-    //             showSubscription.remove();
-    //             hideSubscription.remove();
-    //         }
-    //     }, [isEnabled, keyboardHeight]),
-    // );
-
-    // console.log("keyboardHeight......", keyboardHeight)
+    useFocusEffect(
+        React.useCallback(() => {
+            const showSubscription = Keyboard.addListener('keyboardDidShow', e => setKeyboardHeight(e.endCoordinates.height));
+            const hideSubscription = Keyboard.addListener('keyboardWillHide', () => setKeyboardHeight(0));
+            const keyboardShowListener = Keyboard.addListener(
+                'keyboardDidShow',
+                () => {
+                    setIsEnabled(true)
+                }
+            );
+            const keyboardHideListener = Keyboard.addListener(
+                'keyboardDidHide',
+                () => {
+                    setIsEnabled(false)
+                }
+            );
+            return () => {
+                showSubscription.remove();
+                hideSubscription.remove();
+            }
+        }, [isEnabled, keyboardHeight]),
+    );
 
     useEffect(() => {
         BackHandler.addEventListener('hardwareBackPress', backAction);
@@ -87,7 +85,7 @@ export default function WelcomePurchaseScreen({ navigation, route }) {
     return (
         <View style={styles.container}>
             <Header showRightIcon RightIcon={'info'} title={t("welcome")} />
-            <View style={[styles.subContainer, { bottom: isEnabled ? wp(18) : 0 }]}>
+            <View style={[styles.subContainer, { bottom: isEnabled ? wp(6) : 0 }]}>
                 <TouchableOpacity style={styles.buttonConatiner} onPress={handleEnterClick}>
                     <FontText size={normalize(22)} color={'white'} name={'inter-regular'}>
                         {loginData?.name}
@@ -128,31 +126,33 @@ export default function WelcomePurchaseScreen({ navigation, route }) {
                     }
                 /> : null}
             </View>
-            <WalletCard style={[styles.walletCardContainer, { bottom: isEnabled ? 255 - hp(13) : 0 }]}
-                title={t("hiddenWallet")}
-                headerStyle={{ borderColor: colors.black }}
-                titleColor={'black'}
-                children={
-                    <View style={styles.numberView}>
-                        <FontText size={normalize(22)} color={'white'} name={'inter-regular'}>
-                            {t("passphrase")}
-                        </FontText>
-                        <View style={{ flex: 1, alignItems: 'flex-end' }}>
-                            <ToggleSwitch
-                                isOn={isEnabled}
-                                onColor={colors.white}
-                                offColor={colors.black}
-                                thumbOnStyle={{ borderRadius: 2, height: 15, width: 15, backgroundColor: colors.black, left: 8 }}
-                                thumbOffStyle={{ borderRadius: 2, height: 15, width: 15, left: 3 }}
-                                trackOnStyle={{ borderRadius: 4, width: 50, padding: 12 }}
-                                trackOffStyle={{ borderRadius: 4, width: 50, padding: 12 }}
-                                size="small"
-                                onToggle={toggleSwitch}
-                            />
+            <KeyboardAvoidingView behavior='padding'>
+                <WalletCard style={[styles.walletCardContainer, { bottom: isEnabled ? hp(6) : 0 }]}
+                    title={t("hiddenWallet")}
+                    headerStyle={{ borderColor: colors.black }}
+                    titleColor={'black'}
+                    children={
+                        <View style={styles.numberView}>
+                            <FontText size={normalize(22)} color={'white'} name={'inter-regular'}>
+                                {t("passphrase")}
+                            </FontText>
+                            <View style={{ flex: 1, alignItems: 'flex-end' }}>
+                                <ToggleSwitch
+                                    isOn={isEnabled}
+                                    onColor={colors.white}
+                                    offColor={colors.black}
+                                    thumbOnStyle={{ borderRadius: 2, height: 15, width: 15, backgroundColor: colors.black, left: 8 }}
+                                    thumbOffStyle={{ borderRadius: 2, height: 15, width: 15, left: 3 }}
+                                    trackOnStyle={{ borderRadius: 4, width: 50, padding: 12 }}
+                                    trackOffStyle={{ borderRadius: 4, width: 50, padding: 12 }}
+                                    size="small"
+                                    onToggle={toggleSwitch}
+                                />
+                            </View>
                         </View>
-                    </View>
-                }
-            />
+                    }
+                />
+            </KeyboardAvoidingView>
             <Button
                 flex={null}
                 height={hp(8.5)}

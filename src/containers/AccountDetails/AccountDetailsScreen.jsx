@@ -1,5 +1,5 @@
 import { BackHandler, Image, StyleSheet, View } from 'react-native'
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import colors from '../../assets/colors'
 import Header from '../../components/common/Header'
 import { hp, normalize, wp } from '../../helper/responsiveScreen'
@@ -13,13 +13,19 @@ export default function AccountDetailsScreen({ navigation, route }) {
     const { t } = useTranslation();
     const walletName = route?.params?.walletName
     const name = route?.params?.name
+    const showIcon = route?.params?.name
     const from = route?.params?.from
+    const [showRightIcon, setShowRightIcon] = useState(from === appConstant.main || from === appConstant.createAccount ? true : false)
 
     useEffect(() => {
         BackHandler.addEventListener('hardwareBackPress', backAction);
         return async () => {
             BackHandler.removeEventListener('hardwareBackPress', backAction);
         };
+    }, []);
+
+    useEffect(() => {
+        setShowRightIcon(from === appConstant.main || from === appConstant.createAccount ? true : false)
     }, []);
 
     const backAction = () => {
@@ -38,15 +44,16 @@ export default function AccountDetailsScreen({ navigation, route }) {
 
     const handleSignClick = () => {
         navigation.navigate(appConstant.scanQr, {
-            walletName: walletName
+            walletName: walletName,
+            showIcon: showRightIcon
         })
     }
 
     return (
         <View style={styles.container}>
-            <Header title={walletName} showRightIcon={from === appConstant.main || from === appConstant.createAccount ? true : false} showBackIcon onBackPress={backAction} statusBarcolor={colors.black} style={{ alignSelf: 'center' }} RightIconPress={() => navigation.navigate(appConstant.createAccount, {
-                name: name
-            })} titleStyle={{ right: from === appConstant.main || from === appConstant.createAccount ? 0 : wp(40) }} />
+            <Header title={walletName} showRightIcon={from === appConstant.main || from === appConstant.createAccount || showRightIcon ? true : false} showBackIcon onBackPress={backAction} statusBarcolor={colors.black} style={{ alignSelf: 'center' }} RightIconPress={() => navigation.navigate(appConstant.createAccount, {
+                name: name,
+            })} titleStyle={{ right: from === appConstant.main || from === appConstant.createAccount || showRightIcon ? 0 : wp(40) }} />
             <View style={styles.subContainer}>
                 <View style={styles.scannerContainer}>
                     <View style={styles.walletHeaderView}>

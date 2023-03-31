@@ -12,7 +12,5 @@
         android:layout_width="157dp"
         android:layout_height="236dp"
         android:background="@drawable/logo"
-        android:layout_centerInParent="true"
-        android:layout_centerHorizontal="true"
         android:scaleType="center" />
 </LinearLayout>

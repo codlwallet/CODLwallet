@@ -7,6 +7,7 @@ const colors = {
   red: '#D1121A',
   blue: '#5F97F6',
   ['gray-open']: '#555555',
+  green: '#58AFA0',
   // ['gray-natural']: '#9D9CAB',
   // ['gray-lightest']: '#F5F5F6',
   // ['gray-devider']: '#F1F1F4',
