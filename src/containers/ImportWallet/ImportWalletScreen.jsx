@@ -1,5 +1,5 @@
 import { BackHandler, FlatList, Keyboard, StyleSheet, View } from 'react-native'
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import colors from '../../assets/colors'
 import Header from '../../components/common/Header'
 import appConstant from '../../helper/appConstant'
@@ -23,18 +23,18 @@ export default function ImportWalletScreen({ navigation, route }) {
     const [showConfirm, setShowConfirm] = useState(false)
     const [showKeyboard, setShowKeyboard] = useState(false)
     const walletcardData = numberValue && walletData.slice(0, numberValue)
-    const reg = (/^[A-Za-z]+$/);
+    const reg = (/^[a-z]+$/);
 
     useEffect(() => {
         cardRef.current = cardRef?.current?.slice(0, walletData?.length);
     }, [walletData]);
 
-    // useLayoutEffect(() => {
-    //     setTimeout(() => {
-    //         cardRef.current[0].focus();
-    //     }, 1000);
+    useLayoutEffect(() => {
+        setTimeout(() => {
+            cardRef.current[0].focus();
+        }, 1000);
 
-    // }, []);
+    }, []);
 
     useEffect(() => {
         if (form === appConstant.checkAgain) {
@@ -124,8 +124,9 @@ export default function ImportWalletScreen({ navigation, route }) {
         return (
             <>
                 <Input
-                    autoFocus={isEdit}
+                    autoFocus={true}
                     withLeftIcon
+                    maxLength={8}
                     editable={showConfirm && !isEdit ? false : true}
                     ref={el => cardRef.current[index] = el}
                     leftIcon={
@@ -146,7 +147,7 @@ export default function ImportWalletScreen({ navigation, route }) {
                     inputStyle={[styles.textInput, { color: item.name == '' ? colors.white : colors.red }]}
                     onChangeText={text => {
                         if (text === '' || reg.test(text)) {
-                            walletData[index].name = text.toLowerCase();
+                            walletData[index].name = text
                             setWalletData([...walletData]);
                         }
                     }}

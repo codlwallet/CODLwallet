@@ -53,7 +53,7 @@ export default function AccountDetailsScreen({ navigation, route }) {
         <View style={styles.container}>
             <Header title={walletName} showRightIcon={from === appConstant.main || from === appConstant.createAccount || showRightIcon ? true : false} showBackIcon onBackPress={backAction} statusBarcolor={colors.black} style={{ alignSelf: 'center' }} RightIconPress={() => navigation.navigate(appConstant.createAccount, {
                 name: name,
-            })} titleStyle={{ right: from === appConstant.main || from === appConstant.createAccount || showRightIcon ? 0 : wp(40) }} />
+            })} titleStyle={{ right: from === appConstant.main || from === appConstant.createAccount || showRightIcon ? 0 : wp(40), width: wp(65) }} />
             <View style={styles.subContainer}>
                 <View style={styles.scannerContainer}>
                     <View style={styles.walletHeaderView}>

@@ -184,7 +184,6 @@ export default function CreateAccountScreen({ navigation, route }) {
           placeholder={t("walletName")}
           value={walletName}
           ref={nameRef}
-          maxLength={15}
           placeholderTextColor={walletNameFocus ? colors.black : colors.white}
           onChangeText={setWalletName}
           keyboardType={'default'}

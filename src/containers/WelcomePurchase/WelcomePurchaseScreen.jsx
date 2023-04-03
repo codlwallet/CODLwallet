@@ -13,6 +13,7 @@ import WalletCard from '../../components/WalletCard'
 import { useTranslation } from 'react-i18next'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { useFocusEffect } from '@react-navigation/native'
+import PopUp from '../../components/common/AlertBox'
 
 export default function WelcomePurchaseScreen({ navigation, route }) {
     const { t } = useTranslation();
@@ -22,6 +23,9 @@ export default function WelcomePurchaseScreen({ navigation, route }) {
     const [isEnabled, setIsEnabled] = useState(false);
     const [keyboardHeight, setKeyboardHeight] = useState(0);
     const [loginData, setLoginData] = useState()
+    const [showAlert, setShowAlert] = useState(false)
+    const [alertTitle, setAlertTitle] = useState('')
+    const [alertMessage, setAlertMessage] = useState('')
 
     useEffect(() => {
         async function getLoginData() {
@@ -70,10 +74,29 @@ export default function WelcomePurchaseScreen({ navigation, route }) {
 
     const toggleSwitch = () => setIsEnabled(previousState => !previousState);
 
+    const enterBtnValidation = () => {
+        let errorStatus = true;
+        if (password === '' || password.length < 4 || password.length > 8) {
+            setShowAlert(true)
+            setAlertTitle(t("enterPIN"))
+            setAlertMessage(t("pinErrorMess"))
+            errorStatus = false;
+        }
+        else if (loginData?.pin !== password) {
+            setShowAlert(true)
+            setAlertTitle(t("error"))
+            setAlertMessage(t("wrongPin"))
+            errorStatus = false;
+        }
+        return errorStatus;
+    }
+
     const onSubmitPin = () => {
-        Keyboard.dismiss()
-        setIsEnabled(false)
-        navigation.navigate(appConstant.hiddenWallet)
+        if (enterBtnValidation()) {
+            Keyboard.dismiss()
+            setIsEnabled(false)
+            navigation.navigate(appConstant.hiddenWallet)
+        }
     }
 
     const handleEnterClick = () => {
@@ -167,6 +190,13 @@ export default function WelcomePurchaseScreen({ navigation, route }) {
                     {t("enter")}
                 </FontText>
             </Button>
+            {showAlert && <PopUp
+                title={alertTitle}
+                message={alertMessage}
+                onConfirmPressed={() => {
+                    setShowAlert(false)
+                }}
+            />}
         </View>
     )
 }

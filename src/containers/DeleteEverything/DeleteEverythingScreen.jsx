@@ -19,7 +19,7 @@ export default function DeleteEverythingScreen({ navigation }) {
     const [btnValue, setBtnValue] = useState(appConstant.deleteEverything)
     const [isDone, setIsDone] = useState(false)
     const [enterPin, setEnterPin] = useState('')
-    const [enterPinFocus, setEnterPinFocus] = useState(false)
+    const [enterPinFocus, setEnterPinFocus] = useState(true)
     const [showPin, setShowPin] = useState(false)
     const [showAlert, setShowAlert] = useState(false)
     const [alertTitle, setAlertTitle] = useState('')
@@ -33,6 +33,20 @@ export default function DeleteEverythingScreen({ navigation }) {
             BackHandler.removeEventListener('hardwareBackPress', backAction);
         };
     }, []);
+
+    // const keyboardShowListener = Keyboard.addListener(
+    //     'keyboardDidShow',
+    //     () => {
+    //         setEnterPinFocus(true)
+    //     }
+    // );
+
+    // const keyboardHideListener = Keyboard.addListener(
+    //     'keyboardDidHide',
+    //     () => {
+    //         setEnterPinFocus(false)
+    //     }
+    // );
 
     const backAction = () => {
         navigation.goBack()
@@ -104,7 +118,12 @@ export default function DeleteEverythingScreen({ navigation }) {
     }
 
     return (
-        <View style={styles.container}>
+        <View style={styles.container} onStartShouldSetResponder={() => Keyboard.dismiss()}>
+            <StatusBar
+                barStyle={'light-content'}
+                translucent
+                backgroundColor={colors.red}
+            />
             {!isConfirm && <Header showRightIcon title={t("deleteEverything")} RightIcon={'info'} onBackPress={backAction} showBackIcon statusBarcolor={colors.red} />}
             {
                 !isDone ?
@@ -128,7 +147,7 @@ export default function DeleteEverythingScreen({ navigation }) {
                         <Input
                             withRightIcon
                             ref={enterPinRef}
-                            // autoFocus={!from ? true : false}
+                            autoFocus={true}
                             placeholder={t("enterPin")}
                             value={enterPin}
                             placeholderTextColor={enterPinFocus ? colors.red : colors.white}

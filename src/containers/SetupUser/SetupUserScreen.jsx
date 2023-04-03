@@ -176,6 +176,7 @@ export default function SetupUserScreen({ navigation, route }) {
                 <Input
                     withRightIcon={name !== '' ? true : false}
                     ref={nameRef}
+                    autoFocus={true}
                     editable={from ? false : true}
                     placeholder={t("name")}
                     value={from ? loginData?.name : name}
@@ -300,7 +301,7 @@ export default function SetupUserScreen({ navigation, route }) {
                     <Input
                         withRightIcon
                         ref={enterPinRef}
-                        // autoFocus={!from ? true : false}
+                        autoFocus={true}
                         placeholder={t("enterPin")}
                         value={enterPin}
                         placeholderTextColor={enterPinFocus ? colors.black : colors.white}

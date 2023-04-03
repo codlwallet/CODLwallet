@@ -102,10 +102,10 @@ export default function AccountListScreen({ navigation, route }) {
                             return (
                                 <View key={index} style={styles.listView}>
                                     <TouchableOpacity style={[styles.buttonContainer]} onPress={() => onClickAccount(item)}>
-                                        <FontText name={"inter-regular"} size={normalize(22)} color={'white'}  >
+                                        <FontText name={"inter-regular"} size={normalize(22)} color={'white'} style={{ width: wp(45) }} lines={1}  >
                                             {item?.walletName}
                                         </FontText>
-                                        <FontText name={"inter-regular"} size={normalize(15)} color={'white'}  >
+                                        <FontText name={"inter-regular"} size={normalize(15)} color={'white'} style={{ width: wp(30), }} lines={1} textAlign={'right'} >
                                             {"0xa94bb...a710"}
                                         </FontText>
                                     </TouchableOpacity>

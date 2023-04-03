@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useTransition} from 'react';
 import {
   View,
   StyleSheet,
@@ -8,9 +8,9 @@ import {
 } from 'react-native';
 import colors from '../../../assets/colors';
 import SvgIcons from '../../../assets/SvgIcons';
-import appConstant from '../../../helper/appConstant';
 import {hp, normalize, wp} from '../../../helper/responsiveScreen';
 import FontText from '../FontText';
+import {useTranslation} from 'react-i18next';
 
 const Header = props => {
   const {
@@ -33,6 +33,7 @@ const Header = props => {
     titleIcon,
     rightIconDisable,
   } = props;
+  const {t} = useTranslation();
 
   return (
     <>
@@ -78,7 +79,7 @@ const Header = props => {
                 textTransform={'uppercase'}
                 lines={1}
                 pLeft={pLeft}>
-                {appConstant.hidden}
+                {t('hidden')}
               </FontText>
             </View>
           )}

@@ -20,7 +20,7 @@ export default function RecoveryCheckScreen({ navigation }) {
     const [textIndex, setTextIndex] = useState(0)
     const [showConfirm, setShowConfirm] = useState(true)
     const [showKeyboard, setShowKeyboard] = useState(false)
-    const reg = (/^[A-Za-z]+$/);
+    const reg = (/^[a-z]+$/);
 
     useEffect(() => {
         cardRef.current = cardRef?.current?.slice(0, walletData?.length);
@@ -92,8 +92,9 @@ export default function RecoveryCheckScreen({ navigation }) {
         return (
             <View >
                 <Input
-                    autoFocus={isEdit}
+                    autoFocus={true}
                     withLeftIcon
+                    maxLength={8}
                     editable={showConfirm && !isEdit ? false : true}
                     ref={el => cardRef.current[index] = el}
                     leftIcon={
@@ -114,7 +115,7 @@ export default function RecoveryCheckScreen({ navigation }) {
                     inputStyle={[styles.textInput, { color: item.name == '' ? colors.white : colors.red }]}
                     onChangeText={text => {
                         if (text === '' || reg.test(text)) {
-                            walletData[index].name = text.toLowerCase();
+                            walletData[index].name = text
                             setWalletData([...walletData]);
                         }
                     }}
