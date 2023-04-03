@@ -200,6 +200,7 @@ export const create = async data => {
       for (const network of mainData) {
         createdAccounts[network.value] = [];
       }
+
       let walletData = {
         nemonic: words,
         accounts,
@@ -208,6 +209,7 @@ export const create = async data => {
       AsyncStorage.setItem(Config.USER, JSON.stringify(user));
       AsyncStorage.setItem(Config.WALLET, JSON.stringify(walletData));
       AsyncStorage.setItem(Config.NETWORK, JSON.stringify(Config.DEFAULT_NETWORK));
+      console.log('words', words)
       return {
         status: true,
         words: words,

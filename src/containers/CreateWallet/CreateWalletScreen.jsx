@@ -1,5 +1,5 @@
 import { BackHandler, FlatList, StyleSheet, View, Alert } from 'react-native';
-import React, { useEffect,useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import colors from '../../assets/colors';
 import Header from '../../components/common/Header';
 import appConstant from '../../helper/appConstant';
@@ -39,7 +39,7 @@ export default function CreateWalletScreen({ navigation, route }) {
             while (1) {
                 confirmIndex = Math.ceil((Math.random() * numberValue));
                 let _indexs = confirm_data.map(v => v.index);
-                if (_indexs.indexOf(confirmIndex)<0) {
+                if (_indexs.indexOf(confirmIndex) < 0) {
                     break;
                 }
             }
@@ -60,10 +60,10 @@ export default function CreateWalletScreen({ navigation, route }) {
             confirmWords.sort((a, b) => 0.5 - Math.random())
             confirm_data = [...confirm_data, {
                 index: confirmIndex,
-                words:confirmWords
+                words: confirmWords
             }]
         }
-        confirm_data.sort((a, b) => a.index-b.index)
+        confirm_data.sort((a, b) => a.index - b.index)
         dispatch(setConfirmData(confirm_data));
         navigation.navigate(appConstant.attentionScreen3, {
             ButtonValue: ButtonValue,
@@ -124,46 +124,48 @@ export default function CreateWalletScreen({ navigation, route }) {
         <View style={styles.container}>
             <Header title={t("createWallet")} showRightIcon RightIcon={'info'} showBackIcon onBackPress={backAction} statusBarcolor={colors.red} style={{ alignSelf: 'center' }} />
             <View style={styles.subContainer}>
-                <WalletCard
-                    style={styles.walletCardContainer}
-                    titleColor={'red'}
-                    headerStyle={{ borderColor: colors.red }}
-                    title={t("recoverySeeds")}
-                    children={
-                        <FlatList
-                            // data={numberValue && createWalletData.slice(0, numberValue)}
-                            data={words}
-                            numColumns={3}
-                            columnWrapperStyle={{ justifyContent: 'space-between' }}
-                            keyExtractor={item => {
-                                return item.toString();
-                            }}
-                            renderItem={({ item, index }) => {
-                                return (
-                                    <View key={index} style={styles.seedsContainer}>
-                                        <View style={styles.numberContainer}>
-                                            <FontText
-                                                name={'inter-bold'}
-                                                size={normalize(12)}
-                                                color={'white'}>
-                                                {index+1}
-                                            </FontText>
+                {
+                    words.length > 0 &&
+                    <WalletCard
+                        style={styles.walletCardContainer}
+                        titleColor={'red'}
+                        headerStyle={{ borderColor: colors.red }}
+                        title={t("recoverySeeds")}
+                        children={
+                            <FlatList
+                                data={["123", "123", "123"]}
+                                numColumns={3}
+                                columnWrapperStyle={{ justifyContent: 'space-between' }}
+                                keyExtractor={item => {
+                                    return item.toString();
+                                }}
+                                renderItem={({ item, index }) => {
+                                    return (
+                                        <View key={index} style={styles.seedsContainer}>
+                                            <View style={styles.numberContainer}>
+                                                <FontText
+                                                    name={'inter-bold'}
+                                                    size={normalize(12)}
+                                                    color={'white'}>
+                                                    {index + 1}
+                                                </FontText>
+                                            </View>
+                                            <View style={styles.nameContainer}>
+                                                <FontText
+                                                    name={'inter-regular'}
+                                                    size={normalize(14)}
+                                                    color={'red'}
+                                                    pLeft={wp(1)}>
+                                                    {item}
+                                                </FontText>
+                                            </View>
                                         </View>
-                                        <View style={styles.nameContainer}>
-                                            <FontText
-                                                name={'inter-regular'}
-                                                size={normalize(14)}
-                                                color={'red'}
-                                                pLeft={wp(1)}>
-                                                {item}
-                                            </FontText>
-                                        </View>
-                                    </View>
-                                );
-                            }}
-                        />
-                    }
-                />
+                                    );
+                                }}
+                            />
+                        }
+                    />
+                }
             </View>
             <Button
                 flex={null}
