@@ -7,10 +7,11 @@ import { hp, isIOS, normalize, wp } from '../../helper/responsiveScreen'
 import Button from '../../components/common/Button'
 import FontText from '../../components/common/FontText'
 import { importWalletData } from '../../constants/data'
-import Input from '../../components/common/Input'
 import WalletCard from '../../components/WalletCard'
-import AsyncStorage from '@react-native-async-storage/async-storage'
-import { useTranslation } from 'react-i18next'
+import Input from '../../components/common/Input'
+import { importWallet } from '../../storage'
+import { useTranslation } from 'react-i18next';
+import Alert from "../../components/common/Alert";
 
 export default function ImportWalletScreen({ navigation, route }) {
     const { t } = useTranslation();
@@ -22,10 +23,14 @@ export default function ImportWalletScreen({ navigation, route }) {
     const [textIndex, setTextIndex] = useState(0)
     const [showConfirm, setShowConfirm] = useState(false)
     const walletcardData = numberValue && walletData.slice(0, numberValue)
+    const [showAlert, setShowAlert] = useState(false);
+    const [alertTitle, setAlertTitle] = useState('')
+    const [alertMessage, setAlertMessage] = useState('')
 
     useEffect(() => {
         cardRef.current = cardRef?.current?.slice(0, walletData?.length);
-    }, [walletData]);
+        setIsEdit(true)
+    }, [walletData, cardRef]);
 
     // useLayoutEffect(() => {
     //     setTimeout(() => {
@@ -80,13 +85,31 @@ export default function ImportWalletScreen({ navigation, route }) {
     );
 
     const handleConfirmClick = async () => {
+        setIsEdit(false)
         setBtnValue(appConstant.confirm)
         if (form === appConstant.recoveryCheck) {
             navigation.goBack()
         }
         else {
-            await AsyncStorage.setItem('WalletData', JSON.stringify(walletcardData));
-            navigation.navigate(appConstant.complateSeeds)
+            const data = walletData.slice(0, numberValue)
+            let mnemonic = "";
+            data.forEach(item => {
+                mnemonic += item.name + " "
+            });
+            importWallet(mnemonic.substring(0, mnemonic.length - 1)).then((res) => {
+                if (res.status) {
+                    navigation.navigate(appConstant.complateSeeds)
+                }
+                else {
+                    setAlertTitle(t('importWalletFailure'));
+                    setAlertMessage(t("nemonicErrorMess"));
+                    setShowAlert(true);
+                }
+            }).catch(e => {
+                setAlertTitle(t('importWalletFailure'));
+                setAlertMessage(t("nemonicErrorMess"));
+                setShowAlert(true);
+            })
         }
     }
 
@@ -117,7 +140,7 @@ export default function ImportWalletScreen({ navigation, route }) {
 
     const renderWalletData = (item, index) => {
         return (
-            <View >
+            <View key={index}>
                 <Input
                     autoFocus={isEdit}
                     withLeftIcon
@@ -178,9 +201,9 @@ export default function ImportWalletScreen({ navigation, route }) {
             </FontText>}
             {!showConfirm && <Button
                 flex={null}
-                disabled={walletcardData?.some((item) => !item.name)}
+                disabled={walletcardData&&walletcardData?.some((item) => !item.name)}
                 height={hp(8.5)}
-                bgColor={!walletcardData?.some((item) => !item.name) ? 'white' : ['red-open']}
+                bgColor={!(walletcardData&&walletcardData?.some((item) => !item.name)) ? 'white' : 'red-open'}
                 type="highlight"
                 borderRadius={11}
                 style={{ marginBottom: hp(2) }}
@@ -196,7 +219,7 @@ export default function ImportWalletScreen({ navigation, route }) {
                     <Button
                         flex={null}
                         height={hp(8.5)}
-                        bgColor={!walletcardData?.some((item) => !item.name) && btnValue === appConstant.confirm ? 'white' : ['red-open']}
+                        bgColor={!walletcardData?.some((item) => !item.name) && btnValue === appConstant.confirm ? 'white' : 'red-open'}
                         type="highlight"
                         borderRadius={11}
                         disabled={walletcardData?.some((item) => !item.name)}
@@ -210,7 +233,7 @@ export default function ImportWalletScreen({ navigation, route }) {
                     <Button
                         flex={null}
                         height={hp(8.5)}
-                        bgColor={btnValue === appConstant.edit ? 'white' : ['red-open']}
+                        bgColor={btnValue === appConstant.edit ? 'white' : 'red-open'}
                         type="highlight"
                         borderRadius={11}
                         style={{ marginBottom: hp(2) }}
@@ -222,6 +245,14 @@ export default function ImportWalletScreen({ navigation, route }) {
                     </Button>
                 </>
             }
+            <Alert
+                show={showAlert}
+                title={alertTitle}
+                message={alertMessage}
+                onConfirmPressed={() => {
+                    setShowAlert(false)
+                }}
+            />
         </View>
     )
 }

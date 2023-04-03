@@ -13,7 +13,6 @@ const WelcomeScreen = ({ navigation, route }) => {
 
     const from = route?.params?.from
 
-
     const onPressStartBtn = () => {
         navigation.navigate(appConstant.setupUser, {
             from: from

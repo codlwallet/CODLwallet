@@ -11,9 +11,11 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useTranslation } from 'react-i18next'
 import appConstant from '../../helper/appConstant'
 import Alert from '../../components/common/Alert'
+import { getUserData } from '../../storage'
 
 export default function ConfirmSingingScreen({ navigation, route }) {
     const walletName = route?.params?.walletName
+    const walletAddress = route?.params?.walletAddress
     const nameRef = useRef()
     const enterPinRef = useRef()
     const [name, setName] = useState('')
@@ -28,11 +30,9 @@ export default function ConfirmSingingScreen({ navigation, route }) {
     const { t } = useTranslation();
 
     useEffect(() => {
-        async function getLoginData() {
-            const data = await AsyncStorage.getItem('LoginData');
-            setLoginData(JSON.parse(data))
-        }
-        getLoginData()
+        getUserData().then(async res => {
+            setLoginData(res.user)
+        })
     }, [])
 
     const onSubmitEnterPin = () => {
@@ -63,7 +63,8 @@ export default function ConfirmSingingScreen({ navigation, route }) {
     const handleProceedBtn = () => {
         if (enterBtnValidation()) {
             navigation.navigate(appConstant.complateSinging, {
-                walletName: walletName
+                walletName: walletName,
+                walletAddress
             })
         }
     }

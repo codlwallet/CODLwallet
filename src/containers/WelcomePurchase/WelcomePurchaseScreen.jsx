@@ -7,10 +7,12 @@ import { hp, normalize, wp } from '../../helper/responsiveScreen'
 import FontText from '../../components/common/FontText'
 import SvgIcons from '../../assets/SvgIcons'
 import Input from '../../components/common/Input'
+import Alert from "../../components/common/Alert";
 import ToggleSwitch from 'toggle-switch-react-native'
 import Button from '../../components/common/Button'
 import WalletCard from '../../components/WalletCard'
 import { useTranslation } from 'react-i18next'
+import { useSelector } from 'react-redux'
 
 export default function WelcomePurchaseScreen({ navigation, route }) {
     const { t } = useTranslation();
@@ -21,7 +23,10 @@ export default function WelcomePurchaseScreen({ navigation, route }) {
     const [keyboardHeight, setKeyboardHeight] = useState(0);
 
     const toggleSwitch = () => setIsEnabled(previousState => !previousState);
-
+    const { user } = useSelector((state) => state.auth)
+    const [showAlert, setShowAlert] = useState(false);
+    const [alertTitle, setAlertTitle] = useState('')
+    const [alertMessage, setAlertMessage] = useState('')
     useEffect(() => {
         const showSubscription = Keyboard.addListener('keyboardDidShow', e => setKeyboardHeight(e.endCoordinates.height));
         const hideSubscription = Keyboard.addListener('keyboardWillHide', () => setKeyboardHeight(0));
@@ -60,8 +65,14 @@ export default function WelcomePurchaseScreen({ navigation, route }) {
 
     const onSubmitPin = () => {
         Keyboard.dismiss()
-        setIsEnabled(false)
-        navigation.navigate(appConstant.hiddenWallet)
+        if (user.pin === password) {
+            setIsEnabled(false)
+            navigation.navigate(appConstant.hiddenWallet)
+        } else {
+            setAlertTitle(t('passphraseNotMatch'));
+            setAlertMessage(t('passphraseMatchErrorMess'));
+            setShowAlert(true);
+        }
     }
 
     const handleEnterClick = () => {
@@ -76,7 +87,7 @@ export default function WelcomePurchaseScreen({ navigation, route }) {
             <View style={[styles.subContainer, { bottom: isEnabled ? wp(18) : 0 }]}>
                 <TouchableOpacity style={styles.buttonConatiner} onPress={handleEnterClick}>
                     <FontText size={normalize(22)} color={'white'} name={'inter-regular'}>
-                        {'Alice’s Crypto'}
+                        {user?.name}
                     </FontText>
                     <SvgIcons.RightBackArrow height={hp(3)} width={hp(2)} />
                 </TouchableOpacity>
@@ -153,6 +164,14 @@ export default function WelcomePurchaseScreen({ navigation, route }) {
                     {t("enter")}
                 </FontText>
             </Button>
+            <Alert
+                show={showAlert}
+                title={alertTitle}
+                message={alertMessage}
+                onConfirmPressed={() => {
+                    setShowAlert(false)
+                }}
+            />
         </View>
     )
 }

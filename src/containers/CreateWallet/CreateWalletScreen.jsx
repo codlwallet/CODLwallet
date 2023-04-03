@@ -1,5 +1,5 @@
-import { BackHandler, FlatList, StyleSheet, View } from 'react-native';
-import React, { useEffect } from 'react';
+import { BackHandler, FlatList, StyleSheet, View, Alert } from 'react-native';
+import React, { useEffect,useState } from 'react';
 import colors from '../../assets/colors';
 import Header from '../../components/common/Header';
 import appConstant from '../../helper/appConstant';
@@ -10,34 +10,77 @@ import { createWalletData } from '../../constants/data';
 import WalletCard from '../../components/WalletCard';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useTranslation } from 'react-i18next';
+import DeviceInfo from 'react-native-device-info'
+
+import RNFS from 'react-native-fs';
+import { useDispatch } from 'react-redux'
+import { setAccountsData, setConfirmData } from '../../redux/slices/authSlice'
+import { create } from '../../storage'
 
 export default function CreateWalletScreen({ navigation, route }) {
+    const dispatch = useDispatch();
     const { t } = useTranslation();
     const { numberValue, ButtonValue } = route.params;
+    const [words, setWords] = useState([])
+    const [downloadText, setText] = useState()
 
-    useEffect(() => {
-        BackHandler.addEventListener('hardwareBackPress', backAction);
-        return async () => {
-            BackHandler.removeEventListener('hardwareBackPress', backAction);
-        };
-    }, []);
-
-    // const handleBackClick = () => {
-    //     console.log("sdhsghja")
-    //     navigation.navigate(appConstant.attentionScreen2, {
-    //         ButtonValue: ButtonValue,
-    //         numberValue: numberValue,
-    //         from: appConstant.createWallet
-    //     })
-    // }
+    const handleBackClick = () => {
+        navigation.navigate(appConstant.attentionScreen2, {
+            ButtonValue: ButtonValue,
+            numberValue: numberValue,
+            from: appConstant.createWallet
+        })
+    }
 
     const handleProceedClick = async () => {
+        let confirm_data = [];
+        for (let _k = 0; _k < 3; _k++) {
+            let confirmIndex;
+            while (1) {
+                confirmIndex = Math.ceil((Math.random() * numberValue));
+                let _indexs = confirm_data.map(v => v.index);
+                if (_indexs.indexOf(confirmIndex)<0) {
+                    break;
+                }
+            }
+            let confirmWords = [
+                {
+                    number: (confirmIndex == 1 ? 3 : confirmIndex - 1),
+                    name: words[(confirmIndex == 1 ? 3 : confirmIndex - 1) - 1]
+                },
+                {
+                    number: confirmIndex,
+                    name: words[confirmIndex - 1]
+                },
+                {
+                    number: (confirmIndex == numberValue ? (numberValue - 2) : confirmIndex + 1),
+                    name: words[(confirmIndex == numberValue ? (numberValue - 2) : confirmIndex + 1) - 1]
+                },
+            ]
+            confirmWords.sort((a, b) => 0.5 - Math.random())
+            confirm_data = [...confirm_data, {
+                index: confirmIndex,
+                words:confirmWords
+            }]
+        }
+        confirm_data.sort((a, b) => a.index-b.index)
+        dispatch(setConfirmData(confirm_data));
         navigation.navigate(appConstant.attentionScreen3, {
             ButtonValue: ButtonValue,
             numberValue: numberValue,
         });
-        await AsyncStorage.setItem('WalletData', JSON.stringify(numberValue && createWalletData.slice(0, numberValue)));
     };
+
+    const download = () => {
+        let path = `${RNFS.DownloadDirectoryPath}/Wallet (${new Date().toDateString()}).txt`;
+        RNFS.writeFile(path, downloadText, 'utf8').then((res) => {
+            Alert.alert("Saved the wallet.", 'Wallet.txt')
+        }
+        ).catch((err) => {
+            console.log(err, "err")
+            Alert.alert("Permission denied.")
+        });
+    }
 
     const backAction = () => {
         navigation.navigate(appConstant.attentionScreen2, {
@@ -47,6 +90,35 @@ export default function CreateWalletScreen({ navigation, route }) {
         });
         return true;
     };
+    useEffect(() => {
+        if (numberValue > 0 && words.length == 0) {
+            const uniqueId = DeviceInfo.getUniqueIdSync();
+            const data = {
+                count: numberValue,
+                machineId: uniqueId
+            }
+
+            create(data).then((res) => {
+                let mnemonic = res.words;
+                if (res.status) {
+                    setText(mnemonic)
+                    const sortWords = mnemonic?.split(" ")
+                    console.log('sortWords', sortWords)
+                    setWords(sortWords)
+                    dispatch(setAccountsData(res.walletData));
+                }
+            }).catch((e) => {
+                Alert.alert('Error!', 'You have got an error.');
+            })
+        }
+    }, [numberValue])
+
+    useEffect(() => {
+        BackHandler.addEventListener('hardwareBackPress', backAction);
+        return async () => {
+            BackHandler.removeEventListener('hardwareBackPress', backAction);
+        };
+    }, []);
 
     return (
         <View style={styles.container}>
@@ -59,21 +131,22 @@ export default function CreateWalletScreen({ navigation, route }) {
                     title={t("recoverySeeds")}
                     children={
                         <FlatList
-                            data={numberValue && createWalletData.slice(0, numberValue)}
+                            // data={numberValue && createWalletData.slice(0, numberValue)}
+                            data={words}
                             numColumns={3}
                             columnWrapperStyle={{ justifyContent: 'space-between' }}
                             keyExtractor={item => {
-                                return item.id;
+                                return item.toString();
                             }}
                             renderItem={({ item, index }) => {
                                 return (
-                                    <View style={styles.seedsContainer}>
+                                    <View key={index} style={styles.seedsContainer}>
                                         <View style={styles.numberContainer}>
                                             <FontText
                                                 name={'inter-bold'}
                                                 size={normalize(12)}
                                                 color={'white'}>
-                                                {item?.id}
+                                                {index+1}
                                             </FontText>
                                         </View>
                                         <View style={styles.nameContainer}>
@@ -82,7 +155,7 @@ export default function CreateWalletScreen({ navigation, route }) {
                                                 size={normalize(14)}
                                                 color={'red'}
                                                 pLeft={wp(1)}>
-                                                {item?.name}
+                                                {item}
                                             </FontText>
                                         </View>
                                     </View>

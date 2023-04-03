@@ -1,9 +1,11 @@
-const {getDefaultConfig} = require('metro-config');
+const { getDefaultConfig } = require('metro-config');
+const crypto = require.resolve('crypto-browserify');
 
 module.exports = (async () => {
   const {
-    resolver: {sourceExts, assetExts},
+    resolver: { sourceExts, assetExts, },
   } = await getDefaultConfig();
+
   return {
     transformer: {
       getTransformOptions: async () => ({
@@ -17,6 +19,16 @@ module.exports = (async () => {
     resolver: {
       assetExts: assetExts.filter(ext => ext !== 'svg'),
       sourceExts: [...sourceExts, 'svg'],
+      extraNodeModules: {
+        crypto,
+        http: require.resolve('stream-http'),
+        https: require.resolve('https-browserify'),
+        os: require.resolve('os-browserify/browser.js'),
+        path: require.resolve('path-browserify'),
+        stream: require.resolve('readable-stream'),
+        vm: require.resolve('vm-browserify'),
+      },
+
     },
   };
 })();

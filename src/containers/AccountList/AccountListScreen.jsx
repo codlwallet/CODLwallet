@@ -11,25 +11,17 @@ import ButtonView from '../../components/common/ButtonList';
 import appConstant from '../../helper/appConstant';
 import Button from '../../components/common/Button';
 import SvgIcons from '../../assets/SvgIcons';
+import { getUserData, getWalletData } from "../../storage";
 
 export default function AccountListScreen({ navigation, route }) {
     const { t } = useTranslation();
     const name = route?.params?.name
     const accountList = route?.params?.accountList
-    const [walletData, setWalletData] = useState()
     const [showList, setShowList] = useState(true)
     const [btnValue, setButtonValue] = useState()
     const [buttonIndex, setButtonIndex] = useState()
     const [showReorder, setShowReorder] = useState(false)
     const [accountValue, setAccountValue] = useState()
-
-    useEffect(() => {
-        async function getWalletData() {
-            const data = await AsyncStorage.getItem('WalletList');
-            setWalletData(JSON.parse(data))
-        }
-        getWalletData()
-    }, [])
 
     useEffect(() => {
         BackHandler.addEventListener('hardwareBackPress', backAction);
@@ -63,10 +55,11 @@ export default function AccountListScreen({ navigation, route }) {
     }
 
     const onClickAccount = (itm) => {
-        setAccountValue(itm?.walletName)
+        setAccountValue(itm?.name)
         if (!showReorder) {
             navigation.navigate(appConstant.accountDetails, {
-                walletName: itm?.walletName,
+                walletName: itm?.name,
+                walletAddress:itm?.publicKey,
                 from: appConstant.accountList,
                 onGoBack: () => {
                     setAccountValue('')
@@ -115,13 +108,13 @@ export default function AccountListScreen({ navigation, route }) {
                         {accountList.map((item, index) => {
                             return (
                                 <View key={index} style={styles.listView}>
-                                    {item?.walletName === accountValue && <SvgIcons.DotIcon style={{ left: wp(-2) }} />}
-                                    <TouchableOpacity style={[styles.buttonContainer, { backgroundColor: item?.walletName === accountValue ? colors.white : colors.gray }]} onPress={() => onClickAccount(item)}>
-                                        <FontText name={"inter-regular"} size={normalize(22)} color={item?.walletName === accountValue ? "black" : 'white'}  >
-                                            {item?.walletName}
+                                    {item?.name === accountValue && <SvgIcons.DotIcon style={{ left: wp(-2) }} />}
+                                    <TouchableOpacity style={[styles.buttonContainer, { backgroundColor: item?.name === accountValue ? colors.white : colors.gray }]} onPress={() => onClickAccount(item)}>
+                                        <FontText name={"inter-regular"} size={normalize(22)} color={item?.name === accountValue ? "black" : 'white'}  >
+                                            {item?.name}
                                         </FontText>
-                                        <FontText name={"inter-regular"} size={normalize(15)} color={item?.walletName === accountValue ? "black" : 'white'}  >
-                                            {"0xa94bb...a710"}
+                                        <FontText name={"inter-regular"} size={normalize(15)} color={item?.name === accountValue ? "black" : 'white'}  >
+                                            {item?.publicKey}
                                         </FontText>
                                     </TouchableOpacity>
                                 </View>

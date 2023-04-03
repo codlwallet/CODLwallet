@@ -46,7 +46,7 @@ export default function AttentionWarningView({
             buttonValue === firstBtnTitle
               ? 'white'
               : isBgRed
-              ? ['red-open']
+              ? 'red-open'
               : 'gray'
           }
           height={hp(8.5)}
@@ -76,7 +76,7 @@ export default function AttentionWarningView({
             buttonValue === secondBtnTitle
               ? 'white'
               : isBgRed
-              ? ['red-open']
+              ? 'red-open'
               : 'gray'
           }
           height={hp(8.5)}

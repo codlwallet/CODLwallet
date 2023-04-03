@@ -3,18 +3,24 @@ import React, { useEffect, useRef, useState } from 'react'
 import colors from '../../assets/colors'
 import { hp, normalize, wp } from '../../helper/responsiveScreen'
 import Header from '../../components/common/Header'
-import appConstant from '../../helper/appConstant'
+import appConstant, { complateSinging } from '../../helper/appConstant'
 import Input from '../../components/common/Input'
 import SvgIcons from '../../assets/SvgIcons'
+import DeviceInfo from 'react-native-device-info';
+import { signup } from '../../storage'
+import { useDispatch, useSelector } from 'react-redux'
+import { setUser } from '../../redux/slices/authSlice'
 import FontText from '../../components/common/FontText'
 import Button from '../../components/common/Button'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useFocusEffect } from '@react-navigation/native'
 import Alert from '../../components/common/Alert'
 import { useTranslation } from 'react-i18next'
+import { getUserData } from "../../storage";
 
 export default function SetupUserScreen({ navigation, route }) {
     const { from } = route?.params
+    const dispatch = useDispatch()
     const nameRef = useRef()
     const choosePinRef = useRef()
     const confirmPinRef = useRef()
@@ -23,7 +29,7 @@ export default function SetupUserScreen({ navigation, route }) {
     const [choosePin, setChoosePin] = useState('')
     const [confirmPin, setConfirmPin] = useState('')
     const [showPin, setShowPin] = useState(false)
-    const [nameFocus, setNameFocus] = useState(false)
+    const [nameFocus, setNameFocus] = useState(true)
     const [choosePinFocus, setChoosePinFocus] = useState(false)
     const [confirmPinFocus, setConfirmPinFocus] = useState(false)
     const [enterPin, setEnterPin] = useState('')
@@ -36,11 +42,9 @@ export default function SetupUserScreen({ navigation, route }) {
     const { t } = useTranslation();
 
     useEffect(() => {
-        async function getLoginData() {
-            const data = await AsyncStorage.getItem('LoginData');
-            setLoginData(JSON.parse(data))
-        }
-        getLoginData()
+        getUserData().then(async res => {
+            setLoginData(res.user)
+        })
     }, [])
 
     useFocusEffect(
@@ -48,7 +52,9 @@ export default function SetupUserScreen({ navigation, route }) {
             setEnterPin('')
         }, []),
     );
-
+    const onSubmitConfirmpin = () => {
+        setConfirmPinFocus(false)
+    }
     const onSubmitEnterPin = () => {
         setEnterPinFocus(false)
     }
@@ -61,9 +67,6 @@ export default function SetupUserScreen({ navigation, route }) {
         confirmPinRef.current.focus()
     }
 
-    const onSubmitConfirmpin = () => {
-        setConfirmPinFocus(false)
-    }
 
     const onFocusName = () => {
         setNameFocus(true)
@@ -152,10 +155,13 @@ export default function SetupUserScreen({ navigation, route }) {
     }
 
     const handleProceedBtn = async () => {
-        data = {
+        const uniqueId = DeviceInfo.getUniqueIdSync();
+        const data = {
+            machineId: uniqueId,
+            pin: choosePin,
             name: name,
-            pin: choosePin
         }
+
         if (from) {
             if (enterBtnValidation()) {
                 navigation.navigate(from)
@@ -163,8 +169,17 @@ export default function SetupUserScreen({ navigation, route }) {
         }
         else {
             if (checkValidation()) {
-                await AsyncStorage.setItem('LoginData', JSON.stringify(data));
-                navigation.navigate(appConstant.createdUser)
+                signup(data).then(async (res) => {
+                    console.log(res, "res")
+                    if (res.status) {
+                        dispatch(setUser(res.user))
+                        navigation.navigate(appConstant.createdUser)
+                    } else {
+                        // navigation.navigate(appConstant.lockUser)
+                    }
+                }).catch((e) => {
+                    // navigation.navigate(appConstant.lockUser)
+                })
             }
         }
     }
@@ -187,8 +202,8 @@ export default function SetupUserScreen({ navigation, route }) {
                     returnKeyType={'next'}
                     onFocus={onFocusName}
                     onBlur={onBlurName}
-                    onSubmit={onSubmitName}
                     fontName={'poppins-regular'}
+                    onSubmit={onSubmitConfirmpin}
                     onSubmitEditing={onSubmitName}
                     fontSize={normalize(22)}
                     inputStyle={[styles.textInput, {

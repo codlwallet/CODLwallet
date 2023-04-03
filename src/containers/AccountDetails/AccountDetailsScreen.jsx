@@ -12,6 +12,7 @@ import appConstant from '../../helper/appConstant'
 export default function AccountDetailsScreen({ navigation, route }) {
     const { t } = useTranslation();
     const walletName = route?.params?.walletName
+    const walletAddress= route?.params?.walletAddress
     const name = route?.params?.name
     const from = route?.params?.from
 
@@ -34,7 +35,8 @@ export default function AccountDetailsScreen({ navigation, route }) {
 
     const handleSignClick = () => {
         navigation.navigate(appConstant.scanQr, {
-            walletName: walletName
+            walletName: walletName,
+            walletAddress: walletAddress
         })
     }
 
@@ -65,7 +67,7 @@ export default function AccountDetailsScreen({ navigation, route }) {
             <View style={styles.bottomView}>
                 <Image source={require('../../assets/images/EV.png')} style={styles.image} />
                 <FontText name={"inter-regular"} size={normalize(22)} color="white" pLeft={wp(4)} style={{ width: wp(75) }}>
-                    {'0x9b4545d9214097DBE61c984EB2AB83C6e86'}
+                    {walletAddress}
                 </FontText>
             </View>
             <Button

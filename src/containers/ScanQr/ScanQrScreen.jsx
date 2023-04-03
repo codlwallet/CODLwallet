@@ -15,6 +15,7 @@ import { QrReader } from 'react-qr-reader';
 export default function ScanQrScreen({ navigation, route }) {
     const { t } = useTranslation();
     const walletName = route?.params?.walletName
+    const walletAddress = route?.params?.walletAddress
     const camaraRef = useRef(null)
     const devices = useCameraDevices('wide-angle-camera')
     const device = devices.back
@@ -58,7 +59,8 @@ export default function ScanQrScreen({ navigation, route }) {
             <Header title={t("scanQr")} showRightIcon statusBarcolor={colors.black} style={{ alignSelf: 'center' }} RightIcon={'info'} />
             <View style={styles.subContainer}>
                 <TouchableOpacity onPress={() => navigation.navigate(appConstant.signTransaction, {
-                    walletName: walletName
+                    walletName: walletName,
+                    walletAddress: walletAddress
                 })} style={styles.scannerContainer}>
                     {device != null &&
                         hasPermission &&

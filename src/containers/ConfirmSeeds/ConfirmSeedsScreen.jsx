@@ -7,21 +7,45 @@ import appConstant from '../../helper/appConstant'
 import FontText from '../../components/common/FontText'
 import Button from '../../components/common/Button'
 import Header from '../../components/common/Header'
+import Alert from "../../components/common/Alert";
 import WalletCard from '../../components/WalletCard'
 import { useTranslation } from 'react-i18next'
+import { useSelector } from 'react-redux'
 
 export default function ConfirmSeedsScreen(props) {
     const { t } = useTranslation();
     const { navigation } = props
-    const [secondNumberValue, setSecondNumberValue] = useState()
-    const [secondIndex, setSecondIndex] = useState(0)
-    const [sixIndex, setsixIndex] = useState(0)
-    const [twelveIndex, setTwelveIndex] = useState(0)
-    const [sixNumberValue, setSixNumberValue] = useState()
-    const [twelveNumberValue, setTwelveNumberValue] = useState()
+    const [_confirm_data,_setConfirmData]=useState({})
+    const { confirmData } = useSelector((state) => state.auth)
+    const [showAlert, setShowAlert] = useState(false);
+    const [alertTitle, setAlertTitle] = useState('')
+    const [alertMessage, setAlertMessage] = useState('')
 
+    const setConfirmData = (index,number) => {
+        _setConfirmData({..._confirm_data,[index]:number});
+    }
     const handleConfirmClick = () => {
-        navigation.navigate(appConstant.complateSeeds)
+        let confirmed = Object.keys(_confirm_data)
+        if (confirmed.length < 3) {
+            setAlertTitle(t('selectConfirmWordsAll'));
+            setAlertMessage(t('confirmWordsErrorMess'));
+            setShowAlert(true);
+        } else {
+            let confirmFlag = true;
+            for (const key of confirmed) {
+                if (Number(key) !== _confirm_data[key]) {
+                    confirmFlag = false;
+                    break;
+                }
+            }
+            if (!confirmFlag) {
+                setAlertTitle(t('confirmWordsNotMatch'));
+                setAlertMessage(t('confirmWordsErrorMess'));
+                setShowAlert(true);
+            } else {
+                navigation.navigate(appConstant.complateSeeds)
+            }
+        }
     }
 
     const handleBackClick = () => {
@@ -32,91 +56,35 @@ export default function ConfirmSeedsScreen(props) {
         <View style={styles.container}>
             <Header title={t("confirmSeeds")} showRightIcon RightIcon={'info'} showBackIcon onBackPress={handleBackClick} />
             <View style={styles.subContainer}>
-                <WalletCard style={styles.walletCardContainer}
-                    title={t('2thSeed')}
-                    headerStyle={{ borderColor: colors.black, top: hp(-3) }}
-                    titleColor={'black'}
-                    children={
-                        <View style={styles.walletInnerContainer}>
-                            <View style={styles.numberWiew}>
-                                <FontText name={"inter-bold"} size={normalize(22)} color={'black'}>
-                                    2
-                                </FontText>
+                {confirmData&&confirmData?.map((confirmItem) =>
+                    <WalletCard key={confirmItem?.index} style={styles.walletCardContainer}
+                        title={t(`${confirmItem?.index}thSeed`)}
+                        headerStyle={{ borderColor: colors.black, top: hp(-3) }}
+                        titleColor={'black'}
+                        children={
+                            <View style={styles.walletInnerContainer}>
+                                <View style={styles.numberWiew}>
+                                    <FontText name={"inter-bold"} size={normalize(22)} color={'black'}>
+                                        {confirmItem?.index}
+                                    </FontText>
+                                </View>
+                                {confirmItem?.words?.map((item) => {
+                                    return (
+                                        <View key={item?.number} style={styles.seedsView}>
+                                            <TouchableOpacity style={[styles.numberContainer, { backgroundColor: (confirmItem?.index in _confirm_data)&&item.number === _confirm_data[confirmItem?.index] ? colors.white : colors.black }]}
+                                                onPress={()=>setConfirmData(confirmItem.index,item.number)}>
+                                                <FontText name={"inter-regular"} size={normalize(16)} color={(confirmItem?.index in _confirm_data)&&item.number === _confirm_data[confirmItem?.index] ? "black" : 'white'}>
+                                                    {item?.name}
+                                                </FontText>
+                                            </TouchableOpacity>
+                                        </View>
+                                    )
+                                })}
                             </View>
-                            {secondSeedsData.map((item, index) => {
-                                return (
-                                    <View key={index} style={styles.seedsView}>
-                                        <TouchableOpacity style={[styles.numberContainer, { backgroundColor: index === secondIndex ? colors.white : colors.black }]} onPress={() => {
-                                            setSecondNumberValue(item?.number)
-                                            setSecondIndex(index)
-                                        }}>
-                                            <FontText name={"inter-regular"} size={normalize(16)} color={index === secondIndex ? "black" : 'white'}>
-                                                {item?.name}
-                                            </FontText>
-                                        </TouchableOpacity>
-                                    </View>
-                                )
-                            })}
-                        </View>
-                    }
-                />
-                <WalletCard style={styles.walletCardContainer}
-                    title={t('6thSeed')}
-                    headerStyle={{ borderColor: colors.black, top: hp(-3) }}
-                    titleColor={'black'}
-                    children={
-                        <View style={styles.walletInnerContainer}>
-                            <View style={styles.numberWiew}>
-                                <FontText name={"inter-bold"} size={normalize(22)} color={'black'}>
-                                    6
-                                </FontText>
-                            </View>
-                            {sixSeedsData.map((item, index) => {
-                                return (
-                                    <View key={index} style={styles.seedsView}>
-                                        <TouchableOpacity style={[styles.numberContainer, { backgroundColor: index === sixIndex ? colors.white : colors.black }]} onPress={() => {
-                                            setSixNumberValue(item?.number)
-                                            setsixIndex(index)
-                                        }}>
-                                            <FontText name={"inter-regular"} size={normalize(16)} color={index === sixIndex ? "black" : 'white'}>
-                                                {item?.name}
-                                            </FontText>
-                                        </TouchableOpacity>
-                                    </View>
-                                )
-                            })}
-                        </View>
-                    }
-                />
-                <WalletCard style={styles.walletCardContainer}
-                    title={t('12thSeed')}
-                    headerStyle={{ borderColor: colors.black, top: hp(-3) }}
-                    titleColor={'black'}
-                    children={
-                        <View style={styles.walletInnerContainer}>
-                            <View style={styles.numberWiew}>
-                                <FontText name={"inter-bold"} size={normalize(22)} color={'black'}>
-                                    12
-                                </FontText>
-                            </View>
-                            {twelveSeedsData.map((item, index) => {
-                                return (
-                                    <View key={index} style={styles.seedsView}>
-                                        <TouchableOpacity style={[styles.numberContainer, { backgroundColor: index === twelveIndex ? colors.white : colors.black }]} onPress={() => {
-                                            setTwelveNumberValue(item?.number)
-                                            setTwelveIndex(index)
-                                        }}>
-                                            <FontText name={"inter-regular"} size={normalize(16)} color={index === twelveIndex ? "black" : 'white'}>
-                                                {item?.name}
-                                            </FontText>
-                                        </TouchableOpacity>
-                                    </View>
-                                )
-                            })}
-                        </View>
-                    }
-                />
-
+                        }
+                    />
+                )
+                }
             </View>
             <Button
                 flex={null}
@@ -131,6 +99,14 @@ export default function ConfirmSeedsScreen(props) {
                     {t("confirm")}
                 </FontText>
             </Button>
+            <Alert
+                show={showAlert}
+                title={alertTitle}
+                message={alertMessage}
+                onConfirmPressed={() => {
+                    setShowAlert(false)
+                }}
+            />
         </View >
     )
 }

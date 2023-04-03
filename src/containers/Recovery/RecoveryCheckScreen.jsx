@@ -10,6 +10,7 @@ import Input from '../../components/common/Input'
 import WalletCard from '../../components/WalletCard'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { useTranslation } from 'react-i18next'
+import { getWalletData } from "../../storage";
 
 export default function RecoveryCheckScreen({ navigation }) {
     const { t } = useTranslation();
@@ -21,8 +22,13 @@ export default function RecoveryCheckScreen({ navigation }) {
     const [showConfirm, setShowConfirm] = useState(true)
 
     useEffect(() => {
-        cardRef.current = cardRef?.current?.slice(0, walletData?.length);
-    }, [walletData]);
+        getWalletData().then(res => {
+            if (res.status) {
+                setWalletData(res.words)
+                cardRef.current = cardRef?.current?.slice(0, res.words?.length);
+            }
+        })
+    }, []);
 
     // useLayoutEffect(() => {
     //     setTimeout(() => {
@@ -30,16 +36,6 @@ export default function RecoveryCheckScreen({ navigation }) {
     //     }, 1000);
 
     // }, []);
-
-
-    useEffect(() => {
-        async function getWalletData() {
-            const data = await AsyncStorage.getItem('WalletData');
-            setWalletData(JSON.parse(data))
-        }
-        getWalletData()
-
-    }, []);
 
     useEffect(() => {
         BackHandler.addEventListener('hardwareBackPress', backAction);
@@ -87,7 +83,7 @@ export default function RecoveryCheckScreen({ navigation }) {
 
     const renderWalletData = (item, index) => {
         return (
-            <View >
+            <View key={index}>
                 <Input
                     autoFocus={isEdit}
                     withLeftIcon
@@ -161,7 +157,7 @@ export default function RecoveryCheckScreen({ navigation }) {
                 <Button
                     flex={null}
                     height={hp(8.5)}
-                    bgColor={btnValue === appConstant.edit ? 'white' : ['red-open']}
+                    bgColor={btnValue === appConstant.edit ? 'white' : 'red-open'}
                     type="highlight"
                     borderRadius={11}
                     style={{ marginBottom: hp(4) }}

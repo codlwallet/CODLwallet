@@ -11,23 +11,50 @@ import SvgIcons from '../../assets/SvgIcons'
 import { useTranslation } from 'react-i18next'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { useFocusEffect } from '@react-navigation/native'
+import { useDispatch, useSelector } from "react-redux";
+import { getAccountsData, getNetwork } from "../../storage";
+import { selectNetwork } from "../../redux/slices/authSlice";
 
 export default function MainScreen({ navigation, route }) {
     const { t } = useTranslation();
+    const dispatch = useDispatch();
     const hidden = route?.params?.hidden
     const [hideMenu, setHideMenu] = useState(false);
     const [accountDetails, setAccountDetails] = useState([])
+    const { user } = useSelector((state) => state.auth)
+    const [networks, setNetworks] = useState([])
+    const [accountsData, setAccountsData] = useState({})
 
     useFocusEffect(
         React.useCallback(() => {
-            async function getWalletData() {
-                const data = await AsyncStorage.getItem('WalletList');
-                setAccountDetails(JSON.parse(data))
-            }
-            getWalletData()
+            getAccountsData().then(res => {
+                if (res.status) {
+                    console.log('res.data', res.data)
+                  setAccountsData(res.data);
+                }
+              })
         }, []),
     );
 
+    const loadNetworks = () => {
+        getNetwork().then(res => {
+            if (res.status) {
+                let _networks = mainData.filter(data => res.networks.indexOf(data.value)>=0)
+                setNetworks(_networks);
+            }
+        })
+    }
+
+    useEffect(() => {
+        loadNetworks();
+        return () => { };
+    }, [])
+
+    const settingMenuAction = () => {
+        if(hideMenu) loadNetworks();
+        setHideMenu(!hideMenu);
+    }
+    
     useEffect(() => {
         BackHandler.addEventListener('hardwareBackPress', backAction);
         return async () => {
@@ -41,6 +68,7 @@ export default function MainScreen({ navigation, route }) {
     };
 
     const handleConnectClick = () => {
+
         navigation.navigate(appConstant.connectWallet)
     }
 
@@ -61,8 +89,8 @@ export default function MainScreen({ navigation, route }) {
         else if (item.value === appConstant.AboutCODL) {
             navigation.navigate(appConstant.AboutCODL)
         }
-        else if (item.value === appConstant.recoveryWarning) {
-            navigation.navigate(appConstant.recoveryWarning)
+        else if (item.value === appConstant.recoveryCheck) {
+            navigation.navigate(appConstant.recoveryCheck)
         }
         else if (item.value === appConstant.networks) {
             navigation.navigate(appConstant.networks)
@@ -73,48 +101,62 @@ export default function MainScreen({ navigation, route }) {
     }
 
     const handleMainListClick = (item) => {
-        if (accountDetails?.length === 0 || !accountDetails) {
+        dispatch(selectNetwork(item.value));
+        if (accountsData.createdAccounts[item.value].length === 0 || !accountsData.createdAccounts[item.value]) {
             navigation.navigate(appConstant.createAccount, {
                 name: item?.value
             })
         }
         else {
-            if (accountDetails.some((i) => i.name === item.name)) {
-                accountDetails.map((i) => {
-                    if (i?.name === item.name) {
-                        if (i?.accountDetails.length !== 1) {
-                            navigation.navigate(appConstant.accountList, {
-                                name: item.name,
-                                accountList: i?.accountDetails
-                            })
-                        }
-                        else {
-                            i?.accountDetails.map((itm) => {
-                                navigation.navigate(appConstant?.accountDetails, {
-                                    walletName: itm?.walletName,
-                                    name: item?.name
-                                })
-                            })
-                        }
-                    }
-                })
+            let _created = accountsData.createdAccounts[item.value];
+            let _accounts = accountsData.accounts.filter(item => _created?.indexOf(item.publicKey) >= 0);
+            if (_accounts) {
+                if (_accounts.length !== 1) {
+                    navigation.navigate(appConstant.accountList, {
+                        name: item.value,
+                        accountList: _accounts
+                    })
+                } else {
+                    navigation.navigate(appConstant.accountDetails, {
+                      walletName: _accounts[0].name,
+                      walletAddress:_accounts[0].publicKey
+                    })
+                }
+            }
 
-            }
-            else {
-                navigation.navigate(appConstant.createAccount, {
-                    name: item?.value
-                })
-            }
+            // if (accountDetails.some((i) => i.value === item.value)) {
+            //     accountDetails.map((i) => {
+            //         if (i?.name === item.name) {
+            //             if (i?.accountDetails.length !== 1) {
+                            
+            //             }
+            //             else {
+            //                 i?.accountDetails.map((itm) => {
+            //                     navigation.navigate(appConstant?.accountDetails, {
+            //                         walletName: itm?.walletName,
+            //                         name: item?.name
+            //                     })
+            //                 })
+            //             }
+            //         }
+            //     })
+
+            // }
+            // else {
+            //     navigation.navigate(appConstant.createAccount, {
+            //         name: item?.value
+            //     })
+            // }
         }
     }
 
     return (
         <View style={styles.container}>
-            <Header title={'Alice’s Crypto'} showRightIcon RightIcon={!hideMenu ? 'menu' : 'false'} RightIconPress={() => setHideMenu(!hideMenu)} style={{ height: hp(10) }} showHiddenTitle={hidden} />
+            <Header title={user?.name} showRightIcon RightIcon={!hideMenu ? 'menu' : 'false'} RightIconPress={settingMenuAction} style={{ height: hp(10) }} showHiddenTitle={hidden} />
             <View style={styles.subConatiner}>
                 {!hideMenu ?
                     <>
-                        {mainData.map((item, index) => {
+                        {networks.map((item, index) => {
                             return (
                                 <TouchableOpacity style={styles.buttonContainer} key={index} onPress={() => handleMainListClick(item)} >
                                     <View>

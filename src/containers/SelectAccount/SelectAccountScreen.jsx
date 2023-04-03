@@ -9,6 +9,8 @@ import { useTranslation } from 'react-i18next'
 import { accountData } from '../../constants/data'
 import Button from '../../components/common/Button'
 import appConstant from '../../helper/appConstant'
+import { getAccountsData } from "../../storage";
+import { useSelector } from 'react-redux'
 
 export default function SelectAccountScreen({ navigation, route }) {
     const name = route?.params?.name
@@ -16,8 +18,25 @@ export default function SelectAccountScreen({ navigation, route }) {
     const [selectIndex, setSelectIndex] = useState()
     const [btnValue, setBtnValue] = useState(t("select"))
     const [walletId, setWalletId] = useState()
-    const [isNext, setIsNext] = useState(false)
-    const data = !isNext ? accountData.slice(0, 5) : accountData.slice(5, 10)
+    const [accounts, setAccounts] = useState([])
+    const [page, setPage] = useState(1);
+    const [totalAccounts, setTotalAccounts] = useState(0)
+    const dispCnt = 5;
+    const { selectedNetwork } = useSelector((state) => state.auth)
+
+    const [createdAccounts, setCreatedAccounts] = useState({})
+
+    useEffect(() => {
+        getAccountsData().then(res => {
+            if (res.status) {
+                setAccounts(res.data.accounts);
+                setCreatedAccounts(res.data.createdAccounts);
+                setTotalAccounts(res.data.accounts.length);
+            }
+        });
+        return () => {
+        };
+    }, [])
 
     useEffect(() => {
         BackHandler.addEventListener('hardwareBackPress', backAction);
@@ -32,15 +51,16 @@ export default function SelectAccountScreen({ navigation, route }) {
         return true;
     };
 
-    const handleNextClick = () => {
-        setIsNext(true)
+    const handlePaginationClick = (_page) => {
+        if (_page < 1) _page = 1;
+        if (_page > Math.ceil(totalAccounts / dispCnt)) _page = Math.ceil(totalAccounts / dispCnt);
+        setPage(_page);
     }
 
     const handleSelectClick = () => {
         navigation.navigate(appConstant.createAccount, {
             walletId: walletId,
-            name: name,
-
+            name: selectedNetwork,
         })
         route.params.onGoBack();
     }
@@ -49,46 +69,54 @@ export default function SelectAccountScreen({ navigation, route }) {
         <View style={styles.container}>
             <Header title={t("selectAccount")} showRightIcon RightIcon={'info'} showBackIcon onBackPress={backAction} statusBarcolor={colors.black} style={{ alignSelf: 'center' }} />
             <View style={styles.subContainer}>
-                {data?.map((item, index) => {
+                {accounts.slice((page - 1) * dispCnt, page * dispCnt).map((item, index) => {
                     return (
-                        <TouchableOpacity key={index} style={[styles.buttonContainer, { backgroundColor: index == selectIndex ? colors.white : colors.gray }]} onPress={() => {
-                            setSelectIndex(index)
-                            setWalletId(item?.id)
+                        <TouchableOpacity key={item.publicKey} style={[styles.buttonContainer, { backgroundColor: index + (page - 1) * dispCnt == selectIndex ? colors.white : colors.gray }]} onPress={() => {
+                            if (createdAccounts[selectedNetwork]?.indexOf(item.publicKey) < 0) {
+                                setSelectIndex(index + (page - 1) * dispCnt)
+                                setWalletId(index + (page - 1) * dispCnt)
+                            }
                         }}>
-                            <View style={[styles.numberContainer, { backgroundColor: index == selectIndex ? colors.black : colors.white }]}>
-                                <FontText name={"inter-bold"} size={normalize(15)} color={index == selectIndex ? 'white' : 'black'}>
-                                    {item?.id}
+                            <View style={[styles.numberContainer, { backgroundColor: index + (page - 1) * dispCnt == selectIndex||createdAccounts[selectedNetwork]?.indexOf(item.publicKey)>=0 ? colors.black : colors.white }]}>
+                                <FontText name={"inter-bold"} size={normalize(15)} color={index + (page - 1) * dispCnt == selectIndex||createdAccounts[selectedNetwork]?.indexOf(item.publicKey)>=0 ? 'white' : 'black'}>
+                                    {index + 1 + (page - 1) * dispCnt}
                                 </FontText>
                             </View>
-                            <FontText name={"inter-regular"} size={normalize(22)} color={index == selectIndex ? 'black' : 'white'} pRight={index == selectIndex ? wp(16) : wp(26)} >
-                                {item?.name}
-                            </FontText>
-                            {index == selectIndex && <SvgIcons.BlackCheck height={hp(4)} width={hp(2.5)} />}
+                            <View>
+                                {item.name && <FontText name={"inter-bold"} size={normalize(22)} color={index + (page - 1) * dispCnt == selectIndex ? 'black' : 'white'} pRight={index + (page - 1) * dispCnt == selectIndex ? wp(16) : wp(26)}>
+                                    {item.name}
+                                </FontText>}
+                                <FontText name={"inter-regular"} size={normalize(item.name?15:22)} color={index + (page - 1) * dispCnt == selectIndex ? 'black' : 'white'} pRight={index + (page - 1) * dispCnt == selectIndex ? wp(16) : wp(26)}>
+                                    {item?.publicKey}
+                                </FontText>
+                            </View>
+                            {(index + (page - 1) * dispCnt == selectIndex&&createdAccounts[selectedNetwork]?.indexOf(item.publicKey)<0) && <SvgIcons.BlackCheck height={hp(4)} width={hp(2.5)} />}
                         </TouchableOpacity>
                     )
                 })}
             </View>
             <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: hp(2) }}>
-                {isNext ?
+                {page != 1 &&
                     <Button
-                        width={wp(90)}
+                        width={page != 1 && page != Math.ceil(totalAccounts / dispCnt) ? wp(43) : wp(90)}
                         bgColor={btnValue === t("prev") ? 'white' : 'gray'}
                         type="highlight"
                         borderRadius={11}
-                        onPress={() => setIsNext(!isNext)}
+                        onPress={() => handlePaginationClick(page - 1)}
                         buttonStyle={styles.button}>
                         <FontText name={"inter-medium"} size={normalize(22)} color={btnValue === t("next") ? "red" : 'white'}>
                             {t("prev")}
                         </FontText>
                     </Button>
-                    :
-                    <Button
+                }
+                {
+                    (page * dispCnt) < totalAccounts && <Button
                         height={hp(8.5)}
                         bgColor={btnValue === t("next") ? 'white' : 'gray'}
                         type="highlight"
-                        width={isNext ? wp(43) : wp(95)}
+                        width={page != 1 && page != Math.ceil(totalAccounts / dispCnt) ? wp(43) : wp(90)}
                         borderRadius={11}
-                        onPress={handleNextClick}
+                        onPress={() => handlePaginationClick(page + 1)}
                         buttonStyle={styles.button}>
                         <FontText name={"inter-medium"} size={normalize(22)} color={btnValue === t("next") ? "red" : 'white'}>
                             {t("next")}
@@ -132,7 +160,8 @@ const styles = StyleSheet.create({
         width: wp(90),
         borderRadius: wp(2),
         alignItems: 'center',
-        justifyContent: 'space-between',
+        justifyContent: 'flex-start',
+        gap:wp(5),
         flexDirection: 'row',
         paddingHorizontal: wp(5),
         marginTop: hp(2),

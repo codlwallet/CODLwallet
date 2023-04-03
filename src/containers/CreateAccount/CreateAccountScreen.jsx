@@ -11,18 +11,23 @@ import Button from '../../components/common/Button'
 import appConstant from '../../helper/appConstant'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { useFocusEffect } from '@react-navigation/native'
+import { getAccountsData,createNewAccount } from "../../storage";
+import { useSelector } from 'react-redux'
 
 export default function CreateAccountScreen({ navigation, route }) {
   const { t } = useTranslation();
   const name = route?.params?.name
   const walletId = route?.params?.walletId
   const nameRef = useRef(null)
+  const { selectedNetwork } = useSelector((state) => state.auth)
   const [walletName, setWalletName] = useState('')
   const [walletNameFocus, setWalletNameFocus] = useState(false)
   const [isSelect, setIsSelect] = useState(false)
   const [selectWallet, setSelectWallet] = useState(false)
   const [accountData, setAccountData] = useState([])
   const [showCheckIcon, setShowIcon] = useState(false)
+  const [walletAddress, setWalletAddress] = useState('')
+  const [id, setId] = useState()
 
   useEffect(() => {
     BackHandler.addEventListener('hardwareBackPress', backAction);
@@ -31,15 +36,39 @@ export default function CreateAccountScreen({ navigation, route }) {
     };
   }, []);
 
-  useFocusEffect(
-    React.useCallback(() => {
-      async function getWalletData() {
-        const data = await AsyncStorage.getItem('WalletList');
-        setAccountData(JSON.parse(data))
+
+  useEffect(() => {
+    getAccountsData().then(res => {
+      if (res.status) {
+        setAccountData(res.data);
+        if (typeof walletId == 'number') {
+          setWalletAddress(res.data?.accounts[walletId]?.publicKey)
+          if (res.data?.accounts[walletId]?.name) {
+            setWalletName(res.data?.accounts[walletId]?.name);
+          } else { 
+            setWalletName('');
+          }
+          setId((walletId?walletId:0)+1)
+        } else {
+          let _accounts=res.data.accounts.filter(account => {
+            return res.data.createdAccounts[selectedNetwork].indexOf(account.publicKey) < 0;
+          })
+          for (const key in res.data.accounts) {
+            if (res.data.accounts[key].publicKey === _accounts[0].publicKey) {
+              setId(Number(key)+1);
+              break;
+            }
+          }
+          if (_accounts[0].name) {
+            setWalletName(_accounts[0].name);
+          } else { 
+            setWalletName('');
+          }
+          setWalletAddress(_accounts[0].publicKey);
+        }
       }
-      getWalletData()
-    }, []),
-  );
+    })
+  }, [walletId])
 
   const backAction = () => {
     navigation.navigate(appConstant.main)
@@ -63,52 +92,24 @@ export default function CreateAccountScreen({ navigation, route }) {
   }
 
   const handleCreateClick = async () => {
-    if (accountData !== null) {
-      accountData.map((item) => {
-        if (accountData.some((i) => i.name === name)) {
-          const data = {
+    if (!walletName) return;
+    if (selectedNetwork) {
+      let accounts = accountData;
+      accounts.createdAccounts[selectedNetwork] = [ ...accounts?.createdAccounts[selectedNetwork], walletAddress];
+      setAccountData(accounts);
+      for (const account of accounts?.accounts) {
+        if (account.publicKey === walletAddress) {
+          account.name = walletName;
+        }
+      }
+      createNewAccount(accounts).then(res => {
+        if (res.status) {
+          navigation.navigate(appConstant.accountDetails, {
             walletName: walletName,
-            walletAddress: '0xa94b3c662eE5602A3308604a3fB9A8FDd5caa710'
-          }
-          item?.accountDetails?.push(data)
+            walletAddress:walletAddress,
+            from: appConstant.createAccount
+          })
         }
-        else {
-          const data =
-          {
-            name: name,
-            accountDetails: [
-              {
-                walletName: walletName,
-                walletAddress: '0xa94b3c662eE5602A3308604a3fB9A8FDd5caa710'
-              }
-            ]
-          }
-          accountData?.push(data)
-          setAccountData([...accountData])
-        }
-      })
-      await AsyncStorage.setItem("WalletList", JSON.stringify(accountData))
-      navigation.navigate(appConstant.accountDetails, {
-        walletName: walletName,
-        from: appConstant.createAccount
-      })
-    }
-    else {
-      const data = [
-        {
-          name: name,
-          accountDetails: [
-            {
-              walletName: walletName,
-              walletAddress: '0xa94b3c662eE5602A3308604a3fB9A8FDd5caa710'
-            }
-          ]
-        },
-      ]
-      await AsyncStorage.setItem("WalletList", JSON.stringify(data))
-      navigation.navigate(appConstant.accountDetails, {
-        walletName: walletName,
-        from: appConstant.createAccount
       })
     }
   }
@@ -171,14 +172,14 @@ export default function CreateAccountScreen({ navigation, route }) {
         <TouchableOpacity style={[styles.buttonContainer, { backgroundColor: isSelect ? colors.white : colors.gray }]} onPress={handleSelectWalletClick}>
           <View style={[styles.numberContainer, { backgroundColor: isSelect ? colors.black : colors.white }]}>
             <FontText name={"inter-bold"} size={normalize(15)} color={isSelect ? 'white' : 'black'}>
-              {walletId ? walletId : "0"}
+              {id}
             </FontText>
           </View>
           <FontText name={"inter-regular"} size={normalize(22)} color={isSelect ? 'black' : 'white'} pRight={!isSelect ? hp(13) : hp(9)} >
-            {"0xa94bb...a710"}
+            {walletAddress}
           </FontText>
-          {isSelect && !walletId && <SvgIcons.BlackRightArrow height={hp(3)} width={hp(2.5)} />}
-          {walletId && <SvgIcons.BlackCheck height={hp(4)} width={hp(2.5)} />}
+          {!!!walletId && <SvgIcons.BlackRightArrow height={hp(3)} width={hp(2.5)} />}
+          {!!walletId && <SvgIcons.BlackCheck height={hp(4)} width={hp(2.5)} />}
         </TouchableOpacity>
       </View>
       <Button
