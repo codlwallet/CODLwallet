@@ -7,8 +7,8 @@ module.exports = {
   NETWORK: 'codlnetwork',
   DEFAULT_NETWORK: [
     appConstant.ethereum,
-    appConstant.bitcoin,
-    appConstant.solana,
+    // appConstant.bitcoin,
+    // appConstant.solana,
     appConstant.avalanche,
     appConstant.polygon
   ]

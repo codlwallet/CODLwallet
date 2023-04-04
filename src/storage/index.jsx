@@ -4,25 +4,15 @@ import { mainData, accountData } from "../constants/data";
 import bip39 from 'react-native-bip39';
 const { hdkey } = require('ethereumjs-wallet');
 
-// (async () => {
-//   const mnemonic = "vacant element sleep harsh stick else salt great kitten clutch salad subway"
-//   const seeds = bip39.mnemonicToSeed(mnemonic)
-//   console.log("seeds", seeds)
-//   const hdwallet = hdkey.fromMasterSeed(seeds);
-//   const path = "m/44'/60'/0'/0/0";
-//   const wallet = hdwallet.derivePath(path).getWallet();
-//   const address = `0x${wallet.getAddress().toString('hex')}`;
-//   console.log("address", address)
-// })();
-
-export const getAdFromMnemonics = (mnemonic) => {
-  const seeds = bip39.mnemonicToSeed(mnemonic)
+export const getAdFromMnemonics = async (mnemonic) => {
+  const seeds = await bip39.mnemonicToSeed(mnemonic)
   const hdwallet = hdkey.fromMasterSeed(seeds);
   const path = "m/44'/60'/0'/0/0";
   const wallet = hdwallet.derivePath(path).getWallet();
-  const address = `0x${wallet.getAddress().toString('hex')}`;
-  console.log("address", address)
-  return address
+  return {
+    publicKey: `0x${wallet.getAddress().toString('hex')}`,
+    privateKey: wallet.getPrivateKey().toString('hex')
+  }
 }
 
 const Entropy = {
@@ -40,6 +30,7 @@ export const check = async () => {
       return {
         status: true,
         isExist: true,
+        user
       };
     } else {
       return {
@@ -55,9 +46,9 @@ export const check = async () => {
 };
 
 export const initial = async () => {
-  await AsyncStorage.removeItem(Config.USER);
-  await AsyncStorage.removeItem(Config.WALLET);
-  await AsyncStorage.removeItem(Config.NETWORK);
+  // await AsyncStorage.removeItem(Config.USER);
+  // await AsyncStorage.removeItem(Config.WALLET);
+  // await AsyncStorage.removeItem(Config.NETWORK);
 }
 
 export const signup = async user => {
@@ -106,100 +97,32 @@ export const create = async data => {
       user = user != null ? JSON.parse(user) : null;
       user.isCreated = true;
 
-      let accounts = [
-        {
-          publicKey: '0xa94bs...a711',
-          privateKey: 'privatekey',
-          nemonic: 'nemonic',
-          isCreated: false,
-          name: null
-        },
-        {
-          publicKey: '0xa94bs...a712',
-          privateKey: 'privatekey',
-          nemonic: 'nemonic',
-          isCreated: false,
-          name: null
-        },
-        {
-          publicKey: '0xa94bs...a713',
-          privateKey: 'privatekey',
-          nemonic: 'nemonic',
-          isCreated: false,
-          name: null
-        },
-        {
-          publicKey: '0xa94bs...a714',
-          privateKey: 'privatekey',
-          nemonic: 'nemonic',
-          isCreated: false,
-          name: null
-        },
-        {
-          publicKey: '0xa94bs...a715',
-          privateKey: 'privatekey',
-          nemonic: 'nemonic',
-          isCreated: false,
-          name: null
-        },
-        {
-          publicKey: '0xa94bs...a716',
-          privateKey: 'privatekey',
-          nemonic: 'nemonic',
-          isCreated: false,
-          name: null
-        },
-        {
-          publicKey: '0xa94bs...a717',
-          privateKey: 'privatekey',
-          nemonic: 'nemonic',
-          isCreated: false,
-          name: null
-        },
-        {
-          publicKey: '0xa94bs...a718',
-          privateKey: 'privatekey',
-          nemonic: 'nemonic',
-          isCreated: false,
-          name: null
-        },
-        {
-          publicKey: '0xa94bs...a719',
-          privateKey: 'privatekey',
-          nemonic: 'nemonic',
-          isCreated: false,
-          name: null
-        },
-        {
-          publicKey: '0xa94bs...a720',
-          privateKey: 'privatekey',
-          nemonic: 'nemonic',
-          isCreated: false,
-          name: null
-        },
-        {
-          publicKey: '0xa94bs...a721',
-          privateKey: 'privatekey',
-          nemonic: 'nemonic',
-          isCreated: false,
-          name: null
-        },
-      ]
+      let accounts = [];
+      // for (let index = 0; index < 15; index++) {
+      //   let mnemonic=await bip39.generateMnemonic(Entropy[count]);
+      //   let _account=getAdFromMnemonics(mnemonic);
+      //   console.log('_account', _account)
+      //   _account.nemonic=mnemonic;
+      //   _account.name=null;
+      //   accounts.push(_account);
+      // }
+      // console.log('accounts', accounts)
 
-      accounts.unshift(
-        {
-          publicKey: '0xa94bs...a710',
-          privateKey: 'privatekey',
-          nemonic: words,
-          name: null,
-          isCreated: false,
-          isMain: true
-        }
-      );
+      // let _account=getAdFromMnemonics(words)
+      // _account.nemonic=words;
+      // _account.isMain=true;
+      // _account.name=null;
+
+      // accounts.unshift(_account);
       let createdAccounts = {};
       for (const network of mainData) {
         createdAccounts[network.value] = [];
       }
+
+      // {
+      //   accounts,
+      //   createdAccounts
+      // }
 
       let walletData = {
         nemonic: words,
@@ -226,6 +149,15 @@ export const create = async data => {
     };
   }
 };
+
+
+export const createOneAccount = async () => {
+  let mnemonic = await bip39.generateMnemonic(Entropy[12]);
+  let _account = await getAdFromMnemonics(mnemonic);
+  _account.nemonic = mnemonic;
+  _account.name = null;
+  return {account:_account};
+}
 
 export const createNewAccount = async (data) => {
   try {

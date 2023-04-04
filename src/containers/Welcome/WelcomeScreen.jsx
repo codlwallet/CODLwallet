@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next';
 import { Image, StatusBar, StyleSheet, View } from 'react-native'
 import colors from '../../assets/colors';
@@ -7,17 +7,41 @@ import Button from '../../components/common/Button';
 import FontText from '../../components/common/FontText';
 import appConstant from '../../helper/appConstant';
 import { hp, normalize, wp } from '../../helper/responsiveScreen';
+import { check } from '../../storage';
+import constants from '../../helper/appConstant';
+import { useDispatch } from 'react-redux';
+import { setUser } from '../../redux/slices/authSlice';
+
 
 const WelcomeScreen = ({ navigation, route }) => {
     const { t } = useTranslation();
+    const dispatch=useDispatch()
 
-    const from = route?.params?.from
+    const [from, setFrom] = useState(route?.params?.from)
+
+    // const from = route?.params?.from
+
+    useEffect(() => {
+
+        check().then(res => {
+            if (res.status) {
+                if (res.isExist){
+                    setFrom(constants.welcomePurchase)
+                    dispatch(setUser(res.user));
+                }
+            }
+        })
+        return () => {
+        }
+    }, [])
+
 
     const onPressStartBtn = () => {
         navigation.navigate(appConstant.setupUser, {
-            from: from
+            from: from,
         })
     }
+
     return (
         <>
             <StatusBar backgroundColor={colors.black} />

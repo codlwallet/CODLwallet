@@ -67,7 +67,7 @@ export default function AccountDetailsScreen({ navigation, route }) {
             <View style={styles.bottomView}>
                 <Image source={require('../../assets/images/EV.png')} style={styles.image} />
                 <FontText name={"inter-regular"} size={normalize(22)} color="white" pLeft={wp(4)} style={{ width: wp(75) }}>
-                    {walletAddress}
+                    {walletAddress.replace(walletAddress.substring(7,38),`...`)}
                 </FontText>
             </View>
             <Button

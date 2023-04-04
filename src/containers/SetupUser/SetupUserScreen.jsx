@@ -20,6 +20,7 @@ import { getUserData } from "../../storage";
 
 export default function SetupUserScreen({ navigation, route }) {
     const { from } = route?.params
+    console.log('from', from)
     const dispatch = useDispatch()
     const nameRef = useRef()
     const choosePinRef = useRef()

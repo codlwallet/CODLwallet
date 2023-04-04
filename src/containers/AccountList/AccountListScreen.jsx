@@ -114,7 +114,7 @@ export default function AccountListScreen({ navigation, route }) {
                                             {item?.name}
                                         </FontText>
                                         <FontText name={"inter-regular"} size={normalize(15)} color={item?.name === accountValue ? "black" : 'white'}  >
-                                            {item?.publicKey}
+                                            {item?.publicKey.replace(item?.publicKey.substring(7,38),`...`)}
                                         </FontText>
                                     </TouchableOpacity>
                                 </View>

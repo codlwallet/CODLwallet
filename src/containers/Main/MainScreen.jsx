@@ -30,16 +30,16 @@ export default function MainScreen({ navigation, route }) {
             getAccountsData().then(res => {
                 if (res.status) {
                     console.log('res.data', res.data)
-                  setAccountsData(res.data);
+                    setAccountsData(res.data);
                 }
-              })
+            })
         }, []),
     );
 
     const loadNetworks = () => {
         getNetwork().then(res => {
             if (res.status) {
-                let _networks = mainData.filter(data => res.networks.indexOf(data.value)>=0)
+                let _networks = mainData.filter(data => res.networks.indexOf(data.value) >= 0)
                 setNetworks(_networks);
             }
         })
@@ -51,10 +51,10 @@ export default function MainScreen({ navigation, route }) {
     }, [])
 
     const settingMenuAction = () => {
-        if(hideMenu) loadNetworks();
+        if (hideMenu) loadNetworks();
         setHideMenu(!hideMenu);
     }
-    
+
     useEffect(() => {
         BackHandler.addEventListener('hardwareBackPress', backAction);
         return async () => {
@@ -102,14 +102,16 @@ export default function MainScreen({ navigation, route }) {
 
     const handleMainListClick = (item) => {
         dispatch(selectNetwork(item.value));
-        if (accountsData.createdAccounts[item.value].length === 0 || !accountsData.createdAccounts[item.value]) {
+        // if (accountsData.createdAccounts[item.value].length === 0 || !accountsData.createdAccounts[item.value]) {
+        if (accountsData.accounts.length === 0 ) {
             navigation.navigate(appConstant.createAccount, {
                 name: item?.value
             })
         }
         else {
             let _created = accountsData.createdAccounts[item.value];
-            let _accounts = accountsData.accounts.filter(item => _created?.indexOf(item.publicKey) >= 0);
+            // let _accounts = accountsData.accounts.filter(item => _created?.indexOf(item.publicKey) >= 0);
+            let _accounts = accountsData.accounts;
             if (_accounts) {
                 if (_accounts.length !== 1) {
                     navigation.navigate(appConstant.accountList, {
@@ -118,8 +120,8 @@ export default function MainScreen({ navigation, route }) {
                     })
                 } else {
                     navigation.navigate(appConstant.accountDetails, {
-                      walletName: _accounts[0].name,
-                      walletAddress:_accounts[0].publicKey
+                        walletName: _accounts[0].name,
+                        walletAddress: _accounts[0].publicKey
                     })
                 }
             }
@@ -128,7 +130,7 @@ export default function MainScreen({ navigation, route }) {
             //     accountDetails.map((i) => {
             //         if (i?.name === item.name) {
             //             if (i?.accountDetails.length !== 1) {
-                            
+
             //             }
             //             else {
             //                 i?.accountDetails.map((itm) => {

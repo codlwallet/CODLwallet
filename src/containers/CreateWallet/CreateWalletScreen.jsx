@@ -103,7 +103,6 @@ export default function CreateWalletScreen({ navigation, route }) {
                 if (res.status) {
                     setText(mnemonic)
                     const sortWords = mnemonic?.split(" ")
-                    console.log('sortWords', sortWords)
                     setWords(sortWords)
                     dispatch(setAccountsData(res.walletData));
                 }
@@ -133,7 +132,7 @@ export default function CreateWalletScreen({ navigation, route }) {
                         title={t("recoverySeeds")}
                         children={
                             <FlatList
-                                data={["123", "123", "123"]}
+                                data={words}
                                 numColumns={3}
                                 columnWrapperStyle={{ justifyContent: 'space-between' }}
                                 keyExtractor={item => {
