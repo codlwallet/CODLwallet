@@ -1,0 +1,224 @@
+import { BackHandler, Image, StyleSheet, TouchableOpacity, View } from 'react-native'
+import React, { useEffect, useState } from 'react'
+import colors from '../../assets/colors'
+import Header from '../../components/common/Header'
+import { mainData, settingData } from '../../constants/data'
+import FontText from '../../components/common/FontText'
+import { hp, normalize, wp } from '../../helper/responsiveScreen'
+import Button from '../../components/common/Button'
+import appConstant from '../../helper/appConstant'
+import SvgIcons from '../../assets/SvgIcons'
+import { useTranslation } from 'react-i18next'
+import AsyncStorage from '@react-native-async-storage/async-storage'
+import { useFocusEffect } from '@react-navigation/native'
+import i18n from '../../constants/i18n'
+
+export default function MainScreen({ navigation, route }) {
+    const { t } = useTranslation();
+    const hidden = route?.params?.hidden
+    const [hideMenu, setHideMenu] = useState(false);
+    const [accountDetails, setAccountDetails] = useState([])
+    const [loginData, setLoginData] = useState()
+
+    useEffect(() => {
+        async function getLoginData() {
+            const data = await AsyncStorage.getItem('LoginData');
+            setLoginData(JSON.parse(data))
+        }
+        getLoginData()
+    }, [])
+
+    useFocusEffect(
+        React.useCallback(() => {
+            async function getWalletData() {
+                const data = await AsyncStorage.getItem('WalletList');
+                setAccountDetails(JSON.parse(data))
+            }
+            getWalletData()
+        }, []),
+    );
+
+    useEffect(() => {
+        BackHandler.addEventListener('hardwareBackPress', backAction);
+        return async () => {
+            BackHandler.removeEventListener('hardwareBackPress', backAction);
+        };
+    }, [hideMenu]);
+
+    const backAction = () => {
+        if (hideMenu) {
+            setHideMenu(false)
+        }
+        else {
+            navigation.navigate(appConstant.welcomePurchase)
+        }
+        return true;
+    };
+
+    const handleConnectClick = () => {
+        navigation.navigate(appConstant.connectWallet)
+    }
+
+    const handleMenuListClick = (item) => {
+        if (item.value === appConstant.changeName) {
+            navigation.navigate(appConstant.changeUserDetails, {
+                from: appConstant.changeName
+            })
+        }
+        else if (item.value === appConstant.changePIN) {
+            navigation.navigate(appConstant.changeUserDetails, {
+                from: appConstant.changePIN
+            })
+        }
+        else if (item.value === appConstant.language) {
+            navigation.navigate(appConstant.language)
+        }
+        else if (item.value === appConstant.AboutCODL) {
+            navigation.navigate(appConstant.AboutCODL)
+        }
+        else if (item.value === appConstant.recoveryCheck) {
+            navigation.navigate(appConstant.recoveryWarning)
+        }
+        else if (item.value === appConstant.networks) {
+            navigation.navigate(appConstant.networks)
+        }
+        else if (item.value === appConstant.deleteEverything) {
+            navigation.navigate(appConstant.deleteEverything)
+        }
+    }
+
+    const handleMainListClick = (item) => {
+        if (accountDetails?.length === 0 || !accountDetails) {
+            navigation.navigate(appConstant.createAccount, {
+                name: item?.value
+            })
+        }
+        else {
+            if (accountDetails.some((i) => i.name === item.value)) {
+                accountDetails.map((i) => {
+                    if (i?.name === item.value) {
+                        if (i?.accountDetails.length !== 1) {
+                            navigation.navigate(appConstant.accountList, {
+                                name: item?.value,
+                                headerName: i18n.language == 'tr' ? item?.name : item?.value,
+                                accountList: i?.accountDetails
+                            })
+                        }
+                        else {
+                            i?.accountDetails.map((itm) => {
+                                navigation.navigate(appConstant?.accountDetails, {
+                                    walletName: itm?.walletName,
+                                    name: item?.value,
+                                    headerName: i18n.language == 'tr' ? item?.name : item?.value,
+                                    from: appConstant.main
+                                })
+                            })
+                        }
+                    }
+                })
+            }
+            else {
+                navigation.navigate(appConstant.createAccount, {
+                    name: item?.value
+                })
+            }
+        }
+    }
+
+    const handleLockDeviceClick = () => {
+        navigation.navigate(appConstant.welcome, {
+            from: appConstant.welcomePurchase,
+        });
+    }
+
+    const onpressRightIcon = () => {
+        setHideMenu(!hideMenu)
+    }
+
+    return (
+        <View style={styles.container}>
+            <Header title={loginData?.name} showRightIcon RightIcon={!hideMenu ? 'menu' : 'false'} RightIconPress={() => onpressRightIcon()} showHiddenTitle={hidden} />
+            <View style={styles.subConatiner}>
+                {!hideMenu ?
+                    <>
+                        {mainData.map((item, index) => {
+                            return (
+                                <TouchableOpacity style={styles.buttonContainer} key={index} onPress={() => handleMainListClick(item)} >
+                                    <View>
+                                        {item.value === appConstant.bitcoin ?
+                                            <SvgIcons.Bitcoin height={hp(6)} width={hp(4)} /> :
+                                            item.value === appConstant.ethereum ?
+                                                <Image source={item.image} style={{ width: hp(4), height: hp(6.5), }} /> :
+                                                item.value === appConstant.solana ?
+                                                    <SvgIcons.Solana height={hp(6)} width={hp(4)} /> :
+                                                    item.value === appConstant.avalanche ?
+                                                        <Image source={item.image} style={{ height: hp(4), width: hp(4.5) }} />
+                                                        :
+                                                        <SvgIcons.Poly height={hp(6)} width={hp(4.5)} />
+                                        }
+                                    </View>
+                                    <FontText size={normalize(25)} color={'white'} name={'inter-regular'} pLeft={wp(5)}>
+                                        {i18n.language === 'tr' ? item?.name : item?.value}
+                                    </FontText>
+                                </TouchableOpacity>
+                            )
+                        })
+                        }
+                    </>
+                    :
+                    <>
+                        {settingData.map((item, index) => {
+                            return (
+                                <TouchableOpacity style={[styles.buttonContainer, { height: hp(7) }]} key={index} onPress={() => handleMenuListClick(item)}>
+                                    <FontText size={normalize(22)} color={item.value === appConstant.deleteEverything ? "red" : 'white'} name={'inter-regular'}  >
+                                        {i18n.language === 'tr' ? item?.name : item?.value}
+                                    </FontText>
+                                </TouchableOpacity>
+                            )
+                        })
+                        }
+                    </>
+                }
+            </View>
+            <Button
+                height={hp(8.5)}
+                width={wp(90)}
+                flex={null}
+                type="highlight"
+                borderRadius={11}
+                bgColor="white"
+                onPress={!hideMenu ? handleConnectClick : handleLockDeviceClick}
+                style={styles.button}>
+                <FontText name={"inter-medium"} size={normalize(22)} color="black">
+                    {!hideMenu ? t("connect") : t("lockDevice")}
+                </FontText>
+            </Button>
+        </View>
+    )
+}
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        backgroundColor: colors.black,
+        alignItems: 'center'
+    },
+    subConatiner: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        flex: 1,
+    },
+    buttonContainer: {
+        backgroundColor: colors.gray,
+        alignItems: 'center',
+        flexDirection: 'row',
+        width: wp(90),
+        borderRadius: wp(2),
+        marginVertical: hp(1),
+        paddingHorizontal: wp(4),
+        height: hp(9)
+    },
+    button: {
+        marginBottom: hp(3),
+    }
+})
