@@ -40,7 +40,10 @@ const Route = () => {
     const Stack = createNativeStackNavigator();
     return (
         <NavigationContainer>
-            <Stack.Navigator screenOptions={{ headerShown: false, }}  >
+            <Stack.Navigator screenOptions={{
+                headerShown: false,
+                animation: "slide_from_right",
+            }}  >
                 <Stack.Screen name={Constant.welcome} component={WelcomeScreen} />
                 <Stack.Screen name={Constant.setupUser} component={SetupUserScreen} />
                 <Stack.Screen name={Constant.createdUser} component={CreatedUserScreen} />

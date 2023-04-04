@@ -182,6 +182,7 @@ export default function CreateAccountScreen({ navigation, route }) {
         <Input
           withRightIcon={walletName !== '' ? true : false}
           placeholder={t("walletName")}
+          autoFocus={true}
           value={walletName}
           ref={nameRef}
           placeholderTextColor={walletNameFocus ? colors.black : colors.white}

@@ -55,10 +55,10 @@ export default function ReorderScreen({ navigation, route }) {
                             <View key={index} style={styles.listView}>
                                 {item?.walletName === accountValue && <SvgIcons.DotIcon style={{ left: wp(-1.5) }} />}
                                 <TouchableOpacity style={[styles.buttonContainer, { backgroundColor: item?.walletName === accountValue ? colors.white : colors.gray }]} onPress={() => onClickAccount(item)}>
-                                    <FontText name={"inter-regular"} size={normalize(22)} color={item?.walletName === accountValue ? "black" : 'white'}  >
+                                    <FontText name={"inter-regular"} size={normalize(22)} color={item?.walletName === accountValue ? "black" : 'white'} style={{ width: wp(45) }} lines={1} >
                                         {item?.walletName}
                                     </FontText>
-                                    <FontText name={"inter-regular"} size={normalize(15)} color={item?.walletName === accountValue ? "black" : 'white'}  >
+                                    <FontText name={"inter-regular"} size={normalize(15)} color={item?.walletName === accountValue ? "black" : 'white'} style={{ width: wp(30), }} lines={1} >
                                         {"0xa94bb...a710"}
                                     </FontText>
                                 </TouchableOpacity>

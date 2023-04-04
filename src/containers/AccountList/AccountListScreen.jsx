@@ -73,7 +73,6 @@ export default function AccountListScreen({ navigation, route }) {
         <View style={styles.container}>
             <Header title={headerName}
                 showRightIcon
-                style={{ height: hp(10) }}
                 RightIcon={showList ? 'menu' : "false"}
                 showBackIcon={showList ? true : false}
                 onBackPress={backAction}

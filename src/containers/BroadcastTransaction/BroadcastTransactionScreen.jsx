@@ -73,7 +73,7 @@ export default function BroadcastTransactionScreen({ navigation, route }) {
 
     return (
         <View style={styles.container}>
-            <Header title={t("broadcastTransaction")} showRightIcon RightIcon={'info'} statusBarcolor={colors.black} style={{ alignSelf: 'center' }} />
+            <Header title={t("broadcastTransaction")} showRightIcon RightIcon={'info'} statusBarcolor={colors.black} />
             <View style={styles.subContainer}>
                 <Carousel
                     data={paginationData}

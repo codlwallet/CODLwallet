@@ -1,4 +1,4 @@
-import { View, StyleSheet, TouchableOpacity, Keyboard } from 'react-native'
+import { View, StyleSheet, TouchableOpacity, Keyboard, StatusBar } from 'react-native'
 import React, { useEffect, useRef, useState } from 'react'
 import colors from '../../assets/colors'
 import { hp, normalize, wp } from '../../helper/responsiveScreen'
@@ -170,77 +170,163 @@ export default function SetupUserScreen({ navigation, route }) {
     }
 
     return (
-        <View style={styles.container} onStartShouldSetResponder={() => Keyboard.dismiss()}>
-            <Header title={from ? t("unlock") : t("setupUser")} showRightIcon RightIcon={'info'} statusBarHidden={false} />
-            <View style={styles.subContainer}>
-                <Input
-                    withRightIcon={name !== '' ? true : false}
-                    ref={nameRef}
-                    autoFocus={true}
-                    editable={from ? false : true}
-                    placeholder={t("name")}
-                    value={from ? loginData?.name : name}
-                    maxLength={15}
-                    placeholderTextColor={nameFocus ? colors.black : colors.white}
-                    onChangeText={setName}
-                    keyboardType={'default'}
-                    blurOnSubmit={false}
-                    returnKeyType={'next'}
-                    onFocus={onFocusName}
-                    onBlur={onBlurName}
-                    onSubmit={onSubmitName}
-                    fontName={'poppins-regular'}
-                    onSubmitEditing={onSubmitName}
-                    fontSize={normalize(22)}
-                    inputStyle={[styles.textInput, {
-                        color: nameFocus == true
-                            ? colors.black
-                            : colors.white
-                    }]}
-                    style={[styles.textInputContainer,
-                    {
-                        backgroundColor:
-                            nameFocus == true
-                                ? colors.white
-                                : colors.gray,
+        <>
+            <View style={styles.container} onStartShouldSetResponder={() => Keyboard.dismiss()}>
+                <StatusBar translucent hidden backgroundColor='transparent' />
+                <Header title={from ? t("unlock") : t("setupUser")} showRightIcon RightIcon={'info'} statusBarHidden={true} />
+                <View style={styles.subContainer}>
+                    <Input
+                        withRightIcon={name !== '' ? true : false}
+                        ref={nameRef}
+                        autoFocus={true}
+                        editable={from ? false : true}
+                        placeholder={t("name")}
+                        value={from ? loginData?.name : name}
+                        maxLength={15}
+                        placeholderTextColor={nameFocus ? colors.black : colors.white}
+                        onChangeText={setName}
+                        keyboardType={'default'}
+                        blurOnSubmit={false}
+                        returnKeyType={'next'}
+                        onFocus={onFocusName}
+                        onBlur={onBlurName}
+                        onSubmit={onSubmitName}
+                        fontName={'poppins-regular'}
+                        onSubmitEditing={onSubmitName}
+                        fontSize={normalize(22)}
+                        inputStyle={[styles.textInput, {
+                            color: nameFocus == true
+                                ? colors.black
+                                : colors.white
+                        }]}
+                        style={[styles.textInputContainer,
+                        {
+                            backgroundColor:
+                                nameFocus == true
+                                    ? colors.white
+                                    : colors.gray,
 
-                    }]}
-                    rightIcon={
-                        <TouchableOpacity>
-                            {nameFocus ?
-                                <SvgIcons.BlackCheck height={hp(4)} width={hp(2.5)} /> :
-                                <SvgIcons.Check height={hp(4)} width={hp(2.5)} />
-                            }
-                        </TouchableOpacity>
-                    }
-                />
-                {!from ?
-                    <>
+                        }]}
+                        rightIcon={
+                            <TouchableOpacity>
+                                {nameFocus ?
+                                    <SvgIcons.BlackCheck height={hp(4)} width={hp(2.5)} /> :
+                                    <SvgIcons.Check height={hp(4)} width={hp(2.5)} />
+                                }
+                            </TouchableOpacity>
+                        }
+                    />
+                    {!from ?
+                        <>
+                            <Input
+                                withRightIcon
+                                ref={choosePinRef}
+                                placeholder={t("choosePin")}
+                                value={choosePin}
+                                placeholderTextColor={choosePinFocus ? colors.black : colors.white}
+                                onChangeText={setChoosePin}
+                                keyboardType={'number-pad'}
+                                returnKeyType={'next'}
+                                maxLength={8}
+                                secureTextEntry={!showPin ? true : false}
+                                onFocus={onFocusChoosePin}
+                                onBlur={onBlurChoosePin}
+                                onSubmitEditing={onSubmitChoosepin}
+                                onSubmit={onSubmitChoosepin}
+                                inputStyle={[styles.textInput, {
+                                    color: choosePinFocus == true
+                                        ? colors.black
+                                        : colors.white
+                                }]}
+                                fontName={'poppins-regular'}
+                                fontSize={normalize(22)}
+                                style={[styles.textInputContainer, {
+                                    backgroundColor:
+                                        choosePinFocus == true
+                                            ? colors.white
+                                            : colors.gray,
+                                }]}
+                                rightIcon={
+                                    <TouchableOpacity onPress={() => setShowPin(!showPin)}>
+                                        {showPin ?
+                                            <>
+                                                {!choosePinFocus ? <SvgIcons.ShowEye height={hp(3.5)} width={hp(2.5)} /> : <SvgIcons.BlackShowEye height={hp(3.5)} width={hp(2.5)} />}
+                                            </>
+                                            :
+                                            <>
+                                                {!choosePinFocus ? <SvgIcons.HideEye /> : <SvgIcons.BlackHideEye />}
+                                            </>
+                                        }
+                                    </TouchableOpacity>
+                                }
+                            />
+                            <Input
+                                withRightIcon={confirmPin !== '' && choosePin === confirmPin ? true : false}
+                                ref={confirmPinRef}
+                                placeholder={t("confirmPin")}
+                                value={confirmPin}
+                                secureTextEntry={true}
+                                maxLength={8}
+                                placeholderTextColor={confirmPinFocus ? colors.black : colors.white}
+                                onChangeText={setConfirmPin}
+                                keyboardType={'numeric'}
+                                returnKeyType={'done'}
+                                blurOnSubmit
+                                onFocus={onFocusConfirmPin}
+                                onBlur={onBlurConfirmPin}
+                                onSubmit={onSubmitConfirmpin}
+                                onSubmitEditing={onSubmitConfirmpin}
+                                inputStyle={[styles.textInput, {
+                                    color: confirmPinFocus == true
+                                        ? colors.black
+                                        : colors.white
+                                }]}
+                                fontName={'poppins-regular'}
+                                fontSize={normalize(22)}
+                                style={[styles.textInputContainer, {
+                                    backgroundColor:
+                                        confirmPinFocus == true
+                                            ? colors.white
+                                            : colors.gray,
+                                }]}
+                                rightIcon={
+                                    <TouchableOpacity>
+                                        {confirmPinFocus ?
+                                            <SvgIcons.BlackCheck height={hp(4)} width={hp(2.5)} /> :
+                                            <SvgIcons.Check height={hp(4)} width={hp(2.5)} />
+                                        }
+                                    </TouchableOpacity>
+                                }
+                            />
+                        </>
+                        :
                         <Input
                             withRightIcon
-                            ref={choosePinRef}
-                            placeholder={t("choosePin")}
-                            value={choosePin}
-                            placeholderTextColor={choosePinFocus ? colors.black : colors.white}
-                            onChangeText={setChoosePin}
+                            ref={enterPinRef}
+                            autoFocus={true}
+                            placeholder={t("enterPin")}
+                            value={enterPin}
+                            placeholderTextColor={enterPinFocus ? colors.black : colors.white}
+                            onChangeText={setEnterPin}
                             keyboardType={'number-pad'}
-                            returnKeyType={'next'}
+                            returnKeyType={'done'}
                             maxLength={8}
                             secureTextEntry={!showPin ? true : false}
-                            onFocus={onFocusChoosePin}
-                            onBlur={onBlurChoosePin}
-                            onSubmitEditing={onSubmitChoosepin}
-                            onSubmit={onSubmitChoosepin}
+                            onBlur={onSubmitEnterPin}
+                            onFocus={onEnterPinName}
+                            onSubmitEditing={onSubmitEnterPin}
+                            onSubmit={onSubmitEnterPin}
                             inputStyle={[styles.textInput, {
-                                color: choosePinFocus == true
+                                color: enterPinFocus == true
                                     ? colors.black
                                     : colors.white
                             }]}
                             fontName={'poppins-regular'}
                             fontSize={normalize(22)}
+                            blurOnSubmit
                             style={[styles.textInputContainer, {
                                 backgroundColor:
-                                    choosePinFocus == true
+                                    enterPinFocus == true
                                         ? colors.white
                                         : colors.gray,
                             }]}
@@ -248,123 +334,41 @@ export default function SetupUserScreen({ navigation, route }) {
                                 <TouchableOpacity onPress={() => setShowPin(!showPin)}>
                                     {showPin ?
                                         <>
-                                            {!choosePinFocus ? <SvgIcons.ShowEye height={hp(3.5)} width={hp(2.5)} /> : <SvgIcons.BlackShowEye height={hp(3.5)} width={hp(2.5)} />}
+                                            {!enterPinFocus ? <SvgIcons.ShowEye height={hp(3.5)} width={hp(2.5)} /> : <SvgIcons.BlackShowEye height={hp(3.5)} width={hp(2.5)} />}
                                         </>
                                         :
                                         <>
-                                            {!choosePinFocus ? <SvgIcons.HideEye /> : <SvgIcons.BlackHideEye />}
+                                            {!enterPinFocus ? <SvgIcons.HideEye height={hp(3.5)} width={hp(2.5)} /> : <SvgIcons.BlackHideEye height={hp(3.5)} width={hp(2.5)} />}
                                         </>
                                     }
                                 </TouchableOpacity>
                             }
                         />
-                        <Input
-                            withRightIcon={confirmPin !== '' && choosePin === confirmPin ? true : false}
-                            ref={confirmPinRef}
-                            placeholder={t("confirmPin")}
-                            value={confirmPin}
-                            secureTextEntry={true}
-                            maxLength={8}
-                            placeholderTextColor={confirmPinFocus ? colors.black : colors.white}
-                            onChangeText={setConfirmPin}
-                            keyboardType={'numeric'}
-                            returnKeyType={'done'}
-                            blurOnSubmit
-                            onFocus={onFocusConfirmPin}
-                            onBlur={onBlurConfirmPin}
-                            onSubmit={onSubmitConfirmpin}
-                            onSubmitEditing={onSubmitConfirmpin}
-                            inputStyle={[styles.textInput, {
-                                color: confirmPinFocus == true
-                                    ? colors.black
-                                    : colors.white
-                            }]}
-                            fontName={'poppins-regular'}
-                            fontSize={normalize(22)}
-                            style={[styles.textInputContainer, {
-                                backgroundColor:
-                                    confirmPinFocus == true
-                                        ? colors.white
-                                        : colors.gray,
-                            }]}
-                            rightIcon={
-                                <TouchableOpacity>
-                                    {confirmPinFocus ?
-                                        <SvgIcons.BlackCheck height={hp(4)} width={hp(2.5)} /> :
-                                        <SvgIcons.Check height={hp(4)} width={hp(2.5)} />
-                                    }
-                                </TouchableOpacity>
-                            }
-                        />
-                    </>
-                    :
-                    <Input
-                        withRightIcon
-                        ref={enterPinRef}
-                        autoFocus={true}
-                        placeholder={t("enterPin")}
-                        value={enterPin}
-                        placeholderTextColor={enterPinFocus ? colors.black : colors.white}
-                        onChangeText={setEnterPin}
-                        keyboardType={'number-pad'}
-                        returnKeyType={'done'}
-                        maxLength={8}
-                        secureTextEntry={!showPin ? true : false}
-                        onBlur={onSubmitEnterPin}
-                        onFocus={onEnterPinName}
-                        onSubmitEditing={onSubmitEnterPin}
-                        onSubmit={onSubmitEnterPin}
-                        inputStyle={[styles.textInput, {
-                            color: enterPinFocus == true
-                                ? colors.black
-                                : colors.white
-                        }]}
-                        fontName={'poppins-regular'}
-                        fontSize={normalize(22)}
-                        blurOnSubmit
-                        style={[styles.textInputContainer, {
-                            backgroundColor:
-                                enterPinFocus == true
-                                    ? colors.white
-                                    : colors.gray,
-                        }]}
-                        rightIcon={
-                            <TouchableOpacity onPress={() => setShowPin(!showPin)}>
-                                {showPin ?
-                                    <>
-                                        {!enterPinFocus ? <SvgIcons.ShowEye height={hp(3.5)} width={hp(2.5)} /> : <SvgIcons.BlackShowEye height={hp(3.5)} width={hp(2.5)} />}
-                                    </>
-                                    :
-                                    <>
-                                        {!enterPinFocus ? <SvgIcons.HideEye height={hp(3.5)} width={hp(2.5)} /> : <SvgIcons.BlackHideEye height={hp(3.5)} width={hp(2.5)} />}
-                                    </>
-                                }
-                            </TouchableOpacity>
-                        }
-                    />
-                }
-                <Button
-                    flex={null}
-                    height={hp(8.5)}
-                    type="highlight"
-                    borderRadius={11}
-                    bgColor="white"
-                    width={wp(90)}
-                    onPress={handleProceedBtn}
-                    style={styles.buttonView}>
-                    <FontText name={"inter-medium"} size={normalize(22)} color="black">
-                        {t("proceed")}
-                    </FontText>
-                </Button>
+                    }
+                    <Button
+                        flex={null}
+                        height={hp(8.5)}
+                        type="highlight"
+                        borderRadius={11}
+                        bgColor="white"
+                        width={wp(90)}
+                        onPress={handleProceedBtn}
+                        style={styles.buttonView}>
+                        <FontText name={"inter-medium"} size={normalize(22)} color="black">
+                            {t("proceed")}
+                        </FontText>
+                    </Button>
+                </View>
+                {showAlert && <PopUp
+                    title={alertTitle}
+                    message={alertMessage}
+                    onConfirmPressed={() => {
+                        setShowAlert(false)
+                    }}
+                />}
             </View>
-            {showAlert && <PopUp
-                title={alertTitle}
-                message={alertMessage}
-                onConfirmPressed={() => {
-                    setShowAlert(false)
-                }}
-            />}
-        </View>
+        </>
+
     )
 }
 
@@ -392,4 +396,5 @@ const styles = StyleSheet.create({
         position: 'absolute',
         bottom: hp(3),
     },
+
 })

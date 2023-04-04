@@ -86,10 +86,9 @@ export default function ConfirmSingingScreen({ navigation, route }) {
 
     return (
         <View style={styles.container} onStartShouldSetResponder={() => Keyboard.dismiss()}>
-            <Header title={t("confirmSigning")} showRightIcon statusBarcolor={colors.black} style={{ alignSelf: 'center' }} RightIcon={'info'} />
+            <Header title={t("confirmSigning")} showRightIcon statusBarcolor={colors.black} RightIcon={'info'} />
             <View style={styles.subContainer}>
                 <Input
-                    // withRightIcon={name !== '' ? true : false}
                     ref={nameRef}
                     placeholder={t("name")}
                     editable={false}
@@ -116,7 +115,7 @@ export default function ConfirmSingingScreen({ navigation, route }) {
                 <Input
                     withRightIcon
                     ref={enterPinRef}
-                    // autoFocus={!from ? true : false}
+                    autoFocus={true}
                     placeholder={t("enterPin")}
                     value={enterPin}
                     placeholderTextColor={enterPinFocus ? colors.black : colors.white}

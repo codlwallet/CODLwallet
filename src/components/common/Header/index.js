@@ -32,17 +32,18 @@ const Header = props => {
     titleWithIcon,
     titleIcon,
     rightIconDisable,
+    pRight,
   } = props;
   const {t} = useTranslation();
 
   return (
     <>
-      <StatusBar
+      {/* <StatusBar
         barStyle={'light-content'}
         hidden={statusBarHidden}
         translucent
         backgroundColor={statusBarcolor ? statusBarcolor : colors.black}
-      />
+      /> */}
       <View style={[styles.container, style]}>
         {showBackIcon && (
           <TouchableOpacity onPress={onBackPress} style={styles.iconContainer}>
@@ -65,6 +66,7 @@ const Header = props => {
               name="inter-regular"
               color={'white'}
               lines={1}
+              pRight={pRight}
               pLeft={pLeft}>
               {title}
             </FontText>
@@ -114,6 +116,7 @@ const styles = StyleSheet.create({
     paddingTop: Platform.OS === 'android' ? hp(4.8) : hp(3),
     width: wp(100),
     alignSelf: 'center',
+    height: hp(12.5),
   },
   text: {
     fontWeight: 'bold',

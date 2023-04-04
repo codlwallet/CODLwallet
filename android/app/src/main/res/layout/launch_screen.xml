@@ -4,13 +4,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center"
-    android:orientation="vertical"
     android:background="@color/black">
 
     <ImageButton
         android:id="@+id/btnFindMe"
         android:layout_width="157dp"
         android:layout_height="236dp"
+        android:layout_marginTop="-23dp"
         android:background="@drawable/logo"
-        android:scaleType="center" />
+        />
 </LinearLayout>

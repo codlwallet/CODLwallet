@@ -25,7 +25,7 @@ export default function AttentionWarningView({
         {mainIcon}
         <FontText
           color={'white'}
-          size={normalize(40)}
+          size={40}
           name={'inter-regular'}
           textAlign={'center'}
           pTop={hp(3)}>
@@ -33,7 +33,7 @@ export default function AttentionWarningView({
         </FontText>
         <FontText
           color={'white'}
-          size={normalize(22)}
+          size={20}
           name={'inter-regular'}
           textAlign={'center'}
           pTop={hp(2)}>
@@ -112,7 +112,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    paddingHorizontal: wp(6),
+    paddingHorizontal: wp(3),
   },
   button: {
     alignSelf: 'center',

@@ -19,7 +19,6 @@ const WelcomeScreen = ({ navigation, route }) => {
     }
     return (
         <>
-            <StatusBar backgroundColor={colors.black} hidden />
             <View style={styles.container}>
                 <SvgIcons.AppLogo />
                 <Button

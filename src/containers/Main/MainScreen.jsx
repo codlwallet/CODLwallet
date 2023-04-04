@@ -137,7 +137,7 @@ export default function MainScreen({ navigation, route }) {
 
     return (
         <View style={styles.container}>
-            <Header title={loginData?.name} showRightIcon RightIcon={!hideMenu ? 'menu' : 'false'} RightIconPress={() => onpressRightIcon()} style={{ height: hp(12.5) }} showHiddenTitle={hidden} />
+            <Header title={loginData?.name} showRightIcon RightIcon={!hideMenu ? 'menu' : 'false'} RightIconPress={() => onpressRightIcon()} showHiddenTitle={hidden} />
             <View style={styles.subConatiner}>
                 {!hideMenu ?
                     <>

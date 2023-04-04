@@ -5,6 +5,7 @@
         <!-- Customize your theme here. -->
          <item name="android:windowDisablePreview">true</item>
         <item name="android:editTextBackground">@drawable/rn_edit_text_material</item>
+        <item name="android:windowLayoutInDisplayCutoutMode">shortEdges</item>
     </style>
 
 </resources>

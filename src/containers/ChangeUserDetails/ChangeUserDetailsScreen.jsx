@@ -106,7 +106,6 @@ export default function ChangeUserDetailsScreen({ navigation, route }) {
         setConfirmPinFocus(false)
     }
 
-
     const checkNameValidation = () => {
         let errorStatus = true;
         if (name === '' || !name.length > 1 || name.length > 15) {
@@ -149,14 +148,11 @@ export default function ChangeUserDetailsScreen({ navigation, route }) {
         return errorStatus;
     };
 
-
-
     const handleDoneBtn = async () => {
         data = {
             name: name,
             pin: from === appConstant?.changeName ? loginData?.pin : confirmPin
         }
-
         if (from === appConstant.changeName) {
             if (checkNameValidation()) {
                 await AsyncStorage.setItem('LoginData', JSON.stringify(data));
@@ -182,6 +178,7 @@ export default function ChangeUserDetailsScreen({ navigation, route }) {
                         withRightIcon
                         ref={nameRef}
                         // editable={from ? false : true}
+                        autoFocus={true}
                         placeholder={t("name")}
                         value={name}
                         maxLength={15}
@@ -223,6 +220,7 @@ export default function ChangeUserDetailsScreen({ navigation, route }) {
                         <Input
                             withRightIcon={currentPin == loginData?.pin ? true : false}
                             ref={currentPinRef}
+                            autoFocus={true}
                             placeholder={t("currentPin")}
                             value={currentPin}
                             placeholderTextColor={currentPinFocus ? colors.black : colors.white}

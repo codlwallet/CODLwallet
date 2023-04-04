@@ -10,36 +10,48 @@ import Input from '../../components/common/Input'
 import WalletCard from '../../components/WalletCard'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { useTranslation } from 'react-i18next'
+import { importWalletData } from '../../constants/data'
 
 export default function RecoveryCheckScreen({ navigation }) {
     const { t } = useTranslation();
     const cardRef = useRef([])
-    const [btnValue, setBtnValue] = useState(appConstant.confirm)
-    const [walletData, setWalletData] = useState()
+    const [btnValue, setBtnValue] = useState(appConstant.edit)
+    const [walletData, setWalletData] = useState(importWalletData)
     const [isEdit, setIsEdit] = useState(false)
-    const [textIndex, setTextIndex] = useState(0)
-    const [showConfirm, setShowConfirm] = useState(true)
-    const [showKeyboard, setShowKeyboard] = useState(false)
+    const [textIndex, setTextIndex] = useState(-1)
+    const [showKeyboard, setShowKeyboard] = useState(true)
+    const [numberValue, setNumberValue] = useState(0)
+    const walletcardData = numberValue && walletData.slice(0, numberValue)
     const reg = (/^[a-z]+$/);
 
     useEffect(() => {
         cardRef.current = cardRef?.current?.slice(0, walletData?.length);
     }, [walletData]);
 
-    // useLayoutEffect(() => {
-    //     setTimeout(() => {
-    //         cardRef.current[0].focus();
-    //     }, 1000);
+    useLayoutEffect(() => {
+        setTimeout(() => {
+            cardRef.current[0].focus();
+        }, 1000);
 
-    // }, []);
+    }, []);
+
+    useEffect(() => {
+        const walletdata = walletData.map(item => {
+            return {
+                id: item?.id,
+                name: '',
+                number: item?.number
+            };
+        });
+        setWalletData(walletdata)
+    }, [])
 
     useEffect(() => {
         async function getWalletData() {
             const data = await AsyncStorage.getItem('WalletData');
-            setWalletData(JSON.parse(data))
+            setNumberValue(JSON.parse(data).length)
         }
         getWalletData()
-
     }, []);
 
     useEffect(() => {
@@ -68,6 +80,7 @@ export default function RecoveryCheckScreen({ navigation }) {
                 setBtnValue(appConstant.edit)
                 setIsEdit(true)
                 setShowKeyboard(false)
+                setTextIndex(-1)
             }
         }
     );
@@ -95,7 +108,7 @@ export default function RecoveryCheckScreen({ navigation }) {
                     autoFocus={true}
                     withLeftIcon
                     maxLength={8}
-                    editable={showConfirm && !isEdit ? false : true}
+                    // editable={!isEdit ? false : true}
                     ref={el => cardRef.current[index] = el}
                     leftIcon={
                         <View style={[styles.numberContainer, { backgroundColor: item.name === '' ? colors.white : colors.red }]}>
@@ -107,7 +120,7 @@ export default function RecoveryCheckScreen({ navigation }) {
                     placeholder={''}
                     value={item?.name}
                     autoCapitalize={'none'}
-                    secureTextEntry={showConfirm ? false : true}
+                    secureTextEntry={index == textIndex ? false : true}
                     onSubmit={() => { walletData[index].name !== '' && index !== walletData.length - 1 ? cardRef.current[index + 1].focus() : Keyboard.dismiss() }}
                     onFocus={() => { cardRef.current[index].focus(), setTextIndex(index) }}
                     multiline={false}
@@ -129,7 +142,7 @@ export default function RecoveryCheckScreen({ navigation }) {
 
     return (
         <View style={styles.container} >
-            <Header title={t("recoveryCheck")} showRightIcon RightIcon={'info'} showBackIcon onBackPress={backAction} statusBarcolor={colors.red} style={{ alignSelf: 'center', }} />
+            <Header title={t("recoveryCheck")} showRightIcon RightIcon={'info'} showBackIcon onBackPress={backAction} statusBarcolor={colors.red} />
             <View style={[styles.subContainer, { bottom: showKeyboard ? hp(4) : 0 }]}>
                 <WalletCard style={styles.walletCardContainer}
                     titleColor={'red'}
@@ -137,7 +150,7 @@ export default function RecoveryCheckScreen({ navigation }) {
                     headerStyle={{ borderColor: colors.red }}
                     children={
                         <FlatList
-                            data={walletData}
+                            data={walletcardData}
                             numColumns={3}
                             columnWrapperStyle={{ justifyContent: 'space-between' }}
                             keyExtractor={(item) => {
@@ -191,7 +204,7 @@ const styles = StyleSheet.create({
     },
     subContainer: {
         justifyContent: 'center',
-        marginTop: hp(12)
+        marginTop: hp(15)
     },
     button: {
         alignSelf: 'center',
