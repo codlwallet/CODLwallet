@@ -72,22 +72,22 @@ export default function RecoveryCheckScreen({ navigation }) {
     const keyboardHideListener = Keyboard.addListener(
         'keyboardDidHide',
         () => {
-            if (!walletData?.some((item) => !item.name)) {
-                setBtnValue(appConstant.confirm)
+            if (!walletData.slice(0, numberValue)?.some((item) => !item.name)) {
+                setBtnValue(appConstant.done)
                 setIsEdit(false)
             }
             else {
                 setBtnValue(appConstant.edit)
                 setIsEdit(true)
-                setShowKeyboard(false)
-                setTextIndex(-1)
             }
+            setTextIndex(walletcardData.length)
+            setShowKeyboard(false)
         }
     );
 
-    const handleConfirmClick = async () => {
+    const handleDoneClick = async () => {
         navigation.navigate(appConstant.main)
-        await AsyncStorage.setItem('WalletData', JSON.stringify(walletData));
+        await AsyncStorage.setItem('WalletData', JSON.stringify(walletData.slice(0, numberValue)));
     }
 
     const handleEditClick = () => {
@@ -121,7 +121,7 @@ export default function RecoveryCheckScreen({ navigation }) {
                     value={item?.name}
                     autoCapitalize={'none'}
                     secureTextEntry={index == textIndex ? false : true}
-                    onSubmit={() => { walletData[index].name !== '' && index !== walletData.length - 1 ? cardRef.current[index + 1].focus() : Keyboard.dismiss() }}
+                    onSubmit={() => { walletData[index].name !== '' && index !== walletData.slice(0, numberValue).length - 1 ? cardRef.current[index + 1].focus() : Keyboard.dismiss() }}
                     onFocus={() => { cardRef.current[index].focus(), setTextIndex(index) }}
                     multiline={false}
                     autoCorrect={false}
@@ -165,15 +165,15 @@ export default function RecoveryCheckScreen({ navigation }) {
                 <Button
                     flex={null}
                     height={hp(8.5)}
-                    bgColor={!walletData?.some((item) => !item.name) && btnValue === appConstant.confirm ? 'white' : ['red-open']}
+                    bgColor={btnValue === appConstant.done ? 'white' : ['red-open']}
                     type="highlight"
                     borderRadius={11}
                     width={wp(90)}
-                    disabled={walletData?.some((item) => !item.name)}
+                    disabled={btnValue === appConstant.done ? false : true}
                     style={[styles.button, { bottom: hp(14) }]}
-                    onPress={handleConfirmClick}
+                    onPress={handleDoneClick}
                 >
-                    <FontText name={"inter-medium"} size={normalize(22)} color={!walletData?.some((item) => !item.name) && btnValue === appConstant.confirm ? "red" : 'white'}>
+                    <FontText name={"inter-medium"} size={normalize(22)} color={btnValue === appConstant.done ? "red" : 'white'}>
                         {t("done")}
                     </FontText>
                 </Button>

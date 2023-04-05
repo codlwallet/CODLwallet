@@ -58,19 +58,19 @@ export default function WelcomePurchaseScreen({ navigation, route }) {
         }, [isEnabled, keyboardHeight]),
     );
 
-    useEffect(() => {
-        BackHandler.addEventListener('hardwareBackPress', backAction);
-        return async () => {
-            BackHandler.removeEventListener('hardwareBackPress', backAction);
-        };
-    }, []);
+    // useEffect(() => {
+    //     BackHandler.addEventListener('hardwareBackPress', backAction);
+    //     return async () => {
+    //         BackHandler.removeEventListener('hardwareBackPress', backAction);
+    //     };
+    // }, []);
 
-    const backAction = () => {
-        navigation.navigate(appConstant.welcome, {
-            from: appConstant.welcomePurchase,
-        });
-        return true;
-    };
+    // const backAction = () => {
+    //     navigation.navigate(appConstant.welcome, {
+    //         from: appConstant.welcomePurchase,
+    //     });
+    //     return true;
+    // };
 
     const toggleSwitch = () => setIsEnabled(previousState => !previousState);
 
@@ -82,16 +82,11 @@ export default function WelcomePurchaseScreen({ navigation, route }) {
             setAlertMessage(t("pinErrorMess"))
             errorStatus = false;
         }
-        else if (loginData?.pin !== password) {
-            setShowAlert(true)
-            setAlertTitle(t("error"))
-            setAlertMessage(t("wrongPin"))
-            errorStatus = false;
-        }
         return errorStatus;
     }
 
-    const onSubmitPin = () => {
+    const onSubmitPin = async () => {
+        await AsyncStorage.setItem("hidden", JSON.stringify(isEnabled))
         if (enterBtnValidation()) {
             Keyboard.dismiss()
             setIsEnabled(false)
@@ -99,17 +94,28 @@ export default function WelcomePurchaseScreen({ navigation, route }) {
         }
     }
 
-    const handleEnterClick = () => {
-        navigation.navigate(appConstant.main, {
-            hidden: isEnabled
-        })
+    const handleEnterClick = async () => {
+        await AsyncStorage.setItem("hidden", JSON.stringify(isEnabled))
+        navigation.navigate(appConstant.main)
+    }
+
+    const handleUserNameClick = async () => {
+        await AsyncStorage.setItem("hidden", JSON.stringify(isEnabled))
+        if (isEnabled) {
+            if (enterBtnValidation()) {
+                navigation.navigate(appConstant.hiddenWallet)
+            }
+        }
+        else {
+            navigation.navigate(appConstant.main)
+        }
     }
 
     return (
         <View style={styles.container}>
             <Header showRightIcon RightIcon={'info'} title={t("welcome")} />
             <View style={[styles.subContainer, { bottom: isEnabled ? wp(6) : 0 }]}>
-                <TouchableOpacity style={styles.buttonConatiner} onPress={handleEnterClick}>
+                <TouchableOpacity style={styles.buttonConatiner} onPress={handleUserNameClick}>
                     <FontText size={normalize(22)} color={'white'} name={'inter-regular'}>
                         {loginData?.name}
                     </FontText>

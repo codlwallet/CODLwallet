@@ -15,10 +15,20 @@ import i18n from '../../constants/i18n'
 
 export default function MainScreen({ navigation, route }) {
     const { t } = useTranslation();
-    const hidden = route?.params?.hidden
     const [hideMenu, setHideMenu] = useState(false);
+    const [hidden, setHidden] = useState(false)
     const [accountDetails, setAccountDetails] = useState([])
     const [loginData, setLoginData] = useState()
+
+    console.log("true")
+    useEffect(() => {
+        async function getLoginData() {
+            const data = await AsyncStorage.getItem('hidden');
+            setHidden(JSON.parse(data))
+        }
+        getLoginData()
+    }, [])
+
 
     useEffect(() => {
         async function getLoginData() {
@@ -38,22 +48,22 @@ export default function MainScreen({ navigation, route }) {
         }, []),
     );
 
-    useEffect(() => {
-        BackHandler.addEventListener('hardwareBackPress', backAction);
-        return async () => {
-            BackHandler.removeEventListener('hardwareBackPress', backAction);
-        };
-    }, [hideMenu]);
+    // useEffect(() => {
+    //     BackHandler.addEventListener('hardwareBackPress', backAction);
+    //     return async () => {
+    //         BackHandler.removeEventListener('hardwareBackPress', backAction);
+    //     };
+    // }, [hideMenu]);
 
-    const backAction = () => {
-        if (hideMenu) {
-            setHideMenu(false)
-        }
-        else {
-            navigation.navigate(appConstant.welcomePurchase)
-        }
-        return true;
-    };
+    // const backAction = () => {
+    //     if (hideMenu) {
+    //         setHideMenu(false)
+    //     }
+    //     else {
+    //         navigation.navigate(appConstant.welcomePurchase)
+    //     }
+    //     return true;
+    // };
 
     const handleConnectClick = () => {
         navigation.navigate(appConstant.connectWallet)
