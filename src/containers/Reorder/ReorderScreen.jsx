@@ -30,7 +30,7 @@ export default function ReorderScreen({ navigation, route }) {
     }
 
     const onClickAccount = (itm) => {
-        setAccountValue(itm?.walletName)
+        setAccountValue(itm?.name)
     }
 
     const onPressCloseIcon = () => {
@@ -53,13 +53,13 @@ export default function ReorderScreen({ navigation, route }) {
                     {accountList?.map((item, index) => {
                         return (
                             <View key={index} style={styles.listView}>
-                                {item?.walletName === accountValue && <SvgIcons.DotIcon style={{ left: wp(-1.5) }} />}
-                                <TouchableOpacity style={[styles.buttonContainer, { backgroundColor: item?.walletName === accountValue ? colors.white : colors.gray }]} onPress={() => onClickAccount(item)}>
-                                    <FontText name={"inter-regular"} size={normalize(22)} color={item?.walletName === accountValue ? "black" : 'white'} style={{ width: wp(45) }} lines={1} >
-                                        {item?.walletName}
+                                {item?.name === accountValue && <SvgIcons.DotIcon style={{ left: wp(-1.5) }} />}
+                                <TouchableOpacity style={[styles.buttonContainer, { backgroundColor: item?.name === accountValue ? colors.white : colors.gray }]} onPress={() => onClickAccount(item)}>
+                                    <FontText name={"inter-regular"} size={normalize(22)} color={item?.name === accountValue ? "black" : 'white'} style={{ width: wp(45) }} lines={1} >
+                                        {item?.name}
                                     </FontText>
-                                    <FontText name={"inter-regular"} size={normalize(15)} color={item?.walletName === accountValue ? "black" : 'white'} style={{ width: wp(30), }} lines={1} >
-                                        {"0xa94bb...a710"}
+                                    <FontText name={"inter-regular"} size={normalize(15)} color={item?.name === accountValue ? "black" : 'white'} style={{ width: wp(30), }} lines={1} >
+                                        {item?.publicKey.replace(item?.publicKey.substring(7, 38), `...`)}
                                     </FontText>
                                 </TouchableOpacity>
                             </View>

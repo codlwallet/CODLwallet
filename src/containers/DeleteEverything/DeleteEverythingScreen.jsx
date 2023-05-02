@@ -12,6 +12,7 @@ import FontText from '../../components/common/FontText'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { useTranslation } from 'react-i18next'
 import PopUp from '../../components/common/AlertBox'
+import { getUserData, initial } from '../../storage'
 
 export default function DeleteEverythingScreen({ navigation }) {
     const { t } = useTranslation();
@@ -54,11 +55,9 @@ export default function DeleteEverythingScreen({ navigation }) {
     };
 
     useEffect(() => {
-        async function getLoginData() {
-            const data = await AsyncStorage.getItem('LoginData');
-            setLoginData(JSON.parse(data))
-        }
-        getLoginData()
+        getUserData().then(async res => {
+            setLoginData(res.user)
+        })
     }, [])
 
 
@@ -110,7 +109,11 @@ export default function DeleteEverythingScreen({ navigation }) {
     }
 
     const handleConfirmDeleteClick = () => {
-        navigation.navigate(appConstant.welcome)
+        initial().then(() => {
+            navigation.navigate(appConstant.welcome,{
+                from: appConstant.deleteEverything
+            })
+        })
     }
 
     const handleCancelClick = () => {

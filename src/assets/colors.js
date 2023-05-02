@@ -25,7 +25,7 @@ const colors = {
   // naturalDark: '#18171C',
   // skyblue: '#94D8FF',
   // indigo: '#6D44D1',
-  // yellow: '#FED731',
+  yellow: '#FED731',
   // gra1: 'rgba(33, 70, 199, 1)',
   // gra2: 'rgba(14, 136, 233, 1)',
   // lightblue: 'rgba(18, 91, 255, 0.1)',

@@ -96,4 +96,10 @@ const styles = StyleSheet.create({
         position: 'absolute',
         bottom: hp(3)
     },
+    // button: {
+    //     alignItems: 'center',
+    //     alignSelf: 'center',
+    //     width: wp(90),
+    //     height: hp(8.5)
+    // },
 })

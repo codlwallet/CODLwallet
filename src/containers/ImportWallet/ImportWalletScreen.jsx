@@ -9,8 +9,9 @@ import FontText from '../../components/common/FontText'
 import { importWalletData } from '../../constants/data'
 import Input from '../../components/common/Input'
 import WalletCard from '../../components/WalletCard'
-import AsyncStorage from '@react-native-async-storage/async-storage'
+import { completeUserSignup, createAccounts, importWallet } from '../../storage'
 import { useTranslation } from 'react-i18next'
+import PopUp from '../../components/common/AlertBox'
 
 export default function ImportWalletScreen({ navigation, route }) {
     const { t } = useTranslation();
@@ -24,9 +25,13 @@ export default function ImportWalletScreen({ navigation, route }) {
     const [showKeyboard, setShowKeyboard] = useState(false)
     const walletcardData = numberValue && walletData.slice(0, numberValue)
     const reg = (/^[a-z]+$/);
+    const [showAlert, setShowAlert] = useState(false);
+    const [alertTitle, setAlertTitle] = useState('')
+    const [alertMessage, setAlertMessage] = useState('')
 
     useEffect(() => {
         cardRef.current = cardRef?.current?.slice(0, walletData?.length);
+        setIsEdit(true)
     }, [walletData]);
 
     useLayoutEffect(() => {
@@ -85,13 +90,33 @@ export default function ImportWalletScreen({ navigation, route }) {
 
 
     const handleConfirmClick = async () => {
+        setIsEdit(false)
         setBtnValue(appConstant.confirm)
         if (form === appConstant.recoveryCheck) {
             navigation.goBack()
         }
         else {
-            await AsyncStorage.setItem('WalletData', JSON.stringify(walletcardData));
-            navigation.navigate(appConstant.complateSeeds)
+            const data = walletData.slice(0, numberValue)
+            let mnemonic = "";
+            data.forEach(item => {
+                mnemonic += item.name + " "
+            });
+            importWallet(mnemonic.substring(0, mnemonic.length - 1)).then((res) => {
+                if (res.status) {
+                    completeUserSignup()
+                    createAccounts()
+                    navigation.navigate(appConstant.complateSeeds)
+                }
+                else {
+                    setAlertTitle(t('importWalletFailure'));
+                    setAlertMessage(t("nemonicErrorMess"));
+                    setShowAlert(true);
+                }
+            }).catch(e => {
+                setAlertTitle(t('importWalletFailure'));
+                setAlertMessage(t("nemonicErrorMess"));
+                setShowAlert(true);
+            })
         }
     }
 
@@ -122,9 +147,10 @@ export default function ImportWalletScreen({ navigation, route }) {
 
     const renderWalletData = (item, index) => {
         return (
-            <>
+            // <>
                 <Input
-                    autoFocus={true}
+                    key={index}
+                    autoFocus={isEdit}
                     withLeftIcon
                     maxLength={8}
                     editable={showConfirm && !isEdit ? false : true}
@@ -147,7 +173,7 @@ export default function ImportWalletScreen({ navigation, route }) {
                     inputStyle={[styles.textInput, { color: item.name == '' ? colors.white : colors.red }]}
                     onChangeText={text => {
                         if (text === '' || reg.test(text)) {
-                            walletData[index].name = text
+                            walletData[index].name = text.toLowerCase();
                             setWalletData([...walletData]);
                         }
                     }}
@@ -155,7 +181,7 @@ export default function ImportWalletScreen({ navigation, route }) {
                     returnKeyType={'next'}
                     style={[styles.inputContainer, { backgroundColor: item.name == '' ? colors.red : colors.white }]}
                 />
-            </>
+            // </>
         )
     }
 
@@ -186,9 +212,9 @@ export default function ImportWalletScreen({ navigation, route }) {
             </FontText>}
             {!showConfirm && <Button
                 flex={null}
-                disabled={walletcardData?.some((item) => !item.name)}
+                disabled={walletcardData&&walletcardData?.some((item) => !item.name)}
                 height={hp(8.5)}
-                bgColor={!walletcardData?.some((item) => !item.name) ? 'white' : ['red-open']}
+                bgColor={!(walletcardData&&walletcardData?.some((item) => !item.name)) ? 'white' : 'red-open'}
                 type="highlight"
                 borderRadius={11}
                 width={wp(90)}
@@ -205,7 +231,7 @@ export default function ImportWalletScreen({ navigation, route }) {
                     <Button
                         flex={null}
                         height={hp(8.5)}
-                        bgColor={!walletcardData?.some((item) => !item.name) && btnValue === appConstant.confirm ? 'white' : ['red-open']}
+                        bgColor={!walletcardData?.some((item) => !item.name) && btnValue === appConstant.confirm ? 'white' : 'red-open'}
                         type="highlight"
                         borderRadius={11}
                         disabled={walletcardData?.some((item) => !item.name)}
@@ -220,7 +246,7 @@ export default function ImportWalletScreen({ navigation, route }) {
                     <Button
                         flex={null}
                         height={hp(8.5)}
-                        bgColor={btnValue === appConstant.edit ? 'white' : ['red-open']}
+                        bgColor={btnValue === appConstant.edit ? 'white' : 'red-open'}
                         type="highlight"
                         borderRadius={11}
                         width={wp(90)}
@@ -233,6 +259,13 @@ export default function ImportWalletScreen({ navigation, route }) {
                     </Button>
                 </>
             }
+            {showAlert && <PopUp
+                title={alertTitle}
+                message={alertMessage}
+                onConfirmPressed={() => {
+                    setShowAlert(false)
+                }}
+            />}
         </View>
     )
 }
@@ -245,6 +278,7 @@ const styles = StyleSheet.create({
     },
     subContainer: {
         flex: 1,
+        // justifyContent: 'center',
         marginTop: hp(12)
     },
     button: {

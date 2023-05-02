@@ -6,15 +6,21 @@ import Header from '../../components/common/Header'
 import appConstant from '../../helper/appConstant'
 import Input from '../../components/common/Input'
 import SvgIcons from '../../assets/SvgIcons'
+import DeviceInfo from 'react-native-device-info';
+import { initial, signup } from '../../storage'
+import { useDispatch, useSelector } from 'react-redux'
+import { setUser } from '../../redux/slices/authSlice'
 import FontText from '../../components/common/FontText'
 import Button from '../../components/common/Button'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useFocusEffect } from '@react-navigation/native'
 import { useTranslation } from 'react-i18next'
 import PopUp from '../../components/common/AlertBox'
+import { getUserData } from "../../storage";
 
 export default function SetupUserScreen({ navigation, route }) {
     const { from } = route?.params
+    const dispatch = useDispatch()
     const nameRef = useRef()
     const choosePinRef = useRef()
     const confirmPinRef = useRef()
@@ -36,11 +42,9 @@ export default function SetupUserScreen({ navigation, route }) {
     const { t } = useTranslation();
 
     useEffect(() => {
-        async function getLoginData() {
-            const data = await AsyncStorage.getItem('LoginData');
-            setLoginData(JSON.parse(data))
-        }
-        getLoginData()
+        getUserData().then(async res => {
+            setLoginData(res.user)
+        })
     }, [])
 
     useFocusEffect(
@@ -48,7 +52,9 @@ export default function SetupUserScreen({ navigation, route }) {
             setEnterPin('')
         }, []),
     );
-
+    const onSubmitConfirmpin = () => {
+        setConfirmPinFocus(false)
+    }
     const onSubmitEnterPin = () => {
         setEnterPinFocus(false)
     }
@@ -61,9 +67,6 @@ export default function SetupUserScreen({ navigation, route }) {
         confirmPinRef.current.focus()
     }
 
-    const onSubmitConfirmpin = () => {
-        setConfirmPinFocus(false)
-    }
 
     const onFocusName = () => {
         setNameFocus(true)
@@ -139,7 +142,9 @@ export default function SetupUserScreen({ navigation, route }) {
                 })
             }
             else if (warningCount === 4) {
-                navigation.navigate(appConstant.welcome)
+                initial().then((res) => {
+                    navigation.navigate(appConstant.welcome, { from: "" })
+                })
             }
             else {
                 setShowAlert(true)
@@ -152,10 +157,14 @@ export default function SetupUserScreen({ navigation, route }) {
     }
 
     const handleProceedBtn = async () => {
-        data = {
+        const uniqueId = DeviceInfo.getUniqueIdSync();
+        const data = {
+            machineId: uniqueId,
+            pin: choosePin,
             name: name,
-            pin: choosePin
+            isCreated: false
         }
+
         if (from) {
             if (enterBtnValidation()) {
                 navigation.navigate(from)
@@ -163,8 +172,16 @@ export default function SetupUserScreen({ navigation, route }) {
         }
         else {
             if (checkValidation()) {
-                await AsyncStorage.setItem('LoginData', JSON.stringify(data));
-                navigation.navigate(appConstant.createdUser)
+                signup(data).then(async (res) => {
+                    if (res.status) {
+                        dispatch(setUser(res.user))
+                        navigation.navigate(appConstant.createdUser)
+                    } else {
+                        // navigation.navigate(appConstant.lockUser)
+                    }
+                }).catch((e) => {
+                    // navigation.navigate(appConstant.lockUser)
+                })
             }
         }
     }
@@ -190,7 +207,7 @@ export default function SetupUserScreen({ navigation, route }) {
                         returnKeyType={'next'}
                         onFocus={onFocusName}
                         onBlur={onBlurName}
-                        onSubmit={onSubmitName}
+                        onSubmit={onSubmitConfirmpin}
                         fontName={'poppins-regular'}
                         onSubmitEditing={onSubmitName}
                         fontSize={normalize(22)}
@@ -396,5 +413,19 @@ const styles = StyleSheet.create({
         position: 'absolute',
         bottom: hp(3),
     },
-
+    // button: {
+    //     backgroundColor: colors.white,
+    //     width: wp(90),
+    // },
+    // alertContainerStyle: {
+    //     backgroundColor: '#3A3A3A',
+    //     width: wp(85)
+    // },
+    // alertTextStyle: {
+    //     alignSelf: 'flex-start',
+    //     color: colors.white,
+    //     right: 14,
+    //     fontSize: 19,
+    //     fontWeight: 500
+    // }
 })

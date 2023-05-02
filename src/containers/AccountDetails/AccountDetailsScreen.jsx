@@ -1,4 +1,4 @@
-import { BackHandler, Image, StyleSheet, View } from 'react-native'
+import { BackHandler, Image, LogBox, StyleSheet, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import colors from '../../assets/colors'
 import Header from '../../components/common/Header'
@@ -8,12 +8,15 @@ import FontText from '../../components/common/FontText'
 import { useTranslation } from 'react-i18next'
 import QRCode from 'react-native-qrcode-svg'
 import appConstant from '../../helper/appConstant'
-
+LogBox.ignoreLogs([
+    'Non-serializable values were found in the navigation state',
+]);
 export default function AccountDetailsScreen({ navigation, route }) {
     const { t } = useTranslation();
     const walletName = route?.params?.walletName
+    const walletAddress = route?.params?.walletAddress
     const name = route?.params?.name
-    const showIcon = route?.params?.name
+    console.log('name', name)
     const from = route?.params?.from
     const [showRightIcon, setShowRightIcon] = useState(from === appConstant.main || from === appConstant.createAccount ? true : false)
 
@@ -45,7 +48,8 @@ export default function AccountDetailsScreen({ navigation, route }) {
     const handleSignClick = () => {
         navigation.navigate(appConstant.scanQr, {
             walletName: walletName,
-            showIcon: showRightIcon
+            showIcon: showRightIcon,
+            walletAddress: walletAddress
         })
     }
 
@@ -63,7 +67,7 @@ export default function AccountDetailsScreen({ navigation, route }) {
                     </View>
                     <View style={{ marginTop: hp(-3) }}>
                         <QRCode
-                            // value="Just some string value"
+                            value={walletAddress}
                             logo={require('../../assets/images/BlackAppLogo.png')}
                             logoSize={50}
                             size={hp(39)}
@@ -75,8 +79,9 @@ export default function AccountDetailsScreen({ navigation, route }) {
             </View>
             <View style={styles.bottomView}>
                 <Image source={require('../../assets/images/EV.png')} style={styles.image} />
-                <FontText name={"inter-regular"} size={normalize(22)} color="white" pLeft={wp(4)} style={{ width: wp(75) }}>
-                    {'0x9b4545d9214097DBE61c984EB2AB83C6e86'}
+                <FontText name={"inter-regular"} size={normalize(20)} color="white" pLeft={wp(4)} style={{ width: wp(75) }}>
+                    {walletAddress}
+                    {/* {walletAddress.replace(walletAddress.substring(7, 38), `...`)} */}
                 </FontText>
             </View>
             <Button
@@ -109,7 +114,10 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
     button: {
+        // backgroundColor: colors.white,
         marginBottom: hp(3),
+        // height: hp(8.5),
+        // width: wp(90),
     },
     scannerContainer: {
         backgroundColor: colors.white,

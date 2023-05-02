@@ -1,5 +1,5 @@
-import { BackHandler, Image, StyleSheet, View } from 'react-native'
-import React, { useEffect } from 'react'
+import { ActivityIndicator, BackHandler, Image, StyleSheet, View } from 'react-native'
+import React, { useEffect, useState } from 'react'
 import colors from '../../assets/colors'
 import Header from '../../components/common/Header'
 import { hp, normalize, wp } from '../../helper/responsiveScreen'
@@ -7,13 +7,13 @@ import Button from '../../components/common/Button'
 import FontText from '../../components/common/FontText'
 import { useTranslation } from 'react-i18next'
 import QRCode from 'react-native-qrcode-svg'
-import appConstant from '../../helper/appConstant'
 import SvgIcons from '../../assets/SvgIcons'
+import { generateHDKey } from '../../storage'
 
 export default function ConnectWalletScreen({ navigation, route }) {
     const { t } = useTranslation();
-    // const { walletName } = route?.params
-
+    const { passphrase } = route?.params
+    const [HDKey, setHDKey] = useState('')
     useEffect(() => {
         BackHandler.addEventListener('hardwareBackPress', backAction);
         return async () => {
@@ -21,9 +21,19 @@ export default function ConnectWalletScreen({ navigation, route }) {
         };
     }, []);
 
+    useEffect(() => {
+        (async () => {
+            let hdkey = await generateHDKey(passphrase && passphrase)
+            setHDKey(hdkey)
+        })()
+    }, [])
     const backAction = () => {
-        navigation.goBack()
-        return true;
+        if (HDKey) {
+            navigation.goBack()
+            return true;
+        } else {
+            return false;
+        }
     };
 
 
@@ -32,7 +42,7 @@ export default function ConnectWalletScreen({ navigation, route }) {
         <View style={styles.container}>
             <Header title={t("connectWallet")} showRightIcon RightIcon={'info'} statusBarcolor={colors.black} />
             <View style={styles.subContainer}>
-                <View style={styles.scannerContainer}>
+                {HDKey ? <View style={styles.scannerContainer}>
                     <View style={styles.walletHeaderView}>
                         <FontText name={"inter-bold"} size={normalize(11)} color="black" textTransform={'uppercase'}>
                             {t("watchOnly")}
@@ -40,7 +50,7 @@ export default function ConnectWalletScreen({ navigation, route }) {
                     </View>
                     <View style={{ marginTop: hp(-3) }}>
                         <QRCode
-                            // value="Just some string value"
+                            value={HDKey}
                             logo={require('../../assets/images/BlackAppLogo.png')}
                             logoSize={50}
                             size={hp(39)}
@@ -48,7 +58,7 @@ export default function ConnectWalletScreen({ navigation, route }) {
                             logoBackgroundColor='white'
                         />
                     </View>
-                </View>
+                </View> : <ActivityIndicator animating={!HDKey} size="large" color="#ffffff" />}
             </View>
             <View style={styles.bottomView}>
                 <FontText name={"inter-regular"} size={normalize(22)} color="white"  >
@@ -61,6 +71,8 @@ export default function ConnectWalletScreen({ navigation, route }) {
                 type="highlight"
                 borderRadius={11}
                 bgColor="white"
+                defaultOpacity={!HDKey ? 0.5 : 1}
+                disabled={!HDKey}
                 width={wp(90)}
                 height={hp(8.5)}
                 onPress={backAction}
@@ -86,7 +98,10 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
     button: {
+        // backgroundColor: colors.white,
         marginBottom: hp(3),
+        // height: hp(8.5),
+        // width: wp(90),
     },
     scannerContainer: {
         backgroundColor: colors.white,

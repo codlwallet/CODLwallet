@@ -1,5 +1,5 @@
 import { BackHandler, Keyboard, KeyboardAvoidingView, StyleSheet, TouchableOpacity, View } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import Header from '../../components/common/Header'
 import colors from '../../assets/colors'
 import appConstant from '../../helper/appConstant'
@@ -11,9 +11,12 @@ import ToggleSwitch from 'toggle-switch-react-native'
 import Button from '../../components/common/Button'
 import WalletCard from '../../components/WalletCard'
 import { useTranslation } from 'react-i18next'
-import AsyncStorage from '@react-native-async-storage/async-storage'
+import { useDispatch, useSelector } from 'react-redux'
+import { createAccounts, setWalletIsHidden } from '../../storage'
+import RnBgTask from 'react-native-bg-thread';
 import { useFocusEffect } from '@react-navigation/native'
 import PopUp from '../../components/common/AlertBox'
+import { setLoading } from '../../redux/slices/authSlice'
 
 export default function WelcomePurchaseScreen({ navigation, route }) {
     const { t } = useTranslation();
@@ -23,17 +26,32 @@ export default function WelcomePurchaseScreen({ navigation, route }) {
     const [isEnabled, setIsEnabled] = useState(false);
     const [keyboardHeight, setKeyboardHeight] = useState(0);
     const [loginData, setLoginData] = useState()
+    const toggleSwitch = () => setIsEnabled(previousState => !previousState);
+    const { user } = useSelector((state) => state.auth)
     const [showAlert, setShowAlert] = useState(false)
     const [alertTitle, setAlertTitle] = useState('')
     const [alertMessage, setAlertMessage] = useState('')
+    const dispatch=useDispatch();
 
-    useEffect(() => {
-        async function getLoginData() {
-            const data = await AsyncStorage.getItem('LoginData');
-            setLoginData(JSON.parse(data))
-        }
-        getLoginData()
-    }, [])
+    // useEffect(() => {
+    //     async function getLoginData() {
+    //         // const data = await AsyncStorage.getItem('LoginData');
+    //         setLoginData(JSON.parse(data))
+    //     }
+    //     getLoginData()
+    // }, [])
+    useFocusEffect(
+        useCallback(() => {
+            setWalletIsHidden(false);
+        }, [])
+    )
+
+    const backAction = () => {
+        navigation.navigate(appConstant.welcome, {
+            from: appConstant.welcomePurchase,
+        });
+        return true;
+    };
 
     useFocusEffect(
         React.useCallback(() => {
@@ -58,44 +76,39 @@ export default function WelcomePurchaseScreen({ navigation, route }) {
         }, [isEnabled, keyboardHeight]),
     );
 
-    useEffect(() => {
-        BackHandler.addEventListener('hardwareBackPress', backAction);
-        return async () => {
-            BackHandler.removeEventListener('hardwareBackPress', backAction);
-        };
-    }, []);
-
-    const backAction = () => {
-        navigation.navigate(appConstant.welcome, {
-            from: appConstant.welcomePurchase,
-        });
-        return true;
-    };
-
-    const toggleSwitch = () => setIsEnabled(previousState => !previousState);
-
     const enterBtnValidation = () => {
         let errorStatus = true;
-        if (password === '' || password.length < 4 || password.length > 8) {
+        // if (password === '' || password.length < 4 || password.length > 8) {
+        //     setShowAlert(true)
+        //     setAlertTitle(t("enterPIN"))
+        //     setAlertMessage(t("pinErrorMess"))
+        //     errorStatus = false;
+        // }
+        if(password.length<=0){
+            setAlertTitle(t('passphraseNotMatch'))
+            setAlertMessage(t('enterPassword'))
             setShowAlert(true)
-            setAlertTitle(t("enterPIN"))
-            setAlertMessage(t("pinErrorMess"))
-            errorStatus = false;
-        }
-        else if (loginData?.pin !== password) {
-            setShowAlert(true)
-            setAlertTitle(t("error"))
-            setAlertMessage(t("wrongPin"))
-            errorStatus = false;
+            errorStatus=false;
         }
         return errorStatus;
     }
 
-    const onSubmitPin = () => {
+    const onSubmitPin = async () => {
+        // await AsyncStorage.setItem("hidden", JSON.stringify(isEnabled))
         if (enterBtnValidation()) {
             Keyboard.dismiss()
             setIsEnabled(false)
-            navigation.navigate(appConstant.hiddenWallet)
+            dispatch(setLoading(true));
+            RnBgTask.runInBackground_withPriority("MAX", () => {
+                createAccounts(password).then(res=>{
+                    if(res.state){
+                        dispatch(setLoading(false))
+                    }
+                })
+            })
+            navigation.navigate(appConstant.hiddenWallet,{
+                passphrase: password
+            })
         }
     }
 
@@ -105,13 +118,25 @@ export default function WelcomePurchaseScreen({ navigation, route }) {
         })
     }
 
+    // const handleUserNameClick = async () => {
+    //     // await AsyncStorage.setItem("hidden", JSON.stringify(isEnabled))
+    //     if (isEnabled) {
+    //         if (enterBtnValidation()) {
+    //             navigation.navigate(appConstant.hiddenWallet)
+    //         }
+    //     }
+    //     else {
+    //         navigation.navigate(appConstant.main)
+    //     }
+    // }
+
     return (
         <View style={styles.container}>
             <Header showRightIcon RightIcon={'info'} title={t("welcome")} />
             <View style={[styles.subContainer, { bottom: isEnabled ? wp(6) : 0 }]}>
                 <TouchableOpacity style={styles.buttonConatiner} onPress={handleEnterClick}>
                     <FontText size={normalize(22)} color={'white'} name={'inter-regular'}>
-                        {loginData?.name}
+                        {user?.name}
                     </FontText>
                     <SvgIcons.RightBackArrow height={hp(3)} width={hp(2)} />
                 </TouchableOpacity>

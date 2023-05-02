@@ -1,5 +1,5 @@
 import { BackHandler, Keyboard, StyleSheet, TouchableOpacity, View } from 'react-native'
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import colors from '../../assets/colors'
 import { hp, normalize, wp } from '../../helper/responsiveScreen'
 import Header from '../../components/common/Header'
@@ -9,22 +9,33 @@ import SvgIcons from '../../assets/SvgIcons'
 import FontText from '../../components/common/FontText'
 import Button from '../../components/common/Button'
 import appConstant from '../../helper/appConstant'
-import AsyncStorage from '@react-native-async-storage/async-storage'
-import { useFocusEffect } from '@react-navigation/native'
 
 import PopUp from '../../components/common/AlertBox'
+import { getAccountsData, createNewAccount, setDefaultAccountNameIndex } from "../../storage";
+import { useSelector } from 'react-redux'
+import Config from "../../constants";
+import { useFocusEffect } from '@react-navigation/native'
 
 export default function CreateAccountScreen({ navigation, route }) {
   const { t } = useTranslation();
+  console.log('route.params', route.params)
   const name = route?.params?.name
   const walletId = route?.params?.walletId
   const from = route?.params?.from
   const nameRef = useRef(null)
-  const [walletName, setWalletName] = useState('')
+  const { selectedNetwork,passphrase } = useSelector((state) => state.auth)
+  const [walletName, setWalletName] = useState(route?.params?.walletName)
+  const [walletNameChanged, setWalletNameChanged] = useState(false)
+  const [defaultWalletName, setDefaultWalletName] = useState(null)
   const [walletNameFocus, setWalletNameFocus] = useState(false)
   const [isSelect, setIsSelect] = useState(false)
   const [selectWallet, setSelectWallet] = useState(false)
-  const [accountData, setAccountData] = useState([])
+  const [accountData, setAccountData] = useState({})
+  const [showCheckIcon, setShowIcon] = useState(false)
+  const [walletAddress, setWalletAddress] = useState('')
+  console.log('walletAddress', walletAddress)
+  const [id, setId] = useState()
+
   const [showAlert, setShowAlert] = useState(false)
   const [alertTitle, setAlertTitle] = useState('')
   const [alertMessage, setAlertMessage] = useState('')
@@ -37,29 +48,51 @@ export default function CreateAccountScreen({ navigation, route }) {
       BackHandler.removeEventListener('hardwareBackPress', backAction);
     };
   }, []);
-
-  useEffect(() => {
-    if (from === appConstant.selectAccount) {
-      setSelectWallet(true)
-    }
-    else {
-      setWalletName('')
-      setSelectWallet(false)
-    }
-  }, [from]);
-
   useFocusEffect(
-    React.useCallback(() => {
+    useCallback(()=>{
       setWalletNameFocus(false)
       setIsSelect(false)
       setShowBackArrow(false)
-      async function getWalletData() {
-        const data = await AsyncStorage.getItem('WalletList');
-        setAccountData(JSON.parse(data))
+      let _selected = false;
+      if (typeof walletId == 'number'&&from === appConstant.selectAccount) {
+        _selected = true;
+        setSelectWallet(true)
+        if (route.params["wallet"]) {
+          setWalletAddress(route.params["wallet"].publicKey)
+          if (route.params["wallet"].name) {
+            setWalletName(route.params["wallet"].name);
+          } else {
+            setWalletName('');
+          }
+        }
+        setId(walletId ? walletId : 0)
+      }else{
+        setSelectWallet(false)
       }
-      getWalletData()
-    }, []),
-  );
+      getAccountsData().then(res => {
+        if (res.status) {
+          setAccountData(res.data);
+          let _key = 0;
+          if (!walletName) {
+            if (res.data.isHidden) {
+              _key = res.data.defaultAccountNameIndex ? res.data.defaultAccountNameIndex.hidden:0;
+            } else { 
+              _key = res.data.defaultAccountNameIndex ? res.data.defaultAccountNameIndex.general:0;
+            }
+            console.log('_selected', _selected)
+            console.log('walletId', walletId)
+            setDefaultWalletName(`${Config.name} ${!_selected?_key:walletId}`)
+            setWalletName(`${Config.name} ${!_selected?_key:walletId}`)
+          } else {
+            setDefaultWalletName(`${Config.name} ${!_selected?_key:walletId}`)
+            setWalletName(`${Config.name} ${!_selected?_key:walletId}`)
+          }
+        }
+      })
+      return () => { }
+    },[walletId])
+  )
+
 
   const backAction = () => {
     if (from === appConstant.accountList) {
@@ -95,61 +128,32 @@ export default function CreateAccountScreen({ navigation, route }) {
       setShowAlert(true)
       setAlertTitle(t('walletnameRequired'))
       setAlertMessage(t("walletnameError"))
+      return;
     }
-    else if (walletId === '' || walletId === undefined) {
+    if (walletId === '' || walletId === undefined) {
       setShowAlert(true)
       setAlertTitle(t('selectWalletRequired'))
       setAlertMessage(t("selectWalletError"))
+      return;
     }
-    else {
-      if (accountData !== null) {
-        accountData.map((item) => {
-          if (accountData.some((i) => i.name === name)) {
-            const data = {
+    if (selectedNetwork) {
+      if(route.params.wallet){
+        let _newWallet=route.params.wallet;
+        _newWallet.name=walletName;
+        createNewAccount(_newWallet,accountData?.isHidden,passphrase).then(res => {
+          if (res.status) {
+            if(defaultWalletName&&defaultWalletName===walletName) setDefaultAccountNameIndex();
+            navigation.navigate(appConstant.accountDetails, {
               walletName: walletName,
-              walletAddress: '0xa94b3c662eE5602A3308604a3fB9A8FDd5caa710'
-            }
-            item.name === name && item?.accountDetails?.push(data)
-          }
-          else {
-            const data =
-            {
+              walletAddress: walletAddress,
               name: name,
-              accountDetails: [
-                {
-                  walletName: walletName,
-                  walletAddress: '0xa94b3c662eE5602A3308604a3fB9A8FDd5caa710'
-                }
-              ]
-            }
-            accountData?.push(data)
-            setAccountData([...accountData])
+              from: appConstant.createAccount
+            })
+            setTimeout(() => {
+              setWalletName('')
+              setWalletAddress('')
+            }, 2000);
           }
-        })
-        await AsyncStorage.setItem("WalletList", JSON.stringify(accountData))
-        navigation.navigate(appConstant.accountDetails, {
-          walletName: walletName,
-          from: appConstant.createAccount,
-          name: name
-        })
-      }
-      else {
-        const data = [
-          {
-            name: name,
-            accountDetails: [
-              {
-                walletName: walletName,
-                walletAddress: '0xa94b3c662eE5602A3308604a3fB9A8FDd5caa710'
-              }
-            ]
-          },
-        ]
-        await AsyncStorage.setItem("WalletList", JSON.stringify(data))
-        navigation.navigate(appConstant.accountDetails, {
-          walletName: walletName,
-          from: appConstant.createAccount,
-          name: name,
         })
       }
     }
@@ -161,6 +165,7 @@ export default function CreateAccountScreen({ navigation, route }) {
     setWalletNameFocus(false)
     navigation.navigate(appConstant.selectAccount, {
       name: name,
+      walletName: walletNameChanged&&walletName,
       walletId: walletId,
       onGoBack: () => {
         setWalletNameFocus(false)
@@ -186,7 +191,10 @@ export default function CreateAccountScreen({ navigation, route }) {
           value={walletName}
           ref={nameRef}
           placeholderTextColor={walletNameFocus ? colors.black : colors.white}
-          onChangeText={setWalletName}
+          onChangeText={(e)=>{
+            setWalletName(e)
+            !walletNameChanged&&setWalletNameChanged(true)
+          }}
           keyboardType={'default'}
           returnKeyType={'next'}
           onFocus={onWalletNameFocus}
@@ -209,7 +217,7 @@ export default function CreateAccountScreen({ navigation, route }) {
                 : colors.gray,
           }]}
           rightIcon={
-            <TouchableOpacity>
+            walletName && !walletNameFocus &&<TouchableOpacity>
               {walletNameFocus ?
                 <SvgIcons.BlackCheck height={hp(4)} width={hp(2.5)} /> :
                 <SvgIcons.Check height={hp(4)} width={hp(2.5)} />
@@ -218,14 +226,22 @@ export default function CreateAccountScreen({ navigation, route }) {
           }
         />
         <TouchableOpacity style={[styles.buttonContainer, { backgroundColor: isSelect ? colors.white : colors.gray }]} onPress={handleSelectWalletClick}>
+          {walletAddress ? <>
           <View style={[styles.numberContainer, { backgroundColor: isSelect ? colors.black : colors.white }]}>
             <FontText name={"inter-bold"} size={normalize(15)} color={isSelect ? 'white' : 'black'}>
-              {walletId ? walletId : "0"}
+                {id}
             </FontText>
           </View>
           <FontText name={"inter-regular"} size={normalize(22)} color={isSelect ? 'black' : 'white'} pRight={selectWallet || showBackArrow ? hp(9) : hp(13)} >
-            {"0xa94bb...a710"}
+            
+            {walletAddress.replace(walletAddress.substring(7, 38), `...`)}
           </FontText>
+          </> :
+            <FontText name={"inter-regular"} size={normalize(22)} color={isSelect ? 'black' : 'white'} pRight={!isSelect ? hp(13) : hp(9)} >
+              {t('select_wallet')}
+            </FontText>}
+          {/* {!!!walletId && <SvgIcons.BlackRightArrow height={hp(3)} width={hp(2.5)} />}
+          {!!walletId && <SvgIcons.BlackCheck height={hp(4)} width={hp(2.5)} />} */}
           {showBackArrow && <SvgIcons.BlackRightArrow height={hp(3)} width={hp(2.5)} />}
           {!showBackArrow && selectWallet &&
             <>
@@ -285,6 +301,7 @@ const styles = StyleSheet.create({
     width: wp(90),
     borderRadius: wp(2),
     alignItems: 'center',
+    gap: wp(5),
     justifyContent: 'space-between',
     flexDirection: 'row',
     paddingHorizontal: wp(5),
@@ -298,7 +315,10 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   button: {
+    // backgroundColor: colors.white,
     marginBottom: hp(3),
+    // height: hp(8.5),
+    // width: wp(90),
     alignSelf: 'center'
   }
 })

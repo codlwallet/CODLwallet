@@ -108,6 +108,12 @@ const styles = StyleSheet.create({
         alignItems: 'flex-end',
         justifyContent: 'flex-end'
     },
+    // button: {
+    //     alignItems: 'center',
+    //     alignSelf: 'center',
+    //     width: wp(90),
+    //     height: hp(8.5)
+    // },
     bottomView: {
         position: 'absolute',
         bottom: hp(3),

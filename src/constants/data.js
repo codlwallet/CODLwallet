@@ -364,12 +364,12 @@ module.exports = {
   ],
 
   mainData: [
-    {
-      id: 0,
-      name: 'Bitcoin',
-      value: appConstant.bitcoin,
-      image: require('../assets/images/BI.png'),
-    },
+    // {
+    //   id: 0,
+    //   name: 'Bitcoin',
+    //   value: appConstant.bitcoin,
+    //   image: require('../assets/images/BI.png'),
+    // },
     {
       id: 1,
       name: 'Ethereum',
@@ -377,12 +377,12 @@ module.exports = {
       image: require('../assets/images/EV.png'),
       img: require('../assets/images/EVblack.png'),
     },
-    {
-      id: 2,
-      name: 'Solana',
-      value: appConstant.solana,
-      image: require('../assets/images/SO.png'),
-    },
+    // {
+    //   id: 2,
+    //   name: 'Solana',
+    //   value: appConstant.solana,
+    //   image: require('../assets/images/SO.png'),
+    // },
     {
       id: 3,
       name: 'Çığ',
@@ -394,6 +394,34 @@ module.exports = {
       name: 'Çokgen',
       value: appConstant.polygon,
       image: require('../assets/images/PO.png'),
+    },
+    {
+      id: 5,
+      name: 'BSC',
+      value: appConstant.bsc,
+      image: require('../assets/images/BSC.png'),
+      img: require('../assets/images/BSC_selected.png'),
+    },
+    {
+      id: 6,
+      name: 'Arbitrum',
+      value: appConstant.arbitrum,
+      image: require('../assets/images/Arbitrum.png'),
+      img: require('../assets/images/Arbitrum_selected.png'),
+    },
+    {
+      id: 7,
+      name: 'Optimism',
+      value: appConstant.optimism,
+      image: require('../assets/images/Optimism.png'),
+      img: require('../assets/images/Optimism_selected.png'),
+    },
+    {
+      id: 8,
+      name: 'Zksync',
+      value: appConstant.zksync,
+      image: require('../assets/images/Zksync_Era.png'),
+      img: require('../assets/images/Zksync_Era_selected.png'),
     },
   ],
 

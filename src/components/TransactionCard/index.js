@@ -26,7 +26,7 @@ export default function TransactionCard({item, headerTitle}) {
           </FontText>
           <FontText
             name={'inter-regular'}
-            size={normalize(19)}
+            size={normalize(15)}
             color="white"
             style={styles.text}>
             {item?.from}
@@ -38,7 +38,7 @@ export default function TransactionCard({item, headerTitle}) {
           </FontText>
           <FontText
             name={'inter-regular'}
-            size={normalize(19)}
+            size={normalize(15)}
             color="white"
             style={styles.text}>
             {item?.to}

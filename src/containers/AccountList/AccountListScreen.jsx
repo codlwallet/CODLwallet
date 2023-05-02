@@ -8,17 +8,22 @@ import { useTranslation } from 'react-i18next';
 import { walletListData } from '../../constants/data'
 import ButtonView from '../../components/common/ButtonList';
 import appConstant from '../../helper/appConstant';
+import Button from '../../components/common/Button';
 import SvgIcons from '../../assets/SvgIcons';
+import { useDispatch } from 'react-redux';
+import { selectAccount } from "../../redux/slices/authSlice";
 
 export default function AccountListScreen({ navigation, route }) {
     const { t } = useTranslation();
     const name = route?.params?.name
+    const icon = route?.params?.icon
     const accountList = route?.params?.accountList
     const headerName = route?.params?.headerName
     const [showList, setShowList] = useState(true)
     const [btnValue, setButtonValue] = useState()
     const [buttonIndex, setButtonIndex] = useState()
-
+    const [accountValue, setAccountValue] = useState()
+    const dispatch = useDispatch()
     useEffect(() => {
         BackHandler.addEventListener('hardwareBackPress', backAction);
         return async () => {
@@ -63,9 +68,15 @@ export default function AccountListScreen({ navigation, route }) {
     }
 
     const onClickAccount = (itm) => {
+        setAccountValue(itm?.name)
+        dispatch(selectAccount(itm))
         navigation.navigate(appConstant.accountDetails, {
-            walletName: itm?.walletName,
+            walletName: itm?.name,
+            walletAddress: itm?.publicKey,
             from: appConstant.accountList,
+            onGoBack: () => {
+                setAccountValue('')
+            },
         })
     }
 
@@ -78,19 +89,20 @@ export default function AccountListScreen({ navigation, route }) {
                 onBackPress={backAction}
                 statusBarcolor={colors.black}
                 titleStyle={{ left: showList ? wp(2.2) : wp(24), width: wp(45) }}
-                titleIcon={
-                    name === appConstant.bitcoin ?
-                        <SvgIcons.Bitcoin height={hp(5)} width={hp(3)} /> :
-                        name === appConstant.ethereum ?
-                            <Image source={require('../../assets/images/EV.png')} style={{ width: hp(3), height: hp(5), }} /> :
-                            name === appConstant.solana ?
-                                <SvgIcons.Solana height={hp(5.5)} width={hp(3.5)} /> :
-                                name === appConstant.avalanche ?
-                                    <View style={{ backgroundColor: colors.black }}>
-                                        <Image source={require('../../assets/images/img.png')} style={{ height: hp(3.8), width: hp(4.5) }} />
-                                    </View> :
-                                    <SvgIcons.Poly height={hp(5.5)} width={hp(4)} />
-                }
+                // titleIcon={
+                //     name === appConstant.bitcoin ?
+                //         <SvgIcons.Bitcoin height={hp(5)} width={hp(3)} /> :
+                //         name === appConstant.ethereum ?
+                //             <Image source={require('../../assets/images/EV.png')} style={{ width: hp(3), height: hp(5), }} /> :
+                //             name === appConstant.solana ?
+                //                 <SvgIcons.Solana height={hp(5.5)} width={hp(3.5)} /> :
+                //                 name === appConstant.avalanche ?
+                //                     <View style={{ backgroundColor: colors.black }}>
+                //                         <Image source={require('../../assets/images/img.png')} style={{ height: hp(3.8), width: hp(4.5) }} />
+                //                     </View> :
+                //                     <SvgIcons.Poly height={hp(5.5)} width={hp(4)} />
+                // }
+                titleIcon={<Image source={icon} style={name==appConstant.ethereum?{ height: hp(5), width: wp(5) }:{ height: hp(5), width: wp(8.8) }} />}
                 RightIconPress={() => { setShowList(!showList) }}
                 titleWithIcon />
 
@@ -102,10 +114,10 @@ export default function AccountListScreen({ navigation, route }) {
                                 <View key={index} style={styles.listView}>
                                     <TouchableOpacity style={[styles.buttonContainer]} onPress={() => onClickAccount(item)}>
                                         <FontText name={"inter-regular"} size={normalize(22)} color={'white'} style={{ width: wp(45) }} lines={1}  >
-                                            {item?.walletName}
+                                            {item?.name}
                                         </FontText>
                                         <FontText name={"inter-regular"} size={normalize(15)} color={'white'} style={{ width: wp(30), }} lines={1} textAlign={'right'} >
-                                            {"0xa94bb...a710"}
+                                            {item?.publicKey.replace(item?.publicKey.substring(7, 38), `...`)}
                                         </FontText>
                                     </TouchableOpacity>
                                 </View>
@@ -150,8 +162,15 @@ const styles = StyleSheet.create({
         paddingHorizontal: wp(5),
         backgroundColor: colors.gray,
     },
+    image: {
+        width: hp(3),
+        height: hp(5),
+    },
     button: {
+        // backgroundColor: colors.white,
         marginBottom: hp(3),
+        // height: hp(8.5),
+        // width: wp(90)
     },
     listView: {
         flexDirection: 'row',

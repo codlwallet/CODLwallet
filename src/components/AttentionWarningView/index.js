@@ -1,4 +1,4 @@
-import {StyleSheet, View} from 'react-native';
+import { ActivityIndicator, StyleSheet, View} from 'react-native';
 import React from 'react';
 import {hp, normalize, wp} from '../../helper/responsiveScreen';
 import FontText from '../common/FontText';
@@ -18,6 +18,7 @@ export default function AttentionWarningView({
   isBgRed,
   firstBtnValue,
   secondBtnValue,
+  loading
 }) {
   return (
     <View style={styles.container}>
@@ -48,7 +49,7 @@ export default function AttentionWarningView({
             buttonValue === firstBtnValue
               ? 'white'
               : isBgRed
-              ? ['red-open']
+              ? 'red-open'
               : 'gray'
           }
           height={hp(8.5)}
@@ -56,7 +57,7 @@ export default function AttentionWarningView({
           borderRadius={11}
           onPress={handleFirstBtnClick}
           style={[styles.button, {marginBottom: showButton2 ? hp(2) : hp(3)}]}>
-          <FontText
+          {loading?<ActivityIndicator animating={loading} size="large" color="black" />:<FontText
             name={'inter-medium'}
             size={normalize(22)}
             color={
@@ -67,7 +68,7 @@ export default function AttentionWarningView({
                 : 'black'
             }>
             {firstBtnTitle}
-          </FontText>
+          </FontText>}
         </Button>
       )}
       {showButton2 && (
@@ -77,7 +78,7 @@ export default function AttentionWarningView({
             buttonValue === secondBtnValue
               ? 'white'
               : isBgRed
-              ? ['red-open']
+              ? 'red-open'
               : 'gray'
           }
           height={hp(8.5)}
