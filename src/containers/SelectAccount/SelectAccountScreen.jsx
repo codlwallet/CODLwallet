@@ -86,7 +86,7 @@ export default function SelectAccountScreen({ navigation, route }) {
 
     const handleSelectClick = () => {
         if (wallet) {
-            if (!wallet.name) wallet.name = wallet_name;
+            if (wallet_name) wallet.name = wallet_name;
             navigation.navigate(appConstant.createAccount, {
                 walletId: walletId,
                 wallet: wallet,

@@ -18,7 +18,6 @@ import { useFocusEffect } from '@react-navigation/native'
 
 export default function CreateAccountScreen({ navigation, route }) {
   const { t } = useTranslation();
-  console.log('route.params', route.params)
   const name = route?.params?.name
   const walletId = route?.params?.walletId
   const from = route?.params?.from
@@ -33,7 +32,6 @@ export default function CreateAccountScreen({ navigation, route }) {
   const [accountData, setAccountData] = useState({})
   const [showCheckIcon, setShowIcon] = useState(false)
   const [walletAddress, setWalletAddress] = useState('')
-  console.log('walletAddress', walletAddress)
   const [id, setId] = useState()
 
   const [showAlert, setShowAlert] = useState(false)
@@ -79,13 +77,11 @@ export default function CreateAccountScreen({ navigation, route }) {
             } else { 
               _key = res.data.defaultAccountNameIndex ? res.data.defaultAccountNameIndex.general:0;
             }
-            console.log('_selected', _selected)
-            console.log('walletId', walletId)
             setDefaultWalletName(`${Config.name} ${!_selected?_key:walletId}`)
             setWalletName(`${Config.name} ${!_selected?_key:walletId}`)
           } else {
-            setDefaultWalletName(`${Config.name} ${!_selected?_key:walletId}`)
-            setWalletName(`${Config.name} ${!_selected?_key:walletId}`)
+            setDefaultWalletName(!/codl wallet/i.test(walletName)?walletName:`${Config.name} ${walletId}`)
+            setWalletName(!/codl wallet/i.test(walletName)?walletName:`${Config.name} ${walletId}`)
           }
         }
       })
@@ -192,8 +188,10 @@ export default function CreateAccountScreen({ navigation, route }) {
           ref={nameRef}
           placeholderTextColor={walletNameFocus ? colors.black : colors.white}
           onChangeText={(e)=>{
-            setWalletName(e)
-            !walletNameChanged&&setWalletNameChanged(true)
+            if(e.length<=20){
+              setWalletName(e)
+              !walletNameChanged&&setWalletNameChanged(true)
+            }
           }}
           keyboardType={'default'}
           returnKeyType={'next'}

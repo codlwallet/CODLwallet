@@ -171,7 +171,7 @@ export default function ScanQrScreen({ navigation, route }) {
             setAlertTitle(t('wrong_qr'))
             setAlertMessage(t('wrong_qr_err_mess'))
             setShowAlert(true)
-            camaraRef.reactivate();
+            // camaraRef.reactivate();
         }
     };
 

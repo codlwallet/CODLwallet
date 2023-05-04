@@ -51,7 +51,7 @@ export default function SignTransactionScreen({ navigation, route }) {
         from: tx?.payload?.publicKey,
         to: tx?.payload?.transaction?.to,
         fees: `${tx?.fee} ${chain?.nativeCurrency?.symbol}`,
-        amount: `${tx?.payload?.transaction?.value && (parseInt(tx?.payload?.transaction?.value) / (10 ** 18)).toPrecision(3)} ${chain?.nativeCurrency?.symbol}`
+        amount: `${tx?.payload?.transaction?.value && (parseInt(tx?.payload?.transaction?.value) / (10 ** 18)).toPrecision(7)} ${chain?.nativeCurrency?.symbol}`
     }
 
     const handleSignClick = () => {
