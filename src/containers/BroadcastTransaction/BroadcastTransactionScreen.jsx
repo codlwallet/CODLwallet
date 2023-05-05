@@ -27,8 +27,8 @@ export default function BroadcastTransactionScreen({ navigation, route }) {
     const details = {
         from: walletAddress,
         to: tx?.payload?.transaction?.to,
-        fees: `${tx?.fee} ${chain?.nativeCurrency?.symbol}`,
-        amount: `${tx?.payload?.transaction?.value&&(parseInt(tx?.payload?.transaction?.value)/(10**18)).toPrecision(7)} ${chain?.nativeCurrency?.symbol}`
+        fees: `${tx?.fee.toFixed(6)} ${chain?.nativeCurrency?.symbol}`,
+        amount: `${tx?.payload?.transaction?.value&&(parseInt(tx?.payload?.transaction?.value)/(10**18)).toFixed(6)} ${chain?.nativeCurrency?.symbol}`
     }
 
     useEffect(() => {
