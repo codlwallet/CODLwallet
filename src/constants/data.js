@@ -24,11 +24,11 @@ module.exports = {
       name: 'Yeni hesap oluştur',
       value: appConstant.createNewAccount,
     },
-    {
-      id: 1,
-      name: 'Hesapları Yeniden Sırala',
-      value: appConstant.reorderAccounts,
-    },
+    // {
+    //   id: 1,
+    //   name: 'Hesapları Yeniden Sırala',
+    //   value: appConstant.reorderAccounts,
+    // },
   ],
 
   languageData: [

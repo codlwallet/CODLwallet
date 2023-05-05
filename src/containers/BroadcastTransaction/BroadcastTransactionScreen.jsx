@@ -20,15 +20,15 @@ export default function BroadcastTransactionScreen({ navigation, route }) {
     const CarouselRef = useRef();
     const [selectedIndex, setselectedIndex] = useState(0);
 
-    const tx=route?.params?.tx;
-    const chain=route?.params?.chain;
-    const signedTxUR=route?.params?.signedTxUR;
+    const tx = route?.params?.tx;
+    const chain = route?.params?.chain;
+    const signedTxUR = route?.params?.signedTxUR;
 
     const details = {
         from: walletAddress,
         to: tx?.payload?.transaction?.to,
         fees: `${tx?.fee} ${chain?.nativeCurrency?.symbol}`,
-        amount: `${tx?.payload?.transaction?.value&&(parseInt(tx?.payload?.transaction?.value)/(10**18)).toPrecision(7)} ${chain?.nativeCurrency?.symbol}`
+        amount: `${tx?.payload?.transaction?.value && (parseInt(tx?.payload?.transaction?.value) / (10 ** 18)).toPrecision(7)} ${chain?.nativeCurrency?.symbol}`
     }
 
     useEffect(() => {
@@ -53,7 +53,7 @@ export default function BroadcastTransactionScreen({ navigation, route }) {
                 {item?.id === 1 ?
                     <View style={styles.scannerContainer}>
                         <View style={styles.walletHeaderView}>
-                            <FontText name={"inter-bold"} size={normalize(11)} color="black" textTransform={'uppercase'}>
+                            <FontText name={"inter-bold"} size={normalize(11)} color="black">
                                 {t("signedTX")}
                             </FontText>
                         </View>

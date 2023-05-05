@@ -61,7 +61,7 @@ export default function AccountDetailsScreen({ navigation, route }) {
             <View style={styles.subContainer}>
                 <View style={styles.scannerContainer}>
                     <View style={styles.walletHeaderView}>
-                        <FontText name={"inter-bold"} size={normalize(11)} color="black" textTransform={'uppercase'}>
+                        <FontText name={"inter-bold"} size={normalize(11)} color="black">
                             {t("publicAddress")}
                         </FontText>
                     </View>

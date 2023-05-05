@@ -31,7 +31,7 @@ export default function WelcomePurchaseScreen({ navigation, route }) {
     const [showAlert, setShowAlert] = useState(false)
     const [alertTitle, setAlertTitle] = useState('')
     const [alertMessage, setAlertMessage] = useState('')
-    const dispatch=useDispatch();
+    const dispatch = useDispatch();
 
     // useEffect(() => {
     //     async function getLoginData() {
@@ -84,32 +84,32 @@ export default function WelcomePurchaseScreen({ navigation, route }) {
         //     setAlertMessage(t("pinErrorMess"))
         //     errorStatus = false;
         // }
-        if(password.length<=0){
+        if (password.length <= 0) {
             setAlertTitle(t('passphraseNotMatch'))
             setAlertMessage(t('enterPassword'))
             setShowAlert(true)
-            errorStatus=false;
+            errorStatus = false;
         }
         return errorStatus;
     }
 
     const onSubmitPin = async () => {
         // await AsyncStorage.setItem("hidden", JSON.stringify(isEnabled))
-        if (enterBtnValidation()) {
-            Keyboard.dismiss()
-            setIsEnabled(false)
-            dispatch(setLoading(true));
-            RnBgTask.runInBackground_withPriority("MAX", () => {
-                createAccounts(password).then(res=>{
-                    if(res.state){
-                        dispatch(setLoading(false))
-                    }
-                })
-            })
-            navigation.navigate(appConstant.hiddenWallet,{
-                passphrase: password
-            })
-        }
+        // if (enterBtnValidation()) {
+        //     Keyboard.dismiss()
+        //     setIsEnabled(false)
+        //     dispatch(setLoading(true));
+        //     RnBgTask.runInBackground_withPriority("MAX", () => {
+        //         createAccounts(password).then(res=>{
+        //             if(res.state){
+        //                 dispatch(setLoading(false))
+        //             }
+        //         })
+        //     })
+        navigation.navigate(appConstant.hiddenWallet, {
+            passphrase: password
+        })
+        // }
     }
 
     const handleEnterClick = () => {
