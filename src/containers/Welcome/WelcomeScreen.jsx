@@ -17,19 +17,16 @@ const WelcomeScreen = ({ navigation, route }) => {
     const dispatch = useDispatch()
 
     const [from, setFrom] = useState(route?.params?.from)
-    console.log('entry from', from)
 
     useFocusEffect(
         React.useCallback(() => {
             check().then(res => {
-                console.log('welcome check', res)
-                console.log('effect from', from)
                 if (res.status) {
                     if (res.isExist) {
-                        if(from==appConstant.deleteEverything) setFrom(null);
-                        else if(!from) setFrom(appConstant.welcomePurchase);
+                        if (from == appConstant.deleteEverything) setFrom(null);
+                        else if (!from) setFrom(appConstant.welcomePurchase);
                         dispatch(setUser(res.user));
-                    }else{
+                    } else {
                         setFrom(null);
                     }
                 }

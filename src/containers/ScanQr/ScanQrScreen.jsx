@@ -6,13 +6,10 @@ import Header from '../../components/common/Header'
 import { useTranslation } from 'react-i18next'
 import Button from '../../components/common/Button'
 import FontText from '../../components/common/FontText'
-// import { Camera } from 'react-native-vision-camera'  
 import appConstant from '../../helper/appConstant'
 import SvgIcons from '../../assets/SvgIcons'
 import { Camera } from 'react-native-camera-kit'
 import { decodeTxQR } from '../../storage'
-import { isCameraPresent } from 'react-native-device-info';
-import QRCodeScanner from "react-native-qrcode-scanner";
 import { useFocusEffect } from '@react-navigation/native'
 import { useSelector } from 'react-redux'
 import PopUp from '../../components/common/AlertBox'
@@ -110,8 +107,7 @@ export default function ScanQrScreen({ navigation, route }) {
                         alert('CAMERA permission denied');
                     }
                 } catch (err) {
-                    alert('Camera permission err', err);
-                    console.warn(err);
+                    // alert('Camera permission err', err);
                 }
             }
             requestCameraPermission();
@@ -123,7 +119,6 @@ export default function ScanQrScreen({ navigation, route }) {
 
 
     const onBarcodeScan = (qrvalue) => {
-        console.log(qrvalue)
         setQrvalue(qrvalue);
         setOpneScanner(false);
         // if (qrvalue) {
@@ -144,7 +139,6 @@ export default function ScanQrScreen({ navigation, route }) {
                 if (!parsingQR && parsingQR === null) {
                     setParsingQR(true);
                     setQrvalue(qrdata);
-                    console.log(new Date().toLocaleString())
                     decodeTxQR(qrdata, passphrase).then(res => {
                         if (res.state) {
                             setShowAlert(false)
@@ -157,7 +151,6 @@ export default function ScanQrScreen({ navigation, route }) {
                                 encodedSignData: res.signdata,
                                 chain: res.chaindata
                             })
-                            console.log(new Date().toLocaleString())
                         } else {
                             setAlertTitle(t('wrong_qr'))
                             setAlertMessage(t('wrong_qr_err_mess'))
@@ -167,7 +160,6 @@ export default function ScanQrScreen({ navigation, route }) {
                 }
             }
         } catch (error) {
-            console.log('error', error)
             setAlertTitle(t('wrong_qr'))
             setAlertMessage(t('wrong_qr_err_mess'))
             setShowAlert(true)
@@ -179,8 +171,8 @@ export default function ScanQrScreen({ navigation, route }) {
         <View style={styles.container}>
             <Header title={t("scanQr")} showRightIcon statusBarcolor={colors.black} RightIcon={'info'} />
             <View style={styles.subContainer}>
-            {/* {hasPermission && !showAlert && !parsingQR && <TouchableOpacity style={styles.scannerContainer}> */}
-            {opneScanner && !showAlert && <TouchableOpacity style={styles.scannerContainer}>
+                {/* {hasPermission && !showAlert && !parsingQR && <TouchableOpacity style={styles.scannerContainer}> */}
+                {opneScanner && !showAlert && <TouchableOpacity style={styles.scannerContainer}>
                     {opneScanner &&
                         <>
                             <View style={styles.scannerContainer}>
@@ -193,10 +185,10 @@ export default function ScanQrScreen({ navigation, route }) {
                                     }
                                 />
                                 <View style={{ position: 'absolute' }}>
-                                    <Image source={require('../../assets/images/frame.png')} style={{...styles.image,backgroundColor:parsingQR?'black':'transparent'}} />
-                                    {parsingQR&&<View style={{position:'absolute',top:hp(15)}}>
+                                    <Image source={require('../../assets/images/frame.png')} style={{ ...styles.image, backgroundColor: parsingQR ? 'black' : 'transparent' }} />
+                                    {parsingQR && <View style={{ position: 'absolute', top: hp(15) }}>
                                         <ActivityIndicator animating={!!parsingQR} size="large" color="#ffffff" />
-                                        <FontText name={"inter-regular"} style={{...styles.centerText,marginTop:hp(3)}} size={normalize(22)} color="white"  >
+                                        <FontText name={"inter-regular"} style={{ ...styles.centerText, marginTop: hp(3) }} size={normalize(22)} color="white"  >
                                             {t('analyzing')}
                                         </FontText>
                                     </View>}
@@ -298,8 +290,8 @@ const styles = StyleSheet.create({
         paddingHorizontal: wp(4),
     },
     analyzingView: {
-        position:'absolute',
-        top:hp(15),
+        position: 'absolute',
+        top: hp(15),
         backgroundColor: colors.gray
     },
     image: {

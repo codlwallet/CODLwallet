@@ -16,7 +16,6 @@ export default function AccountDetailsScreen({ navigation, route }) {
     const walletName = route?.params?.walletName
     const walletAddress = route?.params?.walletAddress
     const name = route?.params?.name
-    console.log('name', name)
     const from = route?.params?.from
     const [showRightIcon, setShowRightIcon] = useState(from === appConstant.main || from === appConstant.createAccount ? true : false)
 

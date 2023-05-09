@@ -11,8 +11,8 @@ import TransactionCard from '../../components/TransactionCard'
 import { useDispatch, useSelector } from 'react-redux'
 import { setSignData } from '../../redux/slices/authSlice'
 import { useFocusEffect } from '@react-navigation/native'
-import CautionIcon from "../../assets/images/caution.png";
-import { ScrollView } from 'react-native-gesture-handler'
+import CautionWarningIcon from "../../assets/images/caution_yellow.png";
+import CautionErrorIcon from "../../assets/images/caution_red.png";
 
 export default function SignTransactionScreen({ navigation, route }) {
     const { t } = useTranslation();
@@ -28,7 +28,6 @@ export default function SignTransactionScreen({ navigation, route }) {
     const [isNetworkMatch, setisNetworkMatch] = useState(true)
     const [isSignWalletMatch, setIsSignWalletMatch] = useState(walletAddress == tx?.payload.publicKey)
 
-    console.log('isSignWalletMatch', isSignWalletMatch,tx?.payload.publicKey)
     useFocusEffect(useCallback(() => {
         if (selectedNetwork) {
             let regx = new RegExp(selectedNetwork, 'i');
@@ -48,9 +47,10 @@ export default function SignTransactionScreen({ navigation, route }) {
     }, []);
 
     const details = {
+        network: chain?.name,
         from: tx?.payload?.publicKey,
         to: tx?.payload?.transaction?.to,
-        fees: `${tx?.fee.toFixed(6)} ${chain?.nativeCurrency?.symbol}`,
+        fees: `~ ${tx?.fee} ${chain?.nativeCurrency?.symbol}`,
         amount: `${tx?.payload?.transaction?.value && (parseInt(tx?.payload?.transaction?.value) / (10 ** 18)).toFixed(6)} ${chain?.nativeCurrency?.symbol}`
     }
 
@@ -78,20 +78,19 @@ export default function SignTransactionScreen({ navigation, route }) {
         <View style={styles.container}>
             <Header title={t("signTransaction")} showRightIcon statusBarcolor={colors.black} RightIcon={'info'} />
             <View style={styles.subContainer}>
-                <View style={{marginBottom:hp(5)}}>
+                <View style={{ marginBottom: hp(2) }}>
                     {!isNetworkMatch &&
                         <View style={{ ...styles.warningContainer, marginTop: hp(10) }}>
-                            <Image source={CautionIcon} style={{ width: hp(5), height: hp(4), }} />
-                            <FontText style={{ color: colors.yellow }}>
+                            <Image source={CautionWarningIcon} style={{ width: hp(5), height: hp(4), }} />
+                            <FontText size={normalize(15)} style={{ color: colors.yellow, width: wp(75), marginLeft: wp(2) }}>
                                 Please note that this is not {selectedNetwork} Mainnet Transaction.
-                                This is from {chain.name}.
                             </FontText>
                         </View>
                     }
                     {!isSignWalletMatch &&
                         <View style={styles.warningContainer}>
-                            <Image source={CautionIcon} style={{ width: hp(5), height: hp(4), }} />
-                            <FontText style={{ color: colors.yellow }}>
+                            <Image source={CautionErrorIcon} style={{ width: hp(4), height: hp(3.8), marginLeft: wp(1) }} />
+                            <FontText size={normalize(15)} style={{ color: colors.red, width: wp(75), marginLeft: wp(2) }}>
                                 {t('wrongAccountSignTrying')}
                             </FontText>
                         </View>
@@ -180,16 +179,15 @@ const styles = StyleSheet.create({
         borderWidth: wp(1),
         borderColor: colors.black,
     },
-
     warningContainer: {
         flexDirection: 'row',
-        justifyContent: 'space-between',
+        backgroundColor: '#191919',
+        borderRadius: 10,
         alignContent: 'center',
         alignItems: 'center',
         columnGap: wp(1),
-        borderWidth: wp(0.3),
-        borderColor: colors.yellow,
         padding: wp(2),
-        marginBottom: hp(1)
+        marginBottom: hp(1),
+        width: wp(90)
     }
 })

@@ -2,7 +2,6 @@ import React, { useEffect } from 'react';
 import SplashScreen from 'react-native-splash-screen';
 import { StatusBar } from 'react-native';
 import { Provider } from 'react-redux';
-import colors from './src/assets/colors';
 import Route from './src/navigation/route';
 import { store } from './src/redux/store/store';
 import './src/constants/i18n';

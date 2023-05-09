@@ -20,15 +20,15 @@ export default function BroadcastTransactionScreen({ navigation, route }) {
     const CarouselRef = useRef();
     const [selectedIndex, setselectedIndex] = useState(0);
 
-    const tx=route?.params?.tx;
-    const chain=route?.params?.chain;
-    const signedTxUR=route?.params?.signedTxUR;
+    const tx = route?.params?.tx;
+    const chain = route?.params?.chain;
+    const signedTxUR = route?.params?.signedTxUR;
 
     const details = {
         from: walletAddress,
         to: tx?.payload?.transaction?.to,
-        fees: `${tx?.fee.toFixed(6)} ${chain?.nativeCurrency?.symbol}`,
-        amount: `${tx?.payload?.transaction?.value&&(parseInt(tx?.payload?.transaction?.value)/(10**18)).toFixed(6)} ${chain?.nativeCurrency?.symbol}`
+        fees: `~ ${tx?.fee} ${chain?.nativeCurrency?.symbol}`,
+        amount: `${tx?.payload?.transaction?.value && (parseInt(tx?.payload?.transaction?.value) / (10 ** 18)).toFixed(6)} ${chain?.nativeCurrency?.symbol}`
     }
 
     useEffect(() => {

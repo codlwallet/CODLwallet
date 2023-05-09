@@ -31,23 +31,5 @@ module.exports = (async () => {
     },
   };
 
-  const wasmConfig={
-    transformer: {
-      babelTransformerPath: require.resolve('react-native-react-bridge/lib/plugin')
-    },
-    resolver: {
-      assetExts: assetExts.filter(ext => ext !== 'svg'),
-      sourceExts: [...sourceExts, 'svg'],
-      extraNodeModules: {
-        crypto,
-        http: require.resolve('stream-http'),
-        https: require.resolve('https-browserify'),
-        os: require.resolve('os-browserify/browser.js'),
-        path: require.resolve('path-browserify'),
-        stream: require.resolve('readable-stream'),
-        vm: require.resolve('vm-browserify'),
-      },
-    }
-  };
   return mergeConfig(svgConfig)
 })();

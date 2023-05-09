@@ -22,7 +22,7 @@ export default function CreateAccountScreen({ navigation, route }) {
   const walletId = route?.params?.walletId
   const from = route?.params?.from
   const nameRef = useRef(null)
-  const { selectedNetwork,passphrase } = useSelector((state) => state.auth)
+  const { selectedNetwork, passphrase } = useSelector((state) => state.auth)
   const [walletName, setWalletName] = useState(route?.params?.walletName)
   const [walletNameChanged, setWalletNameChanged] = useState(false)
   const [defaultWalletName, setDefaultWalletName] = useState(null)
@@ -47,12 +47,12 @@ export default function CreateAccountScreen({ navigation, route }) {
     };
   }, []);
   useFocusEffect(
-    useCallback(()=>{
+    useCallback(() => {
       setWalletNameFocus(false)
       setIsSelect(false)
       setShowBackArrow(false)
       let _selected = false;
-      if (typeof walletId == 'number'&&from === appConstant.selectAccount) {
+      if (typeof walletId == 'number' && from === appConstant.selectAccount) {
         _selected = true;
         setSelectWallet(true)
         if (route.params["wallet"]) {
@@ -63,30 +63,30 @@ export default function CreateAccountScreen({ navigation, route }) {
             setWalletName('');
           }
         }
-        setId(walletId ? walletId : 0)
-      }else{
+        setId(walletId ? walletId : 1)
+      } else {
         setSelectWallet(false)
       }
       getAccountsData().then(res => {
         if (res.status) {
           setAccountData(res.data);
-          let _key = 0;
+          let _key = 1;
           if (!walletName) {
             if (res.data.isHidden) {
-              _key = res.data.defaultAccountNameIndex ? res.data.defaultAccountNameIndex.hidden:0;
-            } else { 
-              _key = res.data.defaultAccountNameIndex ? res.data.defaultAccountNameIndex.general:0;
+              _key = res.data.defaultAccountNameIndex ? res.data.defaultAccountNameIndex.hidden : 1;
+            } else {
+              _key = res.data.defaultAccountNameIndex ? res.data.defaultAccountNameIndex.general : 1;
             }
-            setDefaultWalletName(`${Config.name} ${!_selected?_key:walletId}`)
-            setWalletName(`${Config.name} ${!_selected?_key:walletId}`)
+            setDefaultWalletName(`${Config.name} ${!_selected ? _key : walletId}`)
+            setWalletName(`${Config.name} ${!_selected ? _key : walletId}`)
           } else {
-            setDefaultWalletName(!/codl wallet/i.test(walletName)?walletName:`${Config.name} ${walletId}`)
-            setWalletName(!/codl wallet/i.test(walletName)?walletName:`${Config.name} ${walletId}`)
+            setDefaultWalletName(!/codl wallet/i.test(walletName) ? walletName : `${Config.name} ${walletId}`)
+            setWalletName(!/codl wallet/i.test(walletName) ? walletName : `${Config.name} ${walletId}`)
           }
         }
       })
       return () => { }
-    },[walletId])
+    }, [walletId])
   )
 
 
@@ -133,12 +133,12 @@ export default function CreateAccountScreen({ navigation, route }) {
       return;
     }
     if (selectedNetwork) {
-      if(route.params.wallet){
-        let _newWallet=route.params.wallet;
-        _newWallet.name=walletName;
-        createNewAccount(_newWallet,accountData?.isHidden,passphrase).then(res => {
+      if (route.params.wallet) {
+        let _newWallet = route.params.wallet;
+        _newWallet.name = walletName;
+        createNewAccount(_newWallet, accountData?.isHidden, passphrase).then(res => {
           if (res.status) {
-            if(defaultWalletName&&defaultWalletName===walletName) setDefaultAccountNameIndex();
+            if (defaultWalletName && defaultWalletName === walletName) setDefaultAccountNameIndex();
             navigation.navigate(appConstant.accountDetails, {
               walletName: walletName,
               walletAddress: walletAddress,
@@ -161,7 +161,7 @@ export default function CreateAccountScreen({ navigation, route }) {
     setWalletNameFocus(false)
     navigation.navigate(appConstant.selectAccount, {
       name: name,
-      walletName: walletNameChanged&&walletName,
+      walletName: walletNameChanged && walletName,
       walletId: walletId,
       onGoBack: () => {
         setWalletNameFocus(false)
@@ -187,10 +187,10 @@ export default function CreateAccountScreen({ navigation, route }) {
           value={walletName}
           ref={nameRef}
           placeholderTextColor={walletNameFocus ? colors.black : colors.white}
-          onChangeText={(e)=>{
-            if(e.length<=20){
+          onChangeText={(e) => {
+            if (e.length <= 20) {
               setWalletName(e)
-              !walletNameChanged&&setWalletNameChanged(true)
+              !walletNameChanged && setWalletNameChanged(true)
             }
           }}
           keyboardType={'default'}
@@ -215,7 +215,7 @@ export default function CreateAccountScreen({ navigation, route }) {
                 : colors.gray,
           }]}
           rightIcon={
-            walletName && !walletNameFocus &&<TouchableOpacity>
+            walletName && !walletNameFocus && <TouchableOpacity>
               {walletNameFocus ?
                 <SvgIcons.BlackCheck height={hp(4)} width={hp(2.5)} /> :
                 <SvgIcons.Check height={hp(4)} width={hp(2.5)} />
@@ -225,15 +225,15 @@ export default function CreateAccountScreen({ navigation, route }) {
         />
         <TouchableOpacity style={[styles.buttonContainer, { backgroundColor: isSelect ? colors.white : colors.gray }]} onPress={handleSelectWalletClick}>
           {walletAddress ? <>
-          <View style={[styles.numberContainer, { backgroundColor: isSelect ? colors.black : colors.white }]}>
-            <FontText name={"inter-bold"} size={normalize(15)} color={isSelect ? 'white' : 'black'}>
+            <View style={[styles.numberContainer, { backgroundColor: isSelect ? colors.black : colors.white }]}>
+              <FontText name={"inter-bold"} size={normalize(15)} color={isSelect ? 'white' : 'black'}>
                 {id}
+              </FontText>
+            </View>
+            <FontText name={"inter-regular"} size={normalize(22)} color={isSelect ? 'black' : 'white'} pRight={selectWallet || showBackArrow ? hp(9) : hp(13)} >
+
+              {walletAddress.replace(walletAddress.substring(7, 38), `...`)}
             </FontText>
-          </View>
-          <FontText name={"inter-regular"} size={normalize(22)} color={isSelect ? 'black' : 'white'} pRight={selectWallet || showBackArrow ? hp(9) : hp(13)} >
-            
-            {walletAddress.replace(walletAddress.substring(7, 38), `...`)}
-          </FontText>
           </> :
             <FontText name={"inter-regular"} size={normalize(22)} color={isSelect ? 'black' : 'white'} pRight={!isSelect ? hp(13) : hp(9)} >
               {t('select_wallet')}

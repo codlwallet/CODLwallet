@@ -18,7 +18,7 @@ const PopUp = ({message, title, onConfirmPressed}) => (
     animationType={'none'}
     visible={true}
     onRequestClose={() => {
-      console.log('close modal');
+      // console.log('close modal');
     }}>
     <View style={styles.background}>
       <View style={[styles.container]}>
