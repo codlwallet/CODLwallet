@@ -17,6 +17,7 @@ import RnBgTask from 'react-native-bg-thread';
 import { useFocusEffect } from '@react-navigation/native'
 import PopUp from '../../components/common/AlertBox'
 import { setLoading } from '../../redux/slices/authSlice'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 export default function WelcomePurchaseScreen({ navigation, route }) {
     const { t } = useTranslation();
@@ -94,22 +95,22 @@ export default function WelcomePurchaseScreen({ navigation, route }) {
     }
 
     const onSubmitPin = async () => {
-        // await AsyncStorage.setItem("hidden", JSON.stringify(isEnabled))
-        // if (enterBtnValidation()) {
-        //     Keyboard.dismiss()
-        //     setIsEnabled(false)
-        //     dispatch(setLoading(true));
-        //     RnBgTask.runInBackground_withPriority("MAX", () => {
-        //         createAccounts(password).then(res=>{
-        //             if(res.state){
-        //                 dispatch(setLoading(false))
-        //             }
-        //         })
-        //     })
-        navigation.navigate(appConstant.hiddenWallet, {
-            passphrase: password
-        })
-        // }
+        await AsyncStorage.setItem("hidden", JSON.stringify(isEnabled))
+        if (enterBtnValidation()) {
+            Keyboard.dismiss()
+            setIsEnabled(false)
+            dispatch(setLoading(true));
+            RnBgTask.runInBackground_withPriority("MAX", () => {
+                createAccounts(password).then(res => {
+                    if (res.state) {
+                        dispatch(setLoading(false))
+                    }
+                })
+            })
+            navigation.navigate(appConstant.hiddenWallet, {
+                passphrase: password
+            })
+        }
     }
 
     const handleEnterClick = () => {

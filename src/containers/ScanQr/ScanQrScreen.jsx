@@ -195,10 +195,9 @@ export default function ScanQrScreen({ navigation, route }) {
                                 <View style={{ position: 'absolute', justifyContent: 'center', alignItems: 'center' }}>
                                     <Image source={require('../../assets/images/frame.png')} style={{ ...styles.image, backgroundColor: parsingQR ? 'black' : 'transparent' }} />
                                     {parsingQR &&
-
-                                        <View style={{ position: 'absolute', top: hp(16) }}>
+                                        <View style={{ position: 'absolute', }}>
                                             <ActivityIndicator animating={!!parsingQR} size="large" color="#ffffff" />
-                                            <FontText name={"inter-regular"} size={normalize(22)} color="white" pTop={hp(1)}>
+                                            <FontText name={"inter-regular"} size={normalize(22)} color="white" >
                                                 {t('analyzing')}
                                             </FontText>
                                         </View>
