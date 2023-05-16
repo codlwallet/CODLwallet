@@ -53,7 +53,7 @@ export default function BroadcastTransactionScreen({ navigation, route }) {
                 {item?.id === 1 ?
                     <View style={styles.scannerContainer}>
                         <View style={styles.walletHeaderView}>
-                            <FontText name={"inter-bold"} size={normalize(11)} color="black" textTransform={'uppercase'}>
+                            <FontText name={"inter-bold"} size={normalize(11)} color="black">
                                 {t("signedTX")}
                             </FontText>
                         </View>

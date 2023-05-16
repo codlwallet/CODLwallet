@@ -195,30 +195,30 @@ export default function MainScreen({ navigation, route }) {
                 {!hideMenu ?
                     <>
                         {networks.map((item, index) => {
-                                return (
-                                    <TouchableOpacity style={styles.buttonContainer} key={index} onPress={() => handleMainListClick(item)} >
-                                        <View>
-                                            {item.value === appConstant.bitcoin ?
-                                                <SvgIcons.Bitcoin height={hp(6)} width={hp(4)} /> :
-                                                item.value === appConstant.ethereum ?
-                                                    <Image source={item.image} style={{ width: hp(4), height: hp(6.5), }} /> :
-                                                    item.value === appConstant.solana ?
-                                                        <SvgIcons.Solana height={hp(6)} width={hp(4)} /> :
-                                                        item.value === appConstant.avalanche ?
-                                                            <View style={{ backgroundColor: colors.gray }}>
-                                                                <Image source={item.image} style={{ height: hp(7), width: hp(7), left: wp(-1.5) }} />
-                                                            </View> :
-                                                            item.value === appConstant.polygon ?
-                                                                <SvgIcons.Poly height={hp(6)} width={hp(4.5)} /> :
-                                                                <Image source={item.image} style={{ width: hp(5), height: wp(8.5), }} />
-                                            }
-                                        </View>
-                                        <FontText size={normalize(25)} color={'white'} name={'inter-regular'} pLeft={wp(5)} style={{ right: item.value === appConstant.avalanche ? wp(4.5) : 0 }}>
-                                            {i18n.language === 'tr' ? item?.name : item?.value}
-                                        </FontText>
-                                    </TouchableOpacity>
-                                )
-                            })
+                            return (
+                                <TouchableOpacity style={styles.buttonContainer} key={index} onPress={() => handleMainListClick(item)} >
+                                    <View>
+                                        {item.value === appConstant.ethereum ?
+                                            <Image source={item.image} style={{ width: hp(3.5), height: hp(6), }} /> :
+                                            item.value === appConstant.avalanche ?
+                                                <Image source={item.image} style={{ height: hp(3.7), width: hp(4.4), }} /> :
+                                                item.value === appConstant.polygon ?
+                                                    <SvgIcons.Poly height={hp(6)} width={hp(4.5)} /> :
+                                                    item.value === appConstant.bsc ?
+                                                        <Image source={item.image} style={{ height: hp(5.2), width: hp(4.5) }} /> :
+                                                        item.value === appConstant.arbitrum ?
+                                                            <Image source={item.image} style={{ height: hp(5.6), width: hp(4.9) }} /> :
+                                                            item.value === appConstant.optimism ?
+                                                                <Image source={item.image} style={{ height: hp(5.09), width: hp(5.1), }} /> :
+                                                                <Image source={item.image} style={{ width: hp(5), height: wp(5.5), }} />
+                                        }
+                                    </View>
+                                    <FontText size={normalize(25)} color={'white'} name={'inter-regular'} pLeft={wp(5)} >
+                                        {item?.value}
+                                    </FontText>
+                                </TouchableOpacity>
+                            )
+                        })
                         }
                     </>
                     :

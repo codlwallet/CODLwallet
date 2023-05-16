@@ -78,7 +78,6 @@ const Header = props => {
                 size={normalize(15)}
                 name="inter-bold"
                 color={'black'}
-                textTransform={'uppercase'}
                 lines={1}
                 pLeft={pLeft}>
                 {t('hidden')}

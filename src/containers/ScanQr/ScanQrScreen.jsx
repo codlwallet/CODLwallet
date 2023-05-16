@@ -184,14 +184,16 @@ export default function ScanQrScreen({ navigation, route }) {
                                         handleScan(event.nativeEvent.codeStringValue)
                                     }
                                 />
-                                <View style={{ position: 'absolute' }}>
+                                <View style={{ position: 'absolute', justifyContent: 'center', alignItems: 'center' }}>
                                     <Image source={require('../../assets/images/frame.png')} style={{ ...styles.image, backgroundColor: parsingQR ? 'black' : 'transparent' }} />
-                                    {parsingQR && <View style={{ position: 'absolute', top: hp(15) }}>
-                                        <ActivityIndicator animating={!!parsingQR} size="large" color="#ffffff" />
-                                        <FontText name={"inter-regular"} style={{ ...styles.centerText, marginTop: hp(3) }} size={normalize(22)} color="white"  >
-                                            {t('analyzing')}
-                                        </FontText>
-                                    </View>}
+                                    {parsingQR &&
+                                        <View style={{ position: 'absolute', }}>
+                                            <ActivityIndicator animating={!!parsingQR} size="large" color="#ffffff" />
+                                            <FontText name={"inter-regular"} size={normalize(22)} color="white" >
+                                                {t('analyzing')}
+                                            </FontText>
+                                        </View>
+                                    }
                                 </View>
                             </View>
 
@@ -251,21 +253,18 @@ const styles = StyleSheet.create({
         paddingHorizontal: wp(3.5),
         alignItems: 'center'
     },
-    centerText: {
-        textAlign: 'center',
-        width: wp(80),
-        paddingVertical: hp(5)
-    },
+    // centerText: {
+    //     textAlign: 'center',
+    //     paddingVertical: hp(5),
+    //     backgroundColor: 'green',
+    // },
     subContainer: {
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
     },
     scannerContainer: {
-        // height: hp(45),
-        // width: hp(45),
         borderRadius: 10,
-        // backgroundColor: colors.gray,
         padding: 6,
         borderRadius: 20,
         justifyContent: 'center',
