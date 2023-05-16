@@ -8,11 +8,10 @@ import Input from '../../components/common/Input'
 import SvgIcons from '../../assets/SvgIcons'
 import DeviceInfo from 'react-native-device-info';
 import { initial, signup } from '../../storage'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { setUser } from '../../redux/slices/authSlice'
 import FontText from '../../components/common/FontText'
 import Button from '../../components/common/Button'
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useFocusEffect } from '@react-navigation/native'
 import { useTranslation } from 'react-i18next'
 import PopUp from '../../components/common/AlertBox'

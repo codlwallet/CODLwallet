@@ -122,23 +122,23 @@ export default function SelectAccountScreen({ navigation, route }) {
                             }
 
                             return (
-                                <TouchableOpacity key={item.publicKey} style={[styles.buttonContainer, { backgroundColor: index + (page - 1) * dispCnt == selectIndex ? colors.white : colors.gray }]} onPress={() => {
+                                <TouchableOpacity key={item.publicKey} style={[styles.buttonContainer, { backgroundColor: index + (page - 1) * dispCnt+1 == selectIndex ? colors.white : colors.gray }]} onPress={() => {
                                     if (!selected) {
-                                        setSelectIndex(index + (page - 1) * dispCnt)
+                                        setSelectIndex(index + (page - 1) * dispCnt+1)
                                         setWallet(item)
-                                        setWalletId(index + (page - 1) * dispCnt)
+                                        setWalletId(index + (page - 1) * dispCnt+1)
                                     }
                                 }}>
-                                    <View style={[styles.numberContainer, { backgroundColor: index + (page - 1) * dispCnt == selectIndex || selected ? colors.black : colors.white }]}>
-                                        <FontText name={"inter-bold"} size={normalize(15)} color={index + (page - 1) * dispCnt == selectIndex || selected ? 'white' : 'black'}>
-                                            {index + (page - 1) * dispCnt}
+                                    <View style={[styles.numberContainer, { backgroundColor: index + (page - 1) * dispCnt+1 == selectIndex || selected ? colors.black : colors.white }]}>
+                                        <FontText name={"inter-bold"} size={normalize(15)} color={index + (page - 1) * dispCnt+1 == selectIndex || selected ? 'white' : 'black'}>
+                                            {index + (page - 1) * dispCnt+1}
                                         </FontText>
                                     </View>
                                     <View>
-                                        {_name && <FontText pRight={index + (page - 1) * dispCnt == selectIndex ? wp(16) : wp(26)} name={"inter-bold"} size={normalize(22)} color={index + (page - 1) * dispCnt == selectIndex ? 'black' : 'white'}>
+                                        {_name && <FontText pRight={index + (page - 1) * dispCnt+1 == selectIndex ? wp(16) : wp(26)} name={"inter-bold"} size={normalize(22)} color={index + (page - 1) * dispCnt+1 == selectIndex ? 'black' : 'white'}>
                                             {_name}
                                         </FontText>}
-                                        <FontText style={{width:wp(60)}} name={"inter-regular"} size={normalize(selected ? 12 : 15)} color={index + (page - 1) * dispCnt == selectIndex ? 'black' : 'white'}>
+                                        <FontText style={{width:wp(60)}} name={"inter-regular"} size={normalize(selected ? 12 : 15)} color={index + (page - 1) * dispCnt+1 == selectIndex ? 'black' : 'white'}>
 
                                             {
                                                 selected ?
@@ -150,7 +150,7 @@ export default function SelectAccountScreen({ navigation, route }) {
                                         </FontText>
                                     </View>
                                     
-                                    {(index + (page - 1) * dispCnt == selectIndex && !selected) && 
+                                    {(index + (page - 1) * dispCnt+1 == selectIndex && !selected) && 
                                     <View>
                                         <SvgIcons.BlackCheck height={hp(4)} width={hp(2.5)} />
                                     </View>}

@@ -1,5 +1,5 @@
 import { BackHandler, Keyboard, KeyboardAvoidingView, StyleSheet, TouchableOpacity, View } from 'react-native'
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import Header from '../../components/common/Header'
 import colors from '../../assets/colors'
 import appConstant from '../../helper/appConstant'

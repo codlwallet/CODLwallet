@@ -52,6 +52,7 @@
     "connect": "Connect",
     "AboutCODL": "About CODL",
     "language": "Language",
+    "network": "Network",
     "networks": "Networks",
     "recoveryCheck": "Recovery Check",
     "changePIN": "Change PIN",

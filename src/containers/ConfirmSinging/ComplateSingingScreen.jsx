@@ -19,7 +19,7 @@ export default function ComplateSingingScreen({ navigation, route }) {
     const from = route?.params?.from
     const { t } = useTranslation();
     const [signedTxUR, setSignedTxUR] = useState(null)
-    const { signdata,selectedAccount }=useSelector(state=>state.auth)
+    const { signdata, selectedAccount } = useSelector(state => state.auth)
 
     useEffect(() => {
         BackHandler.addEventListener('hardwareBackPress', backAction);
@@ -29,19 +29,18 @@ export default function ComplateSingingScreen({ navigation, route }) {
     }, []);
 
     useEffect(() => {
-        signdata&&selectedAccount&&encodeSignedTxToQR({
+        signdata && selectedAccount && encodeSignedTxToQR({
             _serialized: signdata.serialized,
-            tx:signdata.tx.payload.transaction,
+            tx: signdata.tx.payload.transaction,
             requestId: signdata.tx.requestId,
             type: signdata.tx.type,
-            privateKey:selectedAccount.privateKey
+            privateKey: selectedAccount.privateKey
         }).then(res => {
-            console.log('res', res)
-            if(res.state){
+            if (res.state) {
                 setSignedTxUR(res.data)
             }
         })
-      return () => {}
+        return () => { }
     }, [])
 
     const backAction = () => {
@@ -54,10 +53,10 @@ export default function ComplateSingingScreen({ navigation, route }) {
     };
 
     const handlebroadcastTransactionBtn = () => {
-        signedTxUR&&navigation.navigate(appConstant.broadcastTransaction, {
+        signedTxUR && navigation.navigate(appConstant.broadcastTransaction, {
             walletName: walletName,
-            tx:signdata.tx,
-            chain:signdata.chain,
+            tx: signdata.tx,
+            chain: signdata.chain,
             signedTxUR,
             walletAddress
         })

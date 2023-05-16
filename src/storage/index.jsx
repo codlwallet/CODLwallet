@@ -1,7 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Config from '../constants';
 import { mainData } from "../constants/data";
-import appConstant from "../helper/appConstant";
 import bip39 from 'react-native-bip39';
 import CHAINLIST from "../assets/chainlist.json";
 
@@ -83,7 +82,7 @@ export const generateETHIdV2 = (length) => {
   return result;
 }
 
-export const decodeTxQR = async (_scanedqr,_passphrase) => {
+export const decodeTxQR = async (_scanedqr, _passphrase) => {
   const decoder = new URRegistryDecoder()
   const part = _scanedqr;
   decoder.receivePart(part)
@@ -98,10 +97,8 @@ export const decodeTxQR = async (_scanedqr,_passphrase) => {
     signdata = txdata.getSignData()
 
     let seeds = await getSeedFromNemonic(_passphrase)
-    console.log('seeds', seeds)
     const hdwallet = hdkey.fromMasterSeed(seeds);
     const wallet = hdwallet.derivePath(`m/${txdata.getDerivationPath().toString('hex')}`).getWallet();
-    console.log('wallet', `0x${wallet.getAddress().toString('hex')}`)
 
     ownRequestId = generateETHIdV2(8)
     sourceFingerprint = txdata.derivationPath.getSourceFingerprint().toString('hex');
@@ -184,8 +181,6 @@ export const encodeSignedTxToQR = async (data) => {
     let ethTx = TransactionFactory.fromSerializedData(Buffer.from(_serialized, 'hex'));
 
     if (type == TX_TYPE[155]) {
-      console.log('type', type)
-      console.log('tx', tx)
       const common = Common.forCustomChain(Chain.Mainnet, { chainId: tx.chainId })
       ethTx = new Transaction(tx, { common });
     }
@@ -200,15 +195,12 @@ export const encodeSignedTxToQR = async (data) => {
     const idBuffer = Buffer.from(requestId, 'hex');
     const ethSignature = new ETHSignature(rlpSignatureData, Buffer.from(idBuffer));
     let qr = ethSignature.toUREncoder(Number.MAX_SAFE_INTEGER).nextPart().toUpperCase();
-    console.log('qr', qr)
-    console.log('qr.length', qr.length)
 
     return {
       state: true,
       data: qr
     }
   } catch (error) {
-    console.log('error', error)
     return {
       state: false
     }

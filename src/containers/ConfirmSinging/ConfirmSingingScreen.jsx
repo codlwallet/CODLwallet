@@ -7,7 +7,6 @@ import Input from '../../components/common/Input'
 import SvgIcons from '../../assets/SvgIcons'
 import FontText from '../../components/common/FontText'
 import Button from '../../components/common/Button'
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useTranslation } from 'react-i18next'
 import appConstant from '../../helper/appConstant'
 import PopUp from '../../components/common/AlertBox'
