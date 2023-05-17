@@ -144,7 +144,7 @@ export default function MainScreen({ navigation, route }) {
                     if (_accounts.length !== 1) {
                         navigation.navigate(appConstant.accountList, {
                             name: item?.value,
-                            headerName: i18n.language == 'tr' ? item?.name : item?.value,
+                            headerName: item?.value,
                             accountList: _accounts,
                             icon: item.image
                         })
@@ -153,7 +153,7 @@ export default function MainScreen({ navigation, route }) {
                         navigation.navigate(appConstant.accountDetails, {
                             name: item?.value,
                             walletName: _accounts[0].name,
-                            headerName: i18n.language == 'tr' ? item?.name : item?.value,
+                            headerName: item?.value,
                             from: appConstant.main,
                             walletAddress: _accounts[0].publicKey
                         })
@@ -165,7 +165,7 @@ export default function MainScreen({ navigation, route }) {
                     if (_accounts.length !== 1) {
                         navigation.navigate(appConstant.accountList, {
                             name: item?.value,
-                            headerName: i18n.language == 'tr' ? item?.name : item?.value,
+                            headerName: item?.value,
                             accountList: _accounts,
                             icon: item.image
                         })
@@ -174,7 +174,7 @@ export default function MainScreen({ navigation, route }) {
                         navigation.navigate(appConstant.accountDetails, {
                             name: item?.value,
                             walletName: _accounts[0].name,
-                            headerName: i18n.language == 'tr' ? item?.name : item?.value,
+                            headerName: item?.value,
                             from: appConstant.main,
                             walletAddress: _accounts[0].publicKey
                         })

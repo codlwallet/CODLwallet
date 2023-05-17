@@ -7897,11 +7897,6 @@ react-native-svg@^13.8.0:
     css-select "^5.1.0"
     css-tree "^1.1.3"
 
-react-native-vision-camera@^2.13.0:
-  version "2.15.4"
-  resolved "https://registry.yarnpkg.com/react-native-vision-camera/-/react-native-vision-camera-2.15.4.tgz#821f0505fc8c63b87c1ae4697d2bb4f670333576"
-  integrity sha512-SJXSWH1pu4V3Kj4UuX/vSgOxc9d5wb5+nHqBHd+5iUtVyVLEp0F6Jbbaha7tDoU+kUBwonhlwr2o8oV6NZ7Ibg==
-
 react-native-wasm@^0.1.3:
   version "0.1.3"
   resolved "https://registry.yarnpkg.com/react-native-wasm/-/react-native-wasm-0.1.3.tgz#097216a71907c1345d01c779e37b4408b2c052b6"
@@ -9282,16 +9277,6 @@ vary@~1.1.2:
   version "1.1.2"
   resolved "https://registry.npmjs.org/vary/-/vary-1.1.2.tgz"
   integrity sha512-BNGbWLfd0eUPabhkXUVm0j8uuvREyTh5ovRa/dyow/BqAbZJyC+5fU+IzQOzmAKzYqYRAISoRhdQr3eIZ/PXqg==
-
-vision-camera-code-scanner@^0.2.0:
-  version "0.2.0"
-  resolved "https://registry.yarnpkg.com/vision-camera-code-scanner/-/vision-camera-code-scanner-0.2.0.tgz#8adc0694319a17f6a95f6dfacc02ab7ac29b4742"
-  integrity sha512-H5hVkXfbIcGdg9YlhuS8Y/xDX5e32Vo6eK5FyDQsE9AGVjlqEHMmSLHZg7BX8UUm4ADmiAZc8wzc4n8TUqGr0g==
-
-vision-camera-dynamsoft-barcode-reader@^0.6.0:
-  version "0.6.0"
-  resolved "https://registry.yarnpkg.com/vision-camera-dynamsoft-barcode-reader/-/vision-camera-dynamsoft-barcode-reader-0.6.0.tgz#19eb32e407ddf18ae3b29edd414ac2c0a6509349"
-  integrity sha512-noJphbhZ/qRO4Pt3oUSVABmiTmTgBmmnkfyvU09Ppi3HaqghsZ1CpOOT3scBI0Sc9RIjLP8gm8kfYRUT7+cSXA==
 
 vlq@^1.0.0:
   version "1.0.1"

@@ -72,7 +72,6 @@
     "react-native-snap-carousel": "^3.9.1",
     "react-native-splash-screen": "^3.3.0",
     "react-native-svg": "^13.8.0",
-    "react-native-vision-camera": "^2.13.0",
     "react-native-wasm": "^0.1.3",
     "react-native-webview": "^12.0.2",
     "react-qr-reader": "^3.0.0-beta-1",
@@ -83,8 +82,6 @@
     "stream-browserify": "1.0.0",
     "stream-http": "^3.2.0",
     "toggle-switch-react-native": "^3.3.0",
-    "vision-camera-code-scanner": "^0.2.0",
-    "vision-camera-dynamsoft-barcode-reader": "^0.6.0",
     "vm-browserify": "1.1.2"
   },
   "devDependencies": {
