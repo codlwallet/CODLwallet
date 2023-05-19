@@ -80,7 +80,7 @@ export default function RecoveryCheckScreen({ navigation }) {
     const keyboardHideListener = Keyboard.addListener(
         'keyboardDidHide',
         () => {
-            if (!walletData?.slice(0,numberValue).some((item) => !item.name)) {
+            if (!walletData?.slice(0, numberValue).some((item) => !item.name)) {
                 setBtnValue(appConstant.confirm)
                 setIsEdit(false)
             }
@@ -94,16 +94,16 @@ export default function RecoveryCheckScreen({ navigation }) {
     );
 
     const handleConfirmClick = async () => {
-        let _flag=true;
+        let _flag = true;
         for (const key in nemonic) {
-            if(walletData[key].name!=nemonic[key].name){
-                _flag=false;
+            if (walletData[key].name != nemonic[key].name) {
+                _flag = false;
                 break;
             }
         }
-        if(_flag){
+        if (_flag) {
             navigation.navigate(appConstant.main)
-        }else{
+        } else {
             setAlertTitle('Recovery Check Fail!')
             setAlertMessage('Your recovery check is not match!')
             setShowAlert(true)
@@ -163,7 +163,7 @@ export default function RecoveryCheckScreen({ navigation }) {
     return (
         <View style={styles.container} >
             <Header title={t("recoveryCheck")} showRightIcon RightIcon={'info'} showBackIcon onBackPress={backAction} statusBarcolor={colors.red} />
-            {numberValue>0&&<View style={[styles.subContainer, { bottom: showKeyboard ? hp(4) : 0 }]}>
+            {numberValue > 0 && <View style={[styles.subContainer, { bottom: showKeyboard ? hp(4) : 0 }]}>
                 <WalletCard style={styles.walletCardContainer}
                     titleColor={'red'}
                     title={t("recoverySeeds")}
@@ -184,25 +184,21 @@ export default function RecoveryCheckScreen({ navigation }) {
             <>
                 <Button
                     flex={null}
-                    height={hp(8.5)}
-                    bgColor={!walletData?.slice(0,numberValue).some((item) => !item.name) && btnValue === appConstant.confirm ? 'white' : 'red-open'}
+                    bgColor={!walletData?.slice(0, numberValue).some((item) => !item.name) && btnValue === appConstant.confirm ? 'white' : 'red-open'}
                     type="highlight"
                     borderRadius={11}
-                    width={wp(90)}
-                    disabled={walletData?.slice(0,numberValue).some((item) => !item.name)}
+                    disabled={walletData?.slice(0, numberValue).some((item) => !item.name)}
                     style={[styles.button, { bottom: hp(14) }]}
                     onPress={handleConfirmClick}
                 >
-                    <FontText name={"inter-medium"} size={normalize(22)} color={!walletData?.slice(0,numberValue)?.some((item) => !item.name) && btnValue === appConstant.confirm ? "red" : 'white'}>
+                    <FontText name={"inter-medium"} size={normalize(22)} color={!walletData?.slice(0, numberValue)?.some((item) => !item.name) && btnValue === appConstant.confirm ? "red" : 'white'}>
                         {t("done")}
                     </FontText>
                 </Button>
                 <Button
                     flex={null}
-                    height={hp(8.5)}
                     bgColor={btnValue === appConstant.edit ? 'white' : 'red-open'}
                     type="highlight"
-                    width={wp(90)}
                     borderRadius={11}
                     style={styles.button}
                     onPress={handleEditClick}

@@ -157,7 +157,7 @@ export default function ChangeUserDetailsScreen({ navigation, route }) {
         if (from === appConstant.changeName) {
             if (checkNameValidation()) {
                 // await AsyncStorage.setItem('LoginData', JSON.stringify(data));
-                changeUserData('name',data.name).then(async res => {
+                changeUserData('name', data.name).then(async res => {
                     if (res.status) {
                         dispatch(setUser(res.user))
                         navigation.goBack()
@@ -168,7 +168,7 @@ export default function ChangeUserDetailsScreen({ navigation, route }) {
         else {
             if (checkPinValidation()) {
                 // await AsyncStorage.setItem('LoginData', JSON.stringify(data));
-                changeUserData('pin',data.pin).then(async res => {
+                changeUserData('pin', data.pin).then(async res => {
                     if (res.status) {
                         dispatch(setUser(res.user))
                         navigation.navigate(appConstant.complateSeeds, {
@@ -353,9 +353,7 @@ export default function ChangeUserDetailsScreen({ navigation, route }) {
                 }
                 <Button
                     flex={null}
-                    height={hp(8.5)}
                     type="highlight"
-                    width={wp(90)}
                     borderRadius={11}
                     bgColor="white"
                     onPress={handleDoneBtn}

@@ -363,11 +363,9 @@ export default function SetupUserScreen({ navigation, route }) {
                     }
                     <Button
                         flex={null}
-                        height={hp(8.5)}
                         type="highlight"
                         borderRadius={11}
                         bgColor="white"
-                        width={wp(90)}
                         onPress={handleProceedBtn}
                         style={styles.buttonView}>
                         <FontText name={"inter-medium"} size={normalize(22)} color="black">

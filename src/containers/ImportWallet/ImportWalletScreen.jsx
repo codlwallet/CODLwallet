@@ -148,39 +148,39 @@ export default function ImportWalletScreen({ navigation, route }) {
     const renderWalletData = (item, index) => {
         return (
             // <>
-                <Input
-                    key={index}
-                    autoFocus={isEdit}
-                    withLeftIcon
-                    maxLength={8}
-                    editable={showConfirm && !isEdit ? false : true}
-                    ref={el => cardRef.current[index] = el}
-                    leftIcon={
-                        <View style={[styles.numberContainer, { backgroundColor: item.name === '' ? colors.white : colors.red }]}>
-                            <FontText name={"inter-bold"} size={normalize(12)} color={item.name === '' ? 'red' : 'white'}>
-                                {item?.id}
-                            </FontText>
-                        </View>
+            <Input
+                key={index}
+                autoFocus={isEdit}
+                withLeftIcon
+                maxLength={8}
+                editable={showConfirm && !isEdit ? false : true}
+                ref={el => cardRef.current[index] = el}
+                leftIcon={
+                    <View style={[styles.numberContainer, { backgroundColor: item.name === '' ? colors.white : colors.red }]}>
+                        <FontText name={"inter-bold"} size={normalize(12)} color={item.name === '' ? 'red' : 'white'}>
+                            {item?.id}
+                        </FontText>
+                    </View>
+                }
+                placeholder={''}
+                value={item?.name}
+                autoCapitalize={'none'}
+                secureTextEntry={index == textIndex ? false : showConfirm ? false : true}
+                onSubmit={() => { walletData[index].name !== '' && index !== walletData.slice(0, numberValue).length - 1 ? cardRef.current[index + 1].focus() : Keyboard.dismiss() }}
+                onFocus={() => { cardRef.current[index].focus(), setTextIndex(index) }}
+                multiline={false}
+                autoCorrect={false}
+                inputStyle={[styles.textInput, { color: item.name == '' ? colors.white : colors.red }]}
+                onChangeText={text => {
+                    if (text === '' || reg.test(text)) {
+                        walletData[index].name = text.toLowerCase();
+                        setWalletData([...walletData]);
                     }
-                    placeholder={''}
-                    value={item?.name}
-                    autoCapitalize={'none'}
-                    secureTextEntry={index == textIndex ? false : showConfirm ? false : true}
-                    onSubmit={() => { walletData[index].name !== '' && index !== walletData.slice(0, numberValue).length - 1 ? cardRef.current[index + 1].focus() : Keyboard.dismiss() }}
-                    onFocus={() => { cardRef.current[index].focus(), setTextIndex(index) }}
-                    multiline={false}
-                    autoCorrect={false}
-                    inputStyle={[styles.textInput, { color: item.name == '' ? colors.white : colors.red }]}
-                    onChangeText={text => {
-                        if (text === '' || reg.test(text)) {
-                            walletData[index].name = text.toLowerCase();
-                            setWalletData([...walletData]);
-                        }
-                    }}
-                    keyboardType={'default'}
-                    returnKeyType={'next'}
-                    style={[styles.inputContainer, { backgroundColor: item.name == '' ? colors.red : colors.white }]}
-                />
+                }}
+                keyboardType={'default'}
+                returnKeyType={'next'}
+                style={[styles.inputContainer, { backgroundColor: item.name == '' ? colors.red : colors.white }]}
+            />
             // </>
         )
     }
@@ -212,9 +212,9 @@ export default function ImportWalletScreen({ navigation, route }) {
             </FontText>}
             {!showConfirm && <Button
                 flex={null}
-                disabled={walletcardData&&walletcardData?.some((item) => !item.name)}
+                disabled={walletcardData && walletcardData?.some((item) => !item.name)}
                 height={hp(8.5)}
-                bgColor={!(walletcardData&&walletcardData?.some((item) => !item.name)) ? 'white' : 'red-open'}
+                bgColor={!(walletcardData && walletcardData?.some((item) => !item.name)) ? 'white' : 'red-open'}
                 type="highlight"
                 borderRadius={11}
                 width={wp(90)}
@@ -230,12 +230,10 @@ export default function ImportWalletScreen({ navigation, route }) {
                 <>
                     <Button
                         flex={null}
-                        height={hp(8.5)}
                         bgColor={!walletcardData?.some((item) => !item.name) && btnValue === appConstant.confirm ? 'white' : 'red-open'}
                         type="highlight"
                         borderRadius={11}
                         disabled={walletcardData?.some((item) => !item.name)}
-                        width={wp(90)}
                         style={[styles.button, { marginBottom: hp(2) }]}
                         onPress={handleConfirmClick}
                     >
@@ -245,11 +243,9 @@ export default function ImportWalletScreen({ navigation, route }) {
                     </Button>
                     <Button
                         flex={null}
-                        height={hp(8.5)}
                         bgColor={btnValue === appConstant.edit ? 'white' : 'red-open'}
                         type="highlight"
                         borderRadius={11}
-                        width={wp(90)}
                         style={styles.button}
                         onPress={handleEditClick}
                     >

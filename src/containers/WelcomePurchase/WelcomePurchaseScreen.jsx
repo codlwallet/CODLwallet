@@ -204,8 +204,6 @@ export default function WelcomePurchaseScreen({ navigation, route }) {
             </KeyboardAvoidingView>
             <Button
                 flex={null}
-                height={hp(8.5)}
-                width={wp(90)}
                 type="highlight"
                 borderRadius={11}
                 bgColor="white"

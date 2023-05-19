@@ -24,6 +24,7 @@ const WelcomeScreen = ({ navigation, route }) => {
                 if (res.status) {
                     if (res.isExist) {
                         if (from == appConstant.deleteEverything) setFrom(null);
+                        if (from == appConstant.setupWallet) setFrom(null);
                         else if (!from) setFrom(appConstant.welcomePurchase);
                         dispatch(setUser(res.user));
                     } else {
@@ -47,11 +48,9 @@ const WelcomeScreen = ({ navigation, route }) => {
                 <SvgIcons.AppLogo />
                 <Button
                     flex={null}
-                    height={hp(8.5)}
                     type="highlight"
                     borderRadius={11}
                     bgColor="white"
-                    width={wp(90)}
                     onPress={onPressStartBtn}
                     style={styles.buttonView}>
                     <FontText name={"inter-medium"} size={normalize(22)} color="black">

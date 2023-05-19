@@ -109,7 +109,7 @@ export default function DeleteEverythingScreen({ navigation }) {
 
     const handleConfirmDeleteClick = () => {
         initial().then(() => {
-            navigation.navigate(appConstant.welcome,{
+            navigation.navigate(appConstant.welcome, {
                 from: appConstant.deleteEverything
             })
         })
@@ -131,6 +131,7 @@ export default function DeleteEverythingScreen({ navigation }) {
                 !isDone ?
                     <AttentionWarningView
                         isBgRed
+                        bgColor
                         title={isConfirm ? t("sureDeleteTitle") : t("deleteEverythingTitle")}
                         mainIcon={<SvgIcons.RedPolygon height={hp(11)} width={hp(11)} />}
                         description={t("deleteEverythingDes")}
@@ -192,9 +193,7 @@ export default function DeleteEverythingScreen({ navigation }) {
                         />
                         <Button
                             flex={null}
-                            height={hp(8.5)}
                             type="highlight"
-                            width={wp(90)}
                             borderRadius={11}
                             bgColor="white"
                             onPress={hndleDoneClick}

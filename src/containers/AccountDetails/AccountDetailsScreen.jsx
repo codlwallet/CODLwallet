@@ -87,8 +87,6 @@ export default function AccountDetailsScreen({ navigation, route }) {
                 flex={null}
                 type="highlight"
                 borderRadius={11}
-                height={hp(8.5)}
-                width={wp(90)}
                 bgColor="white"
                 onPress={handleSignClick}
                 style={styles.button}>

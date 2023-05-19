@@ -44,6 +44,7 @@ export default function AccountListScreen({ navigation, route }) {
                 navigation.navigate(appConstant.createAccount, {
                     name: name,
                     from: appConstant.accountList,
+                    accountList: accountList,
                     onGoBack: () => {
                         setShowList(true)
                     }

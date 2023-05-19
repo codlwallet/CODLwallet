@@ -105,8 +105,6 @@ export default function BroadcastTransactionScreen({ navigation, route }) {
                 type="highlight"
                 borderRadius={11}
                 bgColor="white"
-                height={hp(8.5)}
-                width={wp(90)}
                 onPress={backAction}
                 style={styles.button}>
                 <FontText name={"inter-medium"} size={normalize(22)} color="black">

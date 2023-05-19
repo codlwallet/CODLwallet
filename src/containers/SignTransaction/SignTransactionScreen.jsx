@@ -104,8 +104,6 @@ export default function SignTransactionScreen({ navigation, route }) {
             <Button
                 flex={null}
                 type="highlight"
-                height={hp(8.5)}
-                width={wp(90)}
                 borderRadius={11}
                 disabled={!isSignWalletMatch}
                 defaultOpacity={!isSignWalletMatch ? 0.7 : 1}
@@ -120,8 +118,6 @@ export default function SignTransactionScreen({ navigation, route }) {
             <Button
                 flex={null}
                 type="highlight"
-                height={hp(8.5)}
-                width={wp(90)}
                 borderRadius={11}
                 bgColor={btnValue === t("reject") ? "white" : 'gray'}
                 onPress={backAction}

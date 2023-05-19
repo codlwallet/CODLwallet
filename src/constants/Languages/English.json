@@ -144,6 +144,8 @@
     "selectWalletRequired": "Select Wallet Required",
     "selectWalletError": "You must have select account.",
     "newPinRequired": "Invalid New Pin",
-    "newPinError": "New pin must be different than old pin."
+    "newPinError": "New pin must be different than old pin.",
+    "networkError": "Please chose at least one network to display!",
+    "selectNetwork": "Select Network"
   }
 }

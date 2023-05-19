@@ -142,6 +142,8 @@
     "reorderAccounts": "Hesapları Yeniden Sırala",
     "selectWalletRequired": "Cüzdan Seçin Gerekli",
     "selectWalletError": "Seçtiğiniz hesaba sahip olmalısınız.",
-    "newPinError": "Yeni pin eski pinden farklı olmalıdır."
+    "newPinError": "Yeni pin eski pinden farklı olmalıdır.",
+    "networkError": "Lütfen görüntülenecek en az bir ağ seçin!",
+    "selectNetwork": "Ağ Seçin"
   }
 }

@@ -75,54 +75,52 @@ export default function CreateWalletScreen({ navigation, route }) {
             <View style={styles.subContainer}>
                 {
                     words.length > 0 &&
-                <WalletCard
-                    style={styles.walletCardContainer}
-                    titleColor={'red'}
-                    headerStyle={{ borderColor: colors.red }}
-                    title={t("recoverySeeds")}
-                    children={
-                        <FlatList
-                            data={words}
-                            numColumns={3}
-                            columnWrapperStyle={{ justifyContent: 'space-between' }}
-                            keyExtractor={item => {
-                                return item.toString();
-                            }}
-                            renderItem={({ item, index }) => {
-                                return (
-                                    <View key={index} style={styles.seedsContainer}>
-                                        <View style={styles.numberContainer}>
-                                            <FontText
-                                                name={'inter-bold'}
-                                                size={normalize(12)}
-                                                color={'white'}>
-                                                {index + 1}
-                                            </FontText>
+                    <WalletCard
+                        style={styles.walletCardContainer}
+                        titleColor={'red'}
+                        headerStyle={{ borderColor: colors.red }}
+                        title={t("recoverySeeds")}
+                        children={
+                            <FlatList
+                                data={words}
+                                numColumns={3}
+                                columnWrapperStyle={{ justifyContent: 'space-between' }}
+                                keyExtractor={item => {
+                                    return item.toString();
+                                }}
+                                renderItem={({ item, index }) => {
+                                    return (
+                                        <View key={index} style={styles.seedsContainer}>
+                                            <View style={styles.numberContainer}>
+                                                <FontText
+                                                    name={'inter-bold'}
+                                                    size={normalize(12)}
+                                                    color={'white'}>
+                                                    {index + 1}
+                                                </FontText>
+                                            </View>
+                                            <View style={styles.nameContainer}>
+                                                <FontText
+                                                    name={'inter-regular'}
+                                                    size={normalize(14)}
+                                                    color={'red'}
+                                                    pLeft={wp(1)}>
+                                                    {item}
+                                                </FontText>
+                                            </View>
                                         </View>
-                                        <View style={styles.nameContainer}>
-                                            <FontText
-                                                name={'inter-regular'}
-                                                size={normalize(14)}
-                                                color={'red'}
-                                                pLeft={wp(1)}>
-                                                {item}
-                                            </FontText>
-                                        </View>
-                                    </View>
-                                );
-                            }}
-                        />
-                    }
-                />
+                                    );
+                                }}
+                            />
+                        }
+                    />
                 }
             </View>
             <Button
                 flex={null}
-                height={hp(8.5)}
                 bgColor="white"
                 type="highlight"
                 borderRadius={11}
-                width={wp(90)}
                 onPress={handleProceedClick}
                 style={styles.button}
             >
