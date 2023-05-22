@@ -109,4 +109,5 @@ module.exports = {
   createNewAccount: 'Create New Account',
   reorderAccounts: 'Reorder Accounts',
   reorder: 'Reorder',
+  deletingEverything: 'Deleting Everything',
 };

@@ -47,7 +47,7 @@
     "enterPIN": "Pin Required ",
     "matchedPIN": "Pin does not matched",
     "enterSeedsCorrectly": "Did you enter the seeds correctly?",
-    "hiddenWallet": "Hidden Wallet",
+    "hiddenWallet": "HIDDEN WALLET",
     "main": "Main",
     "connect": "Connect",
     "AboutCODL": "About CODL",
@@ -146,6 +146,8 @@
     "newPinRequired": "Invalid New Pin",
     "newPinError": "New pin must be different than old pin.",
     "networkError": "Please chose at least one network to display!",
-    "selectNetwork": "Select Network"
+    "selectNetwork": "Select Network",
+    "deletingEverything": "Deleting Everything..",
+    "deletingEveryDis": "You entered the wrong pin 5 times. The device is being reset for your security."
   }
 }

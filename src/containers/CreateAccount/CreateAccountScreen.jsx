@@ -44,7 +44,6 @@ export default function CreateAccountScreen({ navigation, route }) {
   const [showCheckIcon, setShowIcon] = useState(false);
   const [walletAddress, setWalletAddress] = useState('');
   const [id, setId] = useState();
-
   const [showAlert, setShowAlert] = useState(false);
   const [alertTitle, setAlertTitle] = useState('');
   const [alertMessage, setAlertMessage] = useState('');
@@ -114,11 +113,13 @@ export default function CreateAccountScreen({ navigation, route }) {
     }, [walletId]),
   );
 
-  const backAction = () => {
+  const onPressCloseIcon = () => {
     if (from === appConstant.accountList) {
       navigation.goBack();
+      route?.params?.onGoBack();
     } else if (from === appConstant.selectAccount && accountList?.length > 0) {
       navigation.goBack();
+      route?.params?.onGoBack();
     } else {
       navigation.navigate(appConstant.main);
     }
@@ -171,6 +172,7 @@ export default function CreateAccountScreen({ navigation, route }) {
                 walletAddress: walletAddress,
                 name: name,
                 from: appConstant.createAccount,
+                accountList: accountList
               });
               setTimeout(() => {
                 setWalletName('');
@@ -192,22 +194,18 @@ export default function CreateAccountScreen({ navigation, route }) {
       walletName: walletNameChanged && walletName,
       walletId: walletId,
       accountList: accountList,
+      onGoBackFunc: route?.params?.onGoBack,
       onGoBack: () => {
         setWalletNameFocus(false);
         setShowBackArrow(false);
-        route.params.onGoBack();
+        // route?.params?.onGoBack();
         // setIsSelect(false)
       },
     });
   };
 
-  const onPressCloseIcon = () => {
-    if (accountList?.length > 0) {
-      navigation.goBack();
-    } else {
-      navigation.goBack();
-      route.params.onGoBack();
-    }
+  const backAction = () => {
+    navigation.goBack();
   };
 
   return (

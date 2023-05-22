@@ -50,7 +50,7 @@
     "confirmWordsNotMatch": "Tohumlar Onayı eşleşmiyor",
     "confirmWordsErrorMess": "Onay tohumlarını doğru seçtiniz mi?",
     "enterSeedsCorrectly": "Tohumları doğru girdiniz mi?",
-    "hiddenWallet": "Gizli Cüzdan",
+    "hiddenWallet": "GİZLİ CÜZDAN",
     "main": "Ana",
     "connect": "Bağlamak",
     "AboutCODL": "CODL hakkında",
@@ -144,6 +144,8 @@
     "selectWalletError": "Seçtiğiniz hesaba sahip olmalısınız.",
     "newPinError": "Yeni pin eski pinden farklı olmalıdır.",
     "networkError": "Lütfen görüntülenecek en az bir ağ seçin!",
-    "selectNetwork": "Ağ Seçin"
+    "selectNetwork": "Ağ Seçin",
+    "deletingEverything": "Herşeyi Silmek..",
+    "deletingEveryDis": "5 kez yanlış pin girdiniz. Cihaz güvenliğiniz için sıfırlanıyor."
   }
 }

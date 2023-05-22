@@ -75,6 +75,8 @@ export default function AccountListScreen({ navigation, route }) {
             walletName: itm?.name,
             walletAddress: itm?.publicKey,
             from: appConstant.accountList,
+            headerName: headerName,
+            accountList: accountList,
             onGoBack: () => {
                 setAccountValue('')
             },

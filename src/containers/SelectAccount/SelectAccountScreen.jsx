@@ -94,9 +94,9 @@ export default function SelectAccountScreen({ navigation, route }) {
                 walletName: wallet.name,
                 name: name,
                 from: appConstant.selectAccount,
-                accountList: accountList
+                accountList: accountList,
+                onGoBack: route.params.onGoBackFunc
             })
-            route.params.onGoBack();
         }
     }
 

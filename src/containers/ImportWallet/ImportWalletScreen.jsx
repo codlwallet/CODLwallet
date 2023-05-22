@@ -274,8 +274,8 @@ const styles = StyleSheet.create({
     },
     subContainer: {
         flex: 1,
-        // justifyContent: 'center',
-        marginTop: hp(12)
+        justifyContent: 'center',
+        // marginTop: hp(12)
     },
     button: {
         marginBottom: hp(3),

@@ -1,5 +1,5 @@
 import { BackHandler, Keyboard, KeyboardAvoidingView, StyleSheet, TouchableOpacity, View } from 'react-native'
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import Header from '../../components/common/Header'
 import colors from '../../assets/colors'
 import appConstant from '../../helper/appConstant'
@@ -12,7 +12,7 @@ import Button from '../../components/common/Button'
 import WalletCard from '../../components/WalletCard'
 import { useTranslation } from 'react-i18next'
 import { useDispatch, useSelector } from 'react-redux'
-import { createAccounts, setWalletIsHidden } from '../../storage'
+import { createAccounts, getUserData, setWalletIsHidden } from '../../storage'
 import RnBgTask from 'react-native-bg-thread';
 import { useFocusEffect } from '@react-navigation/native'
 import PopUp from '../../components/common/AlertBox'
@@ -34,13 +34,19 @@ export default function WelcomePurchaseScreen({ navigation, route }) {
     const [alertMessage, setAlertMessage] = useState('')
     const dispatch = useDispatch();
 
-    // useEffect(() => {
-    //     async function getLoginData() {
-    //         // const data = await AsyncStorage.getItem('LoginData');
-    //         setLoginData(JSON.parse(data))
-    //     }
-    //     getLoginData()
-    // }, [])
+    useEffect(() => {
+        getUserData().then(async res => {
+            setLoginData(res.user)
+        })
+    }, [])
+
+    useEffect(() => {
+        BackHandler.addEventListener('hardwareBackPress', backAction);
+        return async () => {
+            BackHandler.removeEventListener('hardwareBackPress', backAction);
+        };
+    }, []);
+
     useFocusEffect(
         useCallback(() => {
             setWalletIsHidden(false);
@@ -48,8 +54,8 @@ export default function WelcomePurchaseScreen({ navigation, route }) {
     )
 
     const backAction = () => {
-        navigation.navigate(appConstant.welcome, {
-            from: appConstant.welcomePurchase,
+        navigation.navigate(appConstant.setupUser, {
+            from: appConstant.welcomePurchase
         });
         return true;
     };
