@@ -10,6 +10,7 @@ import { hp, normalize, wp } from '../../helper/responsiveScreen'
 import FontText from '../../components/common/FontText'
 import WalletCard from '../../components/WalletCard'
 import { useTranslation } from 'react-i18next'
+import { resetNavigateTo } from '../../helper/navigationHelper'
 
 export default function SetupWalletScreen(props) {
     const { t } = useTranslation();
@@ -34,12 +35,11 @@ export default function SetupWalletScreen(props) {
     }
 
     const backAction = () => {
-        navigation.navigate(appConstant.welcome, {
-            from: appConstant.setupWallet,
+        navigation.navigate(appConstant.setupUser, {
+            from: appConstant.setupWallet
         });
         return true;
     };
-
 
     return (
         <View style={styles.container}>

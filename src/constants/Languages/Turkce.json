@@ -21,11 +21,11 @@
     "watchSurroundings": "Çevrenizi İzleyin",
     "attention1Description": "Kimsenin sizi izlemediğinden veya kameraya kayıt yapmadığından emin olun.",
     "understand": "Anladım",
-    "numberOfWords": "kelime sayısı",
+    "numberOfWords": "KELİME SAYISI",
     "areUSure": "Emin misin?",
     "attention2Description": "Geri dönerseniz, oluşturulan tohumları kaybedersiniz ve yenilerini yeniden yaratırsınız.",
     "checkAgain": "Tekrar kontrol et",
-    "recoverySeeds": "Kurtarma tohumu",
+    "recoverySeeds": "KURTARMA TOHUMU",
     "attentionScreen3": "dikkatEkran3",
     "passphraseNotMatch": "Se requiere contraseña",
     "passphraseMatchErrorMess": "La frase de contraseña no coincide",
@@ -143,9 +143,13 @@
     "selectWalletRequired": "Cüzdan Seçin Gerekli",
     "selectWalletError": "Seçtiğiniz hesaba sahip olmalısınız.",
     "newPinError": "Yeni pin eski pinden farklı olmalıdır.",
-    "networkError": "Lütfen görüntülenecek en az bir ağ seçin!",
+    "networkError": "Lütfen görüntülemek için en az bir ağ seçin!",
     "selectNetwork": "Ağ Seçin",
     "deletingEverything": "Herşeyi Silmek..",
-    "deletingEveryDis": "5 kez yanlış pin girdiniz. Cihaz güvenliğiniz için sıfırlanıyor."
+    "deletingEveryDis": "5 kez yanlış pin girdiniz. Cihaz güvenliğiniz için sıfırlanıyor.",
+    "failRecoveryCheck": "Kurtarma Kontrolü Başarısız!",
+    "recoveryCheckError": "İyileşme kontrolünüz eşleşmiyor!",
+    "successRecovery": "Kurtarma Kontrolü Başarılı!",
+    "successRecoveryMess": "İyileşme kontrolünüz eşleşti."
   }
 }

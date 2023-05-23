@@ -23,6 +23,8 @@ export default function AccountDetailsScreen({ navigation, route }) {
     const accountList = route?.params?.accountList;
     const [showRightIcon, setShowRightIcon] = useState(from === appConstant.main || from === appConstant.createAccount ? true : false)
 
+    console.log("name", name)
+
     useEffect(() => {
         BackHandler.addEventListener('hardwareBackPress', backAction);
         return async () => {
@@ -90,7 +92,17 @@ export default function AccountDetailsScreen({ navigation, route }) {
                 </View>
             </View>
             <View style={styles.bottomView}>
-                <Image source={require('../../assets/images/EV.png')} style={styles.image} />
+                {mainData?.map((item) => {
+                    return (
+                        <>
+                            {name === item.value &&
+                                <Image source={item?.image} style={styles.image} />
+
+                            }
+                        </>
+                    )
+
+                })}
                 <FontText name={"inter-regular"} size={normalize(20)} color="white" pLeft={wp(4)} style={{ width: wp(75) }}>
                     {walletAddress}
                     {/* {walletAddress.replace(walletAddress.substring(7, 38), `...`)} */}
@@ -158,7 +170,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: wp(4)
     },
     image: {
-        width: hp(3.5),
-        height: hp(5.5),
+        width: hp(5),
+        height: hp(6),
     },
 })

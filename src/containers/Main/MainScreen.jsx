@@ -69,18 +69,24 @@ export default function MainScreen({ navigation, route }) {
         return async () => {
             BackHandler.removeEventListener('hardwareBackPress', backAction);
         };
-    }, []);
+    }, [hideMenu]);
 
     const backAction = () => {
-        if (hidden) {
-            navigation.navigate(appConstant.welcome, {
-                from: appConstant.welcomePurchase
-            })
+        if (hideMenu) {
+            // navigation.navigate(appConstant.welcome, {
+            //     from: appConstant.welcomePurchase
+            // })
+            setHideMenu(false)
+
         } else {
             navigation.goBack()
         }
         return true;
     };
+
+    const onpressRightIcon = () => {
+        setHideMenu(!hideMenu)
+    }
 
     const lockDevice = () => {
         navigation.navigate(appConstant.welcome, {
@@ -182,10 +188,6 @@ export default function MainScreen({ navigation, route }) {
                 }
             }
         }
-    }
-
-    const onpressRightIcon = () => {
-        setHideMenu(!hideMenu)
     }
 
     return (

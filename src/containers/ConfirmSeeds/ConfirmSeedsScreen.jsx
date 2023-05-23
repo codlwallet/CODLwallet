@@ -86,7 +86,7 @@ export default function ConfirmSeedsScreen(props) {
             <View style={styles.subContainer}>
                 {confirmData && confirmData?.map((confirmItem) =>
                     <WalletCard key={confirmItem?.index} style={styles.walletCardContainer}
-                        title={t(`${confirmItem?.index}thSeed`)}
+                        title={t(`${confirmItem?.index}TH SEED`)}
                         headerStyle={{ borderColor: colors.black, top: hp(-3) }}
                         titleColor={'black'}
                         children={

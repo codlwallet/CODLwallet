@@ -56,6 +56,7 @@ export default function CreateAccountScreen({ navigation, route }) {
       BackHandler.removeEventListener('hardwareBackPress', backAction);
     };
   }, []);
+
   useFocusEffect(
     useCallback(() => {
       setWalletNameFocus(false);
@@ -205,7 +206,13 @@ export default function CreateAccountScreen({ navigation, route }) {
   };
 
   const backAction = () => {
-    navigation.goBack();
+    if (from === appConstant.accountList) {
+      navigation.goBack();
+      route?.params?.onGoBack();
+    }
+    else {
+      navigation.goBack();
+    }
   };
 
   return (

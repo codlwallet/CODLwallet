@@ -42,7 +42,7 @@ export default function SetupUserScreen({ navigation, route }) {
 
     useEffect(() => {
         getUserData().then(async res => {
-            setLoginData(res.user)
+            setLoginData(res?.user)
             setName(res?.user?.name)
         })
     }, [])
@@ -110,13 +110,11 @@ export default function SetupUserScreen({ navigation, route }) {
             setAlertTitle(t("enterName"))
             setAlertMessage(t("nameErrorMess"))
             errorStatus = false;
-
         } else if (choosePin === '' || choosePin.length < 4 || choosePin.length > 8) {
             setShowAlert(true)
             setAlertTitle(t("enterPIN"))
             setAlertMessage(t("pinErrorMess"))
             errorStatus = false;
-
         } else if (confirmPin !== choosePin) {
             setShowAlert(true)
             setAlertTitle(t("matchedPIN"))
@@ -165,7 +163,6 @@ export default function SetupUserScreen({ navigation, route }) {
             name: name,
             isCreated: false
         }
-
         if (from) {
             if (enterBtnValidation()) {
                 navigation.navigate(from)

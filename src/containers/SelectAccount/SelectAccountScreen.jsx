@@ -183,7 +183,7 @@ export default function SelectAccountScreen({ navigation, route }) {
             <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: hp(2) }}>
                 {page != 1 &&
                     <Button
-                        width={page != 1 && page != Math.ceil(totalAccounts / dispCnt) ? wp(43) : wp(90)}
+                        width={page != 1 ? wp(43) : wp(90)}
                         bgColor={btnValue === t("prev") ? 'white' : 'gray'}
                         type="highlight"
                         borderRadius={11}
@@ -198,7 +198,7 @@ export default function SelectAccountScreen({ navigation, route }) {
                     <Button
                         bgColor={btnValue === t("next") ? 'white' : 'gray'}
                         type="highlight"
-                        width={page != 1 && page != Math.ceil(totalAccounts / dispCnt) ? wp(43) : wp(90)}
+                        width={page != 1 ? wp(43) : wp(90)}
                         borderRadius={11}
                         onPress={() => handlePaginationClick(page + 1, true)}
                         style={styles.button}>
@@ -240,9 +240,11 @@ export default function SelectAccountScreen({ navigation, route }) {
                 bgColor={btnValue === t("select") ? 'white' : 'gray'}
                 type="highlight"
                 borderRadius={11}
-                // style={{ marginBottom: hp(2) }}
+                style={{ marginBottom: hp(2) }}
                 onPress={handleSelectClick}
-                style={styles.button}>
+            // style={styles.button}
+
+            >
                 <FontText name={"inter-medium"} size={normalize(22)} color={btnValue === t("select") ? "black" : 'white'}>
                     {t("select")}
                 </FontText>
@@ -283,7 +285,7 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
     button: {
-        marginBottom: hp(3),
+        marginBottom: hp(2),
         // backgroundColor: colors.white,
         // height: hp(8.5),
         // alignSelf: 'center'

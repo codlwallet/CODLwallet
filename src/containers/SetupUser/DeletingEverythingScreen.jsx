@@ -14,7 +14,7 @@ export default function DeletingEverythingScreen({ navigation }) {
     useEffect(() => {
         setTimeout(() => {
             initial().then((res) => {
-                navigation.navigate(appConstant.welcome, { from: "" })
+                navigation.navigate(appConstant.welcome, { from: appConstant.deleteEverything })
             })
         }, 5000);
     }, []);
