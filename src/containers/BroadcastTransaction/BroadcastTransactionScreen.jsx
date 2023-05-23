@@ -25,6 +25,7 @@ export default function BroadcastTransactionScreen({ navigation, route }) {
     const signedTxUR = route?.params?.signedTxUR;
 
     const details = {
+        network: chain?.name,
         from: walletAddress,
         to: tx?.payload?.transaction?.to,
         fees: `~ ${tx?.fee} ${chain?.nativeCurrency?.symbol}`,
