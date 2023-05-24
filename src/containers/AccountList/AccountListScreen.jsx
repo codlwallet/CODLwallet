@@ -18,6 +18,7 @@ export default function AccountListScreen({ navigation, route }) {
     const name = route?.params?.name
     const icon = route?.params?.icon
     const accountList = route?.params?.accountList
+    const from = route?.params?.from;
     const headerName = route?.params?.headerName
     const [showList, setShowList] = useState(true)
     const [btnValue, setButtonValue] = useState()
@@ -32,7 +33,12 @@ export default function AccountListScreen({ navigation, route }) {
     }, []);
 
     const backAction = () => {
-        navigation.goBack()
+        if (from === appConstant.accountDetails) {
+            navigation.navigate(appConstant.main)
+        }
+        else {
+            navigation.goBack()
+        }
         return true;
     };
 
@@ -44,6 +50,7 @@ export default function AccountListScreen({ navigation, route }) {
                 navigation.navigate(appConstant.createAccount, {
                     name: name,
                     from: appConstant.accountList,
+                    accountList: accountList,
                     onGoBack: () => {
                         setShowList(true)
                     }
@@ -74,6 +81,9 @@ export default function AccountListScreen({ navigation, route }) {
             walletName: itm?.name,
             walletAddress: itm?.publicKey,
             from: appConstant.accountList,
+            headerName: headerName,
+            accountList: accountList,
+            name: name,
             onGoBack: () => {
                 setAccountValue('')
             },
@@ -82,7 +92,7 @@ export default function AccountListScreen({ navigation, route }) {
 
     return (
         <View style={styles.container}>
-            <Header title={headerName}
+            <Header title={headerName !== undefined ? headerName : name}
                 showRightIcon
                 RightIcon={showList ? 'menu' : "false"}
                 showBackIcon={showList ? true : false}

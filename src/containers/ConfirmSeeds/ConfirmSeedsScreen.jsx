@@ -1,5 +1,5 @@
 import { BackHandler, StyleSheet, TouchableOpacity, View } from 'react-native'
-import React, { useState,useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import { hp, normalize, wp } from '../../helper/responsiveScreen'
 import colors from '../../assets/colors'
 import appConstant from '../../helper/appConstant'
@@ -16,20 +16,20 @@ import { setConfirmData as setNemonicConfirmData } from "../../redux/slices/auth
 export default function ConfirmSeedsScreen(props) {
     const { t } = useTranslation();
     const { navigation } = props
-    const [_confirm_data,_setConfirmData]=useState({})
+    const [_confirm_data, _setConfirmData] = useState({})
     const { confirmData } = useSelector((state) => state.auth)
     const [showAlert, setShowAlert] = useState(false);
     const [alertTitle, setAlertTitle] = useState('')
     const [alertMessage, setAlertMessage] = useState('')
-    const dispatch=useDispatch()
+    const dispatch = useDispatch()
     const [words, setWords] = useState([])
     useEffect(() => {
-        getWalletData().then(res=>{
-            setWords(res.words.map(v=>v.name))
+        getWalletData().then(res => {
+            setWords(res.words.map(v => v.name))
         })
-    
-      return () => {
-      }
+
+        return () => {
+        }
     }, [])
 
     useEffect(() => {
@@ -39,8 +39,8 @@ export default function ConfirmSeedsScreen(props) {
         };
     }, []);
 
-    const setConfirmData = (index,number) => {
-        _setConfirmData({..._confirm_data,[index]:number});
+    const setConfirmData = (index, number) => {
+        _setConfirmData({ ..._confirm_data, [index]: number });
     }
     const handleConfirmClick = () => {
         let confirmed = Object.keys(_confirm_data)
@@ -66,16 +66,16 @@ export default function ConfirmSeedsScreen(props) {
             }
         }
     }
-    const resetConfirmData=()=>{
+    const resetConfirmData = () => {
         dispatch(setNemonicConfirmData(words));
         _setConfirmData({})
         setShowAlert(false)
     }
     const handleBackClick = () => {
         // navigation.goBack()
-        navigation.navigate(appConstant.createWallet,{
-            numberValue:words.length,
-            ButtonValue:appConstant.createWallet
+        navigation.navigate(appConstant.createWallet, {
+            numberValue: words.length,
+            ButtonValue: appConstant.createWallet
         });
         return true;
     }
@@ -84,9 +84,9 @@ export default function ConfirmSeedsScreen(props) {
         <View style={styles.container}>
             <Header title={t("confirmSeeds")} showRightIcon RightIcon={'info'} showBackIcon onBackPress={handleBackClick} />
             <View style={styles.subContainer}>
-                {confirmData&&confirmData?.map((confirmItem) =>
+                {confirmData && confirmData?.map((confirmItem) =>
                     <WalletCard key={confirmItem?.index} style={styles.walletCardContainer}
-                        title={t(`${confirmItem?.index}thSeed`)}
+                        title={t(`${confirmItem?.index}TH SEED`)}
                         headerStyle={{ borderColor: colors.black, top: hp(-3) }}
                         titleColor={'black'}
                         children={
@@ -99,9 +99,9 @@ export default function ConfirmSeedsScreen(props) {
                                 {confirmItem?.words?.map((item) => {
                                     return (
                                         <View key={item?.number} style={styles.seedsView}>
-                                            <TouchableOpacity style={[styles.numberContainer, { backgroundColor: (confirmItem?.index in _confirm_data)&&item.number === _confirm_data[confirmItem?.index] ? colors.white : colors.black }]}
-                                                onPress={()=>setConfirmData(confirmItem.index,item.number)}>
-                                                <FontText name={"inter-regular"} size={normalize(16)} color={(confirmItem?.index in _confirm_data)&&item.number === _confirm_data[confirmItem?.index] ? "black" : 'white'}>
+                                            <TouchableOpacity style={[styles.numberContainer, { backgroundColor: (confirmItem?.index in _confirm_data) && item.number === _confirm_data[confirmItem?.index] ? colors.white : colors.black }]}
+                                                onPress={() => setConfirmData(confirmItem.index, item.number)}>
+                                                <FontText name={"inter-regular"} size={normalize(16)} color={(confirmItem?.index in _confirm_data) && item.number === _confirm_data[confirmItem?.index] ? "black" : 'white'}>
                                                     {item?.name}
                                                 </FontText>
                                             </TouchableOpacity>
@@ -116,7 +116,6 @@ export default function ConfirmSeedsScreen(props) {
             </View>
             <Button
                 flex={null}
-                height={hp(8.5)}
                 width="95%"
                 type="highlight"
                 borderRadius={11}

@@ -1,4 +1,4 @@
-import { ActivityIndicator, StyleSheet, View} from 'react-native';
+import {ActivityIndicator, StyleSheet, View} from 'react-native';
 import React from 'react';
 import {hp, normalize, wp} from '../../helper/responsiveScreen';
 import FontText from '../common/FontText';
@@ -18,7 +18,8 @@ export default function AttentionWarningView({
   isBgRed,
   firstBtnValue,
   secondBtnValue,
-  loading
+  loading,
+  bgColor,
 }) {
   return (
     <View style={styles.container}>
@@ -46,7 +47,9 @@ export default function AttentionWarningView({
           flex={null}
           width={wp(90)}
           bgColor={
-            buttonValue === firstBtnValue
+            bgColor
+              ? 'white'
+              : buttonValue === firstBtnValue
               ? 'white'
               : isBgRed
               ? 'red-open'
@@ -57,18 +60,24 @@ export default function AttentionWarningView({
           borderRadius={11}
           onPress={handleFirstBtnClick}
           style={[styles.button, {marginBottom: showButton2 ? hp(2) : hp(3)}]}>
-          {loading?<ActivityIndicator animating={loading} size="large" color="black" />:<FontText
-            name={'inter-medium'}
-            size={normalize(22)}
-            color={
-              buttonValue !== firstBtnValue
-                ? 'white'
-                : isBgRed
-                ? 'red'
-                : 'black'
-            }>
-            {firstBtnTitle}
-          </FontText>}
+          {loading ? (
+            <ActivityIndicator animating={loading} size="large" color="black" />
+          ) : (
+            <FontText
+              name={'inter-medium'}
+              size={normalize(22)}
+              color={
+                bgColor
+                  ? 'red'
+                  : buttonValue !== firstBtnValue
+                  ? 'white'
+                  : isBgRed
+                  ? 'red'
+                  : 'black'
+              }>
+              {firstBtnTitle}
+            </FontText>
+          )}
         </Button>
       )}
       {showButton2 && (

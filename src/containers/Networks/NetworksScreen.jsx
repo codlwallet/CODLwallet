@@ -11,10 +11,14 @@ import { useTranslation } from 'react-i18next'
 import i18n from '../../constants/i18n'
 import { getNetwork, setNetwork } from "../../storage";
 import appConstant from '../../helper/appConstant'
+import PopUp from '../../components/common/AlertBox'
 
 export default function NetworksScreen({ navigation, route }) {
     const { t } = useTranslation();
     const [btnIndex, setBtnIndex] = useState({});
+    const [showAlert, setShowAlert] = useState(false)
+    const [alertTitle, setAlertTitle] = useState('')
+    const [alertMessage, setAlertMessage] = useState('')
 
     useEffect(() => {
         BackHandler.addEventListener('hardwareBackPress', backAction);
@@ -44,8 +48,14 @@ export default function NetworksScreen({ navigation, route }) {
         for (const key in btnIndex) {
             if (btnIndex[key]) _networks = [..._networks, key]
         }
-        setNetwork(_networks)
-        backAction()
+        if (_networks.length === 0) {
+            setShowAlert(true)
+            setAlertTitle(t("selectNetwork"))
+            setAlertMessage(t("networkError"))
+        } else {
+            setNetwork(_networks)
+            backAction()
+        }
     }
 
 
@@ -60,23 +70,23 @@ export default function NetworksScreen({ navigation, route }) {
                             <TouchableOpacity style={[styles.buttonContainer, { backgroundColor: btnIndex[item?.value] ? colors.white : colors.gray }]} key={index} onPress={() => setBtnIndex({ ...btnIndex, [item?.value]: !btnIndex[item?.value] })}>
                                 <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                                     {item.value === appConstant.ethereum ?
-                                        <Image source={btnIndex[item?.value] ? item?.img : item.image} style={{ width: hp(4), height: hp(6.5), }} /> :
+                                        <Image source={btnIndex[item?.value] ? item?.img : item.image} style={{ width: hp(3.5), height: hp(5.6) }} /> :
                                         item.value === appConstant.avalanche ?
-                                            <Image source={item.image} style={{ height: hp(3.5), width: hp(4.2), right: wp(1), tintColor: btnIndex[item?.value] ? '#495057' : colors.white }} /> :
+                                            <Image source={item.image} style={[styles.icons, { right: wp(1), tintColor: btnIndex[item?.value] ? '#495057' : colors.white }]} /> :
                                             item.value === appConstant.polygon ?
-                                                <Image source={item.image} style={{ height: hp(4), width: hp(4.5), tintColor: btnIndex[item?.value] ? '#495057' : colors.white }} /> :
+                                                <Image source={item.image} style={[styles.icons, { tintColor: btnIndex[item?.value] ? '#495057' : colors.white }]} /> :
                                                 item.value === appConstant.bsc ?
-                                                    <Image source={item.image} style={{ height: hp(4), width: hp(3.5), tintColor: btnIndex[item?.value] ? '#495057' : colors.white }} /> :
+                                                    <Image source={item.image} style={[styles.icons, { tintColor: btnIndex[item?.value] ? '#495057' : colors.white }]} /> :
                                                     item.value === appConstant.arbitrum ?
-                                                        <Image source={item.image} style={{ height: hp(4.5), width: hp(4), tintColor: btnIndex[item?.value] ? '#495057' : colors.white }} />
+                                                        <Image source={item.image} style={[styles.icons, { tintColor: btnIndex[item?.value] ? '#495057' : colors.white }]} />
                                                         :
                                                         item.value === appConstant.optimism ?
-                                                            <Image source={item.image} style={{ height: hp(5.09), width: hp(5.09), tintColor: btnIndex[item?.value] ? '#495057' : colors.white }} />
+                                                            <Image source={item.image} style={[styles.icons, { tintColor: btnIndex[item?.value] ? '#495057' : colors.white }]} />
                                                             :
                                                             item.value === appConstant.zksync ?
-                                                                <Image source={item.image} style={{ width: hp(5), height: wp(5.5), backgroundColor: 'transparent', tintColor: btnIndex[item?.value] ? '#495057' : colors.white }} /> :
+                                                                <Image source={item.image} style={[styles.icons, { backgroundColor: 'transparent', tintColor: btnIndex[item?.value] ? '#495057' : colors.white }]} /> :
 
-                                                                <Image source={btnIndex[item?.value] ? item?.img : item.image} style={{ height: hp(5), width: wp(8.5), right: wp(2.5), }} />
+                                                                <Image source={btnIndex[item?.value] ? item?.img : item.image} style={styles.icons} />
                                     }
                                     <FontText size={normalize(25)} color={btnIndex[item?.value] ? 'black' : 'white'} name={'inter-regular'} pLeft={wp(5)} style={{ right: item.name === 'Avalanche' ? wp(6) : 0 }}>
                                         {item?.value}
@@ -91,8 +101,6 @@ export default function NetworksScreen({ navigation, route }) {
             </View>
             <Button
                 flex={null}
-                height={hp(8.5)}
-                width={wp(90)}
                 type="highlight"
                 borderRadius={11}
                 bgColor="white"
@@ -102,6 +110,13 @@ export default function NetworksScreen({ navigation, route }) {
                     {t("done")}
                 </FontText>
             </Button>
+            {showAlert && <PopUp
+                title={alertTitle}
+                message={alertMessage}
+                onConfirmPressed={() => {
+                    setShowAlert(false)
+                }}
+            />}
         </View>
     )
 }
@@ -137,5 +152,9 @@ const styles = StyleSheet.create({
         // backgroundColor: colors.white,
         marginBottom: hp(3),
         // alignItems: 'center',
+    },
+    icons: {
+        width: hp(4.6),
+        height: hp(5.5)
     }
 })

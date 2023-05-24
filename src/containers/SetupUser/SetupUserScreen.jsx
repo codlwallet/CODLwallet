@@ -42,7 +42,8 @@ export default function SetupUserScreen({ navigation, route }) {
 
     useEffect(() => {
         getUserData().then(async res => {
-            setLoginData(res.user)
+            setLoginData(res?.user)
+            setName(res?.user?.name)
         })
     }, [])
 
@@ -66,7 +67,6 @@ export default function SetupUserScreen({ navigation, route }) {
         confirmPinRef.current.focus()
     }
 
-
     const onFocusName = () => {
         setNameFocus(true)
         setChoosePinFocus(false)
@@ -80,6 +80,7 @@ export default function SetupUserScreen({ navigation, route }) {
 
     const onBlurName = () => {
         setNameFocus(!nameFocus)
+        setChoosePinFocus(true)
     }
 
     const onFocusChoosePin = () => {
@@ -109,13 +110,11 @@ export default function SetupUserScreen({ navigation, route }) {
             setAlertTitle(t("enterName"))
             setAlertMessage(t("nameErrorMess"))
             errorStatus = false;
-
         } else if (choosePin === '' || choosePin.length < 4 || choosePin.length > 8) {
             setShowAlert(true)
             setAlertTitle(t("enterPIN"))
             setAlertMessage(t("pinErrorMess"))
             errorStatus = false;
-
         } else if (confirmPin !== choosePin) {
             setShowAlert(true)
             setAlertTitle(t("matchedPIN"))
@@ -141,9 +140,10 @@ export default function SetupUserScreen({ navigation, route }) {
                 })
             }
             else if (warningCount === 4) {
-                initial().then((res) => {
-                    navigation.navigate(appConstant.welcome, { from: "" })
-                })
+                // initial().then((res) => {
+                //     navigation.navigate(appConstant.welcome, { from: "" })
+                // })
+                navigation.navigate(appConstant.deletingEverything)
             }
             else {
                 setShowAlert(true)
@@ -163,7 +163,6 @@ export default function SetupUserScreen({ navigation, route }) {
             name: name,
             isCreated: false
         }
-
         if (from) {
             if (enterBtnValidation()) {
                 navigation.navigate(from)
@@ -191,49 +190,49 @@ export default function SetupUserScreen({ navigation, route }) {
                 <StatusBar translucent hidden backgroundColor='transparent' />
                 <Header title={from ? t("unlock") : t("setupUser")} showRightIcon RightIcon={'info'} statusBarHidden={true} />
                 <View style={styles.subContainer}>
-                    <Input
-                        withRightIcon={name !== '' ? true : false}
-                        ref={nameRef}
-                        autoFocus={true}
-                        editable={from ? false : true}
-                        placeholder={t("name")}
-                        value={from ? loginData?.name : name}
-                        maxLength={15}
-                        placeholderTextColor={nameFocus ? colors.black : colors.white}
-                        onChangeText={setName}
-                        keyboardType={'default'}
-                        blurOnSubmit={false}
-                        returnKeyType={'next'}
-                        onFocus={onFocusName}
-                        onBlur={onBlurName}
-                        onSubmit={onSubmitConfirmpin}
-                        fontName={'poppins-regular'}
-                        onSubmitEditing={onSubmitName}
-                        fontSize={normalize(22)}
-                        inputStyle={[styles.textInput, {
-                            color: nameFocus == true
-                                ? colors.black
-                                : colors.white
-                        }]}
-                        style={[styles.textInputContainer,
-                        {
-                            backgroundColor:
-                                nameFocus == true
-                                    ? colors.white
-                                    : colors.gray,
-
-                        }]}
-                        rightIcon={
-                            <TouchableOpacity>
-                                {nameFocus ?
-                                    <SvgIcons.BlackCheck height={hp(4)} width={hp(2.5)} /> :
-                                    <SvgIcons.Check height={hp(4)} width={hp(2.5)} />
-                                }
-                            </TouchableOpacity>
-                        }
-                    />
                     {!from ?
                         <>
+                            <Input
+                                withRightIcon={name !== '' ? true : false}
+                                ref={nameRef}
+                                autoFocus={true}
+                                editable={from ? false : true}
+                                placeholder={t("name")}
+                                value={from ? loginData?.name : name}
+                                maxLength={15}
+                                placeholderTextColor={nameFocus ? colors.black : colors.white}
+                                onChangeText={setName}
+                                keyboardType={'default'}
+                                blurOnSubmit={false}
+                                returnKeyType={'next'}
+                                onFocus={onFocusName}
+                                onBlur={onBlurName}
+                                onSubmit={onSubmitName}
+                                fontName={'poppins-regular'}
+                                onSubmitEditing={onSubmitName}
+                                fontSize={normalize(22)}
+                                inputStyle={[styles.textInput, {
+                                    color: nameFocus == true
+                                        ? colors.black
+                                        : colors.white
+                                }]}
+                                style={[styles.textInputContainer,
+                                {
+                                    backgroundColor:
+                                        nameFocus == true
+                                            ? colors.white
+                                            : colors.gray,
+
+                                }]}
+                                rightIcon={
+                                    <TouchableOpacity>
+                                        {nameFocus ?
+                                            <SvgIcons.BlackCheck height={hp(4)} width={hp(2.5)} /> :
+                                            <SvgIcons.Check height={hp(4)} width={hp(2.5)} />
+                                        }
+                                    </TouchableOpacity>
+                                }
+                            />
                             <Input
                                 withRightIcon
                                 ref={choosePinRef}
@@ -345,6 +344,7 @@ export default function SetupUserScreen({ navigation, route }) {
                                     enterPinFocus == true
                                         ? colors.white
                                         : colors.gray,
+                                marginTop: hp(18)
                             }]}
                             rightIcon={
                                 <TouchableOpacity onPress={() => setShowPin(!showPin)}>
@@ -363,11 +363,9 @@ export default function SetupUserScreen({ navigation, route }) {
                     }
                     <Button
                         flex={null}
-                        height={hp(8.5)}
                         type="highlight"
                         borderRadius={11}
                         bgColor="white"
-                        width={wp(90)}
                         onPress={handleProceedBtn}
                         style={styles.buttonView}>
                         <FontText name={"inter-medium"} size={normalize(22)} color="black">

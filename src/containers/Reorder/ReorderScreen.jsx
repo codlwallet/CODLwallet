@@ -73,8 +73,6 @@ export default function ReorderScreen({ navigation, route }) {
                 type="highlight"
                 borderRadius={11}
                 bgColor="white"
-                height={hp(8.5)}
-                width={wp(90)}
                 onPress={handleDoneClick}
                 style={styles.button}>
                 <FontText name={"inter-medium"} size={normalize(22)} color="black">

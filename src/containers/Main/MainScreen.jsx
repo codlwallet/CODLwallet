@@ -69,18 +69,24 @@ export default function MainScreen({ navigation, route }) {
         return async () => {
             BackHandler.removeEventListener('hardwareBackPress', backAction);
         };
-    }, []);
+    }, [hideMenu]);
 
     const backAction = () => {
-        if (hidden) {
-            navigation.navigate(appConstant.welcome, {
-                from: appConstant.welcomePurchase
-            })
+        if (hideMenu) {
+            // navigation.navigate(appConstant.welcome, {
+            //     from: appConstant.welcomePurchase
+            // })
+            setHideMenu(false)
+
         } else {
             navigation.goBack()
         }
         return true;
     };
+
+    const onpressRightIcon = () => {
+        setHideMenu(!hideMenu)
+    }
 
     const lockDevice = () => {
         navigation.navigate(appConstant.welcome, {
@@ -184,10 +190,6 @@ export default function MainScreen({ navigation, route }) {
         }
     }
 
-    const onpressRightIcon = () => {
-        setHideMenu(!hideMenu)
-    }
-
     return (
         <View style={styles.container}>
             <Header title={user?.name} showRightIcon RightIcon={!hideMenu ? 'menu' : 'false'} RightIconPress={() => onpressRightIcon()} showHiddenTitle={hidden} />
@@ -199,21 +201,21 @@ export default function MainScreen({ navigation, route }) {
                                 <TouchableOpacity style={styles.buttonContainer} key={index} onPress={() => handleMainListClick(item)} >
                                     <View>
                                         {item.value === appConstant.ethereum ?
-                                            <Image source={item.image} style={{ width: hp(3.5), height: hp(6), }} /> :
+                                            <Image source={item.image} style={styles.icons} /> :
                                             item.value === appConstant.avalanche ?
-                                                <Image source={item.image} style={{ height: hp(3.7), width: hp(4.4), }} /> :
+                                                <Image source={item.image} style={styles.icons} /> :
                                                 item.value === appConstant.polygon ?
-                                                    <SvgIcons.Poly height={hp(6)} width={hp(4.5)} /> :
+                                                    <Image source={item.image} style={styles.icons} /> :
                                                     item.value === appConstant.bsc ?
-                                                        <Image source={item.image} style={{ height: hp(5.2), width: hp(4.5) }} /> :
+                                                        <Image source={item.image} style={styles.icons} /> :
                                                         item.value === appConstant.arbitrum ?
-                                                            <Image source={item.image} style={{ height: hp(5.6), width: hp(4.9) }} /> :
+                                                            <Image source={item.image} style={styles.icons} /> :
                                                             item.value === appConstant.optimism ?
-                                                                <Image source={item.image} style={{ height: hp(5.09), width: hp(5.1), }} /> :
-                                                                <Image source={item.image} style={{ width: hp(5), height: wp(5.5), }} />
+                                                                <Image source={item.image} style={styles.icons} /> :
+                                                                <Image source={item.image} style={styles.icons} />
                                         }
                                     </View>
-                                    <FontText size={normalize(25)} color={'white'} name={'inter-regular'} pLeft={wp(5)} >
+                                    <FontText size={25} color={'white'} name={'inter-regular'} pLeft={wp(5)} >
                                         {item?.value}
                                     </FontText>
                                 </TouchableOpacity>
@@ -237,8 +239,6 @@ export default function MainScreen({ navigation, route }) {
                 }
             </View>
             <Button
-                height={hp(8.5)}
-                width={wp(90)}
                 flex={null}
                 type="highlight"
                 borderRadius={11}
@@ -285,6 +285,10 @@ const styles = StyleSheet.create({
         // backgroundColor: colors.white,
         marginBottom: hp(3),
         // width: wp(90),
-        // height: hp(8.5)
+        // height: hp(8)
+    },
+    icons: {
+        width: hp(4.6),
+        height: hp(5.5)
     }
 })

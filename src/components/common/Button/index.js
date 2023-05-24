@@ -177,8 +177,8 @@ const Button = props => {
 Button.defaultProps = {
   position: 'center',
   flex: true,
-  // height: isX ? hp(5.5) : hp(6.5),
-  width: null,
+  height: hp(8),
+  width: wp(90),
   minWidth: 44,
   sideOffset: 0,
   type: 'opacity',

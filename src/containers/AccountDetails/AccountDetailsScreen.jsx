@@ -8,6 +8,10 @@ import FontText from '../../components/common/FontText'
 import { useTranslation } from 'react-i18next'
 import QRCode from 'react-native-qrcode-svg'
 import appConstant from '../../helper/appConstant'
+import { mainData } from '../../constants/data'
+import { getAccountsData } from '../../storage'
+import { useFocusEffect } from '@react-navigation/native'
+
 LogBox.ignoreLogs([
     'Non-serializable values were found in the navigation state',
 ]);
@@ -17,7 +21,29 @@ export default function AccountDetailsScreen({ navigation, route }) {
     const walletAddress = route?.params?.walletAddress
     const name = route?.params?.name
     const from = route?.params?.from
+    const headerName = route?.params?.headerName
+    const [accountList, setAccountList] = useState({})
+    const [walletIcon, setWalletIcon] = useState()
+
     const [showRightIcon, setShowRightIcon] = useState(from === appConstant.main || from === appConstant.createAccount ? true : false)
+
+    useFocusEffect(
+        React.useCallback(() => {
+            getAccountsData().then(res => {
+                if (res.status) {
+                    setAccountList(res.created?.general);
+                }
+            })
+        }, []),
+    );
+
+    useEffect(() => {
+        mainData?.map((item, index) => {
+            if (name === item.value) {
+                setWalletIcon(item?.image)
+            }
+        })
+    }, []);
 
     useEffect(() => {
         BackHandler.addEventListener('hardwareBackPress', backAction);
@@ -31,7 +57,16 @@ export default function AccountDetailsScreen({ navigation, route }) {
     }, []);
 
     const backAction = () => {
-        if (from === appConstant.createAccount || from === appConstant.main) {
+        if (accountList.length > 1) {
+            navigation.navigate(appConstant.accountList, {
+                name: name,
+                headerName: headerName,
+                from: appConstant?.accountDetails,
+                accountList: accountList,
+                icon: walletIcon
+            })
+        }
+        else if (from === appConstant.createAccount || from === appConstant.main) {
             navigation.navigate(appConstant.main)
         }
         else if (from === appConstant.accountList) {
@@ -52,11 +87,20 @@ export default function AccountDetailsScreen({ navigation, route }) {
         })
     }
 
+    const RightIconPress = () => {
+        if (accountList?.length > 1) {
+            navigation.goBack()
+        }
+        else {
+            navigation.navigate(appConstant.createAccount, {
+                name: name,
+            })
+        }
+    }
+
     return (
         <View style={styles.container}>
-            <Header title={walletName} showRightIcon={from === appConstant.main || from === appConstant.createAccount || showRightIcon ? true : false} showBackIcon onBackPress={backAction} statusBarcolor={colors.black} RightIconPress={() => navigation.navigate(appConstant.createAccount, {
-                name: name,
-            })} titleStyle={{ right: from === appConstant.main || from === appConstant.createAccount || showRightIcon ? 0 : wp(13), width: wp(65) }} />
+            <Header RightIcon={accountList?.length > 1 ? 'menu' : 'plus'} title={walletName} showRightIcon={from === appConstant.main || from === appConstant.createAccount || from === appConstant.accountList || showRightIcon ? true : false} showBackIcon onBackPress={backAction} statusBarcolor={colors.black} RightIconPress={RightIconPress} titleStyle={{ right: from === appConstant.main || from === appConstant.createAccount || from === appConstant.accountList || showRightIcon ? 0 : wp(13), width: wp(65) }} />
             <View style={styles.subContainer}>
                 <View style={styles.scannerContainer}>
                     <View style={styles.walletHeaderView}>
@@ -77,7 +121,15 @@ export default function AccountDetailsScreen({ navigation, route }) {
                 </View>
             </View>
             <View style={styles.bottomView}>
-                <Image source={require('../../assets/images/EV.png')} style={styles.image} />
+                {mainData?.map((item, index) => {
+                    return (
+                        <View key={index}>
+                            {name === item.value &&
+                                <Image source={item?.image} style={styles.image} />
+                            }
+                        </View>
+                    )
+                })}
                 <FontText name={"inter-regular"} size={normalize(20)} color="white" pLeft={wp(4)} style={{ width: wp(75) }}>
                     {walletAddress}
                     {/* {walletAddress.replace(walletAddress.substring(7, 38), `...`)} */}
@@ -87,8 +139,6 @@ export default function AccountDetailsScreen({ navigation, route }) {
                 flex={null}
                 type="highlight"
                 borderRadius={11}
-                height={hp(8.5)}
-                width={wp(90)}
                 bgColor="white"
                 onPress={handleSignClick}
                 style={styles.button}>
@@ -147,7 +197,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: wp(4)
     },
     image: {
-        width: hp(3.5),
-        height: hp(5.5),
+        width: hp(5),
+        height: hp(6),
     },
 })

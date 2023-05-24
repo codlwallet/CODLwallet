@@ -17,6 +17,7 @@ export default function SelectAccountScreen({ navigation, route }) {
     const WalletId = route?.params?.walletId
     const { t } = useTranslation();
     const wallet_name = route?.params?.walletName
+    const accountList = route?.params?.accountList
     const [selectIndex, setSelectIndex] = useState()
     const [btnValue, setBtnValue] = useState(t("select"))
     const [isNext, setIsNext] = useState(false)
@@ -60,7 +61,7 @@ export default function SelectAccountScreen({ navigation, route }) {
 
     const handlePaginationClick = (_page, _isNext = false) => {
         if (_isNext && _page > Math.ceil(totalAccounts / dispCnt)) {
-            extendAccounts(isHidden?passphrase:null, _page).then((res) => {
+            extendAccounts(isHidden ? passphrase : null, _page).then((res) => {
                 setAccounts([...accounts, ...res])
                 setTotalAccounts(totalAccounts + res.length)
                 setPage(_page);
@@ -92,17 +93,18 @@ export default function SelectAccountScreen({ navigation, route }) {
                 wallet: wallet,
                 walletName: wallet.name,
                 name: name,
-                from: appConstant.selectAccount
+                from: appConstant.selectAccount,
+                accountList: accountList,
+                onGoBack: route.params.onGoBackFunc
             })
-            route.params.onGoBack();
         }
     }
 
     return (
         <View style={styles.container}>
             <Header title={t("selectAccount")} showRightIcon RightIcon={'info'} showBackIcon onBackPress={backAction} statusBarcolor={colors.black} />
-            <View style={styles.subContainer}>   
-            {
+            <View style={styles.subContainer}>
+                {
                     accounts && accounts?.length > 0 && (
                         accounts?.slice((page - 1) * dispCnt, page * dispCnt).map((item, index) => {
                             let selected = false;
@@ -122,23 +124,23 @@ export default function SelectAccountScreen({ navigation, route }) {
                             }
 
                             return (
-                                <TouchableOpacity key={item.publicKey} style={[styles.buttonContainer, { backgroundColor: index + (page - 1) * dispCnt+1 == selectIndex ? colors.white : colors.gray }]} onPress={() => {
+                                <TouchableOpacity key={item.publicKey} style={[styles.buttonContainer, { backgroundColor: index + (page - 1) * dispCnt + 1 == selectIndex ? colors.white : colors.gray }]} onPress={() => {
                                     if (!selected) {
-                                        setSelectIndex(index + (page - 1) * dispCnt+1)
+                                        setSelectIndex(index + (page - 1) * dispCnt + 1)
                                         setWallet(item)
-                                        setWalletId(index + (page - 1) * dispCnt+1)
+                                        setWalletId(index + (page - 1) * dispCnt + 1)
                                     }
                                 }}>
-                                    <View style={[styles.numberContainer, { backgroundColor: index + (page - 1) * dispCnt+1 == selectIndex || selected ? colors.black : colors.white }]}>
-                                        <FontText name={"inter-bold"} size={normalize(15)} color={index + (page - 1) * dispCnt+1 == selectIndex || selected ? 'white' : 'black'}>
-                                            {index + (page - 1) * dispCnt+1}
+                                    <View style={[styles.numberContainer, { backgroundColor: index + (page - 1) * dispCnt + 1 == selectIndex || selected ? colors.black : colors.white }]}>
+                                        <FontText name={"inter-bold"} size={normalize(15)} color={index + (page - 1) * dispCnt + 1 == selectIndex || selected ? 'white' : 'black'}>
+                                            {index + (page - 1) * dispCnt + 1}
                                         </FontText>
                                     </View>
                                     <View>
-                                        {_name && <FontText pRight={index + (page - 1) * dispCnt+1 == selectIndex ? wp(16) : wp(26)} name={"inter-bold"} size={normalize(22)} color={index + (page - 1) * dispCnt+1 == selectIndex ? 'black' : 'white'}>
+                                        {_name && <FontText pRight={index + (page - 1) * dispCnt + 1 == selectIndex ? wp(16) : wp(26)} name={"inter-bold"} size={normalize(22)} color={index + (page - 1) * dispCnt + 1 == selectIndex ? 'black' : 'white'}>
                                             {_name}
                                         </FontText>}
-                                        <FontText style={{width:wp(60)}} name={"inter-regular"} size={normalize(selected ? 12 : 15)} color={index + (page - 1) * dispCnt+1 == selectIndex ? 'black' : 'white'}>
+                                        <FontText style={{ width: wp(60) }} name={"inter-regular"} size={normalize(selected ? 12 : 15)} color={index + (page - 1) * dispCnt + 1 == selectIndex ? 'black' : 'white'}>
 
                                             {
                                                 selected ?
@@ -149,11 +151,11 @@ export default function SelectAccountScreen({ navigation, route }) {
 
                                         </FontText>
                                     </View>
-                                    
-                                    {(index + (page - 1) * dispCnt+1 == selectIndex && !selected) && 
-                                    <View>
-                                        <SvgIcons.BlackCheck height={hp(4)} width={hp(2.5)} />
-                                    </View>}
+
+                                    {(index + (page - 1) * dispCnt + 1 == selectIndex && !selected) &&
+                                        <View>
+                                            <SvgIcons.BlackCheck height={hp(4)} width={hp(2.5)} />
+                                        </View>}
                                 </TouchableOpacity>
                             )
                         })
@@ -181,11 +183,10 @@ export default function SelectAccountScreen({ navigation, route }) {
             <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: hp(2) }}>
                 {page != 1 &&
                     <Button
-                        width={page != 1 && page != Math.ceil(totalAccounts / dispCnt) ? wp(43) : wp(90)}
+                        width={page != 1 ? wp(43) : wp(90)}
                         bgColor={btnValue === t("prev") ? 'white' : 'gray'}
                         type="highlight"
                         borderRadius={11}
-                        height={hp(8.5)}
                         onPress={() => handlePaginationClick(page - 1, false)}
                         style={styles.button}>
                         <FontText name={"inter-medium"} size={normalize(22)} color={btnValue === t("next") ? "red" : 'white'}>
@@ -195,10 +196,9 @@ export default function SelectAccountScreen({ navigation, route }) {
                 }
                 {
                     <Button
-                        height={hp(8.5)}
                         bgColor={btnValue === t("next") ? 'white' : 'gray'}
                         type="highlight"
-                        width={page != 1 && page != Math.ceil(totalAccounts / dispCnt) ? wp(43) : wp(90)}
+                        width={page != 1 ? wp(43) : wp(90)}
                         borderRadius={11}
                         onPress={() => handlePaginationClick(page + 1, true)}
                         style={styles.button}>
@@ -237,14 +237,14 @@ export default function SelectAccountScreen({ navigation, route }) {
             </View>
             <Button
                 flex={null}
-                height={hp(8.5)}
                 bgColor={btnValue === t("select") ? 'white' : 'gray'}
                 type="highlight"
                 borderRadius={11}
-                width={wp(90)}
-                // style={{ marginBottom: hp(2) }}
+                style={{ marginBottom: hp(2) }}
                 onPress={handleSelectClick}
-                style={styles.button}>
+            // style={styles.button}
+
+            >
                 <FontText name={"inter-medium"} size={normalize(22)} color={btnValue === t("select") ? "black" : 'white'}>
                     {t("select")}
                 </FontText>
@@ -285,7 +285,7 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
     button: {
-        marginBottom: hp(3),
+        marginBottom: hp(2),
         // backgroundColor: colors.white,
         // height: hp(8.5),
         // alignSelf: 'center'

@@ -73,8 +73,6 @@ export default function ConnectWalletScreen({ navigation, route }) {
                 bgColor="white"
                 defaultOpacity={!HDKey ? 0.5 : 1}
                 disabled={!HDKey}
-                width={wp(90)}
-                height={hp(8.5)}
                 onPress={backAction}
                 style={styles.button}>
                 <FontText name={"inter-medium"} size={normalize(22)} color="black">

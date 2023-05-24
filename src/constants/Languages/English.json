@@ -21,11 +21,11 @@
     "watchSurroundings": "Watch Your Surroundings",
     "attention1Description": "Make sure no one is watching you or recording on camera.",
     "understand": "I Understand",
-    "numberOfWords": "number of words",
+    "numberOfWords": "NUMBER OF WORDS",
     "areUSure": "Are You Sure?",
     "attention2Description": "If you go back, you will lose the created seeds and recreate new ones.",
     "checkAgain": "Check Again",
-    "recoverySeeds": "Recovery seed",
+    "recoverySeeds": "RECOVERY SEED",
     "attentionScreen3": "attentionScreen3",
     "secureSeeds": "Did you secure recovery seeds?",
     "attention3Description": "Please, write the seed words in the correct order and store them in a secure place.",
@@ -47,7 +47,7 @@
     "enterPIN": "Pin Required ",
     "matchedPIN": "Pin does not matched",
     "enterSeedsCorrectly": "Did you enter the seeds correctly?",
-    "hiddenWallet": "Hidden Wallet",
+    "hiddenWallet": "HIDDEN WALLET",
     "main": "Main",
     "connect": "Connect",
     "AboutCODL": "About CODL",
@@ -144,6 +144,14 @@
     "selectWalletRequired": "Select Wallet Required",
     "selectWalletError": "You must have select account.",
     "newPinRequired": "Invalid New Pin",
-    "newPinError": "New pin must be different than old pin."
+    "newPinError": "New pin must be different than old pin.",
+    "networkError": "Please choose at least one network to display!",
+    "selectNetwork": "Select Network",
+    "deletingEverything": "Deleting Everything..",
+    "deletingEveryDis": "You entered the wrong pin 5 times. The device is being reset for your security.",
+    "failRecoveryCheck": "Recovery Check Fail!",
+    "recoveryCheckError": "Your recovery check is not match!",
+    "successRecovery": "Recovery Check Successful!",
+    "successRecoveryMess": "Your recovery check is matched."
   }
 }

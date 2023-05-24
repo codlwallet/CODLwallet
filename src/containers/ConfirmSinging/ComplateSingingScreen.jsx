@@ -73,10 +73,8 @@ export default function ComplateSingingScreen({ navigation, route }) {
             />
             <Button
                 flex={null}
-                height={hp(8.5)}
                 type="highlight"
                 borderRadius={11}
-                width={wp(90)}
                 bgColor="white"
                 onPress={handlebroadcastTransactionBtn}
                 style={styles.buttonView}>
