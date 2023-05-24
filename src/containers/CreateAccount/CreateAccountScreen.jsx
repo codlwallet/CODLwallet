@@ -15,7 +15,6 @@ import SvgIcons from '../../assets/SvgIcons';
 import FontText from '../../components/common/FontText';
 import Button from '../../components/common/Button';
 import appConstant from '../../helper/appConstant';
-
 import PopUp from '../../components/common/AlertBox';
 import {
   getAccountsData,
@@ -206,13 +205,14 @@ export default function CreateAccountScreen({ navigation, route }) {
   };
 
   const backAction = () => {
-    if (from === appConstant.accountList) {
+    if (from === appConstant.accountList || from === appConstant.selectAccount) {
       navigation.goBack();
       route?.params?.onGoBack();
     }
     else {
       navigation.goBack();
     }
+    return true
   };
 
   return (

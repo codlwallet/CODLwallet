@@ -9,6 +9,8 @@ import { useTranslation } from 'react-i18next'
 import QRCode from 'react-native-qrcode-svg'
 import appConstant from '../../helper/appConstant'
 import { mainData } from '../../constants/data'
+import { getAccountsData } from '../../storage'
+import { useFocusEffect } from '@react-navigation/native'
 
 LogBox.ignoreLogs([
     'Non-serializable values were found in the navigation state',
@@ -20,10 +22,28 @@ export default function AccountDetailsScreen({ navigation, route }) {
     const name = route?.params?.name
     const from = route?.params?.from
     const headerName = route?.params?.headerName
-    const accountList = route?.params?.accountList;
+    const [accountList, setAccountList] = useState({})
+    const [walletIcon, setWalletIcon] = useState()
+
     const [showRightIcon, setShowRightIcon] = useState(from === appConstant.main || from === appConstant.createAccount ? true : false)
 
-    console.log("name", name)
+    useFocusEffect(
+        React.useCallback(() => {
+            getAccountsData().then(res => {
+                if (res.status) {
+                    setAccountList(res.created?.general);
+                }
+            })
+        }, []),
+    );
+
+    useEffect(() => {
+        mainData?.map((item, index) => {
+            if (name === item.value) {
+                setWalletIcon(item?.image)
+            }
+        })
+    }, []);
 
     useEffect(() => {
         BackHandler.addEventListener('hardwareBackPress', backAction);
@@ -37,7 +57,16 @@ export default function AccountDetailsScreen({ navigation, route }) {
     }, []);
 
     const backAction = () => {
-        if (from === appConstant.createAccount || from === appConstant.main) {
+        if (accountList.length > 1) {
+            navigation.navigate(appConstant.accountList, {
+                name: name,
+                headerName: headerName,
+                from: appConstant?.accountDetails,
+                accountList: accountList,
+                icon: walletIcon
+            })
+        }
+        else if (from === appConstant.createAccount || from === appConstant.main) {
             navigation.navigate(appConstant.main)
         }
         else if (from === appConstant.accountList) {
@@ -92,16 +121,14 @@ export default function AccountDetailsScreen({ navigation, route }) {
                 </View>
             </View>
             <View style={styles.bottomView}>
-                {mainData?.map((item) => {
+                {mainData?.map((item, index) => {
                     return (
-                        <>
+                        <View key={index}>
                             {name === item.value &&
                                 <Image source={item?.image} style={styles.image} />
-
                             }
-                        </>
+                        </View>
                     )
-
                 })}
                 <FontText name={"inter-regular"} size={normalize(20)} color="white" pLeft={wp(4)} style={{ width: wp(75) }}>
                     {walletAddress}

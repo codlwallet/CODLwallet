@@ -30,7 +30,6 @@ const WelcomeScreen = ({ navigation, route }) => {
                         }
                         dispatch(setUser(res.user));
                     } else {
-                        console.log()
                         if (from == appConstant.setupWallet) {
                             setFrom(appConstant.setupWallet)
                         }
@@ -49,8 +48,6 @@ const WelcomeScreen = ({ navigation, route }) => {
             from: from
         })
     }
-
-
 
     return (
         <>
