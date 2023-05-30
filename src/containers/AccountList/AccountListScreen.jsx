@@ -10,7 +10,7 @@ import ButtonView from '../../components/common/ButtonList';
 import appConstant from '../../helper/appConstant';
 import Button from '../../components/common/Button';
 import SvgIcons from '../../assets/SvgIcons';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { selectAccount } from "../../redux/slices/authSlice";
 
 export default function AccountListScreen({ navigation, route }) {
@@ -20,6 +20,7 @@ export default function AccountListScreen({ navigation, route }) {
     const accountList = route?.params?.accountList
     const from = route?.params?.from;
     const headerName = route?.params?.headerName
+    const { selectedNetwork } = useSelector(state => state.auth)
     const [showList, setShowList] = useState(true)
     const [btnValue, setButtonValue] = useState()
     const [buttonIndex, setButtonIndex] = useState()
@@ -31,6 +32,10 @@ export default function AccountListScreen({ navigation, route }) {
             BackHandler.removeEventListener('hardwareBackPress', backAction);
         };
     }, []);
+
+    useEffect(() => {
+        setShowList(true)
+    }, [])
 
     const backAction = () => {
         if (from === appConstant.accountDetails) {
@@ -57,7 +62,8 @@ export default function AccountListScreen({ navigation, route }) {
                 })
                 setButtonValue('')
                 setButtonIndex()
-            }, 200);
+                setShowList(true)
+            }, 200)
         }
         else {
             setTimeout(() => {
@@ -70,6 +76,7 @@ export default function AccountListScreen({ navigation, route }) {
                 })
                 setButtonValue('')
                 setButtonIndex()
+                setShowList(true)
             }, 200);
         }
     }
@@ -92,14 +99,30 @@ export default function AccountListScreen({ navigation, route }) {
 
     return (
         <View style={styles.container}>
-            <Header title={headerName !== undefined ? headerName : name}
+            <Header title={selectedNetwork}
                 showRightIcon
                 RightIcon={showList ? 'menu' : "false"}
                 showBackIcon={showList ? true : false}
                 onBackPress={backAction}
                 statusBarcolor={colors.black}
                 titleStyle={{ left: showList ? wp(2.2) : wp(24), width: wp(45) }}
-                titleIcon={<Image source={icon} style={name == appConstant.ethereum ? { height: hp(5), width: wp(6) } : name == appConstant.avalanche ? { height: hp(3.6), width: hp(4.4) } : name == appConstant.polygon ? { height: hp(4), width: hp(4.5) } : name == appConstant.bsc ? { height: hp(4), width: hp(3.5) } : name == appConstant.arbitrum ? { height: hp(4.1), width: hp(3.6) } : name == appConstant.optimism ? { height: hp(4.5), width: hp(4.5) } : name == appConstant.zksync ? { height: hp(3), width: hp(5) } : { height: hp(5), width: wp(8.8) }} />}
+                titleIcon={
+                    selectedNetwork === appConstant.ethereum ?
+                        <Image source={require('../../assets/images/iEthereum.png')} style={styles.icons} /> :
+                        selectedNetwork === appConstant.avalanche ?
+                            <Image source={require('../../assets/images/iAvalanche.png')} style={styles.icons} /> :
+                            selectedNetwork === appConstant.polygon ?
+                                <Image source={require('../../assets/images/iPolygon.png')} style={styles.icons} /> :
+                                selectedNetwork === appConstant.bsc ?
+                                    <Image source={require('../../assets/images/iBSC.png')} style={styles.icons} /> :
+                                    selectedNetwork === appConstant.arbitrum ?
+                                        <Image source={require('../../assets/images/iArbitrum.png')} style={styles.icons} /> :
+                                        selectedNetwork === appConstant.optimism ?
+                                            <Image source={require('../../assets/images/iOptimism.png')} style={styles.icons} /> :
+                                            <Image source={require('../../assets/images/izkSync.png')} style={styles.icons} />
+
+                }
+                // titleIcon={<Image source={icon} style={selectedNetwork == appConstant.ethereum ? { height: hp(5), width: wp(6) } : selectedNetwork == appConstant.avalanche ? { height: hp(3.6), width: hp(4.4) } : selectedNetwork == appConstant.polygon ? { height: hp(4), width: hp(4.5) } : selectedNetwork == appConstant.bsc ? { height: hp(4), width: hp(3.5) } : selectedNetwork == appConstant.arbitrum ? { height: hp(4.1), width: hp(3.6) } : selectedNetwork == appConstant.optimism ? { height: hp(4.5), width: hp(4.5) } : selectedNetwork == appConstant.zksync ? { height: hp(3), width: hp(5) } : { height: hp(5), width: wp(8.8) }} />}
                 RightIconPress={() => { setShowList(!showList) }}
                 titleWithIcon />
 
@@ -175,5 +198,9 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         width: wp(93),
         marginBottom: hp(2)
+    },
+    icons: {
+        width: hp(4.8),
+        height: hp(5.8)
     }
 })

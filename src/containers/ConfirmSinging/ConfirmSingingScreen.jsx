@@ -45,7 +45,8 @@ export default function ConfirmSingingScreen({ navigation, route }) {
     const backAction = () => {
         navigation.navigate(appConstant.accountDetails, {
             walletName: walletName,
-            showIcon: showIcon
+            showIcon: showIcon,
+            walletAddress
         })
         return true;
     };

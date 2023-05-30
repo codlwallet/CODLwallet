@@ -11,6 +11,7 @@ import appConstant from '../../helper/appConstant'
 import { mainData } from '../../constants/data'
 import { getAccountsData } from '../../storage'
 import { useFocusEffect } from '@react-navigation/native'
+import { useSelector } from 'react-redux'
 
 LogBox.ignoreLogs([
     'Non-serializable values were found in the navigation state',
@@ -22,9 +23,9 @@ export default function AccountDetailsScreen({ navigation, route }) {
     const name = route?.params?.name
     const from = route?.params?.from
     const headerName = route?.params?.headerName
+    const { selectedNetwork } = useSelector(state => state.auth)
     const [accountList, setAccountList] = useState({})
     const [walletIcon, setWalletIcon] = useState()
-
     const [showRightIcon, setShowRightIcon] = useState(from === appConstant.main || from === appConstant.createAccount ? true : false)
 
     useFocusEffect(
@@ -46,18 +47,19 @@ export default function AccountDetailsScreen({ navigation, route }) {
     }, []);
 
     useEffect(() => {
-        BackHandler.addEventListener('hardwareBackPress', backAction);
+        BackHandler.addEventListener('hardwareBackPress', onBackClick);
         return async () => {
-            BackHandler.removeEventListener('hardwareBackPress', backAction);
+            BackHandler.removeEventListener('hardwareBackPress', onBackClick);
         };
-    }, []);
+    }, [accountList]);
 
     useEffect(() => {
         setShowRightIcon(from === appConstant.main || from === appConstant.createAccount ? true : false)
     }, []);
 
-    const backAction = () => {
-        if (accountList.length > 1) {
+
+    const onBackClick = () => {
+        if (accountList?.length > 1 || from === appConstant.accountList) {
             navigation.navigate(appConstant.accountList, {
                 name: name,
                 headerName: headerName,
@@ -69,15 +71,11 @@ export default function AccountDetailsScreen({ navigation, route }) {
         else if (from === appConstant.createAccount || from === appConstant.main) {
             navigation.navigate(appConstant.main)
         }
-        else if (from === appConstant.accountList) {
-            navigation.goBack()
-            // route?.params?.onGoBack()
-        }
         else {
             navigation.goBack()
         }
         return true;
-    };
+    }
 
     const handleSignClick = () => {
         navigation.navigate(appConstant.scanQr, {
@@ -100,7 +98,7 @@ export default function AccountDetailsScreen({ navigation, route }) {
 
     return (
         <View style={styles.container}>
-            <Header RightIcon={accountList?.length > 1 ? 'menu' : 'plus'} title={walletName} showRightIcon={from === appConstant.main || from === appConstant.createAccount || from === appConstant.accountList || showRightIcon ? true : false} showBackIcon onBackPress={backAction} statusBarcolor={colors.black} RightIconPress={RightIconPress} titleStyle={{ right: from === appConstant.main || from === appConstant.createAccount || from === appConstant.accountList || showRightIcon ? 0 : wp(13), width: wp(65) }} />
+            <Header RightIcon={accountList?.length > 1 ? 'menu' : 'plus'} title={walletName} showRightIcon={from === appConstant.main || from === appConstant.createAccount || from === appConstant.accountList || showRightIcon ? true : false} showBackIcon onBackPress={onBackClick} statusBarcolor={colors.black} RightIconPress={RightIconPress} titleStyle={{ right: from === appConstant.main || from === appConstant.createAccount || from === appConstant.accountList || showRightIcon ? 0 : wp(13), width: wp(65) }} />
             <View style={styles.subContainer}>
                 <View style={styles.scannerContainer}>
                     <View style={styles.walletHeaderView}>
@@ -124,7 +122,7 @@ export default function AccountDetailsScreen({ navigation, route }) {
                 {mainData?.map((item, index) => {
                     return (
                         <View key={index}>
-                            {name === item.value &&
+                            {selectedNetwork === item.value &&
                                 <Image source={item?.image} style={styles.image} />
                             }
                         </View>
