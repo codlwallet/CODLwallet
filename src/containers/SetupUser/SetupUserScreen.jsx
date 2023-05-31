@@ -40,12 +40,14 @@ export default function SetupUserScreen({ navigation, route }) {
     const [warningCount, setWarningCount] = useState(0)
     const { t } = useTranslation();
 
-    useEffect(() => {
-        getUserData().then(async res => {
-            setLoginData(res?.user)
-            setName(res?.user?.name)
-        })
-    }, [])
+    useFocusEffect(
+        React.useCallback(() => {
+            setEnterPin('')
+            getUserData().then(async res => {
+                setLoginData(res?.user)
+            })
+        }, []),
+    );
 
     useFocusEffect(
         React.useCallback(() => {
@@ -225,12 +227,12 @@ export default function SetupUserScreen({ navigation, route }) {
 
                                 }]}
                                 rightIcon={
-                                    <TouchableOpacity>
-                                        {nameFocus ?
+                                    <>
+                                        {name !== '' && nameFocus ?
                                             <SvgIcons.BlackCheck height={hp(4)} width={hp(2.5)} /> :
                                             <SvgIcons.Check height={hp(4)} width={hp(2.5)} />
                                         }
-                                    </TouchableOpacity>
+                                    </>
                                 }
                             />
                             <Input

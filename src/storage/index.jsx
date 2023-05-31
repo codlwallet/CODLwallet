@@ -227,7 +227,7 @@ export const check = async () => {
   try {
     let user = await AsyncStorage.getItem(Config.USER);
     user = user != null ? JSON.parse(user) : null;
-    if (user) {
+    if (user !== null) {
       return {
         status: true,
         isExist: user && user.isCreated,
@@ -235,7 +235,7 @@ export const check = async () => {
       };
     } else {
       return {
-        status: true,
+        status: false,
         isExist: false,
       };
     }

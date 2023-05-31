@@ -21,24 +21,38 @@ const WelcomeScreen = ({ navigation, route }) => {
     useFocusEffect(
         React.useCallback(() => {
             check().then(res => {
-                if (res.status) {
+                if (res?.status) {
                     if (res.isExist) {
-                        if (from == appConstant.deleteEverything) setFrom(null);
-                        // if (from == appConstant.setupWallet) setFrom(null);
-                        else if (!from) {
-                            setFrom(appConstant.welcomePurchase);
-                        }
-                        dispatch(setUser(res.user));
-                    } else {
-                        if (from == appConstant.setupWallet) {
-                            setFrom(appConstant.setupWallet)
-                        }
-                        else {
-                            setFrom(null);
-
-                        }
+                        setFrom(appConstant.welcomePurchase);
                     }
+                    else {
+                        setFrom(appConstant.setupWallet);
+                    }
+                    dispatch(setUser(res.user));
                 }
+                else {
+                    setFrom(null);
+                }
+
+                // if (res.status) {
+                //     console.log("res.status...", res)
+                //     if (res.isExist) {
+                //         if (from == appConstant.deleteEverything) setFrom(null);
+                //         // if (from == appConstant.setupWallet) setFrom(null);
+                //         else if (!from) {
+                //             setFrom(appConstant.welcomePurchase);
+                //         }
+                //         dispatch(setUser(res.user));
+                //     } else {
+                //         if (from == appConstant.setupWallet) {
+                //             setFrom(appConstant.setupWallet)
+                //         }
+                //         else {
+                //             setFrom(null);
+
+                //         }
+                //     }
+                // }
             })
         }, []),
     );
