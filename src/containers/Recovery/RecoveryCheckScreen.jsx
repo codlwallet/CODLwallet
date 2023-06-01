@@ -3,26 +3,31 @@ import React, { useEffect, useRef, useState, useLayoutEffect } from 'react'
 import colors from '../../assets/colors'
 import Header from '../../components/common/Header'
 import appConstant from '../../helper/appConstant'
+import { importWalletData } from '../../constants/data'
 import { hp, isIOS, normalize, wp } from '../../helper/responsiveScreen'
 import Button from '../../components/common/Button'
 import FontText from '../../components/common/FontText'
 import Input from '../../components/common/Input'
 import WalletCard from '../../components/WalletCard'
-import AsyncStorage from '@react-native-async-storage/async-storage'
 import { useTranslation } from 'react-i18next'
-import { importWalletData } from '../../constants/data'
+import { getWalletData } from "../../storage";
+import PopUp from '../../components/common/AlertBox'
 
 export default function RecoveryCheckScreen({ navigation }) {
     const { t } = useTranslation();
     const cardRef = useRef([])
     const [btnValue, setBtnValue] = useState(appConstant.edit)
     const [walletData, setWalletData] = useState(importWalletData)
+    const [nemonic, setNemonic] = useState()
     const [isEdit, setIsEdit] = useState(false)
     const [textIndex, setTextIndex] = useState(-1)
     const [showKeyboard, setShowKeyboard] = useState(true)
     const [numberValue, setNumberValue] = useState(0)
     const walletcardData = numberValue && walletData.slice(0, numberValue)
     const reg = (/^[a-z]+$/);
+    const [showAlert, setShowAlert] = useState(false)
+    const [alertTitle, setAlertTitle] = useState('')
+    const [alertMessage, setAlertMessage] = useState('')
 
     useEffect(() => {
         cardRef.current = cardRef?.current?.slice(0, walletData?.length);
@@ -31,8 +36,7 @@ export default function RecoveryCheckScreen({ navigation }) {
     useLayoutEffect(() => {
         setTimeout(() => {
             cardRef.current[0].focus();
-        }, 1000);
-
+        }, 100);
     }, []);
 
     useEffect(() => {
@@ -47,11 +51,15 @@ export default function RecoveryCheckScreen({ navigation }) {
     }, [])
 
     useEffect(() => {
-        async function getWalletData() {
-            const data = await AsyncStorage.getItem('WalletData');
-            setNumberValue(JSON.parse(data).length)
-        }
-        getWalletData()
+        getWalletData().then(res => {
+            if (res.status) {
+                // const _walletData = walletData.slice(0, res.words.length);
+                // setWalletData(_walletData)
+                setNumberValue(res.words.length)
+                setNemonic(res.words)
+                // cardRef.current = cardRef?.current?.slice(0, res.words.length);
+            }
+        })
     }, []);
 
     useEffect(() => {
@@ -72,7 +80,7 @@ export default function RecoveryCheckScreen({ navigation }) {
     const keyboardHideListener = Keyboard.addListener(
         'keyboardDidHide',
         () => {
-            if (!walletData?.some((item) => !item.name)) {
+            if (!walletData?.slice(0, numberValue).some((item) => !item.name)) {
                 setBtnValue(appConstant.confirm)
                 setIsEdit(false)
             }
@@ -86,9 +94,42 @@ export default function RecoveryCheckScreen({ navigation }) {
     );
 
     const handleConfirmClick = async () => {
-        navigation.navigate(appConstant.main)
-        await AsyncStorage.setItem('WalletData', JSON.stringify(walletData));
+        let _flag = true;
+        for (const key in nemonic) {
+            if (walletData[key].name != nemonic[key].name) {
+                _flag = false;
+                break;
+            }
+        }
+        if (_flag) {
+            setAlertTitle(t('successRecovery'))
+            setAlertMessage(t('successRecoveryMess'))
+            setShowAlert(true)
+            // navigation.navigate(appConstant.main)
+        } else {
+            setAlertTitle(t('failRecoveryCheck'))
+            setAlertMessage(t('recoveryCheckError'))
+            setShowAlert(true)
+        }
     }
+
+    const onConfirmAlert = () => {
+        let _flag = true;
+        for (const key in nemonic) {
+            if (walletData[key].name != nemonic[key].name) {
+                _flag = false;
+                break;
+            }
+        }
+        if (_flag) {
+            setShowAlert(false)
+            navigation.navigate(appConstant.main)
+        } else {
+            setShowAlert(false)
+        }
+    }
+
+
 
     const handleEditClick = () => {
         setIsEdit(true)
@@ -120,15 +161,15 @@ export default function RecoveryCheckScreen({ navigation }) {
                     placeholder={''}
                     value={item?.name}
                     autoCapitalize={'none'}
-                    secureTextEntry={index == textIndex ? false : true}
-                    onSubmit={() => { walletData[index].name !== '' && index !== walletData.length - 1 ? cardRef.current[index + 1].focus() : Keyboard.dismiss() }}
+                    // secureTextEntry={index == textIndex ? false : true}
+                    onSubmit={() => { walletData[index].name !== '' && index !== numberValue - 1 ? cardRef.current[index + 1].focus() : Keyboard.dismiss() }}
                     onFocus={() => { cardRef.current[index].focus(), setTextIndex(index) }}
                     multiline={false}
                     autoCorrect={false}
                     inputStyle={[styles.textInput, { color: item.name == '' ? colors.white : colors.red }]}
                     onChangeText={text => {
                         if (text === '' || reg.test(text)) {
-                            walletData[index].name = text
+                            walletData[index].name = text.toLowerCase()
                             setWalletData([...walletData]);
                         }
                     }}
@@ -143,7 +184,7 @@ export default function RecoveryCheckScreen({ navigation }) {
     return (
         <View style={styles.container} >
             <Header title={t("recoveryCheck")} showRightIcon RightIcon={'info'} showBackIcon onBackPress={backAction} statusBarcolor={colors.red} />
-            <View style={[styles.subContainer, { bottom: showKeyboard ? hp(4) : 0 }]}>
+            {numberValue > 0 && <View style={[styles.subContainer, { bottom: showKeyboard ? hp(4) : 0 }]}>
                 <WalletCard style={styles.walletCardContainer}
                     titleColor={'red'}
                     title={t("recoverySeeds")}
@@ -160,29 +201,25 @@ export default function RecoveryCheckScreen({ navigation }) {
                         />
                     }
                 />
-            </View>
+            </View>}
             <>
                 <Button
                     flex={null}
-                    height={hp(8.5)}
-                    bgColor={!walletData?.some((item) => !item.name) && btnValue === appConstant.confirm ? 'white' : ['red-open']}
+                    bgColor={!walletData?.slice(0, numberValue).some((item) => !item.name) && btnValue === appConstant.confirm ? 'white' : 'red-open'}
                     type="highlight"
                     borderRadius={11}
-                    width={wp(90)}
-                    disabled={walletData?.some((item) => !item.name)}
+                    disabled={walletData?.slice(0, numberValue).some((item) => !item.name)}
                     style={[styles.button, { bottom: hp(14) }]}
                     onPress={handleConfirmClick}
                 >
-                    <FontText name={"inter-medium"} size={normalize(22)} color={!walletData?.some((item) => !item.name) && btnValue === appConstant.confirm ? "red" : 'white'}>
+                    <FontText name={"inter-medium"} size={normalize(22)} color={!walletData?.slice(0, numberValue)?.some((item) => !item.name) && btnValue === appConstant.confirm ? "red" : 'white'}>
                         {t("done")}
                     </FontText>
                 </Button>
                 <Button
                     flex={null}
-                    height={hp(8.5)}
-                    bgColor={btnValue === appConstant.edit ? 'white' : ['red-open']}
+                    bgColor={btnValue === appConstant.edit ? 'white' : 'red-open'}
                     type="highlight"
-                    width={wp(90)}
                     borderRadius={11}
                     style={styles.button}
                     onPress={handleEditClick}
@@ -192,6 +229,11 @@ export default function RecoveryCheckScreen({ navigation }) {
                     </FontText>
                 </Button>
             </>
+            {showAlert && <PopUp
+                title={alertTitle}
+                message={alertMessage}
+                onConfirmPressed={onConfirmAlert}
+            />}
         </View>
     )
 }

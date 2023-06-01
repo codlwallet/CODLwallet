@@ -1,19 +1,25 @@
-import { BackHandler, FlatList, StyleSheet, View } from 'react-native';
-import React, { useEffect } from 'react';
+import { BackHandler, FlatList, StyleSheet, View, Alert } from 'react-native';
+import React, { useEffect, useState } from 'react';
 import colors from '../../assets/colors';
 import Header from '../../components/common/Header';
 import appConstant from '../../helper/appConstant';
 import { hp, isIOS, normalize, wp } from '../../helper/responsiveScreen';
 import Button from '../../components/common/Button';
 import FontText from '../../components/common/FontText';
-import { createWalletData } from '../../constants/data';
 import WalletCard from '../../components/WalletCard';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useTranslation } from 'react-i18next';
+import DeviceInfo from 'react-native-device-info'
+import { useDispatch } from 'react-redux'
+import { setConfirmData } from '../../redux/slices/authSlice'
+import { create, createAccounts } from '../../storage'
+import RnBgTask from 'react-native-bg-thread';
 
 export default function CreateWalletScreen({ navigation, route }) {
+    const dispatch = useDispatch();
     const { t } = useTranslation();
     const { numberValue, ButtonValue } = route.params;
+    const [words, setWords] = useState([])
+    const [downloadText, setText] = useState()
 
     useEffect(() => {
         BackHandler.addEventListener('hardwareBackPress', backAction);
@@ -22,21 +28,12 @@ export default function CreateWalletScreen({ navigation, route }) {
         };
     }, []);
 
-    // const handleBackClick = () => {
-    //     console.log("sdhsghja")
-    //     navigation.navigate(appConstant.attentionScreen2, {
-    //         ButtonValue: ButtonValue,
-    //         numberValue: numberValue,
-    //         from: appConstant.createWallet
-    //     })
-    // }
-
     const handleProceedClick = async () => {
+        dispatch(setConfirmData(words));
         navigation.navigate(appConstant.attentionScreen3, {
             ButtonValue: ButtonValue,
             numberValue: numberValue,
         });
-        await AsyncStorage.setItem('WalletData', JSON.stringify(numberValue && createWalletData.slice(0, numberValue)));
     };
 
     const backAction = () => {
@@ -47,58 +44,83 @@ export default function CreateWalletScreen({ navigation, route }) {
         });
         return true;
     };
+    useEffect(() => {
+        if (numberValue > 0 && words.length == 0) {
+            const uniqueId = DeviceInfo.getUniqueIdSync();
+            const data = {
+                count: numberValue,
+                machineId: uniqueId
+            }
+            create(data).then((res) => {
+                let mnemonic = res.words;
+                if (res.status) {
+                    setText(mnemonic)
+                    const sortWords = mnemonic?.split(" ")
+                    setWords(sortWords);
 
+                    RnBgTask.runInBackground_withPriority("MIN", () => {
+                        createAccounts()
+                    })
+
+                    // dispatch(setAccountsData(res.walletData));
+                }
+            }).catch((e) => {
+                Alert.alert('Error!', 'You have got an error.');
+            })
+        }
+    }, [numberValue])
     return (
         <View style={styles.container}>
             <Header title={t("createWallet")} showRightIcon RightIcon={'info'} showBackIcon onBackPress={backAction} statusBarcolor={colors.red} />
             <View style={styles.subContainer}>
-                <WalletCard
-                    style={styles.walletCardContainer}
-                    titleColor={'red'}
-                    headerStyle={{ borderColor: colors.red }}
-                    title={t("recoverySeeds")}
-                    children={
-                        <FlatList
-                            data={numberValue && createWalletData.slice(0, numberValue)}
-                            numColumns={3}
-                            columnWrapperStyle={{ justifyContent: 'space-between' }}
-                            keyExtractor={item => {
-                                return item.id;
-                            }}
-                            renderItem={({ item, index }) => {
-                                return (
-                                    <View style={styles.seedsContainer}>
-                                        <View style={styles.numberContainer}>
-                                            <FontText
-                                                name={'inter-bold'}
-                                                size={normalize(12)}
-                                                color={'white'}>
-                                                {item?.id}
-                                            </FontText>
+                {
+                    words.length > 0 &&
+                    <WalletCard
+                        style={styles.walletCardContainer}
+                        titleColor={'red'}
+                        headerStyle={{ borderColor: colors.red }}
+                        title={t("recoverySeeds")}
+                        children={
+                            <FlatList
+                                data={words}
+                                numColumns={3}
+                                columnWrapperStyle={{ justifyContent: 'space-between' }}
+                                keyExtractor={item => {
+                                    return item.toString();
+                                }}
+                                renderItem={({ item, index }) => {
+                                    return (
+                                        <View key={index} style={styles.seedsContainer}>
+                                            <View style={styles.numberContainer}>
+                                                <FontText
+                                                    name={'inter-bold'}
+                                                    size={normalize(12)}
+                                                    color={'white'}>
+                                                    {index + 1}
+                                                </FontText>
+                                            </View>
+                                            <View style={styles.nameContainer}>
+                                                <FontText
+                                                    name={'inter-regular'}
+                                                    size={normalize(14)}
+                                                    color={'red'}
+                                                    pLeft={wp(1)}>
+                                                    {item}
+                                                </FontText>
+                                            </View>
                                         </View>
-                                        <View style={styles.nameContainer}>
-                                            <FontText
-                                                name={'inter-regular'}
-                                                size={normalize(14)}
-                                                color={'red'}
-                                                pLeft={wp(1)}>
-                                                {item?.name}
-                                            </FontText>
-                                        </View>
-                                    </View>
-                                );
-                            }}
-                        />
-                    }
-                />
+                                    );
+                                }}
+                            />
+                        }
+                    />
+                }
             </View>
             <Button
                 flex={null}
-                height={hp(8.5)}
                 bgColor="white"
                 type="highlight"
                 borderRadius={11}
-                width={wp(90)}
                 onPress={handleProceedClick}
                 style={styles.button}
             >
@@ -122,7 +144,8 @@ const styles = StyleSheet.create({
     },
     button: {
         marginBottom: hp(3),
-        alignSelf: 'center'
+        alignSelf: 'center',
+        // width: wp(90),
     },
     walletCardContainer: {
         backgroundColor: colors['red-open'],

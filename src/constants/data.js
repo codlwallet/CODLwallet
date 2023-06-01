@@ -24,11 +24,11 @@ module.exports = {
       name: 'Yeni hesap oluştur',
       value: appConstant.createNewAccount,
     },
-    {
-      id: 1,
-      name: 'Hesapları Yeniden Sırala',
-      value: appConstant.reorderAccounts,
-    },
+    // {
+    //   id: 1,
+    //   name: 'Hesapları Yeniden Sırala',
+    //   value: appConstant.reorderAccounts,
+    // },
   ],
 
   languageData: [
@@ -364,36 +364,64 @@ module.exports = {
   ],
 
   mainData: [
-    {
-      id: 0,
-      name: 'Bitcoin',
-      value: appConstant.bitcoin,
-      image: require('../assets/images/BI.png'),
-    },
+    // {
+    //   id: 0,
+    //   name: 'Bitcoin',
+    //   value: appConstant.bitcoin,
+    //   image: require('../assets/images/BI.png'),
+    // },
     {
       id: 1,
       name: 'Ethereum',
       value: appConstant.ethereum,
-      image: require('../assets/images/EV.png'),
+      image: require('../assets/images/iEthereum.png'),
       img: require('../assets/images/EVblack.png'),
     },
-    {
-      id: 2,
-      name: 'Solana',
-      value: appConstant.solana,
-      image: require('../assets/images/SO.png'),
-    },
+    // {
+    //   id: 2,
+    //   name: 'Solana',
+    //   value: appConstant.solana,
+    //   image: require('../assets/images/SO.png'),
+    // },
     {
       id: 3,
       name: 'Çığ',
       value: appConstant.avalanche,
-      image: require('../assets/images/img.png'),
+      image: require('../assets/images/iAvalanche.png'),
     },
     {
       id: 4,
       name: 'Çokgen',
       value: appConstant.polygon,
-      image: require('../assets/images/PO.png'),
+      image: require('../assets/images/iPolygon.png'),
+    },
+    {
+      id: 5,
+      name: 'BSC',
+      value: appConstant.bsc,
+      image: require('../assets/images/iBSC.png'),
+      img: require('../assets/images/BSC_selected.png'),
+    },
+    {
+      id: 6,
+      name: 'Arbitrum',
+      value: appConstant.arbitrum,
+      image: require('../assets/images/iArbitrum.png'),
+      img: require('../assets/images/Arbitrum_selected.png'),
+    },
+    {
+      id: 7,
+      name: 'Optimism',
+      value: appConstant.optimism,
+      image: require('../assets/images/iOptimism.png'),
+      img: require('../assets/images/Optimism_selected.png'),
+    },
+    {
+      id: 8,
+      name: 'Zksync',
+      value: appConstant.zksync,
+      image: require('../assets/images/izkSync.png'),
+      img: require('../assets/images/Zksync_Era_selected.png'),
     },
   ],
 

@@ -16,7 +16,6 @@ export default function WalletCard({
       <View style={[styles.headerContainer, headerStyle]}>
         <FontText
           color={titleColor}
-          textTransform={'uppercase'}
           textAlign={'center'}
           name={'inter-bold'}
           size={normalize(11)}>

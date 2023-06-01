@@ -16,14 +16,20 @@ export default function BroadcastTransactionScreen({ navigation, route }) {
     const { t } = useTranslation();
     const walletName = route?.params?.walletName
     const showIcon = route?.params?.name
+    const walletAddress = route?.params?.walletAddress
     const CarouselRef = useRef();
     const [selectedIndex, setselectedIndex] = useState(0);
 
+    const tx = route?.params?.tx;
+    const chain = route?.params?.chain;
+    const signedTxUR = route?.params?.signedTxUR;
+
     const details = {
-        from: '0xa94b3c662eE5602A3308604a3fB9A8FDd5caa710',
-        to: '0xa94b3c662eE5602A3308604a3fB9A8FDd5caa710',
-        fees: '0.0000315 ETH',
-        amount: '0.001 ETH'
+        network: chain?.name,
+        from: walletAddress,
+        to: tx?.payload?.transaction?.to,
+        fees: `~ ${tx?.fee} ${chain?.nativeCurrency?.symbol}`,
+        amount: `${tx?.payload?.transaction?.value && (parseInt(tx?.payload?.transaction?.value) / (10 ** 18)).toFixed(6)} ${chain?.nativeCurrency?.symbol}`
     }
 
     useEffect(() => {
@@ -36,7 +42,8 @@ export default function BroadcastTransactionScreen({ navigation, route }) {
     const backAction = () => {
         navigation.navigate(appConstant.accountDetails, {
             walletName: walletName,
-            showIcon: showIcon
+            showIcon: showIcon,
+            walletAddress
         })
         return true;
     };
@@ -47,11 +54,12 @@ export default function BroadcastTransactionScreen({ navigation, route }) {
                 {item?.id === 1 ?
                     <View style={styles.scannerContainer}>
                         <View style={styles.walletHeaderView}>
-                            <FontText name={"inter-bold"} size={normalize(11)} color="black" textTransform={'uppercase'}>
+                            <FontText name={"inter-bold"} size={normalize(11)} color="black">
                                 {t("signedTX")}
                             </FontText>
                         </View>
                         <QRCode
+                            value={signedTxUR}
                             logo={require('../../assets/images/BlackAppLogo.png')}
                             logoSize={50}
                             size={hp(39)}
@@ -79,7 +87,7 @@ export default function BroadcastTransactionScreen({ navigation, route }) {
                     data={paginationData}
                     ref={CarouselRef}
                     itemWidth={hp(45)}
-                    sliderWidth={wp(90)}
+                    sliderWidth={wp(95)}
                     renderItem={RenderItem}
                     onSnapToItem={index => setselectedIndex(index)}
                 />
@@ -98,8 +106,6 @@ export default function BroadcastTransactionScreen({ navigation, route }) {
                 type="highlight"
                 borderRadius={11}
                 bgColor="white"
-                height={hp(8.5)}
-                width={wp(90)}
                 onPress={backAction}
                 style={styles.button}>
                 <FontText name={"inter-medium"} size={normalize(22)} color="black">
@@ -122,6 +128,9 @@ const styles = StyleSheet.create({
     },
     button: {
         marginBottom: hp(3),
+        // backgroundColor: colors.white,
+        // height: hp(8.5),
+        // width: wp(90),
     },
     scannerContainer: {
         backgroundColor: colors.white,

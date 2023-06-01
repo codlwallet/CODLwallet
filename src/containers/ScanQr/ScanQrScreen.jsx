@@ -1,5 +1,5 @@
-import { BackHandler, Dimensions, Image, PermissionsAndroid, Platform, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import { BackHandler, Image, PermissionsAndroid, Platform, StyleSheet, TouchableOpacity, View, ActivityIndicator } from 'react-native'
+import React, { useEffect, useRef, useState } from 'react'
 import colors from '../../assets/colors'
 import { hp, normalize, wp } from '../../helper/responsiveScreen'
 import Header from '../../components/common/Header'
@@ -9,12 +9,30 @@ import FontText from '../../components/common/FontText'
 import appConstant from '../../helper/appConstant'
 import SvgIcons from '../../assets/SvgIcons'
 import { Camera } from 'react-native-camera-kit'
+import { decodeTxQR } from '../../storage'
+import { useFocusEffect } from '@react-navigation/native'
+import { useSelector } from 'react-redux'
+import PopUp from '../../components/common/AlertBox'
 
 export default function ScanQrScreen({ navigation, route }) {
     const { t } = useTranslation();
     const walletName = route?.params?.walletName
     const [qrvalue, setQrvalue] = useState('');
     const [opneScanner, setOpneScanner] = useState(false);
+    const walletAddress = route?.params?.walletAddress
+    let camaraRef = useRef(null)
+    const [barcode, setBarcode] = useState('');
+    const [hasPermission, setHasPermission] = useState(false);
+    const [data, setData] = useState('');
+    const [showAlert, setShowAlert] = useState(false)
+    const [alertTitle, setAlertTitle] = useState('')
+    const [alertMessage, setAlertMessage] = useState('')
+    const [parsingQR, setParsingQR] = useState(null)
+    const { passphrase } = useSelector(state => state.auth);
+    useFocusEffect(React.useCallback(() => {
+        // checkCameraPermission();        
+        onOpneScanner();
+    }, []))
 
     const WalletData = {
         from: '0xa94b3c662eE5602A3308604a3fB9A8FDd5caa710',
@@ -23,9 +41,8 @@ export default function ScanQrScreen({ navigation, route }) {
         amount: '0.001 ETH'
     }
 
-    useEffect(() => {
-        onOpneScanner();
-    }, []);
+    // useEffect(() => {
+    // }, []);
 
     useEffect(() => {
         BackHandler.addEventListener('hardwareBackPress', backAction);
@@ -38,6 +55,39 @@ export default function ScanQrScreen({ navigation, route }) {
         navigation.goBack()
         return true;
     };
+    // const requestCameraPermission = async () => {
+    //     try {
+    //         const granted = await PermissionsAndroid.request(
+    //             PermissionsAndroid.PERMISSIONS.CAMERA,
+    //             {
+    //                 title: 'Camera Permission',
+    //                 message: 'App needs access to your camera',
+    //                 buttonNeutral: 'Ask Me Later',
+    //                 buttonNegative: 'Cancel',
+    //                 buttonPositive: 'OK',
+    //             },
+    //         );
+    //         if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+    //             return true;
+    //         } else {
+    //             return false;
+    //         }
+    //     } catch (err) {
+    //         return false;
+    //     }
+    // }
+    // const checkCameraPermission = async () => {
+    //     const hasCamera = await isCameraPresent();
+    //     let status = await Camera.getCameraPermissionStatus();
+    //     if (hasCamera && status === 'denied') {
+    //         requestCameraPermission().then(async res => {
+    //             status = await Camera.getCameraPermissionStatus();
+    //             setHasPermission(hasCamera && status === 'authorized');
+    //         })
+    //     } else {
+    //         setHasPermission(hasCamera && status === 'authorized');
+    //     }
+    // };
 
     const onOpneScanner = () => {
         if (Platform.OS === 'android') {
@@ -57,8 +107,7 @@ export default function ScanQrScreen({ navigation, route }) {
                         alert('CAMERA permission denied');
                     }
                 } catch (err) {
-                    alert('Camera permission err', err);
-                    console.warn(err);
+                    // alert('Camera permission err', err);
                 }
             }
             requestCameraPermission();
@@ -70,25 +119,60 @@ export default function ScanQrScreen({ navigation, route }) {
 
 
     const onBarcodeScan = (qrvalue) => {
-        console.log(qrvalue)
         setQrvalue(qrvalue);
         setOpneScanner(false);
-        if (qrvalue) {
-            navigation.navigate(appConstant.signTransaction, {
-                walletName: walletName,
-                WalletData: WalletData
-            })
-        }
+        // if (qrvalue) {
+        //     navigation.navigate(appConstant.signTransaction, {
+        //         walletName: walletName,
+        //         WalletData: WalletData
+        //     })
+        // }
 
+    };
+    let handleScan = e => {
+        try {
+            if (e) {
+                let qrdata = e.toUpperCase();
+                if (!qrdata.startsWith('UR:ETH-SIGN-REQUEST/')) {
+                    throw 'invalid_qr_err';
+                }
+                if (!parsingQR && parsingQR === null) {
+                    setParsingQR(true);
+                    setQrvalue(qrdata);
+                    decodeTxQR(qrdata, passphrase).then(res => {
+                        if (res.state) {
+                            setShowAlert(false)
+                            setParsingQR(false);
+                            setOpneScanner(false);
+                            navigation.navigate(appConstant.signTransaction, {
+                                walletName: walletName,
+                                walletAddress: walletAddress,
+                                tx: res.txdata,
+                                encodedSignData: res.signdata,
+                                chain: res.chaindata
+                            })
+                        } else {
+                            setAlertTitle(t('wrong_qr'))
+                            setAlertMessage(t('wrong_qr_err_mess'))
+                            setShowAlert(true)
+                        }
+                    })
+                }
+            }
+        } catch (error) {
+            setAlertTitle(t('wrong_qr'))
+            setAlertMessage(t('wrong_qr_err_mess'))
+            setShowAlert(true)
+            // camaraRef.reactivate();
+        }
     };
 
     return (
         <View style={styles.container}>
             <Header title={t("scanQr")} showRightIcon statusBarcolor={colors.black} RightIcon={'info'} />
             <View style={styles.subContainer}>
-                <TouchableOpacity onPress={() => navigation.navigate(appConstant.signTransaction, {
-                    walletName: walletName,
-                })}>
+                {/* {hasPermission && !showAlert && !parsingQR && <TouchableOpacity style={styles.scannerContainer}> */}
+                {opneScanner && !showAlert && <TouchableOpacity style={styles.scannerContainer}>
                     {opneScanner &&
                         <>
                             <View style={styles.scannerContainer}>
@@ -97,19 +181,40 @@ export default function ScanQrScreen({ navigation, route }) {
                                     scanBarcode={true}
                                     colorForScannerFrame={'blue'}
                                     onReadCode={(event) =>
-                                        onBarcodeScan(event.nativeEvent.codeStringValue)
+                                        handleScan(event.nativeEvent.codeStringValue)
                                     }
                                 />
-                                <View style={{ position: 'absolute' }}>
-                                    <Image source={require('../../assets/images/frame.png')} style={styles.image} />
+                                <View style={{ position: 'absolute', justifyContent: 'center', alignItems: 'center' }}>
+                                    <Image source={require('../../assets/images/frame.png')} style={{ ...styles.image, backgroundColor: parsingQR ? 'black' : 'transparent' }} />
+                                    {parsingQR &&
+                                        <View style={{ position: 'absolute', }}>
+                                            <ActivityIndicator animating={!!parsingQR} size="large" color="#ffffff" />
+                                            <FontText name={"inter-regular"} size={normalize(22)} color="white" >
+                                                {t('analyzing')}
+                                            </FontText>
+                                        </View>
+                                    }
                                 </View>
-
-
                             </View>
 
                         </>
                     }
-                </TouchableOpacity>
+                    {/* <QRCodeScanner
+                        reactivate={true}
+                        showMarker={true}
+                        markerStyle={styles.scannerStyle.markerStyle}
+                        ref={(node) => { camaraRef = node }}
+                        onRead={handleScan}
+                    /> */}
+                </TouchableOpacity>}
+                {/* {
+                    !hasPermission &&
+                    <View style={styles.bottomView}>
+                        <FontText name={"inter-regular"} style={styles.centerText} size={normalize(22)} color="white"  >
+                            {t('no_permission')}
+                        </FontText>
+                    </View>
+                } */}
             </View>
             <View style={styles.bottomView}>
                 <FontText name={"inter-regular"} size={normalize(22)} color="white"  >
@@ -122,14 +227,19 @@ export default function ScanQrScreen({ navigation, route }) {
                 type="highlight"
                 borderRadius={11}
                 bgColor="white"
-                height={hp(8.5)}
-                width={wp(90)}
                 onPress={backAction}
                 style={styles.button}>
                 <FontText name={"inter-medium"} size={normalize(22)} color="black">
                     {t("back")}
                 </FontText>
             </Button>
+            {showAlert && <PopUp
+                title={alertTitle}
+                message={alertMessage}
+                onConfirmPressed={() => {
+                    setShowAlert(false)
+                }}
+            />}
         </View >
     )
 }
@@ -141,6 +251,11 @@ const styles = StyleSheet.create({
         paddingHorizontal: wp(3.5),
         alignItems: 'center'
     },
+    // centerText: {
+    //     textAlign: 'center',
+    //     paddingVertical: hp(5),
+    //     backgroundColor: 'green',
+    // },
     subContainer: {
         flex: 1,
         justifyContent: 'center',
@@ -171,6 +286,11 @@ const styles = StyleSheet.create({
         justifyContent: "space-between",
         paddingHorizontal: wp(4),
     },
+    analyzingView: {
+        position: 'absolute',
+        top: hp(15),
+        backgroundColor: colors.gray
+    },
     image: {
         height: hp(44.1),
         width: hp(44.1),
@@ -178,6 +298,14 @@ const styles = StyleSheet.create({
         marginTop: hp(0.8)
     },
     button: {
+        // backgroundColor: colors.white,
         marginBottom: hp(3),
+        // height: hp(8.5),
+        // width: wp(90),
     },
+    scannerStyle: {
+        markerStyle: {
+            borderColor: 'white'
+        }
+    }
 })

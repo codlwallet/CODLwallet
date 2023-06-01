@@ -7,14 +7,17 @@ import appConstant from '../../helper/appConstant'
 import SvgIcons from '../../assets/SvgIcons'
 import Header from '../../components/common/Header'
 import Button from '../../components/common/Button'
-import AsyncStorage from '@react-native-async-storage/async-storage'
 import FontText from '../../components/common/FontText'
 import { useTranslation } from 'react-i18next'
 import PopUp from '../../components/common/AlertBox'
+import { useDispatch } from 'react-redux'
+import { changeUserData, getUserData } from "../../storage";
+import { setUser } from "../../redux/slices/authSlice";
 
 export default function ChangeUserDetailsScreen({ navigation, route }) {
     const { t } = useTranslation();
     const nameRef = useRef()
+    const dispatch = useDispatch()
     const currentPinRef = useRef()
     const newPinRef = useRef()
     const confirmPinRef = useRef()
@@ -34,11 +37,9 @@ export default function ChangeUserDetailsScreen({ navigation, route }) {
     const [showPin, setShowPin] = useState(false)
 
     useEffect(() => {
-        async function getLoginData() {
-            const data = await AsyncStorage.getItem('LoginData');
-            setLoginData(JSON.parse(data))
-        }
-        getLoginData()
+        getUserData().then(async res => {
+            setLoginData(res.user)
+        })
     }, [])
 
     useEffect(() => {
@@ -155,15 +156,25 @@ export default function ChangeUserDetailsScreen({ navigation, route }) {
         }
         if (from === appConstant.changeName) {
             if (checkNameValidation()) {
-                await AsyncStorage.setItem('LoginData', JSON.stringify(data));
-                navigation.goBack()
+                // await AsyncStorage.setItem('LoginData', JSON.stringify(data));
+                changeUserData('name', data.name).then(async res => {
+                    if (res.status) {
+                        dispatch(setUser(res.user))
+                        navigation.goBack()
+                    }
+                })
             }
         }
         else {
             if (checkPinValidation()) {
-                await AsyncStorage.setItem('LoginData', JSON.stringify(data));
-                navigation.navigate(appConstant.complateSeeds, {
-                    from: appConstant.changePIN
+                // await AsyncStorage.setItem('LoginData', JSON.stringify(data));
+                changeUserData('pin', data.pin).then(async res => {
+                    if (res.status) {
+                        dispatch(setUser(res.user))
+                        navigation.navigate(appConstant.complateSeeds, {
+                            from: appConstant.changePIN
+                        })
+                    }
                 })
             }
         }
@@ -342,12 +353,11 @@ export default function ChangeUserDetailsScreen({ navigation, route }) {
                 }
                 <Button
                     flex={null}
-                    height={hp(8.5)}
                     type="highlight"
-                    width={wp(90)}
                     borderRadius={11}
                     bgColor="white"
                     onPress={handleDoneBtn}
+                    // buttonStyle={styles.button}
                     style={styles.buttonView}
                 >
                     <FontText name={"inter-medium"} size={normalize(22)} color="black">
@@ -390,4 +400,8 @@ const styles = StyleSheet.create({
         position: 'absolute',
         bottom: hp(3),
     },
+    // button: {
+    //     backgroundColor: colors.white,
+    //     width: wp(90),
+    // },
 })

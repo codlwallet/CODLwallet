@@ -6,37 +6,63 @@ import { mainData, settingData } from '../../constants/data'
 import FontText from '../../components/common/FontText'
 import { hp, normalize, wp } from '../../helper/responsiveScreen'
 import Button from '../../components/common/Button'
+import PopUp from '../../components/common/AlertBox'
 import appConstant from '../../helper/appConstant'
 import SvgIcons from '../../assets/SvgIcons'
 import { useTranslation } from 'react-i18next'
-import AsyncStorage from '@react-native-async-storage/async-storage'
 import { useFocusEffect } from '@react-navigation/native'
 import i18n from '../../constants/i18n'
+import { useDispatch, useSelector } from "react-redux";
+import { getAccountsData, getNetwork } from "../../storage";
+import { selectNetwork } from "../../redux/slices/authSlice";
+import { selectAccount } from "../../redux/slices/authSlice";
 
 export default function MainScreen({ navigation, route }) {
     const { t } = useTranslation();
-    const hidden = route?.params?.hidden
+    const dispatch = useDispatch();
     const [hideMenu, setHideMenu] = useState(false);
     const [accountDetails, setAccountDetails] = useState([])
-    const [loginData, setLoginData] = useState()
-
-    useEffect(() => {
-        async function getLoginData() {
-            const data = await AsyncStorage.getItem('LoginData');
-            setLoginData(JSON.parse(data))
-        }
-        getLoginData()
-    }, [])
+    const { user, passphrase } = useSelector((state) => state.auth)
+    const [networks, setNetworks] = useState([])
+    const [accountsData, setAccountsData] = useState({})
+    const [createdAccounts, setCreatedAccounts] = useState({})
+    const [showAlert, setShowAlert] = useState(false)
+    const [alertTitle, setAlertTitle] = useState('')
+    const [alertMessage, setAlertMessage] = useState('')
+    const [hidden, setIsHidden] = useState(route?.params?.hidden)
 
     useFocusEffect(
         React.useCallback(() => {
-            async function getWalletData() {
-                const data = await AsyncStorage.getItem('WalletList');
-                setAccountDetails(JSON.parse(data))
-            }
-            getWalletData()
+            getAccountsData().then(res => {
+                if (res.status) {
+                    if (typeof hidden != 'boolean') setIsHidden(res.data.isHidden);
+                    setAccountsData(res.data);
+                    setCreatedAccounts(res.created);
+                }
+            })
         }, []),
     );
+
+    const loadNetworks = () => {
+        getNetwork().then(res => {
+            if (res.status) {
+                let _networks = mainData.filter(data => res.networks.indexOf(data.value) >= 0)
+                setNetworks(_networks);
+            }
+        })
+    }
+
+    useFocusEffect(
+        React.useCallback(() => {
+            loadNetworks();
+            return () => { };
+        }, []),
+    );
+
+    const settingMenuAction = () => {
+        if (hideMenu) loadNetworks();
+        setHideMenu(!hideMenu);
+    }
 
     useEffect(() => {
         BackHandler.addEventListener('hardwareBackPress', backAction);
@@ -47,16 +73,40 @@ export default function MainScreen({ navigation, route }) {
 
     const backAction = () => {
         if (hideMenu) {
+            // navigation.navigate(appConstant.welcome, {
+            //     from: appConstant.welcomePurchase
+            // })
             setHideMenu(false)
-        }
-        else {
-            navigation.navigate(appConstant.welcomePurchase)
+
+        } else {
+            navigation.goBack()
         }
         return true;
     };
 
+    const onpressRightIcon = () => {
+        setHideMenu(!hideMenu)
+    }
+
+    const lockDevice = () => {
+        navigation.navigate(appConstant.welcome, {
+            from: appConstant.welcomePurchase
+        })
+    }
     const handleConnectClick = () => {
-        navigation.navigate(appConstant.connectWallet)
+        let _createdAccounts = []
+        if (!hidden) {
+            _createdAccounts = createdAccounts && createdAccounts.general
+        } else {
+            _createdAccounts = createdAccounts && createdAccounts.hidden[passphrase]
+        }
+        if (_createdAccounts && _createdAccounts.length > 0) {
+            navigation.navigate(appConstant.connectWallet, { passphrase: hidden ? passphrase : null })
+        } else {
+            setAlertTitle('There is no created Account.')
+            setAlertMessage('You must create one account at least to connect Metamask.')
+            setShowAlert(true)
+        }
     }
 
     const handleMenuListClick = (item) => {
@@ -88,77 +138,85 @@ export default function MainScreen({ navigation, route }) {
     }
 
     const handleMainListClick = (item) => {
-        if (accountDetails?.length === 0 || !accountDetails) {
+        dispatch(selectNetwork(item.value));
+        if (!createdAccounts || (accountsData.isHidden === false && createdAccounts.general.length === 0) || (accountsData.isHidden === true && !createdAccounts.hidden[passphrase])) {
             navigation.navigate(appConstant.createAccount, {
                 name: item?.value
             })
-        }
-        else {
-            if (accountDetails.some((i) => i.name === item.value)) {
-                accountDetails.map((i) => {
-                    if (i?.name === item.value) {
-                        if (i?.accountDetails.length !== 1) {
-                            navigation.navigate(appConstant.accountList, {
-                                name: item?.value,
-                                headerName: i18n.language == 'tr' ? item?.name : item?.value,
-                                accountList: i?.accountDetails
-                            })
-                        }
-                        else {
-                            i?.accountDetails.map((itm) => {
-                                navigation.navigate(appConstant?.accountDetails, {
-                                    walletName: itm?.walletName,
-                                    name: item?.value,
-                                    headerName: i18n.language == 'tr' ? item?.name : item?.value,
-                                    from: appConstant.main
-                                })
-                            })
-                        }
+        } else {
+            if (accountsData.isHidden === false) {
+                let _accounts = createdAccounts.general;
+                if (_accounts) {
+                    if (_accounts.length !== 1) {
+                        navigation.navigate(appConstant.accountList, {
+                            name: item?.value,
+                            headerName: item?.value,
+                            accountList: _accounts,
+                            icon: item.image
+                        })
+                    } else {
+                        dispatch(selectAccount(_accounts[0]))
+                        navigation.navigate(appConstant.accountDetails, {
+                            name: item?.value,
+                            walletName: _accounts[0].name,
+                            headerName: item?.value,
+                            from: appConstant.main,
+                            walletAddress: _accounts[0].publicKey
+                        })
                     }
-                })
-            }
-            else {
-                navigation.navigate(appConstant.createAccount, {
-                    name: item?.value
-                })
+                }
+            } else {
+                let _accounts = createdAccounts.hidden[passphrase];
+                if (_accounts) {
+                    if (_accounts.length !== 1) {
+                        navigation.navigate(appConstant.accountList, {
+                            name: item?.value,
+                            headerName: item?.value,
+                            accountList: _accounts,
+                            icon: item.image
+                        })
+                    } else {
+                        dispatch(selectAccount(_accounts[0]))
+                        navigation.navigate(appConstant.accountDetails, {
+                            name: item?.value,
+                            walletName: _accounts[0].name,
+                            headerName: item?.value,
+                            from: appConstant.main,
+                            walletAddress: _accounts[0].publicKey
+                        })
+                    }
+                }
             }
         }
-    }
-
-    const handleLockDeviceClick = () => {
-        navigation.navigate(appConstant.welcome, {
-            from: appConstant.welcomePurchase,
-        });
-    }
-
-    const onpressRightIcon = () => {
-        setHideMenu(!hideMenu)
     }
 
     return (
         <View style={styles.container}>
-            <Header title={loginData?.name} showRightIcon RightIcon={!hideMenu ? 'menu' : 'false'} RightIconPress={() => onpressRightIcon()} showHiddenTitle={hidden} />
+            <Header title={user?.name} showRightIcon RightIcon={!hideMenu ? 'menu' : 'false'} RightIconPress={() => onpressRightIcon()} showHiddenTitle={hidden} />
             <View style={styles.subConatiner}>
                 {!hideMenu ?
                     <>
-                        {mainData.map((item, index) => {
+                        {networks.map((item, index) => {
                             return (
                                 <TouchableOpacity style={styles.buttonContainer} key={index} onPress={() => handleMainListClick(item)} >
                                     <View>
-                                        {item.value === appConstant.bitcoin ?
-                                            <SvgIcons.Bitcoin height={hp(6)} width={hp(4)} /> :
-                                            item.value === appConstant.ethereum ?
-                                                <Image source={item.image} style={{ width: hp(4), height: hp(6.5), }} /> :
-                                                item.value === appConstant.solana ?
-                                                    <SvgIcons.Solana height={hp(6)} width={hp(4)} /> :
-                                                    item.value === appConstant.avalanche ?
-                                                        <Image source={item.image} style={{ height: hp(4), width: hp(4.5) }} />
-                                                        :
-                                                        <SvgIcons.Poly height={hp(6)} width={hp(4.5)} />
+                                        {item.value === appConstant.ethereum ?
+                                            <Image source={item.image} style={styles.icons} /> :
+                                            item.value === appConstant.avalanche ?
+                                                <Image source={item.image} style={styles.icons} /> :
+                                                item.value === appConstant.polygon ?
+                                                    <Image source={item.image} style={styles.icons} /> :
+                                                    item.value === appConstant.bsc ?
+                                                        <Image source={item.image} style={styles.icons} /> :
+                                                        item.value === appConstant.arbitrum ?
+                                                            <Image source={item.image} style={styles.icons} /> :
+                                                            item.value === appConstant.optimism ?
+                                                                <Image source={item.image} style={styles.icons} /> :
+                                                                <Image source={item.image} style={styles.icons} />
                                         }
                                     </View>
-                                    <FontText size={normalize(25)} color={'white'} name={'inter-regular'} pLeft={wp(5)}>
-                                        {i18n.language === 'tr' ? item?.name : item?.value}
+                                    <FontText size={25} color={'white'} name={'inter-regular'} pLeft={wp(5)} >
+                                        {item?.value}
                                     </FontText>
                                 </TouchableOpacity>
                             )
@@ -181,18 +239,23 @@ export default function MainScreen({ navigation, route }) {
                 }
             </View>
             <Button
-                height={hp(8.5)}
-                width={wp(90)}
                 flex={null}
                 type="highlight"
                 borderRadius={11}
                 bgColor="white"
-                onPress={!hideMenu ? handleConnectClick : handleLockDeviceClick}
+                onPress={!hideMenu ? handleConnectClick : lockDevice}
                 style={styles.button}>
                 <FontText name={"inter-medium"} size={normalize(22)} color="black">
                     {!hideMenu ? t("connect") : t("lockDevice")}
                 </FontText>
             </Button>
+            {showAlert && <PopUp
+                title={alertTitle}
+                message={alertMessage}
+                onConfirmPressed={() => {
+                    setShowAlert(false)
+                }}
+            />}
         </View>
     )
 }
@@ -219,6 +282,13 @@ const styles = StyleSheet.create({
         height: hp(9)
     },
     button: {
+        // backgroundColor: colors.white,
         marginBottom: hp(3),
+        // width: wp(90),
+        // height: hp(8)
+    },
+    icons: {
+        width: hp(4.6),
+        height: hp(5.5)
     }
 })

@@ -1,5 +1,5 @@
 import { BackHandler, StyleSheet, View } from 'react-native'
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import colors from '../../assets/colors'
 import SvgIcons from '../../assets/SvgIcons'
 import { hp, normalize, wp } from '../../helper/responsiveScreen'
@@ -9,12 +9,17 @@ import { useTranslation } from 'react-i18next'
 import Button from '../../components/common/Button'
 import FontText from '../../components/common/FontText'
 import Header from '../../components/common/Header'
+import { useSelector } from 'react-redux'
+import { encodeSignedTxToQR } from '../../storage'
 
 export default function ComplateSingingScreen({ navigation, route }) {
     const walletName = route?.params?.walletName
+    const walletAddress = route?.params?.walletAddress
     const showIcon = route?.params?.name
     const from = route?.params?.from
     const { t } = useTranslation();
+    const [signedTxUR, setSignedTxUR] = useState(null)
+    const { signdata, selectedAccount } = useSelector(state => state.auth)
 
     useEffect(() => {
         BackHandler.addEventListener('hardwareBackPress', backAction);
@@ -23,17 +28,37 @@ export default function ComplateSingingScreen({ navigation, route }) {
         };
     }, []);
 
+    useEffect(() => {
+        signdata && selectedAccount && encodeSignedTxToQR({
+            _serialized: signdata.serialized,
+            tx: signdata.tx.payload.transaction,
+            requestId: signdata.tx.requestId,
+            type: signdata.tx.type,
+            privateKey: selectedAccount.privateKey
+        }).then(res => {
+            if (res.state) {
+                setSignedTxUR(res.data)
+            }
+        })
+        return () => { }
+    }, [])
+
     const backAction = () => {
         navigation.navigate(appConstant.accountDetails, {
             walletName: walletName,
-            showIcon: showIcon
+            showIcon: showIcon,
+            walletAddress
         });
         return true;
     };
 
     const handlebroadcastTransactionBtn = () => {
-        navigation.navigate(appConstant.broadcastTransaction, {
-            walletName: walletName
+        signedTxUR && navigation.navigate(appConstant.broadcastTransaction, {
+            walletName: walletName,
+            tx: signdata.tx,
+            chain: signdata.chain,
+            signedTxUR,
+            walletAddress
         })
     }
 
@@ -48,10 +73,8 @@ export default function ComplateSingingScreen({ navigation, route }) {
             />
             <Button
                 flex={null}
-                height={hp(8.5)}
                 type="highlight"
                 borderRadius={11}
-                width={wp(90)}
                 bgColor="white"
                 onPress={handlebroadcastTransactionBtn}
                 style={styles.buttonView}>

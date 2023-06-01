@@ -65,8 +65,6 @@ export default function LanguageScreen({ navigation }) {
             </View>
             <Button
                 flex={null}
-                height={hp(8.5)}
-                width={wp(90)}
                 type="highlight"
                 borderRadius={11}
                 bgColor="white"
@@ -96,4 +94,10 @@ const styles = StyleSheet.create({
         position: 'absolute',
         bottom: hp(3)
     },
+    // button: {
+    //     alignItems: 'center',
+    //     alignSelf: 'center',
+    //     width: wp(90),
+    //     height: hp(8.5)
+    // },
 })

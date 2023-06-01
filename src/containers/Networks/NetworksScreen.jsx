@@ -9,10 +9,16 @@ import Button from '../../components/common/Button'
 import SvgIcons from '../../assets/SvgIcons'
 import { useTranslation } from 'react-i18next'
 import i18n from '../../constants/i18n'
+import { getNetwork, setNetwork } from "../../storage";
+import appConstant from '../../helper/appConstant'
+import PopUp from '../../components/common/AlertBox'
 
 export default function NetworksScreen({ navigation, route }) {
     const { t } = useTranslation();
-    const [btnIndex, setBtnIndex] = useState();
+    const [btnIndex, setBtnIndex] = useState({});
+    const [showAlert, setShowAlert] = useState(false)
+    const [alertTitle, setAlertTitle] = useState('')
+    const [alertMessage, setAlertMessage] = useState('')
 
     useEffect(() => {
         BackHandler.addEventListener('hardwareBackPress', backAction);
@@ -20,15 +26,38 @@ export default function NetworksScreen({ navigation, route }) {
             BackHandler.removeEventListener('hardwareBackPress', backAction);
         };
     }, []);
+    useEffect(() => {
+        getNetwork().then(res => {
+            if (res.status) {
+                let _networks = {}
+                for (const data of mainData) {
+                    _networks[data?.value] = false;
+                    if (res?.networks?.indexOf(data?.value) >= 0) _networks[data?.value] = true;
+                }
+                setBtnIndex(_networks);
+            }
+        })
+    }, [])
 
     const backAction = () => {
         navigation.goBack()
         return true;
     };
+    const handleDoneClick = () => {
+        let _networks = []
+        for (const key in btnIndex) {
+            if (btnIndex[key]) _networks = [..._networks, key]
+        }
+        if (_networks.length === 0) {
+            setShowAlert(true)
+            setAlertTitle(t("selectNetwork"))
+            setAlertMessage(t("networkError"))
+        } else {
+            setNetwork(_networks)
+            backAction()
+        }
+    }
 
-    // const handleDoneClick = () => {
-    //     navigation.goBack()
-    // }
 
     return (
         <View style={styles.container}>
@@ -37,25 +66,33 @@ export default function NetworksScreen({ navigation, route }) {
                 {mainData.map((item, index) => {
                     return (
                         <View style={styles.buttonView} key={index}>
-                            {index === btnIndex && <SvgIcons.DotIcon style={{ right: wp(3) }} />}
-                            <TouchableOpacity style={[styles.buttonContainer, { backgroundColor: index === btnIndex ? colors.white : colors.gray }]} key={index} onPress={() => setBtnIndex(index)}>
+                            {/* {btnIndex[item?.value] && <SvgIcons.DotIcon style={{ right: wp(3) }} />} */}
+                            <TouchableOpacity style={[styles.buttonContainer, { backgroundColor: btnIndex[item?.value] ? colors.white : colors.gray }]} key={index} onPress={() => setBtnIndex({ ...btnIndex, [item?.value]: !btnIndex[item?.value] })}>
                                 <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                                    {item.value === 'Bitcoin' ?
-                                        <Image source={item.image} style={{ height: hp(5), width: hp(4), tintColor: index === btnIndex ? '#495057' : colors.white }} /> :
-                                        item.value === 'Ethereum' ?
-                                            <Image source={index === btnIndex ? item?.img : item.image} style={{ width: hp(4), height: hp(6.5) }} /> :
-                                            item.value === 'Solana' ?
-                                                <Image source={item.image} style={{ height: hp(3.5), width: hp(4.5), tintColor: index === btnIndex ? '#495057' : colors.white }} /> :
-                                                item.value === 'Avalanche' ?
-                                                    <Image source={item.image} style={{ height: hp(4.3), width: hp(5), tintColor: index === btnIndex ? '#495057' : colors.white }} />
-                                                    :
-                                                    <Image source={item.image} style={{ height: hp(4), width: hp(4.5), tintColor: index === btnIndex ? '#495057' : colors.white }} />
+                                    {item.value === appConstant.ethereum ?
+                                        <Image source={btnIndex[item?.value] ? item?.img : item.image} style={{ width: hp(3.5), height: hp(5.6) }} /> :
+                                        item.value === appConstant.avalanche ?
+                                            <Image source={item.image} style={[styles.icons, { right: wp(1), tintColor: btnIndex[item?.value] ? '#495057' : colors.white }]} /> :
+                                            item.value === appConstant.polygon ?
+                                                <Image source={item.image} style={[styles.icons, { tintColor: btnIndex[item?.value] ? '#495057' : colors.white }]} /> :
+                                                item.value === appConstant.bsc ?
+                                                    <Image source={item.image} style={[styles.icons, { tintColor: btnIndex[item?.value] ? '#495057' : colors.white }]} /> :
+                                                    item.value === appConstant.arbitrum ?
+                                                        <Image source={item.image} style={[styles.icons, { tintColor: btnIndex[item?.value] ? '#495057' : colors.white }]} />
+                                                        :
+                                                        item.value === appConstant.optimism ?
+                                                            <Image source={item.image} style={[styles.icons, { tintColor: btnIndex[item?.value] ? '#495057' : colors.white }]} />
+                                                            :
+                                                            item.value === appConstant.zksync ?
+                                                                <Image source={item.image} style={[styles.icons, { backgroundColor: 'transparent', tintColor: btnIndex[item?.value] ? '#495057' : colors.white }]} /> :
+
+                                                                <Image source={btnIndex[item?.value] ? item?.img : item.image} style={styles.icons} />
                                     }
-                                    <FontText size={normalize(25)} color={index === btnIndex ? 'black' : 'white'} name={'inter-regular'} pLeft={wp(5)} style={{}}>
-                                        {i18n.language === 'tr' ? item?.name : item?.value}
+                                    <FontText size={normalize(25)} color={btnIndex[item?.value] ? 'black' : 'white'} name={'inter-regular'} pLeft={wp(5)} style={{ right: item.name === 'Avalanche' ? wp(6) : 0 }}>
+                                        {item?.value}
                                     </FontText>
                                 </View>
-                                {index === btnIndex && <SvgIcons.BlackCheck height={hp(3)} width={hp(3)} />}
+                                {btnIndex[item?.value] && <SvgIcons.BlackCheck height={hp(3)} width={hp(3)} />}
                             </TouchableOpacity>
                         </View>
                     )
@@ -64,17 +101,22 @@ export default function NetworksScreen({ navigation, route }) {
             </View>
             <Button
                 flex={null}
-                height={hp(8.5)}
-                width={wp(90)}
                 type="highlight"
                 borderRadius={11}
                 bgColor="white"
-                onPress={backAction}
+                onPress={handleDoneClick}
                 style={styles.button}>
                 <FontText name={"inter-medium"} size={normalize(22)} color="black">
                     {t("done")}
                 </FontText>
             </Button>
+            {showAlert && <PopUp
+                title={alertTitle}
+                message={alertMessage}
+                onConfirmPressed={() => {
+                    setShowAlert(false)
+                }}
+            />}
         </View>
     )
 }
@@ -107,6 +149,12 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between'
     },
     button: {
+        // backgroundColor: colors.white,
         marginBottom: hp(3),
+        // alignItems: 'center',
+    },
+    icons: {
+        width: hp(4.6),
+        height: hp(5.5)
     }
 })

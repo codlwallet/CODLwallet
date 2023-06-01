@@ -55,7 +55,11 @@ module.exports = {
   ethereum: 'Ethereum',
   solana: 'Solana',
   avalanche: 'Avalanche',
+  bsc: 'BSC',
   polygon: 'Polygon',
+  arbitrum: 'Arbitrum',
+  optimism: 'Optimism',
+  zksync: 'zkSync Era',
   lockDevice: 'Lock Device',
   unlock: 'Unlock',
   enterPin: 'Enter PIN',
@@ -105,4 +109,5 @@ module.exports = {
   createNewAccount: 'Create New Account',
   reorderAccounts: 'Reorder Accounts',
   reorder: 'Reorder',
+  deletingEverything: 'Deleting Everything',
 };
