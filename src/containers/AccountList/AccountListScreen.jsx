@@ -12,16 +12,18 @@ import Button from '../../components/common/Button';
 import SvgIcons from '../../assets/SvgIcons';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectAccount } from "../../redux/slices/authSlice";
+import { useFocusEffect } from '@react-navigation/native';
 
 export default function AccountListScreen({ navigation, route }) {
     const { t } = useTranslation();
     const name = route?.params?.name
     const icon = route?.params?.icon
     const accountList = route?.params?.accountList
+    const showlistvisible = route?.params?.showList
     const from = route?.params?.from;
     const headerName = route?.params?.headerName
     const { selectedNetwork } = useSelector(state => state.auth)
-    const [showList, setShowList] = useState(true)
+    const [showList, setShowList] = useState(showlistvisible === false ? false : true)
     const [btnValue, setButtonValue] = useState()
     const [buttonIndex, setButtonIndex] = useState()
     const [accountValue, setAccountValue] = useState()
@@ -33,9 +35,16 @@ export default function AccountListScreen({ navigation, route }) {
         };
     }, []);
 
-    useEffect(() => {
-        setShowList(true)
-    }, [])
+    useFocusEffect(
+        React.useCallback(() => {
+            if (showlistvisible === false) {
+                console.log("showlistvisible")
+                setShowList(false)
+
+            }
+        }, [showlistvisible]),
+    );
+
 
     const backAction = () => {
         if (from === appConstant.accountDetails) {

@@ -87,7 +87,14 @@ export default function AccountDetailsScreen({ navigation, route }) {
 
     const RightIconPress = () => {
         if (accountList?.length > 1) {
-            navigation.goBack()
+            navigation.navigate(appConstant.accountList, {
+                name: name,
+                headerName: headerName,
+                from: appConstant?.accountDetails,
+                accountList: accountList,
+                icon: walletIcon,
+                showList: false
+            })
         }
         else {
             navigation.navigate(appConstant.createAccount, {
