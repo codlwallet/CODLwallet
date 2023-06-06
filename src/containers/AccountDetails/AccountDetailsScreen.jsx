@@ -12,6 +12,7 @@ import { mainData } from '../../constants/data'
 import { getAccountsData } from '../../storage'
 import { useFocusEffect } from '@react-navigation/native'
 import { useSelector } from 'react-redux'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 LogBox.ignoreLogs([
     'Non-serializable values were found in the navigation state',
@@ -23,6 +24,7 @@ export default function AccountDetailsScreen({ navigation, route }) {
     const name = route?.params?.name
     const from = route?.params?.from
     const headerName = route?.params?.headerName
+    const { passphrase } = useSelector((state) => state.auth)
     const { selectedNetwork } = useSelector(state => state.auth)
     const [accountList, setAccountList] = useState({})
     const [walletIcon, setWalletIcon] = useState()
@@ -30,9 +32,15 @@ export default function AccountDetailsScreen({ navigation, route }) {
 
     useFocusEffect(
         React.useCallback(() => {
-            getAccountsData().then(res => {
+            getAccountsData().then(async res => {
+                let user = await AsyncStorage.getItem("hidden");
+                const isHidden = JSON.parse(user)
                 if (res.status) {
-                    setAccountList(res.created?.general);
+                    if (!isHidden) {
+                        setAccountList(res.created?.general)
+                    } else {
+                        setAccountList(res.created?.hidden[passphrase])
+                    }
                 }
             })
         }, []),
