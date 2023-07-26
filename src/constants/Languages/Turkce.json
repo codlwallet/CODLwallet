@@ -150,6 +150,10 @@
     "failRecoveryCheck": "Kurtarma Kontrolü Başarısız!",
     "recoveryCheckError": "İyileşme kontrolünüz eşleşmiyor!",
     "successRecovery": "Kurtarma Kontrolü Başarılı!",
-    "successRecoveryMess": "İyileşme kontrolünüz eşleşti."
+    "successRecoveryMess": "İyileşme kontrolünüz eşleşti.",
+    "connectWith": "İLE BAĞLANTI",
+    "rename": "Yeniden isimlendirmek",
+    "removeAccoDes": "Bir hesabı kaldırmanın kripto varlıklarınız üzerinde hiçbir etkisi yoktur. Sadece adı siler ve adresi gizler. Hesabı daha sonra istediğiniz zaman tekrar ekleyebilirsiniz.",
+    "successfullyRemoved": "Başarıyla kaldırıldı!"
   }
 }

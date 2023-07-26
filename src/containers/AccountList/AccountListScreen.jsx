@@ -13,27 +13,48 @@ import SvgIcons from '../../assets/SvgIcons';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectAccount } from "../../redux/slices/authSlice";
 import { useFocusEffect } from '@react-navigation/native';
+import { getAccountsData } from '../../storage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function AccountListScreen({ navigation, route }) {
     const { t } = useTranslation();
     const name = route?.params?.name
     const icon = route?.params?.icon
-    const accountList = route?.params?.accountList
+    const accountListArry = route?.params?.accountList
     const showlistvisible = route?.params?.showList
     const from = route?.params?.from;
     const headerName = route?.params?.headerName
+    const { passphrase } = useSelector((state) => state.auth)
     const { selectedNetwork } = useSelector(state => state.auth)
+    const dispatch = useDispatch()
     const [showList, setShowList] = useState(showlistvisible === false ? false : true)
     const [btnValue, setButtonValue] = useState()
     const [buttonIndex, setButtonIndex] = useState()
     const [accountValue, setAccountValue] = useState()
-    const dispatch = useDispatch()
+    const [accountList, setAccountList] = useState(accountListArry)
+
     useEffect(() => {
         BackHandler.addEventListener('hardwareBackPress', backAction);
         return async () => {
             BackHandler.removeEventListener('hardwareBackPress', backAction);
         };
     }, []);
+
+    useFocusEffect(
+        React.useCallback(() => {
+            getAccountsData().then(async res => {
+                let user = await AsyncStorage.getItem("hidden");
+                const isHidden = JSON.parse(user)
+                if (res.status) {
+                    if (!isHidden) {
+                        setAccountList(res.created?.general)
+                    } else {
+                        setAccountList(res.created?.hidden[passphrase])
+                    }
+                }
+            })
+        }, []),
+    );
 
     useFocusEffect(
         React.useCallback(() => {

@@ -94,26 +94,32 @@ export default function AccountDetailsScreen({ navigation, route }) {
     }
 
     const RightIconPress = () => {
-        if (accountList?.length > 1) {
-            navigation.navigate(appConstant.accountList, {
-                name: name,
-                headerName: headerName,
-                from: appConstant?.accountDetails,
-                accountList: accountList,
-                icon: walletIcon,
-                showList: false
-            })
-        }
-        else {
-            navigation.navigate(appConstant.createAccount, {
-                name: name,
-            })
-        }
+        // if (accountList?.length > 1) {
+        //     navigation.navigate(appConstant.accountList, {
+        //         name: name,
+        //         headerName: headerName,
+        //         from: appConstant?.accountDetails,
+        //         accountList: accountList,
+        //         icon: walletIcon,
+        //         showList: false
+        //     })
+        // }
+        // else {
+        //     navigation.navigate(appConstant.createAccount, {
+        //         name: name,
+        //     })
+        // }
+        navigation.navigate(appConstant.accountOptions, {
+            walletName: walletName,
+            name: name,
+            accountList: accountList,
+            walletAddress: walletAddress
+        })
     }
 
     return (
         <View style={styles.container}>
-            <Header RightIcon={accountList?.length > 1 ? 'menu' : 'plus'} title={walletName} showRightIcon={from === appConstant.main || from === appConstant.createAccount || from === appConstant.accountList || showRightIcon ? true : false} showBackIcon onBackPress={onBackClick} statusBarcolor={colors.black} RightIconPress={RightIconPress} titleStyle={{ right: from === appConstant.main || from === appConstant.createAccount || from === appConstant.accountList || showRightIcon ? 0 : wp(13), width: wp(65) }} />
+            <Header RightIcon={'menu'} title={walletName} showRightIcon={from === appConstant.main || from === appConstant.createAccount || from === appConstant.accountList || showRightIcon ? true : false} showBackIcon onBackPress={onBackClick} statusBarcolor={colors.black} RightIconPress={RightIconPress} titleStyle={{ right: from === appConstant.main || from === appConstant.createAccount || from === appConstant.accountList || showRightIcon ? 0 : wp(13), width: wp(65) }} />
             <View style={styles.subContainer}>
                 <View style={styles.scannerContainer}>
                     <View style={styles.walletHeaderView}>
@@ -126,7 +132,7 @@ export default function AccountDetailsScreen({ navigation, route }) {
                             value={walletAddress}
                             logo={require('../../assets/images/BlackAppLogo.png')}
                             logoSize={50}
-                            size={hp(39)}
+                            size={hp(36)}
                             logoMargin={10}
                             logoBackgroundColor='white'
                         />
@@ -143,7 +149,7 @@ export default function AccountDetailsScreen({ navigation, route }) {
                         </View>
                     )
                 })}
-                <FontText name={"inter-regular"} size={normalize(20)} color="white" pLeft={wp(4)} style={{ width: wp(75) }}>
+                <FontText name={"inter-regular"} size={normalize(19)} color="white" pLeft={wp(4)} style={{ width: wp(75) }}>
                     {walletAddress}
                     {/* {walletAddress.replace(walletAddress.substring(7, 38), `...`)} */}
                 </FontText>
@@ -183,8 +189,8 @@ const styles = StyleSheet.create({
     },
     scannerContainer: {
         backgroundColor: colors.white,
-        height: hp(45),
-        width: hp(45),
+        height: hp(40),
+        width: hp(40),
         borderRadius: wp(2),
         alignItems: 'center',
         justifyContent: 'center'
@@ -193,8 +199,8 @@ const styles = StyleSheet.create({
         backgroundColor: colors.white,
         borderRadius: wp(1.5),
         paddingHorizontal: wp(2),
-        paddingVertical: hp(0.5),
-        top: hp(-5),
+        paddingVertical: hp(0.3),
+        top: hp(-4),
         borderWidth: wp(1),
         borderColor: colors.black,
     },

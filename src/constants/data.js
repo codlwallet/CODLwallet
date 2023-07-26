@@ -24,11 +24,11 @@ module.exports = {
       name: 'Yeni hesap oluştur',
       value: appConstant.createNewAccount,
     },
-    // {
-    //   id: 1,
-    //   name: 'Hesapları Yeniden Sırala',
-    //   value: appConstant.reorderAccounts,
-    // },
+    {
+      id: 1,
+      name: 'Hesapları Yeniden Sırala',
+      value: appConstant.reorderAccounts,
+    },
   ],
 
   languageData: [
@@ -505,14 +505,21 @@ module.exports = {
     },
   ],
 
-  paginationData: [
+  accountOptions: [
     {
       id: 1,
-      title: i18n.t('signedTX'),
+      name: 'Hesabı yeniden adlandır',
+      value: appConstant.renameAccount,
     },
     {
       id: 2,
-      title: i18n.t('tokenTransfer'),
+      name: 'Hesabı kaldır',
+      value: appConstant.removeAccount,
+    },
+    {
+      id: 3,
+      name: 'Hesap oluşturmak',
+      value: appConstant.createAccount,
     },
   ],
 };

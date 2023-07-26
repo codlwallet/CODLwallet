@@ -7,11 +7,15 @@ import FontText from '../../components/common/FontText';
 import { useTranslation } from 'react-i18next';
 import Button from '../../components/common/Button';
 import SvgIcons from '../../assets/SvgIcons';
+import DraggableFlatList, {
+} from "react-native-draggable-flatlist";
+import { GestureHandlerRootView } from 'react-native-gesture-handler'
 
 export default function ReorderScreen({ navigation, route }) {
     const { t } = useTranslation();
     const accountList = route?.params?.accountList
     const [accountValue, setAccountValue] = useState()
+    const [reorderAccounts, setReorderAccounts] = useState(accountList)
 
     useEffect(() => {
         BackHandler.addEventListener('hardwareBackPress', backAction);
@@ -25,7 +29,9 @@ export default function ReorderScreen({ navigation, route }) {
         return true;
     };
 
-    const handleDoneClick = () => {
+    const handleDoneClick = async () => {
+        // console.log("reorderAccounts", reorderAccounts)
+        // await AsyncStorage.setItem(Config.CREATED_ACCOUNTS, JSON.stringify(reorderAccounts))
         navigation.goBack()
     }
 
@@ -38,6 +44,25 @@ export default function ReorderScreen({ navigation, route }) {
         route.params.onGoBack();
     }
 
+    const renderItem = ({ item, drag, isActive }) => {
+        return (
+            <GestureHandlerRootView style={{ flex: 1 }}>
+                <View style={styles.listView}>
+                    <View style={{ width: wp(1), right: wp(0.7) }}>
+                        {isActive && <SvgIcons.DotIcon />}
+                    </View>
+                    <TouchableOpacity disabled={isActive} onLongPress={drag} style={[styles.buttonContainer, { backgroundColor: isActive ? colors.lightGrey : colors.gray }]} onPress={() => onClickAccount(item)}>
+                        <FontText name={"inter-regular"} size={normalize(22)} color={item?.name === accountValue ? "black" : 'white'} style={{ width: wp(45) }} lines={1} >
+                            {item?.name}
+                        </FontText>
+                        <FontText name={"inter-regular"} size={normalize(15)} color={item?.name === accountValue ? "black" : 'white'} style={{ width: wp(30), }} lines={1} >
+                            {item?.publicKey.replace(item?.publicKey.substring(7, 38), `...`)}
+                        </FontText>
+                    </TouchableOpacity>
+                </View>
+            </GestureHandlerRootView>
+        )
+    }
     return (
         <View style={styles.container}>
             <Header title={t('reorder')}
@@ -49,24 +74,13 @@ export default function ReorderScreen({ navigation, route }) {
                 RightIconPress={onPressCloseIcon}
             />
             <View style={styles.subContainer}>
-                <ScrollView contentContainerStyle={{ justifyContent: 'center', alignItems: 'center', flexGrow: 1, paddingVertical: hp(0.5) }}  >
-                    {accountList?.map((item, index) => {
-                        return (
-                            <View key={index} style={styles.listView}>
-                                {item?.name === accountValue && <SvgIcons.DotIcon style={{ left: wp(-1.5) }} />}
-                                <TouchableOpacity style={[styles.buttonContainer, { backgroundColor: item?.name === accountValue ? colors.white : colors.gray }]} onPress={() => onClickAccount(item)}>
-                                    <FontText name={"inter-regular"} size={normalize(22)} color={item?.name === accountValue ? "black" : 'white'} style={{ width: wp(45) }} lines={1} >
-                                        {item?.name}
-                                    </FontText>
-                                    <FontText name={"inter-regular"} size={normalize(15)} color={item?.name === accountValue ? "black" : 'white'} style={{ width: wp(30), }} lines={1} >
-                                        {item?.publicKey.replace(item?.publicKey.substring(7, 38), `...`)}
-                                    </FontText>
-                                </TouchableOpacity>
-                            </View>
-                        )
-                    })
-                    }
-                </ScrollView>
+                <DraggableFlatList
+                    contentContainerStyle={{ flexGrow: 1, justifyContent: 'center' }}
+                    data={reorderAccounts}
+                    onDragEnd={({ data }) => { setReorderAccounts(data) }}
+                    keyExtractor={(item, index) => index.toString()}
+                    renderItem={renderItem}
+                />
             </View>
             <Button
                 flex={null}

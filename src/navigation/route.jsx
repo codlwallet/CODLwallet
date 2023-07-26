@@ -36,6 +36,10 @@ import ComplateSingingScreen from '../containers/ConfirmSinging/ComplateSingingS
 import BroadcastTransactionScreen from '../containers/BroadcastTransaction/BroadcastTransactionScreen';
 import ReorderScreen from '../containers/Reorder/ReorderScreen';
 import DeletingEverythingScreen from '../containers/SetupUser/DeletingEverythingScreen';
+import AccountOptionsScreen from '../containers/AccountOptions/AccountOptionsScreen';
+import RenameAccountScreen from '../containers/RenameAccount/RenameAccountScreen';
+import RemoveAccountScreen from '../containers/RemoveAccount/RemoveAccountScreen';
+import RemoveSuccessfull from '../containers/RemoveAccount/RemoveSuccessfull';
 
 const Route = () => {
     const Stack = createNativeStackNavigator();
@@ -79,6 +83,10 @@ const Route = () => {
                 <Stack.Screen name={Constant.broadcastTransaction} component={BroadcastTransactionScreen} />
                 <Stack.Screen name={Constant.reorder} component={ReorderScreen} />
                 <Stack.Screen name={Constant.deletingEverything} component={DeletingEverythingScreen} />
+                <Stack.Screen name={Constant.accountOptions} component={AccountOptionsScreen} />
+                <Stack.Screen name={Constant.renameAccount} component={RenameAccountScreen} />
+                <Stack.Screen name={Constant.removeAccount} component={RemoveAccountScreen} />
+                <Stack.Screen name={Constant.removeSuccessful} component={RemoveSuccessfull} />
             </Stack.Navigator>
         </NavigationContainer>
     )

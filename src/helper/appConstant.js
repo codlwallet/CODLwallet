@@ -110,4 +110,9 @@ module.exports = {
   reorderAccounts: 'Reorder Accounts',
   reorder: 'Reorder',
   deletingEverything: 'Deleting Everything',
+  accountOptions: 'Account Options',
+  renameAccount: 'Rename Account',
+  removeAccount: 'Remove Account',
+  removeSuccessful: 'Remove Successful',
+  remove: 'Remove',
 };

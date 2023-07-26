@@ -124,7 +124,7 @@ export default function SelectAccountScreen({ navigation, route }) {
                             }
 
                             return (
-                                <TouchableOpacity key={item.publicKey} style={[styles.buttonContainer, { backgroundColor: index + (page - 1) * dispCnt + 1 == selectIndex ? colors.white : colors.gray }]} onPress={() => {
+                                <TouchableOpacity key={item.publicKey} style={[styles.buttonContainer, { backgroundColor: index + (page - 1) * dispCnt + 1 == selectIndex ? colors.white : index + (page - 1) * dispCnt + 1 == selectIndex || selected ? colors.lightGrey : colors.gray }]} onPress={() => {
                                     if (!selected) {
                                         setSelectIndex(index + (page - 1) * dispCnt + 1)
                                         setWallet(item)

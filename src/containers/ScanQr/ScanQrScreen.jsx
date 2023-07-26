@@ -117,18 +117,6 @@ export default function ScanQrScreen({ navigation, route }) {
         }
     };
 
-
-    const onBarcodeScan = (qrvalue) => {
-        setQrvalue(qrvalue);
-        setOpneScanner(false);
-        // if (qrvalue) {
-        //     navigation.navigate(appConstant.signTransaction, {
-        //         walletName: walletName,
-        //         WalletData: WalletData
-        //     })
-        // }
-
-    };
     let handleScan = e => {
         try {
             if (e) {
@@ -196,7 +184,6 @@ export default function ScanQrScreen({ navigation, route }) {
                                     }
                                 </View>
                             </View>
-
                         </>
                     }
                     {/* <QRCodeScanner
@@ -251,11 +238,14 @@ const styles = StyleSheet.create({
         paddingHorizontal: wp(3.5),
         alignItems: 'center'
     },
-    // centerText: {
-    //     textAlign: 'center',
-    //     paddingVertical: hp(5),
-    //     backgroundColor: 'green',
-    // },
+    walletHeaderView: {
+        backgroundColor: colors.white,
+        borderRadius: wp(1.5),
+        paddingHorizontal: wp(2),
+        paddingVertical: hp(0.3),
+        borderWidth: wp(1),
+        borderColor: colors.black,
+    },
     subContainer: {
         flex: 1,
         justifyContent: 'center',
@@ -284,7 +274,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: "space-between",
-        paddingHorizontal: wp(4),
+        paddingHorizontal: wp(5),
     },
     analyzingView: {
         position: 'absolute',

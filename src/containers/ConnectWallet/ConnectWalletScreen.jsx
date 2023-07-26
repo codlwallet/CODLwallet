@@ -36,14 +36,12 @@ export default function ConnectWalletScreen({ navigation, route }) {
         }
     };
 
-
-
     return (
         <View style={styles.container}>
             <Header title={t("connectWallet")} showRightIcon RightIcon={'info'} statusBarcolor={colors.black} />
             <View style={styles.subContainer}>
                 {HDKey ? <View style={styles.scannerContainer}>
-                    <View style={styles.walletHeaderView}>
+                    <View style={[styles.walletHeaderView, { top: hp(-3.5) }]}>
                         <FontText name={"inter-bold"} size={normalize(11)} color="black" textTransform={'uppercase'}>
                             {t("watchOnly")}
                         </FontText>
@@ -53,7 +51,7 @@ export default function ConnectWalletScreen({ navigation, route }) {
                             value={HDKey}
                             logo={require('../../assets/images/BlackAppLogo.png')}
                             logoSize={50}
-                            size={hp(39)}
+                            size={hp(37)}
                             logoMargin={10}
                             logoBackgroundColor='white'
                         />
@@ -61,10 +59,17 @@ export default function ConnectWalletScreen({ navigation, route }) {
                 </View> : <ActivityIndicator animating={!HDKey} size="large" color="#ffffff" />}
             </View>
             <View style={styles.bottomView}>
-                <FontText name={"inter-regular"} size={normalize(22)} color="white"  >
-                    {'Metamask Wallet'}
-                </FontText>
-                <SvgIcons.Dog />
+                <View style={styles.walletHeaderView}>
+                    <FontText name={"inter-bold"} size={normalize(11)} color="black">
+                        {t("connectWith")}
+                    </FontText>
+                </View>
+                <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: wp(80) }}>
+                    <FontText name={"inter-regular"} size={normalize(22)} color="white"  >
+                        {'Metamask Wallet'}
+                    </FontText>
+                    <SvgIcons.Dog />
+                </View>
             </View>
             <Button
                 flex={null}
@@ -103,18 +108,18 @@ const styles = StyleSheet.create({
     },
     scannerContainer: {
         backgroundColor: colors.white,
-        height: hp(45),
-        width: hp(45),
+        height: hp(41),
+        width: hp(41),
         borderRadius: wp(2),
         alignItems: 'center',
         justifyContent: 'center'
     },
     walletHeaderView: {
         backgroundColor: colors.white,
-        borderRadius: wp(1.5),
-        paddingHorizontal: wp(2),
+        borderRadius: wp(2),
+        paddingHorizontal: wp(5),
         paddingVertical: hp(0.5),
-        top: hp(-5),
+        top: hp(-2),
         borderWidth: wp(1),
         borderColor: colors.black,
     },
@@ -124,9 +129,10 @@ const styles = StyleSheet.create({
         width: wp(90),
         marginBottom: hp(2),
         borderRadius: wp(2),
-        flexDirection: 'row',
+        // flexDirection: 'row',
         alignItems: 'center',
-        justifyContent: "space-between",
-        paddingHorizontal: wp(5)
+        // justifyContent: "space-between",
+        paddingHorizontal: wp(5),
+
     },
 })

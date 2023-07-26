@@ -152,6 +152,11 @@
     "failRecoveryCheck": "Recovery Check Fail!",
     "recoveryCheckError": "Your recovery check is not match!",
     "successRecovery": "Recovery Check Successful!",
-    "successRecoveryMess": "Your recovery check is matched."
+    "successRecoveryMess": "Your recovery check is matched.",
+    "connectWith": "CONNECT WITH",
+    "rename": "Rename",
+    "remove": "Remove",
+    "removeAccoDes": "Removing an account has no impact on your crypto assets. It simply deletes the name and hides the address. You can always add the account back later.",
+    "successfullyRemoved": "Successfully removed!"
   }
 }
