@@ -58,15 +58,17 @@ export default function BroadcastTransactionScreen({ navigation, route }) {
                                 {t("signedTX")}
                             </FontText>
                         </View>
-                        <QRCode
-                            value={signedTxUR}
-                            logo={require('../../assets/images/BlackAppLogo.png')}
-                            logoSize={50}
-                            size={hp(39)}
-                            logoMargin={10}
-                            logoBackgroundColor='white'
-                        />
-                    </View>
+                        <View style={{ paddingVertical: hp(1), marginTop: hp(-2) }}>
+                            <QRCode
+                                value={signedTxUR}
+                                logo={require('../../assets/images/BlackAppLogo.png')}
+                                logoSize={50}
+                                size={hp(37)}
+                                logoMargin={10}
+                                logoBackgroundColor='white'
+                            />
+                        </View>
+                    </View >
                     :
                     < View style={{ marginTop: hp(15) }}>
                         <TransactionCard
@@ -134,18 +136,19 @@ const styles = StyleSheet.create({
     },
     scannerContainer: {
         backgroundColor: colors.white,
-        height: hp(45),
-        width: hp(45),
+        height: hp(42),
+        width: hp(41),
         borderRadius: wp(2),
         alignItems: 'center',
-        marginTop: hp(15)
+        marginTop: hp(15),
+        alignSelf: 'center',
     },
     walletHeaderView: {
         backgroundColor: colors.white,
         borderRadius: wp(1.5),
         paddingHorizontal: wp(2),
         paddingVertical: hp(0.5),
-        top: hp(-2),
+        bottom: hp(2),
         borderWidth: wp(1),
         borderColor: colors.black,
     },

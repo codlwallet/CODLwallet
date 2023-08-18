@@ -40,7 +40,6 @@ export default function CreateAccountScreen({ navigation, route }) {
   const [isSelect, setIsSelect] = useState(false);
   const [selectWallet, setSelectWallet] = useState(false);
   const [accountData, setAccountData] = useState({});
-  const [showCheckIcon, setShowIcon] = useState(false);
   const [walletAddress, setWalletAddress] = useState('');
   const [id, setId] = useState();
   const [showAlert, setShowAlert] = useState(false);
@@ -205,7 +204,7 @@ export default function CreateAccountScreen({ navigation, route }) {
   };
 
   const backAction = () => {
-    if (from === appConstant.accountList || from === appConstant.selectAccount) {
+    if (from === appConstant.accountList) {
       navigation.goBack();
       route?.params?.onGoBack();
     }
@@ -238,54 +237,6 @@ export default function CreateAccountScreen({ navigation, route }) {
         RightIconPress={onPressCloseIcon}
       />
       <View style={styles.subContainer}>
-        <Input
-          withRightIcon={walletName !== '' ? true : false}
-          placeholder={t('walletName')}
-          autoFocus={true}
-          value={walletName}
-          ref={nameRef}
-          placeholderTextColor={walletNameFocus ? colors.black : colors.white}
-          onChangeText={e => {
-            if (e.length <= 20) {
-              setWalletName(e);
-              !walletNameChanged && setWalletNameChanged(true);
-            }
-          }}
-          keyboardType={'default'}
-          returnKeyType={'next'}
-          onFocus={onWalletNameFocus}
-          onBlur={onWalletNameBlur}
-          onSubmit={onWalletNameSubmit}
-          blurOnSubmit
-          fontName={'poppins-regular'}
-          onSubmitEditing={onWalletNameSubmit}
-          fontSize={normalize(22)}
-          inputStyle={[
-            styles.textInput,
-            {
-              color: walletNameFocus == true ? colors.black : colors.white,
-            },
-          ]}
-          style={[
-            styles.textInputContainer,
-            {
-              backgroundColor:
-                walletNameFocus == true ? colors.white : colors.gray,
-            },
-          ]}
-          rightIcon={
-            walletName &&
-            !walletNameFocus && (
-              <TouchableOpacity>
-                {walletNameFocus ? (
-                  <SvgIcons.BlackCheck height={hp(4)} width={hp(2.5)} />
-                ) : (
-                  <SvgIcons.Check height={hp(4)} width={hp(2.5)} />
-                )}
-              </TouchableOpacity>
-            )
-          }
-        />
         <TouchableOpacity
           style={[
             styles.buttonContainer,
@@ -338,6 +289,54 @@ export default function CreateAccountScreen({ navigation, route }) {
             </>
           )}
         </TouchableOpacity>
+        <Input
+          withRightIcon={walletName !== '' ? true : false}
+          placeholder={t('walletName')}
+          autoFocus={true}
+          value={walletName}
+          ref={nameRef}
+          placeholderTextColor={walletNameFocus ? colors.black : colors.white}
+          onChangeText={e => {
+            if (e.length <= 20) {
+              setWalletName(e);
+              !walletNameChanged && setWalletNameChanged(true);
+            }
+          }}
+          keyboardType={'default'}
+          returnKeyType={'next'}
+          onFocus={onWalletNameFocus}
+          onBlur={onWalletNameBlur}
+          onSubmit={onWalletNameSubmit}
+          blurOnSubmit
+          fontName={'poppins-regular'}
+          onSubmitEditing={onWalletNameSubmit}
+          fontSize={normalize(22)}
+          inputStyle={[
+            styles.textInput,
+            {
+              color: walletNameFocus == true ? colors.black : colors.white,
+            },
+          ]}
+          style={[
+            styles.textInputContainer,
+            {
+              backgroundColor:
+                walletNameFocus == true ? colors.white : colors.gray,
+            },
+          ]}
+          rightIcon={
+            walletName &&
+            !walletNameFocus && (
+              <TouchableOpacity>
+                {walletNameFocus ? (
+                  <SvgIcons.BlackCheck height={hp(4)} width={hp(2.5)} />
+                ) : (
+                  <SvgIcons.Check height={hp(4)} width={hp(2.5)} />
+                )}
+              </TouchableOpacity>
+            )
+          }
+        />
       </View>
       <Button
         flex={null}

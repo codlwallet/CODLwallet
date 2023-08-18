@@ -100,7 +100,7 @@ export default function MainScreen({ navigation, route }) {
         } else {
             _createdAccounts = createdAccounts && createdAccounts.hidden[passphrase]
         }
-        if (_createdAccounts && _createdAccounts.length > 0) {
+        if (_createdAccounts && _createdAccounts?.length > 0) {
             navigation.navigate(appConstant.connectWallet, { passphrase: hidden ? passphrase : null })
         } else {
             setAlertTitle('There is no created Account.')
@@ -139,7 +139,7 @@ export default function MainScreen({ navigation, route }) {
 
     const handleMainListClick = (item) => {
         dispatch(selectNetwork(item.value));
-        if (!createdAccounts || (accountsData.isHidden === false && createdAccounts.general.length === 0) || (accountsData.isHidden === true && !createdAccounts.hidden[passphrase])) {
+        if (!createdAccounts || (accountsData.isHidden === false && createdAccounts?.general?.length === 0) || (accountsData.isHidden === true && !createdAccounts.hidden[passphrase])) {
             navigation.navigate(appConstant.createAccount, {
                 name: item?.value
             })

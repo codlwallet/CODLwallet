@@ -6,6 +6,7 @@ import Route from './src/navigation/route';
 import { store } from './src/redux/store/store';
 import './src/constants/i18n';
 import { LogBox } from "react-native";
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 LogBox.ignoreLogs([
   "ViewPropTypes will be removed",
@@ -21,9 +22,11 @@ export default function App() {
   });
 
   return (
-    <Provider store={store}>
-      <StatusBar translucent hidden backgroundColor='transparent' />
-      <Route />
-    </Provider>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <Provider store={store}>
+        <StatusBar translucent hidden backgroundColor='transparent' />
+        <Route />
+      </Provider>
+    </GestureHandlerRootView>
   )
 };

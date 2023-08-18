@@ -88,7 +88,6 @@ export default function ImportWalletScreen({ navigation, route }) {
         }
     );
 
-
     const handleConfirmClick = async () => {
         setIsEdit(false)
         setBtnValue(appConstant.confirm)
@@ -147,7 +146,6 @@ export default function ImportWalletScreen({ navigation, route }) {
 
     const renderWalletData = (item, index) => {
         return (
-            // <>
             <Input
                 key={index}
                 autoFocus={isEdit}
@@ -169,7 +167,7 @@ export default function ImportWalletScreen({ navigation, route }) {
                 onSubmit={() => { walletData[index].name !== '' && index !== walletData.slice(0, numberValue).length - 1 ? cardRef.current[index + 1].focus() : Keyboard.dismiss() }}
                 onFocus={() => { cardRef.current[index].focus(), setTextIndex(index) }}
                 multiline={false}
-                autoCorrect={false}
+                autoCorrect={true}
                 inputStyle={[styles.textInput, { color: item.name == '' ? colors.white : colors.red }]}
                 onChangeText={text => {
                     if (text === '' || reg.test(text)) {
@@ -181,7 +179,6 @@ export default function ImportWalletScreen({ navigation, route }) {
                 returnKeyType={'next'}
                 style={[styles.inputContainer, { backgroundColor: item.name == '' ? colors.red : colors.white }]}
             />
-            // </>
         )
     }
 

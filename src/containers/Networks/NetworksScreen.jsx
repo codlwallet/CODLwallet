@@ -12,6 +12,10 @@ import i18n from '../../constants/i18n'
 import { getNetwork, setNetwork } from "../../storage";
 import appConstant from '../../helper/appConstant'
 import PopUp from '../../components/common/AlertBox'
+import DraggableFlatList, {
+    ScaleDecorator,
+} from "react-native-draggable-flatlist";
+import { GestureHandlerRootView } from 'react-native-gesture-handler'
 
 export default function NetworksScreen({ navigation, route }) {
     const { t } = useTranslation();
@@ -19,6 +23,7 @@ export default function NetworksScreen({ navigation, route }) {
     const [showAlert, setShowAlert] = useState(false)
     const [alertTitle, setAlertTitle] = useState('')
     const [alertMessage, setAlertMessage] = useState('')
+    const [mainDataList, setMainDataList] = useState(mainData)
 
     useEffect(() => {
         BackHandler.addEventListener('hardwareBackPress', backAction);
@@ -30,7 +35,7 @@ export default function NetworksScreen({ navigation, route }) {
         getNetwork().then(res => {
             if (res.status) {
                 let _networks = {}
-                for (const data of mainData) {
+                for (const data of mainDataList) {
                     _networks[data?.value] = false;
                     if (res?.networks?.indexOf(data?.value) >= 0) _networks[data?.value] = true;
                 }
@@ -59,45 +64,53 @@ export default function NetworksScreen({ navigation, route }) {
     }
 
 
+    const renderItem = ({ item, drag, isActive }) => {
+        return (
+            <GestureHandlerRootView style={{ flex: 2 }}>
+                <View style={styles.buttonView} key={item?.id}>
+                    {isActive && <SvgIcons.DotIcon style={{ right: wp(2) }} />}
+                    <TouchableOpacity disabled={isActive} onLongPress={drag} style={[styles.buttonContainer, { backgroundColor: isActive ? colors.lightGrey : colors.gray }]} onPress={() => setBtnIndex({ ...btnIndex, [item?.value]: !btnIndex[item?.value] })}>
+                        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                            {item.value === appConstant.ethereum ?
+                                <Image source={item.image} style={{ width: hp(3.5), height: hp(5.6) }} /> :
+                                item.value === appConstant.avalanche ?
+                                    <Image source={item.image} style={[styles.icons, { right: wp(1), }]} /> :
+                                    item.value === appConstant.polygon ?
+                                        <Image source={item.image} style={[styles.icons]} /> :
+                                        item.value === appConstant.bsc ?
+                                            <Image source={item.image} style={[styles.icons,]} /> :
+                                            item.value === appConstant.arbitrum ?
+                                                <Image source={item.image} style={[styles.icons,]} />
+                                                :
+                                                item.value === appConstant.optimism ?
+                                                    <Image source={item.image} style={[styles.icons,]} />
+                                                    :
+                                                    item.value === appConstant.zksync ?
+                                                        <Image source={item.image} style={[styles.icons, { backgroundColor: 'transparent', }]} /> :
+
+                                                        <Image source={btnIndex[item?.value] ? item?.img : item.image} style={styles.icons} />
+                            }
+                            <FontText size={normalize(25)} color={'white'} name={'inter-regular'} pLeft={wp(5)} style={{ right: item.name === 'Avalanche' ? wp(6) : 0 }}>
+                                {item?.value}
+                            </FontText>
+                        </View>
+                        {btnIndex[item?.value] ? <SvgIcons.Check height={hp(3)} width={hp(3)} /> : <SvgIcons.BlackCheck height={hp(3)} width={hp(3)} />}
+                    </TouchableOpacity>
+                </View>
+            </GestureHandlerRootView>
+
+        );
+    };
     return (
         <View style={styles.container}>
             <Header title={t("networks")} showRightIcon RightIcon={'info'} showBackIcon onBackPress={backAction} />
             <View style={styles.subConatiner}>
-                {mainData.map((item, index) => {
-                    return (
-                        <View style={styles.buttonView} key={index}>
-                            {/* {btnIndex[item?.value] && <SvgIcons.DotIcon style={{ right: wp(3) }} />} */}
-                            <TouchableOpacity style={[styles.buttonContainer, { backgroundColor: btnIndex[item?.value] ? colors.white : colors.gray }]} key={index} onPress={() => setBtnIndex({ ...btnIndex, [item?.value]: !btnIndex[item?.value] })}>
-                                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                                    {item.value === appConstant.ethereum ?
-                                        <Image source={btnIndex[item?.value] ? item?.img : item.image} style={{ width: hp(3.5), height: hp(5.6) }} /> :
-                                        item.value === appConstant.avalanche ?
-                                            <Image source={item.image} style={[styles.icons, { right: wp(1), tintColor: btnIndex[item?.value] ? '#495057' : colors.white }]} /> :
-                                            item.value === appConstant.polygon ?
-                                                <Image source={item.image} style={[styles.icons, { tintColor: btnIndex[item?.value] ? '#495057' : colors.white }]} /> :
-                                                item.value === appConstant.bsc ?
-                                                    <Image source={item.image} style={[styles.icons, { tintColor: btnIndex[item?.value] ? '#495057' : colors.white }]} /> :
-                                                    item.value === appConstant.arbitrum ?
-                                                        <Image source={item.image} style={[styles.icons, { tintColor: btnIndex[item?.value] ? '#495057' : colors.white }]} />
-                                                        :
-                                                        item.value === appConstant.optimism ?
-                                                            <Image source={item.image} style={[styles.icons, { tintColor: btnIndex[item?.value] ? '#495057' : colors.white }]} />
-                                                            :
-                                                            item.value === appConstant.zksync ?
-                                                                <Image source={item.image} style={[styles.icons, { backgroundColor: 'transparent', tintColor: btnIndex[item?.value] ? '#495057' : colors.white }]} /> :
-
-                                                                <Image source={btnIndex[item?.value] ? item?.img : item.image} style={styles.icons} />
-                                    }
-                                    <FontText size={normalize(25)} color={btnIndex[item?.value] ? 'black' : 'white'} name={'inter-regular'} pLeft={wp(5)} style={{ right: item.name === 'Avalanche' ? wp(6) : 0 }}>
-                                        {item?.value}
-                                    </FontText>
-                                </View>
-                                {btnIndex[item?.value] && <SvgIcons.BlackCheck height={hp(3)} width={hp(3)} />}
-                            </TouchableOpacity>
-                        </View>
-                    )
-                })
-                }
+                <DraggableFlatList
+                    data={mainDataList}
+                    onDragEnd={({ data }) => { setMainDataList(data), console.log("data...", data) }}
+                    keyExtractor={(item, index) => index.toString()}
+                    renderItem={renderItem}
+                />
             </View>
             <Button
                 flex={null}
@@ -133,12 +146,13 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     buttonView: {
-        justifyContent: 'space-between',
+        justifyContent: 'center',
         flexDirection: 'row',
         alignItems: 'center',
+        width: '100%',
     },
     buttonContainer: {
-        backgroundColor: colors.gray,
+        backgroundColor: colors.white,
         alignItems: 'center',
         flexDirection: 'row',
         width: wp(88),

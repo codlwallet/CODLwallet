@@ -469,6 +469,48 @@ export const createNewAccount = async (data, _is_hidden = false, _passphrase = n
   }
 }
 
+
+export const removeAccount = async (address, _is_hidden = false, _passphrase = null) => {
+  console.log("address", address)
+  try {
+    let walletData = await AsyncStorage.getItem(Config.CREATED_ACCOUNTS)
+    if (!walletData) walletData = { general: [], hidden: {} };
+    else walletData = JSON.parse(walletData);
+
+    if (!_is_hidden) walletData.general.filter((itm) => itm.publicKey != address);
+
+    // {
+    // console.log("walletData.general", walletData.general)
+
+    // }
+    else {
+      if (_passphrase) {
+        if (!walletData.hidden[_passphrase]) walletData.hidden[_passphrase] = []
+        walletData.hidden[_passphrase].filter((itm) => itm.publicKey != address);
+      }
+    }
+
+    console.log("walletData...........", walletData)
+    await AsyncStorage.setItem(Config.CREATED_ACCOUNTS, JSON.stringify(walletData))
+    // walletData = JSON.parse(walletData)
+    // if (walletData.isHidden === true) {
+    //   walletData.hiddenAccounts.accounts = data.accounts;
+    //   walletData.hiddenAccounts.createdAccounts = data.createdAccounts;
+    // } else {
+    //   walletData.accounts = data.accounts;
+    //   walletData.createdAccounts = data.createdAccounts;
+    // }
+    // await AsyncStorage.setItem(Config.WALLET, JSON.stringify(walletData));
+    return {
+      status: true
+    }
+  } catch (error) {
+    return {
+      status: false
+    }
+  }
+}
+
 export const getAccountsData = async () => {
   try {
     let walletData = await AsyncStorage.getItem(Config.WALLET);
