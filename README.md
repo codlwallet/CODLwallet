@@ -3,7 +3,7 @@
 Introduction
 In the fast-paced world of cryptocurrency, many users grapple with the daunting challenge of safeguarding their crypto assets, especially in the wake of substantial losses. Cold storage devices have emerged as a beacon of hope, promising to keep crypto assets secure by maintaining private keys offline. However, the high costs, specific hardware prerequisites, and limited recovery options of traditional cold storage devices have curtailed their mass adoption.
 
-Enter Codl Wallet.
+Introducing CODL Wallet.
 
 Codl Wallet offers a fresh, secure, and private method for storing your digital assets. This entirely offline wallet ensures your private keys remain solely under your control, significantly reducing the risk of hackers accessing or misusing your digital assets. With over a billion people possessing spare phones or devices, Codl Wallet taps into this potential. We believe that Codl can democratize access to privacy and security for a broader audience, all without exacerbating the global e-waste dilemma.
 
