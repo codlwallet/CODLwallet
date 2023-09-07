@@ -29,7 +29,7 @@ Passphrase: Applying a passphrase to your seed words generates a unique wallet. 
 Biometric Authentication: Log in using fingerprint or facial recognition.
 Login Password: Add an additional layer of security with a login password, bolstering protection against unauthorized access.
 Support
-For assistance with CODL Wallet, visit the CODL website or reach out via email at support@CODL.io.
+For assistance with CODL Wallet, visit the CODL website or reach out via email at support@codl.io.
 
 ## Contributing
 CODL Wallet is an open-source initiative. Contributions are welcome through pull requests to the GitHub repository.
@@ -48,5 +48,5 @@ CODL Wallet is the brainchild of a developer team with a fervent passion for pri
 - [Khenisiddharth](https://github.com/Khenisiddharth)
     
 ## Contact
-For more about CODL Wallet, visit the CODL website or email us at hello@CODL.io.
+For more about CODL Wallet, visit the CODL website or email us at hello@codl.io.
 
