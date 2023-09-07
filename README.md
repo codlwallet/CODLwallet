@@ -40,12 +40,13 @@ Codl Wallet operates under the MIT License.
 ## Acknowledgements
 Codl Wallet is the brainchild of a developer team with a fervent passion for privacy and security. We extend our gratitude to the following contributors:
 
-engincetin
-nxxng
-iremozkal
-codl-core
-Khenisiddharth
-blockchain1112
+- [codl-core](https://github.com/codl-core)
+-  [engincetin](https://github.com/engincetin)
+- [nxxng](https://github.com/nxxng)
+- [iremozkal](https://github.com/iremozkal)
+- [blockchain1112](https://github.com/blockchain1112)
+- [Khenisiddharth](https://github.com/Khenisiddharth)
+    
 ## Contact
 For more about Codl Wallet, visit the Codl website or email us at hello@codl.io.
 
