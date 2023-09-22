@@ -24,18 +24,18 @@ export default function RemoveAccountScreen({ navigation, route }) {
     }, []);
 
     const handleProceedClick = () => {
-        // removeAccount(walletAddress).then(
-        //     res => {
-        //         if (res.status) {
-        //             navigation.navigate(appConstant.removeSuccessful, {
-        //                 accountList: accountList
-        //             })
-        //         }
-        //     },
-        // );
-        navigation.navigate(appConstant.removeSuccessful, {
-            accountList: accountList
-        })
+        removeAccount(walletAddress).then(
+            res => {
+                if (res.status) {
+                    navigation.navigate(appConstant.removeSuccessful, {
+                        accountList: accountList
+                    })
+                }
+            },
+        );
+        // navigation.navigate(appConstant.removeSuccessful, {
+        //     accountList: accountList
+        // })
     }
     const backAction = () => {
         navigation.goBack()

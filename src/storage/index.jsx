@@ -469,6 +469,19 @@ export const createNewAccount = async (data, _is_hidden = false, _passphrase = n
   }
 }
 
+const removeByAttr = function (arr, attr, value) {
+  var i = arr.length;
+  while (i--) {
+    if (arr[i]
+      && arr[i].hasOwnProperty(attr)
+      && (arguments.length > 2 && arr[i][attr] === value)) {
+
+      arr.splice(i, 1);
+
+    }
+  }
+  return arr;
+}
 
 export const removeAccount = async (address, _is_hidden = false, _passphrase = null) => {
   console.log("address", address)
@@ -476,21 +489,21 @@ export const removeAccount = async (address, _is_hidden = false, _passphrase = n
     let walletData = await AsyncStorage.getItem(Config.CREATED_ACCOUNTS)
     if (!walletData) walletData = { general: [], hidden: {} };
     else walletData = JSON.parse(walletData);
-
-    if (!_is_hidden) walletData.general.filter((itm) => itm.publicKey != address);
-
-    // {
-    // console.log("walletData.general", walletData.general)
-
-    // }
+    let data;
+    // if (!_is_hidden) walletData.general.filter((itm) => itm.publicKey != address);
+    if (!_is_hidden) {
+      console.log(123)
+      data = removeByAttr(walletData.general, 'publicKey', address)
+      walletData = { ...walletData, general: data }
+    }
     else {
       if (_passphrase) {
         if (!walletData.hidden[_passphrase]) walletData.hidden[_passphrase] = []
-        walletData.hidden[_passphrase].filter((itm) => itm.publicKey != address);
+        data = removeByAttr(walletData.hidden[_passphrase], 'publicKey', address)
+        walletData = { ...walletData, [hidden[_passphrase]]: data }
       }
     }
 
-    console.log("walletData...........", walletData)
     await AsyncStorage.setItem(Config.CREATED_ACCOUNTS, JSON.stringify(walletData))
     // walletData = JSON.parse(walletData)
     // if (walletData.isHidden === true) {
@@ -505,6 +518,52 @@ export const removeAccount = async (address, _is_hidden = false, _passphrase = n
       status: true
     }
   } catch (error) {
+    console.log(error, "error")
+    return {
+      status: false
+    }
+  }
+}
+
+
+
+export const renameAccount = async (address, name, _is_hidden = false, _passphrase = null) => {
+  console.log("address", address, name)
+  try {
+    let walletData = await AsyncStorage.getItem(Config.CREATED_ACCOUNTS)
+    if (!walletData) walletData = { general: [], hidden: {} };
+    else walletData = JSON.parse(walletData);
+    let data;
+    if (!_is_hidden) {
+      data = walletData.general.map((item) => {
+        if (item.publicKey == address) {
+          item.name = name
+        }
+
+        return item;
+      });
+      walletData = { ...walletData, general: data }
+    }
+    else {
+      if (_passphrase) {
+        if (!walletData.hidden[_passphrase]) walletData.hidden[_passphrase] = []
+        data = walletData.hidden[_passphrase].map((item) => {
+          if (item.publicKey == address) {
+            item.name = name
+          }
+
+          return item;
+        });
+        walletData = { ...walletData, [hidden[_passphrase]]: data }
+      }
+    }
+
+    await AsyncStorage.setItem(Config.CREATED_ACCOUNTS, JSON.stringify(walletData))
+    return {
+      status: true
+    }
+  } catch (error) {
+    console.log(error, "error")
     return {
       status: false
     }

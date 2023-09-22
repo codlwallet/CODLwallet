@@ -11,7 +11,7 @@ import FontText from '../../components/common/FontText'
 import { useTranslation } from 'react-i18next'
 import PopUp from '../../components/common/AlertBox'
 import { useDispatch } from 'react-redux'
-import { changeUserData, getUserData } from "../../storage";
+import { changeUserData, getUserData, renameAccount } from "../../storage";
 import { setUser } from "../../redux/slices/authSlice";
 
 export default function RenameAccountScreen({ navigation, route }) {
@@ -25,6 +25,7 @@ export default function RenameAccountScreen({ navigation, route }) {
     const [showAlert, setShowAlert] = useState(false)
     const [alertTitle, setAlertTitle] = useState('')
     const [alertMessage, setAlertMessage] = useState('')
+    const walletAddress = route?.params?.walletAddress
 
     useEffect(() => {
         BackHandler.addEventListener('hardwareBackPress', backAction);
@@ -63,14 +64,20 @@ export default function RenameAccountScreen({ navigation, route }) {
 
 
     const handleDoneBtn = async () => {
-        if (accountList?.length > 1) {
-            navigation.navigate(appConstant.accountList, {
-                accountList: accountList,
-            })
-        }
-        else {
-            navigation.navigate(appConstant.main)
-        }
+        // if (accountList?.length > 1) {
+        renameAccount(walletAddress, name).then(
+            res => {
+                if (res.status) {
+                    navigation.navigate(appConstant.accountList, {
+                        accountList: accountList,
+                    })
+                }
+            },
+        );
+        // }
+        // else {
+        //     navigation.navigate(appConstant.main)
+        // }
     }
 
     return (
