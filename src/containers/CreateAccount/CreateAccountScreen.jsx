@@ -214,6 +214,9 @@ export default function CreateAccountScreen({ navigation, route }) {
     return true
   };
 
+  useEffect(() => {
+    handleSelectWalletClick()
+  }, [])
   return (
     <View
       style={styles.container}
@@ -242,6 +245,7 @@ export default function CreateAccountScreen({ navigation, route }) {
             styles.buttonContainer,
             { backgroundColor: isSelect ? colors.white : colors.gray },
           ]}
+          // onFocus={}
           onPress={handleSelectWalletClick}>
           {walletAddress ? (
             <>
@@ -292,7 +296,6 @@ export default function CreateAccountScreen({ navigation, route }) {
         <Input
           withRightIcon={walletName !== '' ? true : false}
           placeholder={t('walletName')}
-          autoFocus={true}
           value={walletName}
           ref={nameRef}
           placeholderTextColor={walletNameFocus ? colors.black : colors.white}
