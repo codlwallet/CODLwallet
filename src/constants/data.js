@@ -425,6 +425,17 @@ module.exports = {
     },
   ],
 
+  paginationData: [
+    {
+      id: 1,
+      title: i18n.t('signedTX'),
+    },
+    {
+      id: 2,
+      title: i18n.t('tokenTransfer'),
+    },
+  ],
+
   settingData: [
     {
       id: 0,

@@ -81,6 +81,7 @@ export default function BroadcastTransactionScreen({ navigation, route }) {
         )
     }
 
+    console.log(paginationData, "paginationData")
     return (
         <View style={styles.container}>
             <Header title={t("broadcastTransaction")} showRightIcon RightIcon={'info'} statusBarcolor={colors.black} />
@@ -93,7 +94,7 @@ export default function BroadcastTransactionScreen({ navigation, route }) {
                     renderItem={RenderItem}
                     onSnapToItem={index => setselectedIndex(index)}
                 />
-                <Pagination
+                {/* <Pagination
                     dotsLength={paginationData.length}
                     activeDotIndex={selectedIndex}
                     carouselRef={CarouselRef}
@@ -101,7 +102,7 @@ export default function BroadcastTransactionScreen({ navigation, route }) {
                     dotStyle={styles.activeDot}
                     activeOpacity={0.5}
                     inactiveDotStyle={styles.inactiveDot}
-                />
+                /> */}
             </View>
             <Button
                 flex={null}

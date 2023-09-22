@@ -27,12 +27,13 @@ export default function SignTransactionScreen({ navigation, route }) {
     const { selectedNetwork } = useSelector(state => state.auth)
     const [isNetworkMatch, setisNetworkMatch] = useState(true)
     const [isSignWalletMatch, setIsSignWalletMatch] = useState(walletAddress == tx?.payload.publicKey)
-
+    // (chain.chain && regx.test(chain.chain)) || (chain.name && regx.test(chain.name)) || (chain.title && regx.test(chain.title))
     useFocusEffect(useCallback(() => {
         if (selectedNetwork) {
+            console.log(selectedNetwork, "selectedNetwork", chain.name)
             let regx = new RegExp(selectedNetwork, 'i');
             setIsSignWalletMatch(walletAddress == tx?.payload.publicKey)
-            if ((chain.chain && regx.test(chain.chain)) || (chain.name && regx.test(chain.name)) || (chain.title && regx.test(chain.title))) {
+            if (chain.name == selectedNetwork) {
                 setisNetworkMatch(true)
             } else {
                 setisNetworkMatch(false)
@@ -74,6 +75,8 @@ export default function SignTransactionScreen({ navigation, route }) {
         return true;
     };
 
+    console.log(isNetworkMatch, isSignWalletMatch, "isNetworkMatch")
+
     return (
         <View style={styles.container}>
             <Header title={t("signTransaction")} showRightIcon statusBarcolor={colors.black} RightIcon={'info'} />
@@ -83,7 +86,7 @@ export default function SignTransactionScreen({ navigation, route }) {
                         <View style={{ ...styles.warningContainer, marginTop: hp(10) }}>
                             <Image source={CautionWarningIcon} style={{ width: hp(5), height: hp(4), }} />
                             <FontText size={normalize(15)} style={{ color: colors.yellow, width: wp(75), marginLeft: wp(2) }}>
-                                Please note that this is not {selectedNetwork} Mainnet Transaction.
+                                This is not from {selectedNetwork} Mainnet.
                             </FontText>
                         </View>
                     }

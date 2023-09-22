@@ -76,7 +76,7 @@
     "confirmWordsNotMatch": "Seeds Confirm does not matched",
     "confirmWordsErrorMess": "Did you select the confirm seeds correctly?",
     "error": "Error!",
-    "wrongAccountSignTrying": "You are trying to sign the transaction with a different address.",
+    "wrongAccountSignTrying": "You are trying to sign with a different address. Please check your account!",
     "nameErrorMess": "Name must be greater than 1 and less than 15 characters.",
     "pinErrorMess": "PIN must be greater than 4 and less than 8 characters.",
     "pinMatchError": "Confirm pin is not correct.",

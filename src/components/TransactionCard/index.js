@@ -132,7 +132,7 @@ export default function TransactionCard({item, headerTitle}) {
 const styles = StyleSheet.create({
   detailsContainer: {
     backgroundColor: colors.gray,
-    height: hp(45),
+    height: hp(60),
     width: wp(88),
     borderRadius: wp(2),
   },
