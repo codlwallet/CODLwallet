@@ -1,5 +1,5 @@
-import { BackHandler, StyleSheet, TouchableOpacity, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
+import { BackHandler, StyleSheet, TouchableOpacity, View } from 'react-native'
 import appConstant from '../../helper/appConstant'
 import colors from '../../assets/colors'
 import Header from '../../components/common/Header'
@@ -13,6 +13,8 @@ export default function AccountOptionsScreen({ route, navigation }) {
     const name = route?.params?.name
     const accountList = route?.params?.accountList
     const walletAddress = route?.params?.walletAddress
+    const hidden = route?.params?.hidden
+    const passphrase = route?.params?.passphrase
     const [accountOptionArray, setAccountOptionArray] = useState([{
         id: 1,
         name: 'Hesabı yeniden adlandır',
@@ -30,9 +32,8 @@ export default function AccountOptionsScreen({ route, navigation }) {
     },])
 
     useEffect(() => {
-        if (accountList.length > 1) {
+        if (accountList?.length > 1) {
             let array = accountOptionArray.slice(0, -1)
-            console.log("array", array)
             setAccountOptionArray(array)
         }
         else {
@@ -48,12 +49,13 @@ export default function AccountOptionsScreen({ route, navigation }) {
         };
     }, []);
 
-    // console.log("..", Math.min())
 
     const handleAccountOptionClick = (item) => {
         if (item.value === appConstant.createAccount) {
             navigation.navigate(appConstant.createAccount, {
                 name: name,
+                hidden: hidden,
+                passphrase: passphrase
             })
         }
         else if (item.value === appConstant.renameAccount) {
@@ -61,7 +63,9 @@ export default function AccountOptionsScreen({ route, navigation }) {
                 name: name,
                 walletName: walletName,
                 accountList: accountList,
-                walletAddress: walletAddress
+                walletAddress: walletAddress,
+                hidden,
+                passphrase
             })
         }
         else if (item.value === appConstant.removeAccount) {
@@ -69,7 +73,9 @@ export default function AccountOptionsScreen({ route, navigation }) {
                 name: name,
                 walletName: walletName,
                 accountList: accountList,
-                walletAddress: walletAddress
+                walletAddress: walletAddress,
+                hidden,
+                passphrase
             })
         }
     }

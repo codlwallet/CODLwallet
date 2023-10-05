@@ -30,9 +30,12 @@ export default function CreateAccountScreen({ navigation, route }) {
   const name = route?.params?.name;
   const walletId = route?.params?.walletId;
   const from = route?.params?.from;
+  const hidden = route?.params?.hidden;
+  const passphrase = route?.params?.passphrase;
+
   const accountList = route?.params?.accountList;
   const nameRef = useRef(null);
-  const { selectedNetwork, passphrase } = useSelector(state => state.auth);
+  const { selectedNetwork } = useSelector(state => state.auth);
   const [walletName, setWalletName] = useState(route?.params?.walletName);
   const [walletNameChanged, setWalletNameChanged] = useState(false);
   const [defaultWalletName, setDefaultWalletName] = useState(null);
@@ -54,6 +57,8 @@ export default function CreateAccountScreen({ navigation, route }) {
       BackHandler.removeEventListener('hardwareBackPress', backAction);
     };
   }, []);
+
+  console.log(hidden, passphrase, "create account")
 
   useFocusEffect(
     useCallback(() => {
@@ -81,7 +86,7 @@ export default function CreateAccountScreen({ navigation, route }) {
           setAccountData(res.data);
           let _key = 1;
           if (!walletName) {
-            if (res.data.isHidden) {
+            if (hidden) {
               _key = res.data.defaultAccountNameIndex
                 ? res.data.defaultAccountNameIndex.hidden
                 : 1;
@@ -161,7 +166,7 @@ export default function CreateAccountScreen({ navigation, route }) {
       if (route.params.wallet) {
         let _newWallet = route.params.wallet;
         _newWallet.name = walletName;
-        createNewAccount(_newWallet, accountData?.isHidden, passphrase).then(
+        createNewAccount(_newWallet, hidden, passphrase).then(
           res => {
             if (res.status) {
               if (defaultWalletName && defaultWalletName === walletName)
@@ -170,6 +175,8 @@ export default function CreateAccountScreen({ navigation, route }) {
                 walletName: walletName,
                 walletAddress: walletAddress,
                 name: name,
+                hidden: hidden,
+                passphrase: passphrase,
                 from: appConstant.createAccount,
                 accountList: accountList
               });
@@ -193,6 +200,8 @@ export default function CreateAccountScreen({ navigation, route }) {
       walletName: walletNameChanged && walletName,
       walletId: walletId,
       accountList: accountList,
+      hidden: hidden,
+      passphrase: passphrase,
       onGoBackFunc: route?.params?.onGoBack,
       onGoBack: () => {
         setWalletNameFocus(false);
@@ -217,6 +226,7 @@ export default function CreateAccountScreen({ navigation, route }) {
   useEffect(() => {
     handleSelectWalletClick()
   }, [])
+
   return (
     <View
       style={styles.container}

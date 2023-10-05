@@ -81,7 +81,6 @@ export default function BroadcastTransactionScreen({ navigation, route }) {
         )
     }
 
-    console.log(paginationData, "paginationData")
     return (
         <View style={styles.container}>
             <Header title={t("broadcastTransaction")} showRightIcon RightIcon={'info'} statusBarcolor={colors.black} />

@@ -7,33 +7,35 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import colors from '../../assets/colors';
-import {hp, normalize, wp} from '../../helper/responsiveScreen';
+import { hp, normalize, wp } from '../../helper/responsiveScreen';
 import Header from '../../components/common/Header';
 import FontText from '../../components/common/FontText';
-import {useTranslation} from 'react-i18next';
-import {walletListData} from '../../constants/data';
+import { useTranslation } from 'react-i18next';
+import { walletListData } from '../../constants/data';
 import ButtonView from '../../components/common/ButtonList';
 import appConstant from '../../helper/appConstant';
 import Button from '../../components/common/Button';
 import SvgIcons from '../../assets/SvgIcons';
-import {useDispatch, useSelector} from 'react-redux';
-import {selectAccount} from '../../redux/slices/authSlice';
-import {useFocusEffect} from '@react-navigation/native';
-import {getAccountsData} from '../../storage';
+import { useDispatch, useSelector } from 'react-redux';
+import { selectAccount } from '../../redux/slices/authSlice';
+import { useFocusEffect } from '@react-navigation/native';
+import { getAccountsData } from '../../storage';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-export default function AccountListScreen({navigation, route}) {
-  const {t} = useTranslation();
+export default function AccountListScreen({ navigation, route }) {
+  const { t } = useTranslation();
   const name = route?.params?.name;
   const icon = route?.params?.icon;
   const accountListArry = route?.params?.accountList;
   const showlistvisible = route?.params?.showList;
   const from = route?.params?.from;
+  const passphrase = route?.params?.passphrase;
+  const hidden = route?.params?.hidden;
   const headerName = route?.params?.headerName;
-  const {passphrase} = useSelector(state => state.auth);
-  const {selectedNetwork} = useSelector(state => state.auth);
+  // const { passphrase } = useSelector(state => state.auth);
+  const { selectedNetwork } = useSelector(state => state.auth);
   const dispatch = useDispatch();
   const [showList, setShowList] = useState(
     showlistvisible === false ? false : true,
@@ -53,10 +55,8 @@ export default function AccountListScreen({navigation, route}) {
   useFocusEffect(
     React.useCallback(() => {
       getAccountsData().then(async res => {
-        let user = await AsyncStorage.getItem('hidden');
-        const isHidden = JSON.parse(user);
         if (res.status) {
-          if (!isHidden) {
+          if (!hidden) {
             setAccountList(res.created?.general);
           } else {
             setAccountList(res.created?.hidden[passphrase]);
@@ -69,7 +69,6 @@ export default function AccountListScreen({navigation, route}) {
   useFocusEffect(
     React.useCallback(() => {
       if (showlistvisible === false) {
-        console.log('showlistvisible');
         setShowList(false);
       }
     }, [showlistvisible]),
@@ -77,7 +76,11 @@ export default function AccountListScreen({navigation, route}) {
 
   const backAction = () => {
     if (from === appConstant.accountDetails) {
-      navigation.navigate(appConstant.main);
+      navigation.navigate(appConstant.main, {
+        name: name,
+        passphrase: passphrase,
+        hidden: hidden,
+      });
     } else {
       navigation.goBack();
     }
@@ -92,6 +95,8 @@ export default function AccountListScreen({navigation, route}) {
         navigation.navigate(appConstant.createAccount, {
           name: name,
           from: appConstant.accountList,
+          passphrase: passphrase,
+          hidden: hidden,
           accountList: accountList,
           onGoBack: () => {
             setShowList(true);
@@ -106,6 +111,8 @@ export default function AccountListScreen({navigation, route}) {
         navigation.navigate(appConstant.reorder, {
           name: name,
           accountList: accountList,
+          passphrase: passphrase,
+          hidden: hidden,
           onGoBack: () => {
             setShowList(true);
           },
@@ -125,6 +132,8 @@ export default function AccountListScreen({navigation, route}) {
       walletAddress: itm?.publicKey,
       from: appConstant.accountList,
       headerName: headerName,
+      passphrase: passphrase,
+      hidden: hidden,
       accountList: accountList,
       name: name,
       onGoBack: () => {
@@ -142,7 +151,7 @@ export default function AccountListScreen({navigation, route}) {
         showBackIcon={showList ? true : false}
         onBackPress={backAction}
         statusBarcolor={colors.black}
-        titleStyle={{left: showList ? wp(2.2) : wp(24), width: wp(45)}}
+        titleStyle={{ left: showList ? wp(2.2) : wp(24), width: wp(45) }}
         titleIcon={
           selectedNetwork === appConstant.ethereum ? (
             <Image
@@ -191,7 +200,7 @@ export default function AccountListScreen({navigation, route}) {
         {showList ? (
           <FlatList
             data={accountList}
-            renderItem={({item, index}) => {
+            renderItem={({ item, index }) => {
               return (
                 <TouchableOpacity
                   key={index}
@@ -201,14 +210,14 @@ export default function AccountListScreen({navigation, route}) {
                     name={'inter-regular'}
                     size={normalize(22)}
                     color={'white'}
-                    style={{flex: 0.7}}>
+                    style={{ flex: 0.7 }}>
                     {item?.name}
                   </FontText>
                   <FontText
                     name={'inter-regular'}
                     size={normalize(15)}
                     color={'white'}
-                    style={{flex: 0.6}}
+                    style={{ flex: 0.6 }}
                     textAlign={'left'}>
                     {item?.publicKey.replace(
                       item?.publicKey.substring(10, 38),
@@ -218,7 +227,7 @@ export default function AccountListScreen({navigation, route}) {
                 </TouchableOpacity>
               );
             }}
-            contentContainerStyle={{justifyContent: 'center', flexGrow: 1}}
+            contentContainerStyle={{ justifyContent: 'center', flexGrow: 1 }}
           />
         ) : (
           <>
@@ -227,7 +236,7 @@ export default function AccountListScreen({navigation, route}) {
                 <TouchableOpacity
                   key={index}
                   onPress={() => handleWalletOptionClick(item, index)}
-                  style={{alignItems: 'center'}}>
+                  style={{ alignItems: 'center' }}>
                   <ButtonView
                     listItem={item}
                     showRightIcon

@@ -17,9 +17,7 @@ const PopUp = ({message, title, onConfirmPressed}) => (
     transparent={true}
     animationType={'none'}
     visible={true}
-    onRequestClose={() => {
-      // console.log('close modal');
-    }}>
+    onRequestClose={() => {}}>
     <View style={styles.background}>
       <View style={[styles.container]}>
         <FontText color={'white'} size={normalize(19)}>

@@ -22,7 +22,7 @@ export default function MainScreen({ navigation, route }) {
     const dispatch = useDispatch();
     const [hideMenu, setHideMenu] = useState(false);
     const [accountDetails, setAccountDetails] = useState([])
-    const { user, passphrase } = useSelector((state) => state.auth)
+    const { user, } = useSelector((state) => state.auth)
     const [networks, setNetworks] = useState([])
     const [accountsData, setAccountsData] = useState({})
     const [createdAccounts, setCreatedAccounts] = useState({})
@@ -30,7 +30,7 @@ export default function MainScreen({ navigation, route }) {
     const [alertTitle, setAlertTitle] = useState('')
     const [alertMessage, setAlertMessage] = useState('')
     const [hidden, setIsHidden] = useState(route?.params?.hidden)
-
+    const passphrase = route?.params?.passphrase
     useFocusEffect(
         React.useCallback(() => {
             getAccountsData().then(res => {
@@ -93,19 +93,28 @@ export default function MainScreen({ navigation, route }) {
             from: appConstant.welcomePurchase
         })
     }
+
     const handleConnectClick = () => {
-        let _createdAccounts = []
-        if (!hidden) {
-            _createdAccounts = createdAccounts && createdAccounts.general
-        } else {
-            _createdAccounts = createdAccounts && createdAccounts.hidden[passphrase]
-        }
-        if (_createdAccounts && _createdAccounts?.length > 0) {
-            navigation.navigate(appConstant.connectWallet, { passphrase: hidden ? passphrase : null })
-        } else {
+        try {
+            let _createdAccounts = []
+            if (!hidden) {
+                _createdAccounts = createdAccounts && createdAccounts.general
+            } else {
+                _createdAccounts = createdAccounts && createdAccounts?.hidden?.[passphrase]
+            }
+            if (_createdAccounts && _createdAccounts?.length > 0) {
+                navigation.navigate(appConstant.connectWallet, { passphrase: hidden ? passphrase : null })
+            } else {
+                setAlertTitle('There is no created Account.')
+                setAlertMessage('You must create one account at least to connect Metamask.')
+                setShowAlert(true)
+            }
+
+        } catch (error) {
             setAlertTitle('There is no created Account.')
             setAlertMessage('You must create one account at least to connect Metamask.')
             setShowAlert(true)
+
         }
     }
 
@@ -139,61 +148,83 @@ export default function MainScreen({ navigation, route }) {
 
     const handleMainListClick = (item) => {
         dispatch(selectNetwork(item.value));
-        if (!createdAccounts || (accountsData.isHidden === false && createdAccounts?.general?.length === 0) || (accountsData.isHidden === true && !createdAccounts.hidden[passphrase])) {
-            navigation.navigate(appConstant.createAccount, {
-                name: item?.value
-            })
-        } else {
-            if (accountsData.isHidden === false) {
-                let _accounts = createdAccounts.general;
-                if (_accounts) {
-                    if (_accounts.length !== 1) {
-                        navigation.navigate(appConstant.accountList, {
-                            name: item?.value,
-                            headerName: item?.value,
-                            accountList: _accounts,
-                            hidden: false,
-                            passphrase: "",
-                            createdAccounts: createdAccounts,
-                            icon: item.image
-                        })
-                    } else {
-                        dispatch(selectAccount(_accounts[0]))
-                        navigation.navigate(appConstant.accountDetails, {
-                            name: item?.value,
-                            walletName: _accounts[0].name,
-                            headerName: item?.value,
-                            from: appConstant.main,
-                            walletAddress: _accounts[0].publicKey
-                        })
-                    }
+
+
+        if (hidden === false) {
+
+            if (!createdAccounts || !createdAccounts?.general) {
+                navigation.navigate(appConstant.createAccount, {
+                    name: item?.value,
+                    passphrase: passphrase,
+                    hidden: false,
+                })
+                return;
+            }
+
+            let _accounts = createdAccounts?.general;
+            if (_accounts) {
+                if (_accounts.length !== 1) {
+                    navigation.navigate(appConstant.accountList, {
+                        name: item?.value,
+                        headerName: item?.value,
+                        accountList: _accounts,
+                        hidden: false,
+                        passphrase: "",
+                        createdAccounts: createdAccounts,
+                        icon: item.image
+                    })
+                } else {
+                    dispatch(selectAccount(_accounts[0]))
+                    navigation.navigate(appConstant.accountDetails, {
+                        name: item?.value,
+                        walletName: _accounts[0].name,
+                        headerName: item?.value,
+                        from: appConstant.main,
+                        passphrase: passphrase,
+                        hidden: false,
+                        walletAddress: _accounts[0].publicKey
+                    })
                 }
-            } else {
-                let _accounts = createdAccounts.hidden[passphrase];
-                if (_accounts) {
-                    if (_accounts.length !== 1) {
-                        navigation.navigate(appConstant.accountList, {
-                            name: item?.value,
-                            headerName: item?.value,
-                            accountList: _accounts,
-                            hidden: true,
-                            passphrase: passphrase,
-                            createdAccounts: createdAccounts,
-                            icon: item.image
-                        })
-                    } else {
-                        dispatch(selectAccount(_accounts[0]))
-                        navigation.navigate(appConstant.accountDetails, {
-                            name: item?.value,
-                            walletName: _accounts[0].name,
-                            headerName: item?.value,
-                            from: appConstant.main,
-                            walletAddress: _accounts[0].publicKey
-                        })
-                    }
+            }
+        } else {
+
+            if (hidden === true && !createdAccounts?.hidden?.[passphrase]) {
+                navigation.navigate(appConstant.createAccount, {
+                    name: item?.value,
+                    passphrase: passphrase,
+                    hidden: true,
+                })
+                return;
+            }
+
+            let _accounts = createdAccounts?.hidden?.[passphrase];
+            if (_accounts) {
+                if (_accounts.length !== 1) {
+                    navigation.navigate(appConstant.accountList, {
+                        name: item?.value,
+                        headerName: item?.value,
+                        accountList: _accounts ? _accounts : [],
+                        from: appConstant.main,
+                        hidden: true,
+                        passphrase: passphrase,
+                        createdAccounts: createdAccounts,
+                        icon: item.image
+                    })
+                } else {
+                    dispatch(selectAccount(_accounts[0]))
+                    navigation.navigate(appConstant.accountDetails, {
+                        name: item?.value,
+                        walletName: _accounts[0].name,
+                        headerName: item?.value,
+                        from: appConstant.main,
+                        passphrase: passphrase,
+                        hidden: true,
+                        walletAddress: _accounts[0].publicKey
+                    })
                 }
             }
         }
+
     }
 
     return (

@@ -23,8 +23,10 @@ export default function AccountDetailsScreen({ navigation, route }) {
     const walletAddress = route?.params?.walletAddress
     const name = route?.params?.name
     const from = route?.params?.from
+    const hidden = route?.params?.hidden
     const headerName = route?.params?.headerName
-    const { passphrase } = useSelector((state) => state.auth)
+    const passphrase = route?.params?.passphrase
+    // const { passphrase } = useSelector((state) => state.auth)
     const { selectedNetwork } = useSelector(state => state.auth)
     const [accountList, setAccountList] = useState({})
     const [walletIcon, setWalletIcon] = useState()
@@ -33,10 +35,8 @@ export default function AccountDetailsScreen({ navigation, route }) {
     useFocusEffect(
         React.useCallback(() => {
             getAccountsData().then(async res => {
-                let user = await AsyncStorage.getItem("hidden");
-                const isHidden = JSON.parse(user)
                 if (res.status) {
-                    if (!isHidden) {
+                    if (!hidden) {
                         setAccountList(res.created?.general)
                     } else {
                         setAccountList(res.created?.hidden[passphrase])
@@ -67,12 +67,15 @@ export default function AccountDetailsScreen({ navigation, route }) {
 
 
     const onBackClick = () => {
-        if (accountList?.length > 1 || from === appConstant.accountList) {
+        console.log(accountList?.length, from === appConstant.accountList, from, "========================")
+        if (accountList?.length >= 1 || from === appConstant.accountList || from === appConstant.main) {
             navigation.navigate(appConstant.accountList, {
                 name: name,
                 headerName: headerName,
                 from: appConstant?.accountDetails,
                 accountList: accountList,
+                hidden: hidden,
+                passphrase: passphrase,
                 icon: walletIcon
             })
         }
@@ -113,7 +116,9 @@ export default function AccountDetailsScreen({ navigation, route }) {
             walletName: walletName,
             name: name,
             accountList: accountList,
-            walletAddress: walletAddress
+            walletAddress: walletAddress,
+            hidden: hidden,
+            passphrase
         })
     }
 

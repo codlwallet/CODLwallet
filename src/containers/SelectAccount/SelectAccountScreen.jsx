@@ -18,6 +18,8 @@ export default function SelectAccountScreen({ navigation, route }) {
     const { t } = useTranslation();
     const wallet_name = route?.params?.walletName
     const accountList = route?.params?.accountList
+    const isHidden = route?.params?.hidden
+    const passphrase = route?.params?.passphrase
     const [selectIndex, setSelectIndex] = useState()
     const [btnValue, setBtnValue] = useState(t("select"))
     const [isNext, setIsNext] = useState(false)
@@ -30,15 +32,14 @@ export default function SelectAccountScreen({ navigation, route }) {
     const { selectedNetwork } = useSelector((state) => state.auth)
     const [wallet, setWallet] = useState(null)
     const [createdAccounts, setCreatedAccounts] = useState({})
-    const [isHidden, setIsHidden] = useState(false)
-    const { passphrase } = useSelector((state) => state.auth)
-
+    // const [isHidden, setIsHidden] = useState(false)
+    // const { passphrase } = useSelector((state) => state.auth)
     useEffect(() => {
         getAccountsData().then(res => {
             if (res.status) {
                 setCreatedAccounts(res.created)
                 setAccounts(res.data.accounts);
-                setIsHidden(res.data.isHidden)
+                // setIsHidden(res.data.isHidden)
                 setTotalAccounts(res.data.accounts.length);
             }
         });
@@ -93,8 +94,10 @@ export default function SelectAccountScreen({ navigation, route }) {
                 wallet: wallet,
                 walletName: wallet.name,
                 name: name,
+                hidden: isHidden,
                 from: appConstant.selectAccount,
                 accountList: accountList,
+                passphrase: passphrase,
                 onGoBack: route.params.onGoBackFunc
             })
         }
@@ -112,9 +115,9 @@ export default function SelectAccountScreen({ navigation, route }) {
                             let accounts = []
                             if (createdAccounts) {
                                 if (!isHidden) {
-                                    accounts = createdAccounts.general.filter(account => account.publicKey == item.publicKey)
+                                    accounts = createdAccounts?.general?.filter(account => account.publicKey == item.publicKey)
                                 } else {
-                                    accounts = createdAccounts.hidden[passphrase] && createdAccounts.hidden[passphrase].filter(account => account.publicKey == item.publicKey)
+                                    accounts = createdAccounts?.hidden?.[passphrase] && createdAccounts?.hidden?.[passphrase].filter(account => account.publicKey == item.publicKey)
                                 }
                             }
 

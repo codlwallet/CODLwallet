@@ -16,9 +16,9 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 export default function ReorderScreen({ navigation, route }) {
     const { t } = useTranslation();
     const accountList = route?.params?.accountList
-    const createdAccounts = route?.params?.createdAccounts
-    const passphrase = route?.params?.passphrase
+    // const createdAccounts = route?.params?.createdAccounts
     const hidden = route?.params?.hidden
+    const passphrase = route?.params?.passphrase
     const [accountValue, setAccountValue] = useState()
     const [reorderAccounts, setReorderAccounts] = useState(accountList)
 
@@ -35,7 +35,10 @@ export default function ReorderScreen({ navigation, route }) {
     };
 
     const handleDoneClick = async () => {
-        const reWalletData = hidden ? { ...createdAccounts, [hidden[passphrase]]: reorderAccounts } : { ...createdAccounts, general: reorderAccounts }
+        const data = await AsyncStorage.getItem(Config.CREATED_ACCOUNTS);
+        const walletData = JSON.parse(data)
+        console.log(walletData, reorderAccounts, hidden, passphrase, "Reorder")
+        const reWalletData = hidden ? { ...walletData, hidden: { ...reWalletData?.hidden, [passphrase]: reorderAccounts } } : { ...walletData, general: reorderAccounts }
         await AsyncStorage.setItem(Config.CREATED_ACCOUNTS, JSON.stringify(reWalletData))
         navigation.goBack()
     }

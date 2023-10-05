@@ -26,7 +26,8 @@ export default function RenameAccountScreen({ navigation, route }) {
     const [alertTitle, setAlertTitle] = useState('')
     const [alertMessage, setAlertMessage] = useState('')
     const walletAddress = route?.params?.walletAddress
-
+    const hidden = route?.params?.hidden
+    const passphrase = route?.params?.passphrase
     useEffect(() => {
         BackHandler.addEventListener('hardwareBackPress', backAction);
         return async () => {
@@ -65,11 +66,13 @@ export default function RenameAccountScreen({ navigation, route }) {
 
     const handleDoneBtn = async () => {
         // if (accountList?.length > 1) {
-        renameAccount(walletAddress, name).then(
+        renameAccount(walletAddress, name, hidden, passphrase).then(
             res => {
                 if (res.status) {
                     navigation.navigate(appConstant.accountList, {
                         accountList: accountList,
+                        hidden,
+                        passphrase
                     })
                 }
             },

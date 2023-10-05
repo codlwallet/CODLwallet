@@ -119,10 +119,19 @@ export default function WelcomePurchaseScreen({ navigation, route }) {
         }
     }
 
-    const handleEnterClick = () => {
-        navigation.navigate(appConstant.main, {
-            hidden: isEnabled
+    const handleEnterClick = async () => {
+        await setWalletIsHidden(isEnabled);
+
+        createAccounts(isEnabled ? password : "").then(res => {
+            if (res.state) {
+                dispatch(setLoading(false))
+                navigation.navigate(appConstant.main, {
+                    hidden: isEnabled,
+                    passphrase: password
+                })
+            }
         })
+
     }
 
     // const handleUserNameClick = async () => {

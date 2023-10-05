@@ -30,7 +30,6 @@ export default function SignTransactionScreen({ navigation, route }) {
     // (chain.chain && regx.test(chain.chain)) || (chain.name && regx.test(chain.name)) || (chain.title && regx.test(chain.title))
     useFocusEffect(useCallback(() => {
         if (selectedNetwork) {
-            console.log(selectedNetwork, "selectedNetwork", chain.name)
             let regx = new RegExp(selectedNetwork, 'i');
             setIsSignWalletMatch(walletAddress == tx?.payload.publicKey)
             if (chain.name == selectedNetwork) {
@@ -75,7 +74,6 @@ export default function SignTransactionScreen({ navigation, route }) {
         return true;
     };
 
-    console.log(isNetworkMatch, isSignWalletMatch, "isNetworkMatch")
 
     return (
         <View style={styles.container}>

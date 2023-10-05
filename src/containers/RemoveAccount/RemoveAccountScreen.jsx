@@ -15,6 +15,8 @@ export default function RemoveAccountScreen({ navigation, route }) {
     const accountList = route?.params?.accountList
     const walletName = route?.params?.walletName
     const walletAddress = route?.params?.walletAddress
+    const hidden = route?.params?.hidden
+    const passphrase = route?.params?.passphrase
 
     useEffect(() => {
         BackHandler.addEventListener('hardwareBackPress', backAction);
@@ -24,11 +26,13 @@ export default function RemoveAccountScreen({ navigation, route }) {
     }, []);
 
     const handleProceedClick = () => {
-        removeAccount(walletAddress).then(
+        removeAccount(walletAddress, hidden, passphrase).then(
             res => {
                 if (res.status) {
                     navigation.navigate(appConstant.removeSuccessful, {
-                        accountList: accountList
+                        accountList: accountList,
+                        hidden,
+                        passphrase
                     })
                 }
             },

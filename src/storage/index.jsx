@@ -313,8 +313,11 @@ export const createAccounts = async (password = null) => {
   walletData = JSON.parse(walletData)
   const { nemonic } = walletData
   let seeds;
-  if (password) seeds = await bip39.mnemonicToSeed(nemonic, password);
-  else seeds = await bip39.mnemonicToSeed(nemonic)
+  if (password) {
+    seeds = await bip39.mnemonicToSeed(nemonic, password);
+  } else {
+    seeds = await bip39.mnemonicToSeed(nemonic)
+  }
   let accounts = [];
   for (let index = 0; index < 5; index++) {
     let _account = await getAdFromMnemonics(seeds, index);
@@ -341,6 +344,7 @@ export const createAccounts = async (password = null) => {
       }
     }
   }
+
   AsyncStorage.setItem(Config.WALLET, JSON.stringify(walletData));
   return {
     state: true
@@ -445,7 +449,7 @@ export const createNewAccount = async (data, _is_hidden = false, _passphrase = n
     if (!_is_hidden) walletData.general.push(data);
     else {
       if (_passphrase) {
-        if (!walletData.hidden[_passphrase]) walletData.hidden[_passphrase] = []
+        if (!walletData?.hidden?.[_passphrase]) walletData = { ...walletData, hidden: { ...walletData.hidden, [_passphrase]: [] } }
         walletData.hidden[_passphrase].push(data);
       }
     }
@@ -455,8 +459,8 @@ export const createNewAccount = async (data, _is_hidden = false, _passphrase = n
     //   walletData.hiddenAccounts.accounts = data.accounts;
     //   walletData.hiddenAccounts.createdAccounts = data.createdAccounts;
     // } else {
-    //   walletData.accounts = data.accounts;
-    //   walletData.createdAccounts = data.createdAccounts;
+    //   walletData.general.accounts = data.accounts;
+    //   walletData.general.createdAccounts = data.createdAccounts;
     // }
     // await AsyncStorage.setItem(Config.WALLET, JSON.stringify(walletData));
     return {
@@ -484,7 +488,6 @@ const removeByAttr = function (arr, attr, value) {
 }
 
 export const removeAccount = async (address, _is_hidden = false, _passphrase = null) => {
-  console.log("address", address)
   try {
     let walletData = await AsyncStorage.getItem(Config.CREATED_ACCOUNTS)
     if (!walletData) walletData = { general: [], hidden: {} };
@@ -492,7 +495,6 @@ export const removeAccount = async (address, _is_hidden = false, _passphrase = n
     let data;
     // if (!_is_hidden) walletData.general.filter((itm) => itm.publicKey != address);
     if (!_is_hidden) {
-      console.log(123)
       data = removeByAttr(walletData.general, 'publicKey', address)
       walletData = { ...walletData, general: data }
     }
@@ -500,7 +502,7 @@ export const removeAccount = async (address, _is_hidden = false, _passphrase = n
       if (_passphrase) {
         if (!walletData.hidden[_passphrase]) walletData.hidden[_passphrase] = []
         data = removeByAttr(walletData.hidden[_passphrase], 'publicKey', address)
-        walletData = { ...walletData, [hidden[_passphrase]]: data }
+        walletData = { ...walletData, hidden: { ...walletData.hidden, [_passphrase]: data } }
       }
     }
 
@@ -518,7 +520,6 @@ export const removeAccount = async (address, _is_hidden = false, _passphrase = n
       status: true
     }
   } catch (error) {
-    console.log(error, "error")
     return {
       status: false
     }
@@ -528,7 +529,6 @@ export const removeAccount = async (address, _is_hidden = false, _passphrase = n
 
 
 export const renameAccount = async (address, name, _is_hidden = false, _passphrase = null) => {
-  console.log("address", address, name)
   try {
     let walletData = await AsyncStorage.getItem(Config.CREATED_ACCOUNTS)
     if (!walletData) walletData = { general: [], hidden: {} };
@@ -554,7 +554,7 @@ export const renameAccount = async (address, name, _is_hidden = false, _passphra
 
           return item;
         });
-        walletData = { ...walletData, [hidden[_passphrase]]: data }
+        walletData = { ...walletData, hidden: { ...walletData.hidden, [_passphrase]: data } }
       }
     }
 
@@ -574,12 +574,12 @@ export const getAccountsData = async () => {
   try {
     let walletData = await AsyncStorage.getItem(Config.WALLET);
     let createdWalletData = await AsyncStorage.getItem(Config.CREATED_ACCOUNTS)
-
     walletData = JSON.parse(walletData)
     if (walletData.isHidden === true) {
-      walletData.accounts = walletData.hiddenAccounts.accounts;
-      walletData.createdAccounts = walletData.hiddenAccounts.createdAccounts;
+      walletData.accounts = walletData.hiddenAccounts.accounts ? walletData.hiddenAccounts.accounts : [];
+      walletData.createdAccounts = walletData.hiddenAccounts.createdAccounts ? walletData.hiddenAccounts.createdAccounts : [];
     }
+
     return {
       status: true,
       data: walletData,

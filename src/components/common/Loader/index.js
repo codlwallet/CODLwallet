@@ -8,9 +8,7 @@ const Loader = props => {
       transparent={true}
       animationType={'none'}
       visible={loading}
-      onRequestClose={() => {
-        // console.log('close modal');
-      }}>
+      onRequestClose={() => {}}>
       <View style={styles.loaderBackground}>
         <ActivityIndicator animating={loading} size="large" color="#ffffff" />
       </View>
