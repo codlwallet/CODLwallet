@@ -618,6 +618,38 @@ export const getNetwork = async () => {
   }
 }
 
+
+
+
+export const setNetworkMainData = async data => {
+  try {
+    await AsyncStorage.setItem(Config.NETWORKDATA, JSON.stringify(data));
+    return {
+      status: true
+    }
+  } catch (error) {
+    return {
+      status: false
+    }
+  }
+}
+
+export const getNetworkMainData = async () => {
+  try {
+    let networks = await AsyncStorage.getItem(Config.NETWORKDATA);
+    return {
+      status: true,
+      networks: JSON.parse(networks)
+    }
+  } catch (error) {
+    return {
+      status: false
+    }
+  }
+}
+
+
+
 export const getUserData = async () => {
   let user = await AsyncStorage.getItem(Config.USER);
   return {

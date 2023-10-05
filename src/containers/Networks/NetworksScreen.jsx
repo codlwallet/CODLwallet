@@ -9,7 +9,7 @@ import Button from '../../components/common/Button'
 import SvgIcons from '../../assets/SvgIcons'
 import { useTranslation } from 'react-i18next'
 import i18n from '../../constants/i18n'
-import { getNetwork, setNetwork } from "../../storage";
+import { getNetwork, getNetworkMainData, setNetwork, setNetworkMainData } from "../../storage";
 import appConstant from '../../helper/appConstant'
 import PopUp from '../../components/common/AlertBox'
 import DraggableFlatList, {
@@ -31,6 +31,7 @@ export default function NetworksScreen({ navigation, route }) {
             BackHandler.removeEventListener('hardwareBackPress', backAction);
         };
     }, []);
+
     useEffect(() => {
         getNetwork().then(res => {
             if (res.status) {
@@ -48,21 +49,35 @@ export default function NetworksScreen({ navigation, route }) {
         navigation.goBack()
         return true;
     };
-    const handleDoneClick = () => {
+    const handleDoneClick = async () => {
         let _networks = []
+
         for (const key in btnIndex) {
             if (btnIndex[key]) _networks = [..._networks, key]
         }
+
         if (_networks.length === 0) {
             setShowAlert(true)
             setAlertTitle(t("selectNetwork"))
             setAlertMessage(t("networkError"))
         } else {
+            const res = await setNetworkMainData(mainDataList)
             setNetwork(_networks)
             backAction()
         }
     }
 
+    const loadMaindata = async () => {
+        const { networks } = await getNetworkMainData();
+        if (networks) {
+            setMainDataList(networks)
+        }
+    }
+
+
+    useEffect(() => {
+        loadMaindata()
+    }, [])
 
     const renderItem = ({ item, drag, isActive }) => {
         return (

@@ -6,6 +6,7 @@ module.exports = {
   WALLET: 'codlwallet',
   CREATED_ACCOUNTS: 'created_codlwallet',
   NETWORK: 'codlnetwork',
+  NETWORKDATA: 'codlnetworkdata',
   DEFAULT_NETWORK: [
     appConstant.ethereum,
     // appConstant.bitcoin,
