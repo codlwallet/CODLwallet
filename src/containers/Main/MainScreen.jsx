@@ -152,6 +152,9 @@ export default function MainScreen({ navigation, route }) {
                             name: item?.value,
                             headerName: item?.value,
                             accountList: _accounts,
+                            hidden: false,
+                            passphrase: "",
+                            createdAccounts: createdAccounts,
                             icon: item.image
                         })
                     } else {
@@ -173,6 +176,9 @@ export default function MainScreen({ navigation, route }) {
                             name: item?.value,
                             headerName: item?.value,
                             accountList: _accounts,
+                            hidden: true,
+                            passphrase: passphrase,
+                            createdAccounts: createdAccounts,
                             icon: item.image
                         })
                     } else {

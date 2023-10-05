@@ -10,10 +10,15 @@ import SvgIcons from '../../assets/SvgIcons';
 import DraggableFlatList, {
 } from "react-native-draggable-flatlist";
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
+import Config from '../../constants';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function ReorderScreen({ navigation, route }) {
     const { t } = useTranslation();
     const accountList = route?.params?.accountList
+    const createdAccounts = route?.params?.createdAccounts
+    const passphrase = route?.params?.passphrase
+    const hidden = route?.params?.hidden
     const [accountValue, setAccountValue] = useState()
     const [reorderAccounts, setReorderAccounts] = useState(accountList)
 
@@ -30,8 +35,8 @@ export default function ReorderScreen({ navigation, route }) {
     };
 
     const handleDoneClick = async () => {
-        // console.log("reorderAccounts", reorderAccounts)
-        // await AsyncStorage.setItem(Config.CREATED_ACCOUNTS, JSON.stringify(reorderAccounts))
+        const reWalletData = hidden ? { ...createdAccounts, [hidden[passphrase]]: reorderAccounts } : { ...createdAccounts, general: reorderAccounts }
+        await AsyncStorage.setItem(Config.CREATED_ACCOUNTS, JSON.stringify(reWalletData))
         navigation.goBack()
     }
 
