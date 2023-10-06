@@ -13,7 +13,7 @@ import { useTranslation } from 'react-i18next'
 import { useFocusEffect } from '@react-navigation/native'
 import i18n from '../../constants/i18n'
 import { useDispatch, useSelector } from "react-redux";
-import { getAccountsData, getNetwork } from "../../storage";
+import { getAccountsData, getNetwork, getNetworkMainData } from "../../storage";
 import { selectNetwork } from "../../redux/slices/authSlice";
 import { selectAccount } from "../../redux/slices/authSlice";
 
@@ -23,7 +23,7 @@ export default function MainScreen({ navigation, route }) {
     const [hideMenu, setHideMenu] = useState(false);
     const [accountDetails, setAccountDetails] = useState([])
     const { user, } = useSelector((state) => state.auth)
-    const [networks, setNetworks] = useState([])
+    const [networks, setNetworks] = useState(mainData)
     const [accountsData, setAccountsData] = useState({})
     const [createdAccounts, setCreatedAccounts] = useState({})
     const [showAlert, setShowAlert] = useState(false)
@@ -43,13 +43,30 @@ export default function MainScreen({ navigation, route }) {
         }, []),
     );
 
-    const loadNetworks = () => {
-        getNetwork().then(res => {
-            if (res.status) {
-                let _networks = mainData.filter(data => res.networks.indexOf(data.value) >= 0)
-                setNetworks(_networks);
-            }
-        })
+    const loadNetworks = async () => {
+        const { networks } = await getNetworkMainData();
+        // getNetworkMainData().then(res => {
+        //     if (res.status) {
+        //         let _networks = mainData.filter(data => res.networks.indexOf(data.value) >= 0)
+        //         setNetworks(_networks);
+        //     }
+        // })
+        console.log(networks, "networks")
+        if (networks) {
+            getNetwork().then(res => {
+                if (res.status) {
+                    let _networks = []
+                    for (const data of networks) {
+                        if (res?.networks?.indexOf(data?.value) >= 0) _networks.push(data)
+                    }
+                    console.log(_networks)
+                    setNetworks(_networks)
+
+                }
+            })
+        }
+
+
     }
 
     useFocusEffect(
@@ -198,6 +215,7 @@ export default function MainScreen({ navigation, route }) {
             }
 
             let _accounts = createdAccounts?.hidden?.[passphrase];
+            console.log(_accounts, passphrase, "_accounts")
             if (_accounts) {
                 if (_accounts.length !== 1) {
                     navigation.navigate(appConstant.accountList, {
