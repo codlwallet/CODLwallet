@@ -1,4 +1,4 @@
-package com.codl;
+package com.codlwallet;
 
 import com.facebook.react.ReactActivity;
 import org.devio.rn.splashscreen.SplashScreen; 
@@ -6,8 +6,6 @@ import com.facebook.react.ReactActivityDelegate;
 import com.facebook.react.defaults.DefaultNewArchitectureEntryPoint;
 import com.facebook.react.defaults.DefaultReactActivityDelegate;
 import android.os.Bundle;
-import android.view.Window;
-import android.view.WindowManager;
 
 public class MainActivity extends ReactActivity {
 

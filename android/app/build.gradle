@@ -97,7 +97,7 @@ android {
 
     namespace "com.codl"
     defaultConfig {
-        applicationId "com.codl"
+        applicationId "com.codlwallet"
         minSdkVersion rootProject.ext.minSdkVersion
         missingDimensionStrategy 'react-native-camera', 'general'
         targetSdkVersion rootProject.ext.targetSdkVersion
